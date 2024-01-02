@@ -7,10 +7,11 @@ _Внешние интерфейсы модуля_
 #### Ключеые слова для разбор драйвера
 
 1. cdev_init
-2. MKDEV
-3. register_chrdev_region
-
-4. class_create
+2. register_chrdev_region
+3. class_create
 
 Вообще более-менее чистый список в `dev_exit`
+
+> [!note] test4 test3 ~ разобраться с разными способами
+> регистрации (открытия) драйвера.
 
