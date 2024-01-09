@@ -1,0 +1,136 @@
+28.07.2011
+==========
+
+[olej@notebook log_level]$ sudo insmod log_level.ko
+insmod: error inserting 'log_level.ko': -1 Operation not permitted
+
+[olej@notebook log_level]$ dmesg | tail -n30 | grep message
+message level: <7>
+message level: <6>
+message level: <5>
+message level: <4>
+message level: <3>
+message level: <2>
+message level: <1>
+
+------------------------------------------------------------------------
+
+в текстовой консоли:
+
+# insmod log_level.ko
+message level: <2>
+message level: <1>
+insmod: error inserting 'log_level.ko': -1 Operation not permitted
+
+========================================================================
+
+25.03.2014
+==========
+
+[Olej@modules etc]$ cat /etc/system-release
+Fedora release 20 (Heisenbug)
+
+[Olej@modules etc]$ uname -a
+Linux modules.localdomain 3.13.6-200.fc20.x86_64 #1 SMP Fri Mar 7 17:02:28 UTC 2014 x86_64 x8
+
+
+[Olej@modules log_level]$ make
+make -C /lib/modules/3.13.6-200.fc20.x86_64/build M=/home/Olej/2014-WORK/GlobalLogic/BOOK.Kernel.org/Kexamples.BOOK/tools/log_level modules
+make[1]: Вход в каталог `/usr/src/kernels/3.13.6-200.fc20.x86_64'
+  CC [M]  /home/Olej/2014-WORK/GlobalLogic/BOOK.Kernel.org/Kexamples.BOOK/tools/log_level/log_level.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/Olej/2014-WORK/GlobalLogic/BOOK.Kernel.org/Kexamples.BOOK/tools/log_level/log_level.mod.o
+  LD [M]  /home/Olej/2014-WORK/GlobalLogic/BOOK.Kernel.org/Kexamples.BOOK/tools/log_level/log_level.ko
+make[1]: Выход из каталога `/usr/src/kernels/3.13.6-200.fc20.x86_64'
+
+
+[root@modules log_level]# cat /proc/sys/kernel/printk
+4	4	1	7
+
+[root@modules log_level]# insmod log_level.ko 
+insmod: ERROR: could not insert module log_level.ko: Operation not permitted
+
+[root@modules log_level]# lsmod | head -n2
+Module                  Size  Used by
+usblp                  18746  0 
+
+[root@modules log_level]# dmesg | tail -n5
+[32259.731646] message level: 5
+[32259.731647] message level: 4
+[32259.731648] message level: 3
+[32259.731650] message level: 2
+[32259.731651] message level: 1
+
+
+[root@modules log_level]# echo 8 > /proc/sys/kernel/printk
+
+[root@modules log_level]# cat /proc/sys/kernel/printk
+8	4	1	7
+
+[root@modules log_level]# insmod log_level.ko 
+insmod: ERROR: could not insert module log_level.ko: Operation not permitted
+
+[root@modules log_level]# dmesg | tail -n7
+[32766.920601] message level: 7
+[32766.920605] message level: 6
+[32766.920606] message level: 5
+[32766.920606] message level: 4
+[32766.920607] message level: 3
+[32766.920608] message level: 2
+[32766.920608] message level: 1
+
+
+[root@modules log_level]# echo 4 > /proc/sys/kernel/printk
+
+
+[Olej@modules log_level]$ make disclean
+
+
+========================================================================
+
+18.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/log_level$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/log_level.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/print_string.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/print_string.c: In function ‘print_string’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/print_string.c:32:27: error: dereferencing pointer to incomplete type ‘struct signal_struct’
+   32 |   my_tty = current->signal->tty;
+      |                           ^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/print_string.c:55:22: error: ‘struct tty_driver’ has no member named ‘write’
+   55 |     ((my_tty->driver)->write) (my_tty,  /* Собственно tty  */
+      |                      ^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/print_string.c:72:22: error: ‘struct tty_driver’ has no member named ‘write’
+   72 |     ((my_tty->driver)->write) (my_tty, 0, "\015\012", 2);
+      |                      ^~
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/print_string.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+
+========================================================================
+
+05.07.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/log_level$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/log_level.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/log_level.o
+see include/linux/module.h for more information
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/log_level.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/log_level/log_level.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+========================================================================
+
+------------------------------------------------------------------------

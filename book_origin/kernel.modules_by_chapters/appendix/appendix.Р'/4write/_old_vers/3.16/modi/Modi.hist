@@ -1,0 +1,162 @@
+24.09.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.o
+/home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.c: In function ‘new_sys_write’:
+/home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.c:11:11: warning: unused variable ‘r’ [-Wunused-variable]
+           r = copy_from_user( msg, (void*)buf, n );
+           ^
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+====================================================================================================
+
+25.09.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.ko
+
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ sudo insmod wrlog.ko debug=2
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ ls
+CR0.c  find.c  Makefile  Modi.hist  wrlog.0.c  wrlog.1.c  wrlog.2.c  wrlog.3.c  wrlog.c  wrlog.hist  wrlog.ko
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ sudo rmmod wrlog
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ dmesg | tail -n31
+[ 1594.231242] ! set new sys_write syscall [f8854000]
+[ 1594.231248] !  ---- CR0 = 80050033
+[ 1594.231250] !  ---- CR0 = 80040033
+[ 1594.231252] !  ---- CR0 = 80050033
+[ 1594.232737] ! {0052} /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles
+[ 1594.233368] ! {0078} \x1b[01;32molej@nvidia\x1b[01;34m ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $\x1b[00m 
+[ 1596.866659] ! {0001} l
+[ 1597.154675] ! {0001} s
+[ 1597.644985] ! {0110} CR0.c  find.c  Makefile  Modi.hist  wrlog.0.c  wrlog.1.c  wrlog.2.c  wrlog.3.c  wrlog.c  wrlog.hist  wrlog.ko
+[ 1597.645196] ! {0113} 
+[ 1597.645196] CR0.c  find.c  Makefile  Modi.hist  wrlog.0.c  wrlog.1.c  wrlog.2.c  wrlog.3.c  wrlog.c  wrlog.hist  wrlog.ko
+[ 1597.645321] ! {0052} /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles
+[ 1597.645951] ! {0078} \x1b[01;32molej@nvidia\x1b[01;34m ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $\x1b[00m 
+[ 1600.226651] ! {0001} s
+[ 1600.346587] ! {0001} u
+[ 1600.522683] ! {0001} d
+[ 1601.026667] ! {0001} o
+[ 1602.170701] ! {0001}  
+[ 1602.426522] ! {0001} r
+[ 1603.218682] ! {0001} m
+[ 1603.682677] ! {0001} m
+[ 1603.906615] ! {0001} o
+[ 1604.338566] ! {0001} d
+[ 1606.442570] ! {0001}  
+[ 1606.946670] ! {0001} w
+[ 1607.226667] ! {0001} r
+[ 1607.834662] ! {0001} l
+[ 1608.106672] ! {0001} o
+[ 1608.842694] ! {0001} g
+[ 1612.003059] ! {0002} 
+[ 1612.014102] ! restore old sys_write syscall [c1179f70]
+
+====================================================================================================
+
+26.09.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles/wrlog.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ sudo insmod wrlog.ko
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ sudo rmmod wrlog
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $ dmesg | tail -n 25
+[   21.401410] VBoxPciLinuxInit
+[   21.405724] vboxpci: IOMMU not found (not registered)
+[   25.080511] init: plymouth-stop pre-start process (1969) terminated with status 1
+[  865.193943] perf samples too long (2503 > 2500), lowering kernel.perf_event_max_sample_rate to 50000
+[ 1470.177971] ! set new sys_write syscall [f88fe000]
+[ 1470.179011] ! {0052} /home/olej/2015_WORK/own.BOOK/SysCalls/Modi/examles
+[ 1470.179360] ! {0078} \x1b[01;32molej@nvidia\x1b[01;34m ~/2015_WORK/own.BOOK/SysCalls/Modi/examles $\x1b[00m 
+[ 1472.479423] ! {0001} s
+[ 1472.791305] ! {0001} u
+[ 1472.999390] ! {0001} d
+[ 1473.447394] ! {0001} o
+[ 1474.015401] ! {0001}  
+[ 1475.143412] ! {0001} r
+[ 1475.439386] ! {0001} m
+[ 1475.703390] ! {0001} m
+[ 1475.991394] ! {0001} o
+[ 1476.399404] ! {0001} d
+[ 1477.959427] ! {0001}  
+[ 1479.511430] ! {0001} w
+[ 1479.887420] ! {0001} r
+[ 1480.391408] ! {0001} l
+[ 1480.607364] ! {0001} o
+[ 1481.919419] ! {0001} g
+[ 1482.976711] ! {0002} 
+[ 1482.986291] ! restore old sys_write syscall [c1179f70]
+
+----------------------------------------------------------------------------------------------------
+
+olej@nvidia ~ $ cat /proc/kallsyms | grep _cr0
+00000000 t xen_read_cr0
+00000000 t xen_write_cr0
+00000000 t native_read_cr0
+00000000 t native_write_cr0
+00000000 d xen_cr0_value
+00000000 t vmx_decache_cr0_guest_bits	[kvm_intel]
+00000000 t vmx_set_cr0	[kvm_intel]
+00000000 r __kstrtab_kvm_set_cr0	[kvm]
+00000000 r __kcrctab_kvm_set_cr0	[kvm]
+00000000 t kvm_set_cr0	[kvm]
+00000000 r __ksymtab_kvm_set_cr0	[kvm]
+
+olej@nvidia ~ $ cat /proc/kallsyms | grep preempt_
+00000000 T preempt_notifier_register
+00000000 T preempt_notifier_unregister
+00000000 T check_preempt_curr
+00000000 t check_preempt_curr_idle
+00000000 t wakeup_preempt_entity
+00000000 t check_preempt_wakeup
+00000000 t check_preempt_curr_rt
+00000000 t check_preempt_curr_stop
+00000000 t cfq_preempt_queue
+00000000 t func_prolog_preempt_disable.isra.2.part.3
+00000000 T schedule_preempt_disabled
+00000000 T preempt_schedule_irq
+00000000 R __ksymtab___preempt_count
+00000000 R __ksymtab_preempt_notifier_register
+00000000 R __ksymtab_preempt_notifier_unregister
+00000000 r __kcrctab___preempt_count
+00000000 r __kcrctab_preempt_notifier_register
+00000000 r __kcrctab_preempt_notifier_unregister
+00000000 r __kstrtab___preempt_count
+00000000 r __kstrtab_preempt_notifier_unregister
+00000000 r __kstrtab_preempt_notifier_register
+00000000 D __preempt_count
+00000000 d kvm_preempt_ops	[kvm]
+
+====================================================================================================
+====================================================================================================
+

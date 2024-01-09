@@ -1,0 +1,295 @@
+24.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_procr.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_procr2.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_proc.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_proct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_2.o
+  Building modules, stage 2.
+  MODPOST 5 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_2.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_2.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_proc.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_proc.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_procr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_procr.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_procr2.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_procr2.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_proct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc/mod_proct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+gcc -Wall     mcat.c   -o mcat
+
+=======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 5464 июн 24 15:01 mod_2.ko
+-rw-rw-r-- 1 olej olej 8344 июн 24 15:01 mod_proc.ko
+-rw-rw-r-- 1 olej olej 4808 июн 24 15:01 mod_procr2.ko
+-rw-rw-r-- 1 olej olej 4800 июн 24 15:01 mod_procr.ko
+-rw-rw-r-- 1 olej olej 8928 июн 24 15:01 mod_proct.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo insmod mod_procr.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_procr.ko: Operation canceled
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n2
+[17013.731559] audit: type=1400 audit(1656071844.495:32): apparmor="ALLOWED" operation="connect" profile="libreoffice-oopslash" name="/run/nscd/socket" pid=29271 comm="oosplash" requested_mask="wr" denied_mask="wr" fsuid=1000 ouid=0
+[17412.670829] ! it's work only for kernel LE 3.9
+
+=======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo cat /proc/kallsyms | grep create_proc_
+ffffffffa02dd450 T create_proc_profile
+ffffffffa16f5d24 t __initcall_create_proc_profile4
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ cat /proc/kallsyms | grep create_proc_read_entry
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo insmod mod_procr2.ko
+insmod: ERROR: could not insert module mod_procr2.ko: Operation canceled
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n1
+[17616.289338] ! it's work only for kernel LE 3.9
+
+=======================================================================================================================
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo insmod mod_proc.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ echo $?
+0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ ls -l /proc/mod_*
+-rw-rw-rw- 1 root root 0 июн 24 15:09 /proc/mod_node
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ cat /proc/mod_node 
+.........1.........2.........3.........4.........5
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ echo new_string > /proc/mod_node 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ cat /proc/mod_node 
+new_string
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n10
+[17718.942044] ! /proc/mod_node installed
+[17784.017884] ! read: 131072 bytes (ppos=0)
+[17784.017888] ! return 51 bytes
+[17784.017897] ! read: 131072 bytes (ppos=51)
+[17784.017897] ! EOF
+[17893.808853] ! write: 11 bytes
+[17893.808856] ! put 11 bytes
+[17903.418643] ! read: 131072 bytes (ppos=0)
+[17903.418650] ! return 11 bytes
+[17903.418667] ! read: 131072 bytes (ppos=11)
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo rmmod mod_proc
+
+-----------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo insmod mod_proc.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ ./mcat 20
+read + 20 bytes, input buffer: .........1.........2
+read + 20 bytes, input buffer: .........1.........2.........3.........4
+read + 11 bytes, input buffer: .........1.........2.........3.........4.........5
+read + 00 bytes, input buffer: .........1.........2.........3.........4.........5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n9
+[18061.025241] ! /proc/mod_node removed
+[18070.520991] ! /proc/mod_node installed
+[18129.162451] ! read: 20 bytes (ppos=0)
+[18129.162455] ! return 20 bytes
+[18129.162581] ! read: 20 bytes (ppos=20)
+[18129.162582] ! return 20 bytes
+[18129.162591] ! read: 20 bytes (ppos=40)
+[18129.162592] ! return 11 bytes
+[18129.162600] ! read: 20 bytes (ppos=51)
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ ./mcat 80
+read + 51 bytes, input buffer: .........1.........2.........3.........4.........5
+read + 00 bytes, input buffer: .........1.........2.........3.........4.........5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n4
+[18129.162601] ! EOF
+[18244.698462] ! read: 80 bytes (ppos=0)
+[18244.698466] ! return 51 bytes
+[18244.698600] ! read: 80 bytes (ppos=51)
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ ./mcat 5
+read + 05 bytes, input buffer: .....
+read + 05 bytes, input buffer: .........1
+read + 05 bytes, input buffer: .........1.....
+read + 05 bytes, input buffer: .........1.........2
+read + 05 bytes, input buffer: .........1.........2.....
+read + 05 bytes, input buffer: .........1.........2.........3
+read + 05 bytes, input buffer: .........1.........2.........3.....
+read + 05 bytes, input buffer: .........1.........2.........3.........4
+read + 05 bytes, input buffer: .........1.........2.........3.........4.....
+read + 05 bytes, input buffer: .........1.........2.........3.........4.........5
+read + 01 bytes, input buffer: .........1.........2.........3.........4.........5
+read + 00 bytes, input buffer: .........1.........2.........3.........4.........5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n23
+[18326.890314] ! read: 5 bytes (ppos=0)
+[18326.890317] ! return 5 bytes
+[18326.890442] ! read: 5 bytes (ppos=5)
+[18326.890444] ! return 5 bytes
+[18326.890452] ! read: 5 bytes (ppos=10)
+[18326.890453] ! return 5 bytes
+[18326.890460] ! read: 5 bytes (ppos=15)
+[18326.890461] ! return 5 bytes
+[18326.890467] ! read: 5 bytes (ppos=20)
+[18326.890469] ! return 5 bytes
+[18326.890475] ! read: 5 bytes (ppos=25)
+[18326.890476] ! return 5 bytes
+[18326.890487] ! read: 5 bytes (ppos=30)
+[18326.890488] ! return 5 bytes
+[18326.890497] ! read: 5 bytes (ppos=35)
+[18326.890498] ! return 5 bytes
+[18326.890511] ! read: 5 bytes (ppos=40)
+[18326.890512] ! return 5 bytes
+[18326.890521] ! read: 5 bytes (ppos=45)
+[18326.890522] ! return 5 bytes
+[18326.890531] ! read: 5 bytes (ppos=50)
+[18326.890532] ! return 1 bytes
+[18326.890542] ! read: 5 bytes (ppos=51)
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo rmmod mod_proc
+
+=======================================================================================================================
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo insmod mod_proct.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ echo $?
+0
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ tree /proc/mod_dir/
+/proc/mod_dir/
+└── mod_node
+
+0 directories, 1 file
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ ls -l /proc/mod_dir/mod_node
+-rw-rw-rw- 1 root root 0 июн 24 15:22 /proc/mod_dir/mod_node
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ cat /proc/mod_dir/mod_node 
+.........1.........2.........3.........4.........5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ echo 12345 > /proc/mod_dir/mod_node
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ cat /proc/mod_dir/mod_node 
+12345
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ echo новая строка > /proc/mod_dir/mod_node
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ cat /proc/mod_dir/mod_node 
+новая строка
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo rmmod mod_proct
+
+=======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo insmod mod_2.ko mode=1
+insmod: ERROR: could not insert module mod_2.ko: Operation canceled
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n2
+[18639.454157] ! /proc/mod_dir/mod_node removed
+[18726.137627] ! it's work only for kernel LE 3.9
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ sudo insmod mod_2.ko mode=2
+insmod: ERROR: could not insert module mod_2.ko: Operation canceled
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/proc/proc$ dmesg | tail -n2
+[18726.137627] ! it's work only for kernel LE 3.9
+[18780.431909] ! it's work only for kernel LE 3.9
+
+=======================================================================================================================
+
+30.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/proc$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_procr.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_procr2.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_2.o
+  Building modules, stage 2.
+  MODPOST 5 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_2.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_2.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_procr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_procr.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_procr2.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_procr2.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+=======================================================================================================================
+
+06.07.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/proc$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+gcc -Wall     mcat.c   -o mcat
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/proc$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 8344 июл  6 23:41 mod_proc.ko
+-rw-rw-r-- 1 olej olej 8928 июл  6 23:41 mod_proct.ko
+
+=======================================================================================================================
+
+28.08.2022
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/proc$ make
+make -C /lib/modules/5.4.0-125-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-125-generic»
+
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proc.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/proc/mod_proct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-125-generic»
+gcc -Wall     mcat.c   -o mcat
+
+=======================================================================================================================
+
+==========

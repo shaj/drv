@@ -1,0 +1,211 @@
+05.10.2015
+==========
+
+olej@nvidia ~ $ sudo cat /proc/kallsyms | grep T | grep sys_close
+c1176ff0 T sys_close
+
+olej@nvidia ~ $ uname -r
+3.13.0-37-generic
+
+olej@nvidia /lib/modules/3.13.0-37-generic/build/include $ cat /proc/kallsyms | grep ' sys_' | grep T | wc -l
+357
+
+olej@nvidia /lib/modules/3.13.0-37-generic/build/include $ sudo cat /proc/kallsyms | grep sys_ni_syscall
+c1075930 T sys_ni_syscall
+
+
+---------------------------------------------------------------------
+
+olej@nvidia ~ $ cat /proc/kallsyms | grep ptregs_fork
+
+olej@nvidia ~ $ sudo cat /proc/kallsyms | grep T | grep fork
+c1055aa0 T fork_idle
+c1055b50 T do_fork
+c1055eb0 T sys_fork
+c1055ee0 T sys_vfork
+c10756d0 T tsk_fork_get_node
+c1081780 T sched_fork
+c1091ae0 T sched_autogroup_fork
+c10ce0a0 T cgroup_fork
+c10ce100 T cgroup_post_fork
+c1119ad0 T perf_event_fork
+c11507d0 T anon_vma_fork
+c13d2270 T tty_audit_fork
+c1408bb0 T proc_fork_connector
+c1661b00 T ret_from_fork
+c19d4a4a T fork_init
+
+=====================================================================
+
+06.10.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.o
+/home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.c:7:21: warning: ‘nsys’ defined but not used [-Wunused-variable]
+ static unsigned int nsys = 0;
+                     ^
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ sudo insmod nsys.ko
+insmod: ERROR: could not insert module nsys.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n 3
+[46216.712971] ! sys_call_table address = c1666140
+[46216.712974] ! sys_ni_syscall address = c1075930
+[46216.712982] ! found 27 unused entries: 017, 031, 032, 035, 044, 053, 056, 058, 098, 112, 127, 130, 137, 167, 169, 188, 189, 222, 223, 251, 273, 274, 275, 276, 285, 294, 317, 
+
+---------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ sudo insmod nsys.ko
+insmod: ERROR: could not insert module nsys.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n 4
+[48335.408627] ! sys_call_table address = c1666140
+[48335.408632] ! sys_ni_syscall address = c1075930
+[48335.408634] ! found 397 entries in sys_call_table
+[48335.408645] ! found 27 unused entries: 017, 031, 032, 035, 044, 053, 056, 058, 098, 112, 127, 130, 137, 167, 169, 188, 189, 222, 223, 251, 273, 274, 275, 276, 285, 294, 317, 
+
+---------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.o
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.ko
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+gcc -Wall syscall.c -o syscall
+
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ sudo insmod nsys.ko
+insmod: ERROR: could not insert module nsys.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n 4
+[10751.601851] ! sys_call_table address = c1666140
+[10751.602194] ! sys_ni_syscall address = c1075930
+[10751.659769] ! sys_call_table length = 351
+[10751.659779] ! found 27 unused entries: 017, 031, 032, 035, 044, 053, 056, 058, 098, 112, 127, 130, 137, 167, 169, 188, 189, 222, 223, 251, 273, 274, 275, 276, 285, 294, 317, 
+
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.o
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.ko
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+gcc -Wall syscall.c -o syscall
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ sudo insmod adds.ko
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ lsmod | head -n3
+Module                  Size  Used by
+adds                   12622  0 
+pci_stub               12550  1 
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n3
+[15000.600618] ! sys_ni_syscall address = c1075930
+[15000.600622] ! old sys_call_table[223] = c1075930
+[15000.600623] ! new sys_call_table[223] = f87d9000
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ ./syscall new string for call
+syscall return 0
+syscall return 0
+syscall return 0
+syscall return 0
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n4
+[15070.680753] ! accepted 4 bytes: call
+[15070.680799] ! accepted 3 bytes: for
+[15070.680804] ! accepted 6 bytes: string
+[15070.680807] ! accepted 3 bytes: new
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ ./syscall 'new string for call'
+syscall return 0
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n1
+[15167.526452] ! accepted 19 bytes: new string for call
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ sudo rmmod adds
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n1
+[15199.917817] ! restore sys_call_table[223] = c1075930
+
+---------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ ./syscall 
+syscall error -1 : Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ echo $?
+255
+
+=====================================================================
+
+07.10.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.o
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/adds.ko
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Adds/examles/nsys.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+gcc -Wall syscall.c -o syscall
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ sudo insmod adds.ko 
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ ./syscall 1 23 456
+syscall return 0
+syscall return 0
+syscall return 0
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n6
+[23268.987164] ! sys_ni_syscall address = c1075930
+[23268.987167] ! old sys_call_table[223] = c1075930
+[23268.987169] ! new sys_call_table[223] = f87b5000
+[23284.256116] ! accepted 3 bytes: 456
+[23284.256176] ! accepted 2 bytes: 23
+[23284.256182] ! accepted 1 bytes: 1
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ sudo rmmod adds
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ dmesg | tail -n1
+[23340.154790] ! restore sys_call_table[223] = c1075930
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Adds/examles $ ./syscall 1 23 456
+syscall error -1 : Operation not permitted
+
+=====================================================================

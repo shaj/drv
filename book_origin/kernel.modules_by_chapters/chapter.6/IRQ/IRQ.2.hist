@@ -1,0 +1,278 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ uname -a
+Linux R420 5.4.0-117-generic #132-Ubuntu SMP Thu Jun 2 00:39:06 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/lab1_interrupt.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_tasklet.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_workqueue.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_ser.o
+  Building modules, stage 2.
+  MODPOST 4 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/lab1_interrupt.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/lab1_interrupt.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_ser.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_ser.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_tasklet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_tasklet.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_workqueue.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_workqueue.ko
+
+
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 6624 июн 15 11:35 lab1_interrupt.ko
+-rw-rw-r-- 1 olej olej 6288 июн 15 11:35 mod_ser.ko
+-rw-rw-r-- 1 olej olej 6344 июн 15 11:35 mod_tasklet.ko
+-rw-rw-r-- 1 olej olej 6920 июн 15 11:35 mod_workqueue.ko
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ modinfo *.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/lab1_interrupt.ko
+license:        GPL v2
+description:    LDD:1.0 s_08/lab1_interrupt.c
+author:         Jerry Cooperstein
+srcversion:     62C44AB9CA1E01DA5767685
+depends:        
+retpoline:      Y
+name:           lab1_interrupt
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+parm:           irq:int
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_ser.ko
+license:        GPL v2
+srcversion:     7D0E3F22E11806D38444E47
+depends:        
+retpoline:      Y
+name:           mod_ser
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+parm:           irq:int
+parm:           num:int
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_tasklet.ko
+license:        GPL v2
+author:         Oleg Tsiliuric <olej@front.ru>
+srcversion:     195B6413B14598CA30B0AE9
+depends:        
+retpoline:      Y
+name:           mod_tasklet
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_workqueue.ko
+license:        GPL v2
+author:         Oleg Tsiliuric <olej@front.ru>
+srcversion:     2F6A5A4549C4F2C9AEB4252
+depends:        
+retpoline:      Y
+name:           mod_workqueue
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+parm:           works:int
+
+========================================================================================================================================================
+
+15.08.2022
+==========
+
+olej@orangepione:~$ cat /proc/interrupts
+           CPU0       CPU1       CPU2       CPU3       
+ 25:          0          0          0          0     GICv2  50 Level     timer@1c20c00
+ 26:          0          0          0          0     GICv2  29 Level     arch_timer
+ 27:    2684922    1225055    1778816     470413     GICv2  30 Level     arch_timer
+ 30:        206          0          0          0     GICv2  82 Level     1c02000.dma-controller
+ 31:       1452          0          0          0     GICv2 118 Level     1c0c000.lcd-controller
+ 32:     331414          0          0          0     GICv2  92 Level     sunxi-mmc
+ 34:          0          0          0          0     GICv2 103 Level     musb-hdrc.4.auto
+ 35:          0          0          0          0     GICv2 104 Level     ehci_hcd:usb1
+ 36:          0          0          0          0     GICv2 105 Level     ohci_hcd:usb2
+ 37:          2          0          0          0     GICv2 106 Level     ehci_hcd:usb3
+ 38:         34          0       1402          0     GICv2 107 Level     ohci_hcd:usb4
+ 42:     197166          0          0          0     GICv2 114 Level     eth0
+ 45:          6          0          0          0     GICv2  32 Level     ttyS0
+ 46:        904          0          0          0     GICv2 120 Level     1ee0000.hdmi, dw-hdmi-cec
+ 47:          0          0          0          0  sun6i-r-intc  40 Level     1f00000.rtc
+ 51:          0          0          0          0     GICv2  90 Level     1c0e000.video-codec
+ 52:          0          0          0          0     GICv2 126 Level     sun8i-ce-ns
+ 53:          0          0          0          0     GICv2 129 Level     gp
+ 54:          0          0          0          0     GICv2 130 Level     gpmmu
+ 55:          0          0          0          0     GICv2 131 Level     pp0
+ 56:          0          0          0          0     GICv2 132 Level     ppmmu0
+ 57:          0          0          0          0     GICv2 134 Level     pp1
+ 58:          0          0          0          0     GICv2 135 Level     ppmmu1
+ 60:    1203879          0          0          0     GICv2  63 Level     ths
+ 61:          0          0          0          0     GICv2 152 Level     arm-pmu
+ 62:          0          0          0          0     GICv2 153 Level     arm-pmu
+ 63:          0          0          0          0     GICv2 154 Level     arm-pmu
+ 64:          0          0          0          0     GICv2 155 Level     arm-pmu
+109:          1          0          0          0  sunxi_pio_edge  44 Edge      usb0-id-det
+132:          1          0          0          0  sunxi_pio_edge   3 Edge      sw4
+IPI0:          0          0          0          0  CPU wakeup interrupts
+IPI1:          0          0          0          0  Timer broadcast interrupts
+IPI2:     188159     559359     266176     229523  Rescheduling interrupts
+IPI3:      35362      29678      15459       9251  Function call interrupts
+IPI4:          0          0          0          0  CPU stop interrupts
+IPI5:        431        457        290        440  IRQ work interrupts
+IPI6:          0          0          0          0  completion interrupts
+Err:          0
+
+olej@orangepione:~$ inxi -MC
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family rev: N/A 
+           serial: 02c000815fd5e717 
+CPU:       Topology: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP 
+           Speed: 1008 MHz min/max: 480/1008 MHz Core speeds (MHz): 1: 1008 2: 1008 3: 1008 4: 1008 
+
+========================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/lab1_interrupt.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_tasklet.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_workqueue.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_ser.o
+  Building modules, stage 2.
+  MODPOST 4 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/lab1_interrupt.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/lab1_interrupt.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_ser.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_ser.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_tasklet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_tasklet.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_workqueue.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/IRQ/mod_workqueue.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+========================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ sudo insmod mod_tasklet.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ lsmod | head -n3
+Module                  Size  Used by
+mod_tasklet            16384  0
+vboxnetadp             28672  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ dmesg | tail -n2 | grep " : " 
+[41665.550350] 100615043133471 [10341295] : tasklet was scheduled in contxt 0
+[41665.550357] 100615043164872 [10341295] : tasklet function was called in contxt 1
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ sudo rmmod mod_tasklet
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ ../time/clock 
+00005BC0A00EFD1C
+00005BC0A01327F9
+00005BC0A0133D2C
+2399990329
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ sudo insmod mod_workqueue.ko works=5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ lsmod | head -n3
+Module                  Size  Used by
+mod_workqueue          16384  0
+vboxnetadp             28672  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ ps -ef | grep root | grep my_
+root       41699       2  0 22:39 ?        00:00:00 [my_queue]
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ dmesg | tail -n5
+[42052.166168] #0 : 101542920708030 [10437950] => 101542920719181 [10437950] = 011151 : context 0
+[42052.166174] #1 : 101542920734316 [10437950] => 101542920737709 [10437950] = 003393 : context 0
+[42052.166177] #2 : 101542920743535 [10437950] => 101542920745674 [10437950] = 002139 : context 0
+[42052.166179] #3 : 101542920750258 [10437950] => 101542920752409 [10437950] = 002151 : context 0
+[42052.166182] #4 : 101542920756741 [10437950] => 101542920759477 [10437950] = 002736 : context 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/IRQ$ sudo rmmod mod_workqueue
+
+
+========================================================================================================================================================
+
+$ inxi -MSxxx
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.8 vt: 7 dm: slimski v: 1.5.0
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: <superuser required> Chassis: type: 4
+    serial: <superuser required>
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: <superuser required>
+    UEFI: AMI v: L41 v01.09 date: 10/19/2016
+
+$ uname -r
+4.9.0-279-antix.1-amd64-smp
+
+$ cat /proc/interrupts | grep ehci
+  18:       5374       5412   IO-APIC   18-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+
+$ cat /proc/interrupts | grep ahci
+  19:       9519       9524   IO-APIC   19-fasteoi   ahci[0000:00:11.0]
+
+
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+
+
+$ lsusb
+Bus 002 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 2101:020f ActionStar 
+Bus 001 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+$ sudo insmod mod_ser.ko irq=18
+[sudo] пароль для olej: 
+
+$ lsmod | head -n3
+Module                  Size  Used by
+mod_ser                 1508  0
+8021q                  20506  0
+
+$ dmesg | grep 'irq=18' | head -n6
+[47712.102929] 57157472571836 : irq=18 - handler #2
+[47712.142921] 57157520469724 : irq=18 - handler #1
+[47712.142923] 57157520474041 : irq=18 - handler #2
+[47712.166916] 57157549208617 : irq=18 - handler #1
+[47712.166918] 57157549213276 : irq=18 - handler #2
+[47712.174914] 57157558788144 : irq=18 - handler #1
+
+$ dmesg | grep 'irq=18' | head -n6
+[47738.220175] 57188753720372 : irq=18 - handler #2
+[47738.244184] 57188782470106 : irq=18 - handler #1
+[47738.244188] 57188782481019 : irq=18 - handler #2
+[47738.252183] 57188792047577 : irq=18 - handler #1
+[47738.252187] 57188792061274 : irq=18 - handler #2
+[47738.260183] 57188801629465 : irq=18 - handler #1
+
+$ sudo rmmod mod_ser
+olej@antix21:~/2022/kernel/IRQ
+
+$ lsmod | head -n3
+Module                  Size  Used by
+8021q                  20506  0
+garp                    5898  1 8021q
+
+$ dmesg | grep 'irq=18' | wc -l
+2519
+
+olej@antix21:~/2022/kernel/IRQ
+$ 
+
+========================================================================================================================================================

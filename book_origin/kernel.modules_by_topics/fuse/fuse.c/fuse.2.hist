@@ -1,0 +1,105 @@
+01.09.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ make
+gcc  -O2 -Wall `pkg-config fuse --cflags`  fuse.c `pkg-config fuse --libs` -o fuse
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ ./fuse ./root
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ mount | grep fuse.fuse
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c/fuse on /home/olej/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c/root type fuse.fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ ls -l root
+итого 0
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ mkdir root/d1/d2
+mkdir: невозможно создать каталог «root/d1/d2»: Нет такого файла или каталога
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ mkdir root/d1
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ mkdir root/d1/d2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ tree root
+root
+└── d1
+    └── d2
+
+2 directories, 0 files
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ mkdir root/d1/f1
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ mkdir root/d1/d2/f2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ tree root
+root
+└── d1
+    ├── d2
+    │   └── f2
+    └── f1
+
+4 directories, 0 files
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ echo 12345 > root/d1/f1
+bash: root/d1/f1: Это каталог
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ rmdir root/d1/f1
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ rmdir root/d1/d2/f2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ tree root
+root
+└── d1
+    └── d2
+
+2 directories, 0 files
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ touch root/d1/f1
+touch: установка временных отметок 'root/d1/f1': Функция не реализована
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ touch root/d1/d2/f2
+touch: установка временных отметок 'root/d1/d2/f2': Функция не реализована
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ tree root
+root
+└── d1
+    ├── d2
+    │   └── f2
+    └── f1
+
+2 directories, 2 files
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ ls -lR root
+root:
+итого 0
+drw-rw-rw- 2 root root 0 янв  1  1970 d1
+
+root/d1:
+итого 0
+drw-rw-rw- 2 root root 0 янв  1  1970 d2
+-rw-rw-rw- 1 root root 0 янв  1  1970 f1
+
+root/d1/d2:
+итого 0
+-rw-rw-rw- 1 root root 0 янв  1  1970 f2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ echo 12345 > root/d1/f1
+bash: root/d1/f1: Функция не реализована
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ ls -l root/d1/f1
+-rw-rw-rw- 1 root root 0 янв  1  1970 root/d1/f1
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ umount ./root
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse.c$ tree root
+root
+
+0 directories, 0 files
+
+----------------------------------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,279 @@
+15.06.2022
+==========
+
+olej@R420:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	Linux Mint 20.3
+Release:	20.3
+Codename:	una
+
+
+olej@R420:/lib/modules/5.4.0-122-generic/build$ grep FUSE /lib/modules/`uname -r`/build/.config
+CONFIG_FUSE_FS=y
+# CONFIG_AUFS_BR_FUSE is not set
+
+olej@R420:~$ aptitude search fuse | grep ^i
+i  exfat-fuse - драйвер чтения и записи exFAT для FUSE
+i  fuse - файловая система в пользовательском окружении
+i  gvfs-fuse - userspace virtual filesystem - fuse server
+i  ifuse - FUSE-модуль для устройств iPhone и iPod Touch
+i  libfuse2 - Filesystem in Userspace (library)
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ make 
+gcc -Wall `pkg-config fuse --cflags --libs`  hello.c -lfuse -o hello
+gcc -Wall `pkg-config fuse --cflags --libs`  cusexmp.c -lfuse -o cusexmp
+gcc -Wall `pkg-config fuse --cflags --libs`  fsel.c -lfuse -o fsel
+gcc -Wall `pkg-config fuse --cflags --libs`  fselclient.c -lfuse -o fselclient
+gcc -Wall `pkg-config fuse --cflags --libs`  xmp.c -lfuse -o xmp
+In file included from /usr/include/fuse/fuse.h:26,
+                 from xmp.c:16:
+/usr/include/fuse/fuse_common.h:491:4: warning: #warning Compatibility with API version 11 is deprecated [-Wcpp]
+  491 | #  warning Compatibility with API version 11 is deprecated
+      |    ^~~~~~~
+gcc -Wall `pkg-config fuse --cflags --libs`  fusexmp.c -lfuse -o fusexmp
+gcc -Wall `pkg-config fuse --cflags --libs`  fusexmp_fh.c -lfuse -lulockmgr -o fusexmp_fh
+
+
+olej@R420:~$ pkg-config fuse --cflags --libs
+Package fuse was not found in the pkg-config search path.
+Perhaps you should add the directory containing `fuse.pc'
+to the PKG_CONFIG_PATH environment variable
+No package 'fuse' found
+
+----------------------------------------------------------------------------------------------------------------------------
+
+
+olej@R420:~$ sudo apt install libfuse-dev
+[sudo] пароль для olej:
+Чтение списков пакетов… Готово
+Построение дерева зависимостей
+Чтение информации о состоянии… Готово
+Следующие НОВЫЕ пакеты будут установлены:
+  libfuse-dev
+Обновлено 0 пакетов, установлено 1 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.
+Необходимо скачать 105 kB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 596 kB.
+Пол:1 http://ubuntu.volia.net/ubuntu-archive focal/main amd64 libfuse-dev amd64 2.9.9-3 [105 kB]
+Получено 105 kB за 0с (752 kB/s)
+Выбор ранее не выбранного пакета libfuse-dev.
+(Чтение базы данных … на данный момент установлено 477514 файлов и каталогов.)
+Подготовка к распаковке …/libfuse-dev_2.9.9-3_amd64.deb …
+Распаковывается libfuse-dev (2.9.9-3) …
+Настраивается пакет libfuse-dev (2.9.9-3) …
+
+
+
+olej@R420:~$ pkg-config fuse --cflags --libs
+-D_FILE_OFFSET_BITS=64 -I/usr/include/fuse -lfuse -pthread
+
+
+olej@R420:/usr/lib/x86_64-linux-gnu$ ls -l /usr/lib/x86_64-linux-gnu/*fuse*
+-rw-r--r-- 1 root root 373720 мар  7  2020 /usr/lib/x86_64-linux-gnu/libfuse.a
+lrwxrwxrwx 1 root root     38 мар  7  2020 /usr/lib/x86_64-linux-gnu/libfuse.so -> /lib/x86_64-linux-gnu/libfuse.so.2.9.9
+lrwxrwxrwx 1 root root     16 фев 14  2021 /usr/lib/x86_64-linux-gnu/libfuse.so.2 -> libfuse.so.2.9.9
+-rw-r--r-- 1 root root 252184 мар  7  2020 /usr/lib/x86_64-linux-gnu/libfuse.so.2.9.9
+
+============================================================================================================================
+
+olej@nvme:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	LMDE 5 (elsie)
+Release:	5
+Codename:	elsie
+
+
+olej@nvme:/lib/modules/5.10.0-16-amd64/build/scripts$ lsmod | grep fuse
+fuse                  167936  5
+
+olej@nvme:/lib/modules/5.10.0-16-amd64/build/scripts$ grep FUSE /lib/modules/`uname -r`/build/.config
+CONFIG_FUSE_FS=m
+CONFIG_FUSE_DAX=y
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ make
+gcc -Wall `pkg-config fuse --cflags --libs` hello.c -o hello
+/usr/bin/ld: /tmp/cckTOtCn.o: в функции «main»:
+hello.c:(.text+0x292): неопределённая ссылка на «fuse_main_real»
+collect2: error: ld returned 1 exit status
+make: *** [Makefile:5: hello] Ошибка 1
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ make 
+gcc -Wall `pkg-config fuse --cflags --libs`  hello.c -lfuse -o hello
+gcc -Wall `pkg-config fuse --cflags --libs`  cusexmp.c -lfuse -o cusexmp
+gcc -Wall `pkg-config fuse --cflags --libs`  fsel.c -lfuse -o fsel
+gcc -Wall `pkg-config fuse --cflags --libs`  fselclient.c -lfuse -o fselclient
+gcc -Wall `pkg-config fuse --cflags --libs`  xmp.c -lfuse -o xmp
+In file included from /usr/include/fuse/fuse.h:26,
+                 from xmp.c:16:
+/usr/include/fuse/fuse_common.h:491:4: warning: #warning Compatibility with API version 11 is deprecated [-Wcpp]
+  491 | #  warning Compatibility with API version 11 is deprecated
+      |    ^~~~~~~
+gcc -Wall `pkg-config fuse --cflags --libs`  fusexmp.c -lfuse -o fusexmp
+gcc -Wall `pkg-config fuse --cflags --libs`  fusexmp_fh.c -lfuse -lulockmgr -o fusexmp_fh
+
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ ./hello tmp
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ tree tmp
+tmp
+└── hello
+
+0 directories, 1 file
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ mount | grep fuse.hello
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/fuse/hello on /home/olej/2022/own.BOOKs/BHV.kernel/examples/fuse/tmp type fuse.hello (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ ls -l tmp/ 
+итого 0
+-r--r--r-- 1 root root 13 янв  1  1970 hello
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ cat tmp/hello 
+Hello World!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ echo 'привет' > tmp/hello 
+bash: tmp/hello: Отказано в доступе
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ umount tmp
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/fuse$ ls -l tmp/ 
+итого 0
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ ./xmp tmp
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ ls -l tmp
+итого 2097236
+-rw-r--r--   1 root root          0 мар 29  2021 0
+lrwxrwxrwx   1 root root          7 фев 14  2021 bin -> usr/bin
+drwxr-xr-x   4 root root       4096 авг 10 11:32 boot
+drwxr-xr-x   2 root root       4096 фев 14  2021 cdrom
+drwxr-xr-x  19 root root       4540 авг 10 10:17 dev
+drwxr-xr-x 175 root root      12288 авг  9 12:20 etc
+drwxr-xr-x   3 root root       4096 мая  6 15:30 home
+lrwxrwxrwx   1 root root          7 фев 14  2021 lib -> usr/lib
+lrwxrwxrwx   1 root root          9 фев 14  2021 lib32 -> usr/lib32
+lrwxrwxrwx   1 root root          9 фев 14  2021 lib64 -> usr/lib64
+lrwxrwxrwx   1 root root         10 фев 14  2021 libx32 -> usr/libx32
+drwx------   2 root root      16384 фев 14  2021 lost+found
+drwxr-xr-x   3 root root       4096 июн 27  2021 media
+drwxr-xr-x   5 root root       4096 ноя 15  2021 mnt
+drwxr-xr-x  13 root root       4096 мая  5 13:41 opt
+dr-xr-xr-x 694 root root          0 авг 10 10:16 proc
+drwx------  12 root root       4096 мар 10 00:14 root
+drwxr-xr-x  43 root root       1240 авг 10 11:00 run
+lrwxrwxrwx   1 root root          8 фев 14  2021 sbin -> usr/sbin
+drwxr-xr-x   2 root root       4096 янв  3  2021 srv
+-rw-------   1 root root 2147483648 фев 14  2021 swapfile
+dr-xr-xr-x  13 root root          0 авг 10 10:16 sys
+drwxrwxrwt  23 root root      12288 авг 10 14:27 tmp
+drwxr-xr-x  14 root root       4096 янв  3  2021 usr
+drwxr-xr-x  12 root root       4096 мар 30  2021 var
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ umount tmp
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ ls -l tmp
+итого 0
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ ./fusexmp_fh --help
+usage: ./fusexmp_fh mountpoint [options]
+
+general options:
+    -o opt,[opt...]        mount options
+    -h   --help            print help
+    -V   --version         print version
+
+FUSE options:
+    -d   -o debug          enable debug output (implies -f)
+    -f                     foreground operation
+    -s                     disable multi-threaded operation
+
+    -o allow_other         allow access to other users
+    -o allow_root          allow access to root
+    -o auto_unmount        auto unmount on process termination
+    -o nonempty            allow mounts over non-empty file/dir
+    -o default_permissions enable permission checking by kernel
+    -o fsname=NAME         set filesystem name
+    -o subtype=NAME        set filesystem type
+    -o large_read          issue large read requests (2.4 only)
+    -o max_read=N          set maximum size of read requests
+
+    -o hard_remove         immediate removal (don't hide files)
+    -o use_ino             let filesystem set inode numbers
+    -o readdir_ino         try to fill in d_ino in readdir
+    -o direct_io           use direct I/O
+    -o kernel_cache        cache files in kernel
+    -o [no]auto_cache      enable caching based on modification times (off)
+    -o umask=M             set file permissions (octal)
+    -o uid=N               set file owner
+    -o gid=N               set file group
+    -o entry_timeout=T     cache timeout for names (1.0s)
+    -o negative_timeout=T  cache timeout for deleted names (0.0s)
+    -o attr_timeout=T      cache timeout for attributes (1.0s)
+    -o ac_attr_timeout=T   auto cache timeout for attributes (attr_timeout)
+    -o noforget            never forget cached inodes
+    -o remember=T          remember cached inodes for T seconds (0s)
+    -o nopath              don't supply path if not necessary
+    -o intr                allow requests to be interrupted
+    -o intr_signal=NUM     signal to send on interrupt (10)
+    -o modules=M1[:M2...]  names of modules to push onto filesystem stack
+
+    -o max_write=N         set maximum size of write requests
+    -o max_readahead=N     set maximum readahead
+    -o max_background=N    set number of maximum background requests
+    -o congestion_threshold=N  set kernel's congestion threshold
+    -o async_read          perform reads asynchronously (default)
+    -o sync_read           perform reads synchronously
+    -o atomic_o_trunc      enable atomic open+truncate support
+    -o big_writes          enable larger than 4kB writes
+    -o no_remote_lock      disable remote file locking
+    -o no_remote_flock     disable remote file locking (BSD)
+    -o no_remote_posix_lock disable remove file locking (POSIX)
+    -o [no_]splice_write   use splice to write to the fuse device
+    -o [no_]splice_move    move data while splicing to the fuse device
+    -o [no_]splice_read    use splice to read from the fuse device
+
+Module options:
+
+[iconv]
+    -o from_code=CHARSET   original encoding of file names (default: UTF-8)
+    -o to_code=CHARSET	    new encoding of the file names (default: UTF-8)
+
+[subdir]
+    -o subdir=DIR	    prepend this directory to all paths (mandatory)
+    -o [no]rellinks	    transform absolute symlinks to relative
+
+
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev/fuse$ 
+cat Makefile 
+CC = gcc -Wall 
+COPT = `pkg-config fuse --cflags --libs` 
+PROGS = hello cusexmp fsel fselclient xmp fusexmp fusexmp_fh
+
+%: %.c
+    $(CC) $< $(COPT) -o $@
+
+all:    $(PROGS)
+
+fusexmp_fh: fusexmp_fh.c
+    $(CC) $< $(COPT) -lulockmgr -o $@
+
+clean disclean:
+    rm -f $(PROGS) *.o
+
+
+============================================================================================================================

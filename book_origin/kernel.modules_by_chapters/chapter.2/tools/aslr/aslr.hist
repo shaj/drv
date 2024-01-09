@@ -1,0 +1,342 @@
+01.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ ls
+aslr.c  aslr.hist  aslr.ko  aslr.mod  Makefile
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ modinfo aslr.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.ko
+license:        GPL v2
+author:         Oleg Tsiliuric <olej@front.ru>
+srcversion:     F3F7BC3F87260D9057BC75A
+depends:        
+retpoline:      Y
+name:           aslr
+vermagic:       5.4.0-113-generic SMP mod_unload modversions 
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo insmod aslr.ko
+insmod: ERROR: could not insert module aslr.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail
+[14051.331110] audit: type=1400 audit(1654076139.680:40): apparmor="ALLOWED" operation="open" profile="libreoffice-soffice" name="/home/olej/2022/own.BOOKs/BHV.kernel/Armbian.1.hist" pid=18459 comm="pool-soffice" requested_mask="r" denied_mask="r" fsuid=1000 ouid=1000
+[14063.763459] audit: type=1400 audit(1654076152.113:41): apparmor="ALLOWED" operation="open" profile="libreoffice-soffice" name="/usr/share/zoneinfo-icu/44/le/zoneinfo64.res" pid=18459 comm="soffice.bin" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+[14063.763554] audit: type=1400 audit(1654076152.113:42): apparmor="ALLOWED" operation="open" profile="libreoffice-soffice" name="/usr/share/zoneinfo-icu/44/le/timezoneTypes.res" pid=18459 comm="soffice.bin" requested_mask="r" denied_mask="r" fsuid=1000 ouid=0
+[15878.178622] Hello, world!
+[16222.907015] Goodbye, world!
+[19206.421388] + module md1 start!
+[19210.283125] + module md2 start!
+[19210.283128] + data string exported from md1 : Привет мир!
+[19210.283129] + string returned md1_proc() is : Привет мир!
+[25200.845591] адрес printk = 0x00000000520daf6d
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail -n1
+[25200.845591] адрес printk = 0x00000000520daf6d
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo cat /proc/kallsyms | grep T | grep ' printk'$
+ffffffffa928a3a0 T printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo cat /boot/System.map-`uname -r` | grep T | grep ' printk'$
+ffffffff81a8a3a0 T printk
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo insmod aslr.ko
+insmod: ERROR: could not insert module aslr.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail -n5
+[19210.283129] + string returned md1_proc() is : Привет мир!
+[25200.845591] адрес printk = 0x00000000520daf6d
+[41273.052507] адрес printk = 0x00000000520daf6d
+[41900.342193] адрес printk = 00000000520daf6d
+[41900.342195] адрес current = 000000002b9ddda0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail -n2
+[41900.342193] адрес printk = 00000000520daf6d
+[41900.342195] адрес current = 000000002b9ddda0
+
+====================================================================================================
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo insmod aslr.ko
+insmod: ERROR: could not insert module aslr.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail -n2
+[54283.987679] адрес printk = ffffffffa928a3a0
+[54283.987682] адрес current = ffff98aadd3add00
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo cat /proc/kallsyms | grep T | grep ' printk'$
+ffffffffa928a3a0 T printk
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo insmod aslr.ko
+insmod: ERROR: could not insert module aslr.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail -n4
+[55810.140924] адрес current = ffff98aaf38c45c0
+[55894.060667] адрес printk = 00000000520daf6d
+[55894.060670] адрес printk = ffffffffa928a3a0
+[55894.060671] адрес current = ffff98aa630e0000
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail -n3
+[55894.060667] адрес printk = 00000000520daf6d
+[55894.060670] адрес printk = ffffffffa928a3a0
+[55894.060671] адрес current = ffff98aa630e0000
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ cat /boot/config-`uname -r` | grep CONFIG_PHYSICAL_START
+CONFIG_PHYSICAL_START=0x1000000
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ sudo insmod aslr.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module aslr.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/aslr$ dmesg | tail -n5
+[60417.933579] CONFIG_64BIT
+[60417.933583] адрес printk = 00000000520daf6d
+[60417.933584] адрес printk = ffffffffa928a3a0
+[60417.933584] адрес current = ffff98aa630e5d00
+[60417.933585] CONFIG_COMPAT_32
+
+====================================================================================================
+
+04.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ sudo insmod aslr.ko
+insmod: ERROR: could not insert module aslr.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ dmesg | tail -n3
+[12177.206562] 	:	p	px	pK
+[12177.206565] ====================
+[12177.206570] 	:	00000000c5359128	ffffb186cc697c56	ffffb186cc697c56
+
+----------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ sudo insmod aslr.ko ; dmesg | tail -n7
+insmod: ERROR: could not insert module aslr.ko: Operation not permitted
+[16620.174082] 64-bit
+[16620.174085]                   %p                 %px                 %pK
+[16620.174090]             ff1579cf    ffffb186e0c9fc56    ffffb186e0c9fc56
+[16620.174091]             31ea8d4d    ffffffffb408a3a0    ffffffffb408a3a0
+[16620.174091]             eb8ef4b3    ffff9ca980000000    ffff9ca980000000
+[16620.174092]              2cb2be7    ffff9cc186a05d00    ffff9cc186a05d00
+[16620.174093]             5529ec74    ffff800000000000    ffff800000000000
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ cat /proc/kallsyms | grep " printk"$
+0000000000000000 T printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ sudo cat /proc/kallsyms | grep " printk"$
+[sudo] пароль для olej:       
+ffffffffb408a3a0 T printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ sudo cat /boot/System.map-`uname -r` | grep " printk"$
+ffffffff81a8a3a0 T printk
+
+====================================================================================================
+
+09.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ make intptr
+cc     intptr.c   -o intptr
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ ./intptr 
+0x55f43bf90010	0x55f43bf90014	0x7ffe44736fe6
+55f43bf90010	55f43bf90014	7ffe44736fe6
+55f43bf90010	55f43bf90014	7ffe44736fe6
+
+----------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ uname -a
+Linux R420 5.4.0-117-generic #132-Ubuntu SMP Thu Jun 2 00:39:06 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ make intptr
+cc     intptr.c   -o intptr
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ ./intptr 
+      0x563e20f4f010      0x563e20f4f014      0x7ffc8250b0a6
+        563e20f4f010        563e20f4f014        7ffc8250b0a6
+        563e20f4f010        563e20f4f014        7ffc8250b0a6
+
+----------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ make intptr
+cc    -c -o intptr.o intptr.c
+cc   intptr.o   -o intptr
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ ./intptr 
+      0x560478512010      0x560478512014      0x7fff53096ea6
+        560478512010        560478512014        7fff53096ea6
+        560478512010        560478512014        7fff53096ea6
+
+====================================================================================================
+
+olej@orangepione:~$ uname -a
+Linux orangepione 5.15.25-sunxi #22.02.1 SMP Sun Feb 27 09:23:25 UTC 2022 armv7l GNU/Linux
+
+
+olej@orangepione:~/2022/kernel/examples.tmp/aslr$ ./intptr 
+0x4a1044	0x4a1048	0xbebae42e
+4a1044	4a1048	bebae42e
+4a1044	4a1048	ffffffffbebae42e
+
+----------------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples.tmp/aslr$ ./intptr 
+            0x421044            0x421048          0xbe82442e
+              421044              421048            be82442e
+              421044              421048    ffffffffbe82442e
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ uname -a
+Linux R420 5.4.0-117-generic #132-Ubuntu SMP Thu Jun 2 00:39:06 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ sudo insmod aslr.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module aslr.ko: Unknown symbol in module
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/aslr$ dmesg | tail -n8
+[ 3295.057036] EXT4-fs (sdc1): mounted filesystem with ordered data mode. Opts: (null)
+[18255.111738] 64-bit
+[18255.111741]                   %p                 %px                 %pK                 int
+[18255.111746]             711d7836    ffffc1b8ebea3c56    ffffc1b8ebea3c56    ffffc1b8ebea3c56
+[18255.111747]             f2444aa0    ffffffff84c8b926    ffffffff84c8b926    ffffffff84c8b926
+[18255.111748]             b585547a    ffff9fa9c0000000    ffff9fa9c0000000    ffff9fa9c0000000
+[18255.111749]             7b1f8113    ffff9fc08c079740    ffff9fc08c079740    ffff9fc08c079740
+[18255.111749]             67ea386c    ffff800000000000    ffff800000000000    ffff800000000000
+
+====================================================================================================
+
+13.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/aslr$ sudo cat /proc/kallsyms | grep " printk"$
+ffffffff8348b926 T printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/aslr$ sudo cat /boot/System.map-`uname -r` | grep " printk"$
+ffffffff81a8b926 T printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/aslr$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/aslr modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/aslr/aslr.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/aslr/aslr.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/aslr/aslr.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc -Wall intptr.c -o intptr
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/aslr$ sudo insmod aslr.ko 
+insmod: ERROR: could not insert module aslr.ko: Unknown symbol in module
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/aslr$ dmesg | tail -n7
+[21606.985381] 64-bit
+[21606.985384]                   %p                 %px                 %pK                 int
+[21606.985388]             4a0f4ec6    ffffb7354dddbc56    ffffb7354dddbc56    ffffb7354dddbc56
+[21606.985389]             ab07503d    ffffffff8348b926    ffffffff8348b926    ffffffff8348b926
+[21606.985389]              9c02798    ffff8eb780000000    ffff8eb780000000    ffff8eb780000000
+[21606.985390]             7bdc3bda    ffff8ec3322c9740    ffff8ec3322c9740    ffff8ec3322c9740
+[21606.985391]              75ed937    ffff800000000000    ffff800000000000    ffff800000000000
+
+====================================================================================================
+
+

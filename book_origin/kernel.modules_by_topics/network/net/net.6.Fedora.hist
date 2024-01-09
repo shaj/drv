@@ -1,0 +1,168 @@
+20.06.2022
+==========
+
+[olej@xenix net]$ sudo insmod mulnet.ko num=4
+[sudo] пароль для olej: 
+
+[olej@xenix net]$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+7: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+8: fict1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 01:02:03:04:05:06 brd ff:ff:ff:ff:ff:ff
+9: fict2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 02:03:04:05:06:07 brd ff:ff:ff:ff:ff:ff
+10: fict3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 03:04:05:06:07:08 brd ff:ff:ff:ff:ff:ff
+
+[olej@xenix net]$ dmesg | grep -v nvidia | grep -v EXT4-fs | grep -v audit | tail -n7
+[22557.306613] RDX: 0000000000000000 RSI: 00007ffc44dcb100 RDI: 000000000000000c
+[22557.306615] RBP: 000055a8a8bc0030 R08: 0000000000000000 R09: 0000000000000000
+[22557.306616] R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+[22557.306618] R13: 00007ffc44dcb260 R14: 00007ffc44dcb25c R15: 0000000000000000
+[22557.306622]  </TASK>
+[22557.306623] ---[ end trace 0000000000000000 ]---
+[22557.306707] ! my_open(fict3)
+
+
+
+2022-06-20T20:57:37.962712+03:00 xenix kernel: ! my_open(fict1)
+2022-06-20T20:57:37.962750+03:00 xenix NetworkManager[819]: <info>  [1655747857.9570] device (fict2): driver 'unknown' does not support carrier detection.
+2022-06-20T20:57:37.962847+03:00 xenix NetworkManager[819]: <info>  [1655747857.9594] device (fict1): state change: unmanaged -> unavailable (reason 'managed', sys-iface-s
+tate: 'external')
+2022-06-20T20:57:37.962931+03:00 xenix NetworkManager[819]: <info>  [1655747857.9610] device (fict1): driver 'unknown' does not support carrier detection.
+2022-06-20T20:57:37.963009+03:00 xenix NetworkManager[819]: <info>  [1655747857.9627] device (fict2): state change: unavailable -> disconnected (reason 'none', sys-iface-s
+tate: 'managed')
+2022-06-20T20:57:37.964712+03:00 xenix NetworkManager[819]: <info>  [1655747857.9643] device (fict0): state change: unmanaged -> unavailable (reason 'managed', sys-iface-s
+tate: 'external')
+2022-06-20T20:57:37.964836+03:00 xenix kernel: fict0: Current addr:  00 01 02 03 04 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+2022-06-20T20:57:37.964889+03:00 xenix kernel: fict0: Expected addr: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+2022-06-20T20:57:37.964929+03:00 xenix kernel: ------------[ cut here ]------------
+2022-06-20T20:57:37.964969+03:00 xenix kernel: netdevice: fict0: Incorrect netdev->dev_addr
+2022-06-20T20:57:37.965003+03:00 xenix kernel: WARNING: CPU: 5 PID: 819 at net/core/dev_addr_lists.c:517 dev_addr_check.cold+0x43/0x7d
+
+
+[olej@xenix net]$ sudo insmod devices.ko 
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+[olej@xenix net]$ dmesg | grep -v nvidia | grep -v EXT4-fs | grep -v audit | tail -n9
+[22905.681663] Hello: module loaded at 0xffffffffc19b6000
+[22905.681666] Hello: dev_base address=0xffff921a01357000
+[22905.681668] name=lo     irq=0   MAC=00:00:00:00:00:00 rx_bytes=94119    tx_bytes=94119    
+[22905.681701] name=enp3s0 irq=0   MAC=90:1b:0e:2b:e1:9c rx_bytes=190090460 tx_bytes=13358289 
+[22905.681703] name=virbr0 irq=0   MAC=52:54:00:73:26:0d rx_bytes=0        tx_bytes=0        
+[22905.681705] name=fict0  irq=0   MAC=00:01:02:03:04:05 rx_bytes=0        tx_bytes=0        
+[22905.681707] name=fict1  irq=0   MAC=01:02:03:04:05:06 rx_bytes=0        tx_bytes=0        
+[22905.681709] name=fict2  irq=0   MAC=02:03:04:05:06:07 rx_bytes=0        tx_bytes=0        
+[22905.681710] name=fict3  irq=0   MAC=03:04:05:06:07:08 rx_bytes=0        tx_bytes=0        
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+[olej@xenix net]$ sudo rmmod mulnet
+
+[olej@xenix net]$ dmesg | grep -v nvidia | grep -v EXT4-fs | grep -v audit | tail -n9
+[22977.447157] Code: 73 01 c3 48 8b 0d e5 92 1b 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b5 92 1b 00 f7 d8 64 89 01 48
+[22977.447158] RSP: 002b:00007ffd265a14f8 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
+[22977.447160] RAX: ffffffffffffffda RBX: 00005610b63e6800 RCX: 00007f4ce76cab3b
+[22977.447161] RDX: 000000000000000a RSI: 0000000000000800 RDI: 00005610b63e6868
+[22977.447162] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[22977.447163] R10: 00007f4ce7828ac0 R11: 0000000000000206 R12: 00007ffd265a1750
+[22977.447163] R13: 00007ffd265a37bd R14: 00005610b63e62a0 R15: 00005610b63e6800
+[22977.447165]  </TASK>
+[22977.447166] ---[ end trace 0000000000000000 ]---
+
+===============================================================================================================================
+
+[olej@xenix net]$ sudo insmod mulnet.ko num=2
+[sudo] пароль для olej: 
+
+[olej@xenix net]$ ip a s
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.20/24 brd 192.168.1.255 scope global noprefixroute enp3s0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::921b:eff:fe2b:e19c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+11: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+12: fict1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 01:02:03:04:05:06 brd ff:ff:ff:ff:ff:ff
+
+
+[olej@xenix net]$ sudo ifconfig fict0 192.168.3.100
+
+[olej@xenix net]$ sudo ifconfig fict1 192.168.3.101
+
+[olej@xenix net]$ sudo ifconfig fict0 up
+
+[olej@xenix net]$ sudo ifconfig fict1 up
+
+
+[olej@xenix net]$ ip a s
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.20/24 brd 192.168.1.255 scope global noprefixroute enp3s0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::921b:eff:fe2b:e19c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+11: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.3.100/24 brd 192.168.3.255 scope global fict0
+       valid_lft forever preferred_lft forever
+12: fict1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 01:02:03:04:05:06 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.3.101/24 brd 192.168.3.255 scope global fict1
+       valid_lft forever preferred_lft forever
+
+
+[olej@xenix net]$ sudo ifconfig fict1 down
+
+[olej@xenix net]$ sudo ifconfig fict0 down
+
+[olej@xenix net]$ sudo ifconfig fict1 
+fict1: flags=4098<BROADCAST,MULTICAST>  mtu 1500
+        inet 192.168.3.101  netmask 255.255.255.0  broadcast 192.168.3.255
+        ether 01:02:03:04:05:06  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+[olej@xenix net]$ sudo ifconfig fict0
+fict0: flags=4098<BROADCAST,MULTICAST>  mtu 1500
+        inet 192.168.3.100  netmask 255.255.255.0  broadcast 192.168.3.255
+        ether 00:01:02:03:04:05  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+===============================================================================================================================
+

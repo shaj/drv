@@ -1,0 +1,474 @@
+08.10.2015
+==========
+
+olej@nvidia ~ $ sudo cat /proc/kallsyms | grep __flush_tlb
+c164df22 t __flush_tlb_all
+
+olej@nvidia /lib/modules/3.13.0-37-generic/build $ sudo cat /proc/kallsyms | grep  flush_tlb | grep T
+c1008020 T xen_flush_tlb_all
+c104f910 T native_flush_tlb_others
+c104f950 T flush_tlb_current_task
+c104f9b0 T flush_tlb_mm_range
+c104fb60 T flush_tlb_page
+c104fbf0 T flush_tlb_all
+c104fc20 T flush_tlb_kernel_range
+
+olej@nvidia /lib/modules/3.13.0-37-generic/build $ sudo cat /proc/kallsyms | grep  pv_mmu_ops
+c104673a t start_pv_mmu_ops_read_cr2
+c104673d t end_pv_mmu_ops_read_cr2
+c104673d t start_pv_mmu_ops_write_cr3
+c1046740 t end_pv_mmu_ops_write_cr3
+c1046740 t start_pv_mmu_ops_read_cr3
+c1046743 t end_pv_mmu_ops_read_cr3
+c18e35c4 R __ksymtab_pv_mmu_ops
+c18ef350 r __kcrctab_pv_mmu_ops
+c18f480c r __kstrtab_pv_mmu_ops
+c19304e0 D pv_mmu_ops
+
+-------------------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/srw.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/srw.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/srw.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+=======================================================================================================
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master $ pwd
+/home/olej/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master/hello.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master/hello.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master/hello.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master $ 
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/memsetrw-master $ 
+
+=======================================================================================================
+
+09.10.2015
+==========
+
+olej@mint1 ~/2015_WORK/4write $ uname -a
+Linux mint1 3.16.0-38-generic #52~14.04.1-Ubuntu SMP Fri May 8 09:44:48 UTC 2015 i686 i686 i686 GNU/Linux
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=0
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n3
+[   84.463890] ISO 9660 Extensions: RRIP_1991A
+[22929.451258] ! modified sys_call_table[17] = 00012345
+[22929.451300] ! restored sys_call_table[17] = c107b1a0
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=1
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n2
+[22956.556006] ! modified sys_call_table[17] = 00012345
+[22956.556818] ! restored sys_call_table[17] = c107b1a0
+
+=======================================================================================================
+
+15.10.2015
+==========
+
+olej@mint1 ~/2015_WORK/4write $ uname -a
+Linux mint1 3.16.0-38-generic #52~14.04.1-Ubuntu SMP Fri May 8 09:44:48 UTC 2015 i686 i686 i686 GNU/Linux
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko 
+[sudo] password for olej: 
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n4
+[15737.879498] ! sys_call_table address = c169a140
+[15737.879600] ! sys_ni_syscall address = c107b1a0
+[15737.879643] ! modified sys_call_table[31] = 00012345
+[15737.879659] ! restored sys_call_table[31] = c107b1a0
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=2
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n4
+[15896.889948] ! sys_call_table address = c169a140
+[15896.889962] ! sys_ni_syscall address = c107b1a0
+[15896.892989] ! modified sys_call_table[31] = 00012345
+[15896.896535] ! restored sys_call_table[31] = c107b1a0
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=3
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n4
+[15947.635543] ! sys_call_table address = c169a140
+[15947.635716] ! sys_ni_syscall address = c107b1a0
+[15947.637374] ! modified sys_call_table[31] = 00012345
+[15947.642837] ! restored sys_call_table[31] = c107b1a0
+
+-------------------------------------------------------------------------------------------------------
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=3
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n6
+[16532.811514] ! sys_call_table address = c169a140
+[16532.811549] ! sys_ni_syscall address = c107b1a0
+[16532.811574] ! writing address f80121bc
+[16532.811644] ! modified sys_call_table[31] = 00012345
+[16532.811649] ! writing address f80141bc
+[16532.811693] ! restored sys_call_table[31] = c107b1a0
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=2
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n6
+[16630.358589] ! sys_call_table address = c169a140
+[16630.358614] ! sys_ni_syscall address = c107b1a0
+[16630.358663] ! writing address c169a1bc
+[16630.358707] ! modified sys_call_table[31] = 00012345
+[16630.358746] ! writing address c169a1bc
+[16630.358793] ! restored sys_call_table[31] = c107b1a0
+
+-------------------------------------------------------------------------------------------------------
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=2
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n5
+[17164.118730] ! sys_call_table address = c169a140
+[17164.118915] ! writing address c169a1bc
+[17164.119061] ! modified sys_call_table[31] = 00012345
+[17164.119201] ! writing address c169a1bc
+[17164.119332] ! restored sys_call_table[31] = c107b1a0
+
+=======================================================================================================
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ uname -a
+Linux nvidia 3.13.0-37-generic #64-Ubuntu SMP Mon Sep 22 21:30:01 UTC 2014 i686 i686 i686 GNU/Linux
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ sudo insmod srw.ko mode=0
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ dmesg | tail -n5
+[28409.535318] ! sys_call_table address = c1666140
+[28409.535323] ! writing address c16661bc
+[28409.535326] ! modified sys_call_table[31] = 00012345
+[28409.535328] ! writing address c16661bc
+[28409.535330] ! restored sys_call_table[31] = c1075930
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ sudo insmod srw.ko mode=1
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ dmesg | tail -n5
+[28429.811687] ! sys_call_table address = c1666140
+[28429.811691] ! writing address c16661bc
+[28429.811693] ! modified sys_call_table[31] = 00012345
+[28429.811694] ! writing address c16661bc
+[28429.811695] ! restored sys_call_table[31] = c1075930
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ sudo insmod srw.ko mode=2
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ dmesg | tail -n5
+[28444.355523] ! sys_call_table address = c1666140
+[28444.355527] ! writing address c16661bc
+[28444.355529] ! modified sys_call_table[31] = 00012345
+[28444.355530] ! writing address c16661bc
+[28444.355531] ! restored sys_call_table[31] = c1075930
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ sudo insmod srw.ko mode=3
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ dmesg | tail -n5
+[28453.004056] ! sys_call_table address = c1666140
+[28453.004081] ! writing address f850c1bc
+[28453.004083] ! modified sys_call_table[31] = 00012345
+[28453.004086] ! writing address f85291bc
+[28453.004087] ! restored sys_call_table[31] = c1075930
+
+=======================================================================================================
+
+16.10.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ uname -m
+i686
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/32tst.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/32tst.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/32tst.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ sudo insmod 32tst.ko 
+insmod: ERROR: could not insert module 32tst.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ dmesg | tail -n1
+[ 3306.390482] ! detected 32-bit platform
+
+-------------------------------------------------------------------------------------------------------
+
+olej@osboxes:~/WORK/4write$ uname -m
+x86_64
+
+olej@osboxes:~/WORK/4write$ sudo insmod 32tst.ko 
+[sudo] password for olej: 
+insmod: ERROR: could not insert module 32tst.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n1
+[  335.554466] ! detected 64-bit platform
+
+-------------------------------------------------------------------------------------------------------
+
+olej@osboxes:~/WORK/4write$ make
+make -C /lib/modules/3.16.0-48-generic/build M=/home/olej/WORK/4write modules
+make[1]: Entering directory `/usr/src/linux-headers-3.16.0-48-generic'
+  CC [M]  /home/olej/WORK/4write/srw.o
+/home/olej/WORK/4write/rw_cr0.c: Assembler messages:
+/home/olej/WORK/4write/rw_cr0.c:35: Error: invalid instruction suffix for `push'
+/home/olej/WORK/4write/rw_cr0.c:36: Error: unsupported instruction `mov'
+/home/olej/WORK/4write/rw_cr0.c:38: Error: unsupported instruction `mov'
+/home/olej/WORK/4write/rw_cr0.c:39: Error: invalid instruction suffix for `pop'
+/home/olej/WORK/4write/rw_cr0.c:43: Error: invalid instruction suffix for `push'
+/home/olej/WORK/4write/rw_cr0.c:44: Error: unsupported instruction `mov'
+/home/olej/WORK/4write/rw_cr0.c:46: Error: unsupported instruction `mov'
+/home/olej/WORK/4write/rw_cr0.c:47: Error: invalid instruction suffix for `pop'
+make[2]: *** [/home/olej/WORK/4write/srw.o] Error 1
+make[1]: *** [_module_/home/olej/WORK/4write] Error 2
+make[1]: Leaving directory `/usr/src/linux-headers-3.16.0-48-generic'
+make: *** [default] Error 2
+
+-------------------------------------------------------------------------------------------------------
+
+olej@osboxes:~/WORK/4write$ make
+make -C /lib/modules/3.16.0-48-generic/build M=/home/olej/WORK/4write modules
+make[1]: Entering directory `/usr/src/linux-headers-3.16.0-48-generic'
+  CC [M]  /home/olej/WORK/4write/srw.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK/4write/srw.mod.o
+  LD [M]  /home/olej/WORK/4write/srw.ko
+make[1]: Leaving directory `/usr/src/linux-headers-3.16.0-48-generic'
+
+olej@osboxes:~/WORK/4write$ uname -r
+3.16.0-48-generic
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n6
+[ 1287.849542] ! detected 64-bit platform
+[ 1287.853419] ! sys_call_table address = ffffffff81801460
+[ 1287.853419] ! writing address ffffffff81801558
+[ 1287.853419] ! modified sys_call_table[31] = 0000000000012345
+[ 1287.853419] ! writing address ffffffff81801558
+[ 1287.853419] ! restored sys_call_table[31] = ffffffff812db550
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=0
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=2
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n6
+[ 1500.268886] ! detected 64-bit platform
+[ 1500.273924] ! sys_call_table address = ffffffff81801460
+[ 1500.274063] ! writing address ffffffff81801558
+[ 1500.274110] ! modified sys_call_table[31] = 0000000000012345
+[ 1500.274192] ! writing address ffffffff81801558
+[ 1500.274249] ! restored sys_call_table[31] = ffffffff812db550
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=3
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n6
+[ 1512.852139] ! detected 64-bit platform
+[ 1512.857008] ! sys_call_table address = ffffffff81801460
+[ 1512.857396] ! writing address ffffc900001e6558
+[ 1512.857465] ! modified sys_call_table[31] = 0000000000012345
+[ 1512.857482] ! writing address ffffc9000033d558
+[ 1512.857596] ! restored sys_call_table[31] = ffffffff812db550
+
+-------------------------------------------------------------------------------------------------------
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=1
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n31
+[ 1685.029596] ! detected 64-bit platform
+[ 1685.037121] ! sys_call_table address = ffffffff81801460
+[ 1685.037139] ! writing address ffffffff81801558
+[ 1685.037176] ! modified sys_call_table[31] = 0000000000012345
+[ 1685.037184] ! writing address ffffffff81801558
+[ 1685.037203] ! restored sys_call_table[31] = ffffffff812db550
+[ 1685.037205] ------------[ cut here ]------------
+[ 1685.037212] WARNING: CPU: 1 PID: 3839 at /build/linux-lts-utopic-V0z0lI/linux-lts-utopic-3.16.0/init/main.c:803 do_one_initcall+0x1df/0x210()
+[ 1685.037216] initcall rw_init+0x0/0x1000 [srw] returned with preemption imbalance 
+[ 1685.037218] Modules linked in: srw(OE+) nls_utf8 isofs vboxsf(OE) snd_intel8x0 snd_ac97_codec ac97_bus snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi rfcomm bnep bluetooth 6lowpan_iphc snd_seq snd_seq_device snd_timer joydev snd serio_raw vboxvideo(OE) soundcore drm vboxguest(OE) i2c_piix4 video parport_pc mac_hid ppdev lp parport hid_generic usbhid hid psmouse ahci libahci e1000 pata_acpi
+[ 1685.037255] CPU: 1 PID: 3839 Comm: insmod Tainted: G        W  OE 3.16.0-48-generic #64~14.04.1-Ubuntu
+[ 1685.037256] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
+[ 1685.037258]  0000000000000009 ffff88001d76fca8 ffffffff817663e8 ffff88001d76fcf0
+[ 1685.037261]  ffff88001d76fce0 ffffffff8106de3d 00000000ffffffff ffff88003a797ef0
+[ 1685.037264]  0000000000000000 ffffffffc02a9000 ffffffffc0539000 ffff88001d76fd40
+[ 1685.037266] Call Trace:
+[ 1685.037272]  [<ffffffff817663e8>] dump_stack+0x45/0x56
+[ 1685.037276]  [<ffffffff8106de3d>] warn_slowpath_common+0x7d/0xa0
+[ 1685.037279]  [<ffffffffc02a9000>] ? 0xffffffffc02a8fff
+[ 1685.037281]  [<ffffffff8106deac>] warn_slowpath_fmt+0x4c/0x50
+[ 1685.037283]  [<ffffffffc02a90ba>] ? rw_init+0xba/0x1000 [srw]
+[ 1685.037285]  [<ffffffffc02a9000>] ? 0xffffffffc02a8fff
+[ 1685.037287]  [<ffffffff8100224f>] do_one_initcall+0x1df/0x210
+[ 1685.037300]  [<ffffffff8119d7d2>] ? __vunmap+0xb2/0x100
+[ 1685.037303]  [<ffffffff810edd99>] load_module+0x13d9/0x1b90
+[ 1685.037306]  [<ffffffff810e9930>] ? store_uevent+0x40/0x40
+[ 1685.037309]  [<ffffffff810ee6c6>] SyS_finit_module+0x86/0xb0
+[ 1685.037312]  [<ffffffff8176ea8d>] system_call_fastpath+0x1a/0x1f
+[ 1685.037313] ---[ end trace 11d87d9913a0a394 ]---
+
+-------------------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ uname -a
+Linux nvidia 3.13.0-37-generic #64-Ubuntu SMP Mon Sep 22 21:30:01 UTC 2014 i686 i686 i686 GNU/Linux
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/srw.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/srw.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/Habrahabr/4write/examles/srw.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ sudo insmod srw.ko mode=1
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/Habrahabr/4write/examles $ dmesg | tail -n6
+[ 5975.315000] ! detected 32-bit platform
+[ 5975.318084] ! sys_call_table address = c1666140
+[ 5975.318086] ! writing address c16661bc
+[ 5975.318087] ! modified sys_call_table[31] = 00012345
+[ 5975.318088] ! writing address c16661bc
+[ 5975.318090] ! restored sys_call_table[31] = c1075930
+
+=======================================================================================================
+
+mint1 4write # uname -a
+Linux mint1 3.16.0-38-generic #52~14.04.1-Ubuntu SMP Fri May 8 09:44:48 UTC 2015 i686 i686 i686 GNU/Linux
+
+mint1 4write # sudo insmod srw.ko mode=1
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+mint1 4write # dmesg | tail -n31
+[   45.744468] ISO 9660 Extensions: RRIP_1991A
+[   45.756099] ISO 9660 Extensions: RRIP_1991A
+[  337.230843] ! sys_call_table address = c169a140
+[  337.230859] ! writing address c169a1bc
+[  337.230879] ! modified sys_call_table[31] = 00012345
+[  337.230886] ! writing address c169a1bc
+[  337.230927] ! restored sys_call_table[31] = c107b1a0
+[  337.230937] ------------[ cut here ]------------
+[  337.230949] WARNING: CPU: 1 PID: 3410 at /build/buildd/linux-lts-utopic-3.16.0/init/main.c:802 do_one_initcall+0x1cb/0x1f0()
+[  337.230955] initcall rw_init+0x0/0x1000 [srw] returned with preemption imbalance 
+[  337.230959] Modules linked in: srw(OE+) nls_utf8 isofs vboxsf(OE) deflate ctr twofish_generic twofish_i586 twofish_common camellia_generic serpent_sse2_i586 xts serpent_generic lrw gf128mul glue_helper ablk_helper cryptd blowfish_generic blowfish_common cast5_generic cast_common des_generic cmac xcbc rmd160 crypto_null af_key xfrm_algo snd_intel8x0 snd_ac97_codec ac97_bus snd_pcm snd_seq_midi snd_seq_midi_event snd_rawmidi rfcomm bnep bluetooth 6lowpan_iphc dm_multipath snd_seq scsi_dh snd_seq_device joydev snd_timer vboxvideo(OE) drm binfmt_misc snd serio_raw vboxguest(OE) soundcore parport_pc i2c_piix4 ppdev lp parport mac_hid dm_mirror dm_region_hash dm_log hid_generic usbhid hid psmouse ahci libahci e1000 pata_acpi video
+[  337.231166] CPU: 1 PID: 3410 Comm: insmod Tainted: G           OE 3.16.0-38-generic #52~14.04.1-Ubuntu
+[  337.231170] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBox 12/01/2006
+[  337.231179]  00000000 00000000 da69ddb4 c168dd4a da69ddf4 da69dde4 c105c3be c186c2cc
+[  337.231185]  da69de10 00000d52 c186c1b0 00000322 c100223b c100223b ffffffff 00000000
+[  337.231191]  f824a000 da69ddfc c105c413 00000009 da69ddf4 c186c2cc da69de10 da69de78
+[  337.231198] Call Trace:
+[  337.231210]  [<c168dd4a>] dump_stack+0x41/0x52
+[  337.231217]  [<c105c3be>] warn_slowpath_common+0x7e/0xa0
+[  337.231226]  [<c100223b>] ? do_one_initcall+0x1cb/0x1f0
+[  337.231233]  [<c100223b>] ? do_one_initcall+0x1cb/0x1f0
+[  337.231244]  [<f824a000>] ? 0xf8249fff
+[  337.231250]  [<c105c413>] warn_slowpath_fmt+0x33/0x40
+[  337.231257]  [<c100223b>] do_one_initcall+0x1cb/0x1f0
+[  337.231337]  [<f824a000>] ? 0xf8249fff
+[  337.231345]  [<c116719f>] ? __vunmap+0x8f/0xe0
+[  337.231352]  [<c10cf3e7>] load_module+0x1237/0x1930
+[  337.231360]  [<c10cfc45>] SyS_finit_module+0x75/0xc0
+[  337.231367]  [<c114c16b>] ? vm_mmap_pgoff+0x7b/0xa0
+[  337.231375]  [<c169515f>] sysenter_do_call+0x12/0x12
+[  337.231379] ---[ end trace 25e061ba54c71581 ]---
+
+=======================================================================================================
+
+olej@mint1 ~/2015_WORK/4write $ uname -m
+i686
+
+olej@mint1 ~/2015_WORK/4write $ uname -r
+3.16.0-38-generic
+
+olej@mint1 ~/2015_WORK/4write $ sudo insmod srw.ko mode=4
+[sudo] password for olej: 
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@mint1 ~/2015_WORK/4write $ dmesg | tail -n6
+[ 3475.912156] ! detected 32-bit platform
+[ 3475.915935] ! sys_call_table address = c169a140
+[ 3475.915989] ! writing address c169a1bc
+[ 3475.916008] ! modified sys_call_table[31] = 00012345
+[ 3475.916070] ! writing address c169a1bc
+[ 3475.916090] ! restored sys_call_table[31] = c107b1a0
+
+=======================================================================================================
+
+olej@osboxes:~/WORK/4write$ uname -r
+3.16.0-48-generic
+
+olej@osboxes:~/WORK/4write$ uname -m
+x86_64
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=0
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n6
+[ 7258.575977] ! detected 64-bit platform
+[ 7258.584504] ! sys_call_table address = ffffffff81801460
+[ 7258.584579] ! writing address ffffffff81801558
+[ 7258.584653] ! modified sys_call_table[31] = 0000000000012345
+[ 7258.584654] ! writing address ffffffff81801558
+[ 7258.584666] ! restored sys_call_table[31] = ffffffff812db550
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=2
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n6
+[ 7282.625539] ! detected 64-bit platform
+[ 7282.633020] ! sys_call_table address = ffffffff81801460
+[ 7282.633129] ! writing address ffffffff81801558
+[ 7282.633178] ! modified sys_call_table[31] = 0000000000012345
+[ 7282.633228] ! writing address ffffffff81801558
+[ 7282.633291] ! restored sys_call_table[31] = ffffffff812db550
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=3
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n6
+[ 7297.040272] ! detected 64-bit platform
+[ 7297.059764] ! sys_call_table address = ffffffff81801460
+[ 7297.065930] ! writing address ffffc900001e6558
+[ 7297.066000] ! modified sys_call_table[31] = 0000000000012345
+[ 7297.066035] ! writing address ffffc9000033d558
+[ 7297.066073] ! restored sys_call_table[31] = ffffffff812db550
+
+olej@osboxes:~/WORK/4write$ sudo insmod srw.ko mode=4
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@osboxes:~/WORK/4write$ dmesg | tail -n6
+[ 7309.831119] ! detected 64-bit platform
+[ 7309.836299] ! sys_call_table address = ffffffff81801460
+[ 7309.836311] ! writing address ffffffff81801558
+[ 7309.836359] ! modified sys_call_table[31] = 0000000000012345
+[ 7309.836368] ! writing address ffffffff81801558
+[ 7309.836424] ! restored sys_call_table[31] = ffffffff812db550
+
+=======================================================================================================

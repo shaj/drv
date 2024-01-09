@@ -1,0 +1,254 @@
+28.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko 
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n7
+[45140.456641] + ffffffff8c4013c0
+[45140.456642] + close file: /proc/kallsyms
+[48369.660614] + openning file: /proc/kallsyms
+[48370.313685] + ffffffff8c4013c0 R sys_call_table
+[48370.313686] + ffffffff8c4013c0
+[48370.313686] + ffffffff8c4013c0
+[48370.313687] + close file: /proc/kallsyms
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call_table
+[sudo] пароль для olej:       
+ffffffff8c4002a0 R x32_sys_call_table
+ffffffff8c4013c0 R sys_call_table
+ffffffff8c402400 R ia32_sys_call_table
+
+==================================================================================================================================
+
+olej@raspberrypi:~/kernel/examples/file $ uname -a
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+
+olej@raspberrypi:~/kernel/examples/file $ inxi -Sxxx
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 compiler: gcc v: 10.2.1 Console: tty 3 
+           DM: LightDM 1.26.0 Distro: Raspbian GNU/Linux 11 (bullseye) 
+
+
+olej@raspberrypi:~/kernel/examples/sys_call_table/call_table $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_rct.o
+  MODPOST /home/olej/kernel/examples/sys_call_table/call_table/Module.symvers
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+
+olej@raspberrypi:~/kernel/examples/sys_call_table/call_table $ sudo insmod mod_rct.ko
+КРАХ!!!
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n 4
+[  444.214786] device eno1 entered promiscuous mode
+[ 1885.295802] + openning file: /proc/kallsyms
+[ 1885.295804] + read op. => 0000000000000000
+[ 1885.295805] + close file: /proc/kallsyms
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n 4
+[ 2286.000180] + openning file: /proc/kallsyms
+[ 2286.000182] + op. table => 0000000000000000
+[ 2286.394259] + ffffffff976013c0 R sys_call_table
+[ 2286.394261] + close file: /proc/kallsyms
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call_table
+ffffffff976002a0 R x32_sys_call_table
+ffffffff976013c0 R sys_call_table
+ffffffff97602400 R ia32_sys_call_table
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n4
+[ 4045.618091] + openning file: /proc/kallsyms
+[ 4045.618093] + op. table => 0000000000000000
+[ 4045.618104] + 0000000000000000 A fixed_percpu_data
+[ 4045.618105] + close file: /proc/kallsyms
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo head -n1 /proc/kallsyms 
+0000000000000000 A fixed_percpu_data
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat /boot/config-`uname -r` | grep CONFIG_X86_32
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat /boot/config-`uname -r` | grep CONFIG_X86_64
+CONFIG_X86_64=y
+CONFIG_X86_64_SMP=y
+CONFIG_X86_64_ACPI_NUMA=y
+
+==================================================================================================================================
+
+29.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n4
+[ 1397.175894] + openning file: /proc/kallsyms
+[ 1397.175897] + op. table => 0000000000000000
+[ 1397.702488] + ffffffff9ee013c0 R sys_call_table
+[ 1397.702491] + close file: /proc/kallsyms
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n7
+[48698.857446] + openning file: /proc/kallsyms
+[48698.857457] + op. table => 0000000000000000
+[48699.237192] + ffffffffadc013c0 R sys_call_table
+[48699.237193] + ffffffffadc013c0
+[48699.237194] + sys_call_table address = ffffffffadc013c0
+[48699.237196] + sys_call_table : ffffffffacecdf00 ffffffffacece020 ffffffffacec9bd0 ffffffffacec7c80 ffffffffaced2fe0 ffffffffaced3200 ffffffffaced30a0 ffffffffacee6ed0 ffffffffacecb820 ffffffffacc36820  ...
+[48699.237197] + close file: /proc/kallsyms
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffffacecdf00 /proc/kallsyms
+ffffffffacecdf00 T __x64_sys_read
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep 'ffffffffacecdf00\|ffffffffacece020\|ffffffffacec9bd0\|ffffffffacec7c80\|ffffffffaced2fe0\|ffffffffaced3200\|ffffffffaced30a0\|ffffffffacee6ed0\|ffffffffacecb820\|ffffffffacc36820' /proc//kallsyms 
+ffffffffacc36820 T __x64_sys_mmap
+ffffffffacec7c80 T __x64_sys_close
+ffffffffacec9bd0 T __x64_sys_open
+ffffffffacecb820 T __x64_sys_lseek
+ffffffffacecdf00 T __x64_sys_read
+ffffffffacece020 T __x64_sys_write
+ffffffffaced2fe0 T __x64_sys_newstat
+ffffffffaced30a0 T __x64_sys_newlstat
+ffffffffaced3200 T __x64_sys_newfstat
+ffffffffacee6ed0 T __x64_sys_poll
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep _sys_close
+ffffffffacec74e0 T __ia32_sys_close
+ffffffffacec7c80 T __x64_sys_close
+ffffffffaeaf1400 t _eil_addr___ia32_sys_close
+ffffffffaeaf1410 t _eil_addr___x64_sys_close
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep __x64_sys_close /proc/kallsyms
+[sudo] пароль для olej:       
+ffffffffacec7c80 T __x64_sys_close
+ffffffffaeaf1410 t _eil_addr___x64_sys_close
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_kct.ko
+insmod: ERROR: could not insert module mod_kct.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n2
+[51798.589498] + sys_call_table address = ffffffffadc013c0
+[51798.589502] + sys_call_table : ffffffffacecdf00 ffffffffacece020 ffffffffacec9bd0 ffffffffacec7c80 ffffffffaced2fe0 ffffffffaced3200 ffffffffaced30a0 ffffffffacee6ed0 ffffffffacecb820 ffffffffacc36820  ...
+
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_koes.ko
+insmod: ERROR: could not insert module mod_koes.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n2
+[52386.678370] + find in position 51990
+[52386.678375] + sys_call_table : ffffffffacecdf00 ffffffffacece020 ffffffffacec9bd0 ffffffffacec7c80 ffffffffaced2fe0 ffffffffaced3200 ffffffffaced30a0 ffffffffacee6ed0 ffffffffacecb820 ffffffffacc36820  ...
+
+
+==================================================================================================================================
+
+30.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ head -n13 /usr/include/x86_64-linux-gnu/asm/unistd_64.h
+#ifndef _ASM_X86_UNISTD_64_H
+#define _ASM_X86_UNISTD_64_H 1
+
+#define __NR_read 0
+#define __NR_write 1
+#define __NR_open 2
+#define __NR_close 3
+#define __NR_stat 4
+#define __NR_fstat 5
+#define __NR_lstat 6
+#define __NR_poll 7
+#define __NR_lseek 8
+#define __NR_mmap 9
+
+==================================================================================================================================

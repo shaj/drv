@@ -1,0 +1,231 @@
+02.07.2022
+==========
+
+olej@lmde32:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.o
+  MODPOST /home/olej/kernel/sys_call_table/find/Module.symvers
+ERROR: modpost: "kallsyms_on_each_symbol" [/home/olej/kernel/sys_call_table/find/mod_koes.ko] undefined!
+ERROR: modpost: "kallsyms_lookup_name" [/home/olej/kernel/sys_call_table/find/mod_kct.ko] undefined!
+make[3]: *** [/usr/src/linux-headers-5.10.0-15-common/scripts/Makefile.modpost:124: /home/olej/kernel/sys_call_table/find/Module.symvers] Ошибка 1
+make[3]: *** Удаляется файл «/home/olej/kernel/sys_call_table/find/Module.symvers»
+make[2]: *** [/usr/src/linux-headers-5.10.0-15-common/Makefile:1750: modules] Ошибка 2
+make[1]: *** [/usr/src/linux-headers-5.10.0-15-common/Makefile:185: __sub-make] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+make: *** [Makefile:16: default] Ошибка 2
+
+=========================================================================================================
+
+03.07.2022
+==========
+
+olej@lmde32:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.o
+  MODPOST /home/olej/kernel/sys_call_table/find/Module.symvers
+ERROR: modpost: "kallsyms_on_each_symbol" [/home/olej/kernel/sys_call_table/find/mod_koes.ko] undefined!
+ERROR: modpost: "kallsyms_lookup_name" [/home/olej/kernel/sys_call_table/find/mod_kct.ko] undefined!
+make[3]: *** [/usr/src/linux-headers-5.10.0-15-common/scripts/Makefile.modpost:124: /home/olej/kernel/sys_call_table/find/Module.symvers] Ошибка 1
+make[3]: *** Удаляется файл «/home/olej/kernel/sys_call_table/find/Module.symvers»
+make[2]: *** [/usr/src/linux-headers-5.10.0-15-common/Makefile:1750: modules] Ошибка 2
+make[1]: *** [/usr/src/linux-headers-5.10.0-15-common/Makefile:185: __sub-make] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+make: *** [Makefile:16: default] Ошибка 2
+
+=========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.o
+  MODPOST /home/olej/kernel/sys_call_table/find/Module.symvers
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+
+
+olej@lmde32:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko 
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+
+olej@lmde32:~/kernel/sys_call_table/find$ dmesg | tail -n4
+[34188.026243] + openning file: /proc/kallsyms
+[34188.026247] + close file: /proc/kallsyms
+[34188.026248] + sys_call_table address = 00000000
+[34188.026249] + sys_call_table : not found
+
+=========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/find$ dmesg | tail -n35
+[   15.117782] [drm:vmw_msg_ioctl [vmwgfx]] *ERROR* Failed to open channel.
+[   15.685865] systemd-journald[257]: File /var/log/journal/96f90d78dee7410a8d7202dddf292209/user-1000.journal corrupted or uncleanly shut down, renaming and replacing.
+[   16.645095] process 'VBoxClient' launched '/opt/VBoxGuestAdditions-6.1.32/bin/VBoxDRMClient' with NULL argv: empty string added
+[   17.559885] [drm:vmw_msg_ioctl [vmwgfx]] *ERROR* Failed to open channel.
+[   17.559904] [drm:vmw_msg_ioctl [vmwgfx]] *ERROR* Failed to open channel.
+[   21.951488] ISO 9660 Extensions: Microsoft Joliet Level 3
+[   21.952220] ISO 9660 Extensions: RRIP_1991A
+[   22.372213] [drm:vmw_msg_ioctl [vmwgfx]] *ERROR* Failed to open channel.
+[   22.372235] [drm:vmw_msg_ioctl [vmwgfx]] *ERROR* Failed to open channel.
+[34188.026243] + openning file: /proc/kallsyms
+[34188.026247] + close file: /proc/kallsyms
+[34188.026248] + sys_call_table address = 00000000
+[34188.026249] + sys_call_table : not found
+[34740.136677] + openning file: /proc/kallsyms
+[34740.136680] +  sys_call_table
+
+[34740.136684] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136685] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136686] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136687] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136688] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136689] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136690] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136691] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136692] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136692] kernel read not supported for file /kallsyms (pid: 6472 comm: insmod)
+[34740.136711] + 
+[34740.136730] + 
+[34740.136748] + 
+[34740.136767] + 
+[34740.136786] + 
+[34740.136805] + 
+[34740.136805] + close file: /proc/kallsyms
+[34740.136807] + sys_call_table address = 00000000
+[34740.136808] + sys_call_table : not found
+
+=========================================================================================================
+
+07.07.2022
+==========
+
+olej@lmde32:~/kernel/sys_call_table$ ./test_distr
+[sudo] пароль для olej:       
+Linux lmde32 5.10.0-15-686 #1 SMP Debian 5.10.120-1 (2022-06-09) i686 GNU/Linux
+System:    Host: lmde32 Kernel: 5.10.0-15-686 i686 bits: 32 compiler: gcc v: 10.2.1 Desktop: Cinnamon 5.2.7 tk: GTK 3.24.24 
+           wm: muffin 5.2.1 dm: LightDM 1.26.0 Distro: LMDE 5 Elsie base: Debian 11.2 bullseye 
+CPU:       Info: Single Core model: Intel Xeon E5-2470 v2 bits: 32 type: MCP arch: Ivy Bridge rev: 4 L2 cache: 25 MiB 
+           flags: avx sse sse2 sse3 sse4_1 sse4_2 ssse3 bogomips: 4771 
+           Speed: 2386 MHz min/max: N/A Core speed (MHz): 1: 2386 
+CONFIG_X86_32=y
+CONFIG_X86_32=y
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+d810ab80 T module_kallsyms_on_each_symbol
+d810b370 T kallsyms_on_each_symbol
+d810aaf0 T module_kallsyms_lookup_name
+d810b2d0 T kallsyms_lookup_name
+d810b430 T kallsyms_lookup_size_offset
+d810b4f0 T kallsyms_lookup
+0xae2d4d20	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0x835247b1	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+0xec6a6d91	netdev_printk	vmlinux	EXPORT_SYMBOL	
+
+---------------------------------------------------------------------------------------------------------
+
+olej@lmde32:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.o
+  MODPOST /home/olej/kernel/sys_call_table/find/Module.symvers
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+
+
+olej@lmde32:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Invalid parameters
+
+
+olej@lmde32:~/kernel/sys_call_table/find$ dmesg | tail -n7
+[45897.196317] + openning file: /proc/kallsyms
+[45897.196320] +  sys_call_table
+
+[45897.196323] kernel read not supported for file /kallsyms (pid: 10255 comm: insmod)
+[45897.196324] + [0] -> -22
+[45897.196325] + failed to read
+[45897.196325] + close file: /proc/kallsyms
+
+---------------------------------------------------------------------------------------------------------
+
+olej@lmde32:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.o
+  MODPOST /home/olej/kernel/sys_call_table/find/Module.symvers
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+olej@lmde32:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Invalid parameters
+olej@lmde32:~/kernel/sys_call_table/find$ dmesg | tail -n7
+[52137.910345] + openning file: /proc/kallsyms
+[52137.910349] +  sys_call_table
+
+[52137.910353] kernel read not supported for file /kallsyms (pid: 12204 comm: insmod)
+[52137.910354] + [0] -> -22
+[52137.910355] + failed to read
+[52137.910355] + close file: /proc/kallsyms
+
+
+=========================================================================================================
+
+olej@lmde32:/lib/modules$ ls /lib/modules
+5.10.0-12-686  5.10.0-15-686
+
+olej@lmde32:/lib/modules/5.10.0-15-686/build$ uname -r
+5.10.0-15-686
+
+olej@lmde32:/lib/modules/5.10.0-15-686/build$ cat /lib/modules/`uname -r`/build/Module.symvers | grep kernel_read_file
+0x64334fff	kernel_read_file_from_fd	vmlinux	EXPORT_SYMBOL_GPL	
+0x349b3353	security_kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0x832f0f34	kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0x60606431	kernel_read_file_from_path_initns	vmlinux	EXPORT_SYMBOL_GPL	
+0xa46f8631	kernel_read_file_from_path	vmlinux	EXPORT_SYMBOL_GPL	
+
+=========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Invalid parameters
+
+
+olej@lmde32:~/kernel/sys_call_table/find$ dmesg | tail -n7
+[53793.888723] + openning file: /proc/kallsyms
+[53793.888726] +  sys_call_table
+
+[53793.888730] kernel read not supported for file /kallsyms (pid: 13334 comm: insmod)
+[53793.888730] + failed to read
+[53793.888731] + close file: /proc/kallsyms
+[53793.888732] + find error: -22
+
+=========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/find$ ls -l /proc/kallsyms
+-r--r--r-- 1 root root 0 июл  3 23:18 /proc/kallsyms
+
+olej@lmde32:~/kernel/sys_call_table/find$ cat /boot/config-`uname -r` | grep KALL
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@lmde32:~/kernel/sys_call_table/find$ sudo head /proc/kallsyms
+[sudo] пароль для olej:       
+d8000000 T startup_32
+d8000000 T _stext
+d8000000 T _text
+d8000078 T start_cpu0
+d8000088 T startup_32_smp
+d80001f0 t verify_cpu
+d80002f0 T __traceiter_initcall_level
+d8000330 T __traceiter_initcall_start
+d8000370 T __traceiter_initcall_finish
+d80003b0 t trace_initcall_finish_cb
+
+=========================================================================================================

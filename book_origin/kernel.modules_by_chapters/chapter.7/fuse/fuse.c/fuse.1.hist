@@ -1,0 +1,210 @@
+30.08.2022
+==========
+
+olej@R420:~$ aptitude show fuse
+Пакет: fuse                                      
+Версия: 2.9.9-3
+Состояние: установлен
+Установлен автоматически: нет
+Приоритет: стандартный
+Раздел: utils
+Сопровождающий: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Архитектура: amd64
+Размер в распакованном виде: 116 k
+Зависит: libc6 (>= 2.28), libfuse2 (= 2.9.9-3), adduser, mount (>= 2.19.1), sed (>= 4)
+Конфликтует: fuse:i386
+Предоставляется: fuse3 (3.9.0-2)
+Описание: файловая система в пользовательском окружении
+ Файловая система в пользовательском окружении (FUSE) — это простой интерфейс для программ пользовательского окружения для создания виртуальных файловых систем для ядра Linux.
+ Также целью интерфейса является предоставление безопасного метода непривилегированным пользователям для создания и монтирования их собственных реализаций файловых систем.
+Домашняя страница: https://github.com/libfuse/libfuse/wiki
+
+===================================================================================================================================
+
+olej@R420:~$ pkg-config --list-all | grep fuse
+fuse                           fuse - Filesystem in Userspace
+
+olej@R420:~$ pkg-config --cflags --libs fuse
+-D_FILE_OFFSET_BITS=64 -I/usr/include/fuse -lfuse -pthread
+
+===================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ make
+gcc  -w `pkg-config fuse --cflags`  fuse.c `pkg-config fuse --libs` -o fuse
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ ./fuse ./root 
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ mount | grep FUSE
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/fuse on /home/olej/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/root type fuse.fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ umount /home/olej/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE/root
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ mount | grep FUSE
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ 
+
+===================================================================================================================================
+
+olej@R420:~$ which fusermount
+/usr/bin/fusermount
+
+olej@R420:~$ fusermount --help
+fusermount: [options] mountpoint
+Options:
+ -h		    print help
+ -V		    print version
+ -o opt[,opt...]   mount options
+ -u		    unmount
+ -q		    quiet
+ -z		    lazy unmount
+
+olej@R420:~$ fusermount -V
+fusermount version: 2.9.9
+
+olej@R420:~$ ls /usr/bin/*fuse*
+/usr/bin/fuser  /usr/bin/fusermount  /usr/bin/ifuse
+
+===================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ make
+gcc  -O2 -Wall `pkg-config fuse --cflags`  fuse.c `pkg-config fuse --libs` -o fuse
+fuse.c: In function ‘my_getattr’:
+fuse.c:44:32: warning: passing argument 2 of ‘seekNode’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   44 |     Link node = seekNode(tree, path);
+      |                                ^~~~
+fuse.c:36:32: note: expected ‘char *’ but argument is of type ‘const char *’
+   36 | Link seekNode(Link tree, char* path);
+      |                          ~~~~~~^~~~
+fuse.c:42:9: warning: unused variable ‘res’ [-Wunused-variable]
+   42 |     int res = 0;
+      |         ^~~
+fuse.c: In function ‘my_readdir’:
+fuse.c:64:32: warning: passing argument 2 of ‘seekNode’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   64 |     Link node = seekNode(tree, path);
+      |                                ^~~~
+fuse.c:36:32: note: expected ‘char *’ but argument is of type ‘const char *’
+   36 | Link seekNode(Link tree, char* path);
+      |                          ~~~~~~^~~~
+fuse.c: In function ‘my_read’:
+fuse.c:84:32: warning: passing argument 2 of ‘seekNode’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+   84 |     Link node = seekNode(tree, path);
+      |                                ^~~~
+fuse.c:36:32: note: expected ‘char *’ but argument is of type ‘const char *’
+   36 | Link seekNode(Link tree, char* path);
+      |                          ~~~~~~^~~~
+fuse.c: In function ‘my_write’:
+fuse.c:100:14: warning: assignment discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  100 |     tempFile = path; /*это единственный момент в данном примере,
+      |              ^
+fuse.c:106:42: warning: passing argument 2 of ‘memcpu’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  106 |     tempContent = memcpu(tempContent,buf + offset);
+      |                                      ~~~~^~~~~~~~
+fuse.c:37:7: note: expected ‘char *’ but argument is of type ‘const char *’
+   37 | char* memcpu(char* source, char* buf);
+      |       ^~~~~~
+fuse.c: In function ‘my_mkdir’:
+fuse.c:114:26: warning: passing argument 1 of ‘split’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  114 |     char** array = split(path);
+      |                          ^~~~
+fuse.c:34:8: note: expected ‘char *’ but argument is of type ‘const char *’
+   34 | char** split(char* path);
+      |        ^~~~~
+fuse.c:119:32: warning: passing argument 2 of ‘skNode’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  119 |     Link parent = skNode(tree, path);
+      |                                ^~~~
+fuse.c:35:30: note: expected ‘char *’ but argument is of type ‘const char *’
+   35 | Link skNode(Link tree, char* path);
+      |                        ~~~~~~^~~~
+fuse.c:120:5: warning: implicit declaration of function ‘addNode’ [-Wimplicit-function-declaration]
+  120 |     addNode(parent, node);
+      |     ^~~~~~~
+fuse.c: In function ‘my_mknod’:
+fuse.c:126:26: warning: passing argument 1 of ‘split’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  126 |     char** array = split(path);
+      |                          ^~~~
+fuse.c:34:8: note: expected ‘char *’ but argument is of type ‘const char *’
+   34 | char** split(char* path);
+      |        ^~~~~
+fuse.c:130:32: warning: passing argument 2 of ‘skNode’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  130 |     Link parent = skNode(tree, path); // ищём родительский узел в иерархии
+      |                                ^~~~
+fuse.c:35:30: note: expected ‘char *’ but argument is of type ‘const char *’
+   35 | Link skNode(Link tree, char* path);
+      |                        ~~~~~~^~~~
+fuse.c: In function ‘my_rename’:
+fuse.c:141:36: warning: passing argument 2 of ‘seekNode’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  141 |         Link node = seekNode(tree, new);
+      |                                    ^~~
+fuse.c:36:32: note: expected ‘char *’ but argument is of type ‘const char *’
+   36 | Link seekNode(Link tree, char* path);
+      |                          ~~~~~~^~~~
+fuse.c:146:32: warning: passing argument 2 of ‘seekNode’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  146 |     Link node = seekNode(tree, old);
+      |                                ^~~
+fuse.c:36:32: note: expected ‘char *’ but argument is of type ‘const char *’
+   36 | Link seekNode(Link tree, char* path);
+      |                          ~~~~~~^~~~
+fuse.c:147:26: warning: passing argument 1 of ‘split’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  147 |     char** array = split(new);
+      |                          ^~~
+fuse.c:34:8: note: expected ‘char *’ but argument is of type ‘const char *’
+   34 | char** split(char* path);
+      |        ^~~~~
+fuse.c: In function ‘my_rmdir’:
+fuse.c:157:5: warning: implicit declaration of function ‘deleteNode’; did you mean ‘seekNode’? [-Wimplicit-function-declaration]
+  157 |     deleteNode(node);
+      |     ^~~~~~~~~~
+      |     seekNode
+fuse.c: At top level:
+fuse.c:179:19: warning: initialization of ‘int (*)(const char *)’ from incompatible pointer type ‘int (*)(char *)’ [-Wincompatible-pointer-types]
+  179 |     .rmdir      = my_rmdir, // удалить директорию
+      |                   ^~~~~~~~
+fuse.c:179:19: note: (near initialization for ‘my_oper.rmdir’)
+fuse.c:180:19: warning: initialization of ‘int (*)(const char *)’ from incompatible pointer type ‘int (*)(char *)’ [-Wincompatible-pointer-types]
+  180 |     .unlink     = my_unlink, // удалить файл
+      |                   ^~~~~~~~~
+fuse.c:180:19: note: (near initialization for ‘my_oper.unlink’)
+fuse.c:187:6: warning: conflicting types for built-in function ‘log’; expected ‘double(double)’ [-Wbuiltin-declaration-mismatch]
+  187 | void log(char* path)
+      |      ^~~
+fuse.c:9:1: note: ‘log’ is declared in header ‘<math.h>’
+    8 | #include <errno.h>
+  +++ |+#include <math.h>
+    9 | #include <fcntl.h>
+fuse.c:212:6: warning: conflicting types for ‘addNode’
+  212 | void addNode(Link parent, Link node)
+      |      ^~~~~~~
+fuse.c:120:5: note: previous implicit declaration of ‘addNode’ was here
+  120 |     addNode(parent, node);
+      |     ^~~~~~~
+fuse.c: In function ‘addNode’:
+fuse.c:217:5: warning: statement with no effect [-Wunused-value]
+  217 |     for(i; i < parent->childCount; i++)
+      |     ^~~
+fuse.c: At top level:
+fuse.c:239:6: warning: conflicting types for ‘deleteNode’
+  239 | void deleteNode(Link node)
+      |      ^~~~~~~~~~
+fuse.c:157:5: note: previous implicit declaration of ‘deleteNode’ was here
+  157 |     deleteNode(node);
+      |     ^~~~~~~~~~
+fuse.c: In function ‘deleteNode’:
+fuse.c:256:12: warning: ‘return’ with a value, in function returning void [-Wreturn-type]
+  256 |     return 0;
+      |            ^
+fuse.c:239:6: note: declared here
+  239 | void deleteNode(Link node)
+      |      ^~~~~~~~~~
+fuse.c: In function ‘skNode’:
+fuse.c:346:9: warning: statement with no effect [-Wunused-value]
+  346 |         for(j; j < node->childCount; j++) // перебираем всех непосредственных потомков данного текущего элемента  - узла
+      |         ^~~
+
+
+===================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.inWORK/FUSE$ make
+gcc  -O2 -Wall `pkg-config fuse --cflags`  fuse.c `pkg-config fuse --libs` -o fuse
+
+===================================================================================================================================

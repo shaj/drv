@@ -1,0 +1,300 @@
+14.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:18:8: error: type defaults to ‘int’ in declaration of ‘DECLARE_MUTEX’ [-Werror=implicit-int]
+   18 | static DECLARE_MUTEX(sema);
+      |        ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:18:1: warning: parameter names (without types) in function declaration
+   18 | static DECLARE_MUTEX(sema);
+      | ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c: In function ‘loop_func’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:23:27: error: ‘sema’ undeclared (first use in this function); did you mean ‘sem’?
+   23 |    if(lvl == sync){ down(&sema); locked++; }
+      |                           ^~~~
+      |                           sem
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:23:27: note: each undeclared identifier is reported only once for each function it appears in
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c: At top level:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:18:8: warning: ‘DECLARE_MUTEX’ declared ‘static’ but never defined [-Wunused-function]
+   18 | static DECLARE_MUTEX(sema);
+      |        ^~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:10: all] Ошибка 2
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+============================================================================================================================
+
+$ sudo insmod mlock.ko sync=0
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+$ dmesg | tail -n10
+[  382.534690] ! потоков = 4 | повторов = 10000 | синхронизация: да
+[  382.534825] ! 4295049836 : kthread [05383:4] is started
+[  382.534865] ! 4295049837 : kthread [05384:4] is started
+[  382.536675] ! 4295049838 : kthread [05384:4] is finished
+[  382.536738] ! 4295049838 : kthread [05385:4] is started
+[  382.537972] ! 4295049840 : kthread [05385:4] is finished
+[  382.538011] ! 4295049840 : kthread [05386:4] is started
+[  382.538250] ! 4295049840 : kthread [05383:4] is finished
+[  382.538620] ! 4295049840 : kthread [05386:4] is finished
+[  382.538635] ! summa = 40000 | время = 4294967300
+
+$ sudo insmod mlock.ko sync=1
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+$ dmesg | tail -n10
+[  396.756090] ! потоков = 4 | повторов = 10000 | синхронизация: нет
+[  396.756196] ! 4295064058 : kthread [05419:4] is started
+[  396.756541] ! 4295064058 : kthread [05420:4] is started
+[  396.756692] ! 4295064059 : kthread [05419:4] is finished
+[  396.756761] ! 4295064059 : kthread [05421:4] is started
+[  396.758553] ! 4295064060 : kthread [05421:4] is finished
+[  396.758611] ! 4295064061 : kthread [05422:4] is started
+[  396.761272] ! 4295064063 : kthread [05420:4] is finished
+[  396.761329] ! 4295064063 : kthread [05422:4] is finished
+[  396.761343] ! summa = 40000 | время = 4294967301
+
+============================================================================================================================
+
+$ sudo insmod mlock.ko sync=0
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+$ dmesg | tail -n10
+[ 1534.026393] ! потоков = 4 | повторов = 10000 | синхронизация: да
+[ 1534.026642] ! 4296201349 : kthread [08554:4] is started
+[ 1534.026707] ! 4296201349 : kthread [08555:4] is started
+[ 1534.029554] ! 4296201352 : kthread [08554:4] is finished
+[ 1534.029649] ! 4296201352 : kthread [08556:4] is started
+[ 1534.032357] ! 4296201355 : kthread [08556:4] is finished
+[ 1534.032403] ! 4296201355 : kthread [08557:4] is started
+[ 1534.032515] ! 4296201355 : kthread [08555:4] is finished
+[ 1534.032894] ! 4296201355 : kthread [08557:4] is finished
+[ 1534.032907] ! summa = 40000 | время = 4294967302
+
+$ sudo insmod mlock.ko sync=1
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+$ dmesg | tail -n10
+[ 1541.980567] ! потоков = 4 | повторов = 10000 | синхронизация: нет
+[ 1541.980891] ! 4296209304 : kthread [08578:4] is started
+[ 1541.980909] ! 4296209304 : kthread [08579:4] is started
+[ 1541.981113] ! 4296209304 : kthread [08579:4] is finished
+[ 1541.981123] ! 4296209304 : kthread [08578:4] is finished
+[ 1541.981189] ! 4296209304 : kthread [08580:4] is started
+[ 1541.981204] ! 4296209304 : kthread [08581:4] is started
+[ 1541.981407] ! 4296209304 : kthread [08580:4] is finished
+[ 1541.981421] ! 4296209304 : kthread [08581:4] is finished
+[ 1541.981428] ! summa = 25703 | время = 4294967297
+
+============================================================================================================================
+
+$ sudo insmod mlock.ko sync=1 rep=1000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[ 2198.485989] ! время работы: 0. 5 сек., сумма=2091237
+[ 2586.008726] ! потоков = 4 | повторов = 1000000 | синхронизация: нет
+[ 2586.008830] ! 4297253351 : kthread [13880:4] is started
+[ 2586.008994] ! 4297253351 : kthread [13881:4] is started
+[ 2586.015620] ! 4297253358 : kthread [13882:4] is started
+[ 2586.022596] ! 4297253365 : kthread [13883:4] is started
+[ 2586.056045] ! 4297253398 : kthread [13880:4] is finished
+[ 2586.056060] ! 4297253398 : kthread [13881:4] is finished
+[ 2586.057791] ! 4297253400 : kthread [13883:4] is finished
+[ 2586.058660] ! 4297253401 : kthread [13882:4] is finished
+[ 2586.058674] ! summa = 2070024 | время = 50
+[ 2586.058677] ! время работы: 0.05 сек. (50), сумма=2070024
+
+$ sudo insmod mlock.ko sync=0 rep=1000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[ 2586.058677] ! время работы: 0.05 сек. (50), сумма=2070024
+[ 2718.716813] ! потоков = 4 | повторов = 1000000 | синхронизация: да
+[ 2718.716918] ! 4297386061 : kthread [14182:4] is started
+[ 2718.717283] ! 4297386062 : kthread [14183:4] is started
+[ 2718.720163] ! 4297386065 : kthread [14184:4] is started
+[ 2718.724108] ! 4297386069 : kthread [14185:4] is started
+[ 2719.571499] ! 4297386916 : kthread [14182:4] is finished
+[ 2719.622834] ! 4297386967 : kthread [14185:4] is finished
+[ 2719.643538] ! 4297386988 : kthread [14183:4] is finished
+[ 2719.645071] ! 4297386989 : kthread [14184:4] is finished
+[ 2719.645089] ! summa = 4000000 | время = 929
+[ 2719.645092] ! время работы: 0.92 сек. (929), сумма=4000000
+
+============================================================================================================================
+
+$ time sudo insmod mlock.ko sync=0 rep=10000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+real	0m10,133s
+user	0m0,041s
+sys	0m0,013s
+
+
+$ dmesg | tail -n11
+[ 3148.239894] ! потоков = 4 | повторов = 10000000 | синхронизация: да
+[ 3148.240175] ! 4297815593 : kthread [16327:1] is started
+[ 3148.240194] ! 4297815593 : kthread [16328:2] is started
+[ 3148.242547] ! 4297815595 : kthread [16329:3] is started
+[ 3148.246021] ! 4297815599 : kthread [16330:0] is started
+[ 3158.184215] ! 4297825537 : kthread [16330:0] is finished
+[ 3158.269997] ! 4297825623 : kthread [16327:1] is finished
+[ 3158.272894] ! 4297825626 : kthread [16329:3] is finished
+[ 3158.305705] ! 4297825658 : kthread [16328:2] is finished
+[ 3158.305719] ! summa = 40000000 | время = 10066
+[ 3158.305722] ! время работы: 10.06 сек. (10066), сумма=40000000
+
+
+$ time sudo insmod mlock.ko sync=1 rep=10000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+real	0m0,574s
+user	0m0,046s
+sys	0m0,009s
+
+
+$ dmesg | tail -n11
+[ 3181.880736] ! потоков = 4 | повторов = 10000000 | синхронизация: нет
+[ 3181.881118] ! 4297849234 : kthread [16414:1] is started
+[ 3181.881184] ! 4297849234 : kthread [16415:2] is started
+[ 3181.886643] ! 4297849240 : kthread [16416:3] is started
+[ 3181.893404] ! 4297849247 : kthread [16417:0] is started
+[ 3182.376232] ! 4297849729 : kthread [16414:1] is finished
+[ 3182.376695] ! 4297849730 : kthread [16417:0] is finished
+[ 3182.386574] ! 4297849740 : kthread [16416:3] is finished
+[ 3182.389360] ! 4297849742 : kthread [16415:2] is finished
+[ 3182.389386] ! summa = 21654670 | время = 509
+[ 3182.389388] ! время работы: 0.50 сек. (509), сумма=21654670
+
+============================================================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/thread/mlock/mlock.o
+  CC [M]  /home/olej/2022/kernel/thread/mlock/slock.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/thread/mlock/mlock.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/mlock/mlock.ko
+  CC      /home/olej/2022/kernel/thread/mlock/slock.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/mlock/slock.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+$ time sudo insmod mlock.ko sync=0 rep=10000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+real	0m10,115s
+user	0m0,044s
+sys	0m0,010s
+
+
+$ dmesg | tail -n10
+[ 3363.769775] ! потоков = 4 | повторов = 10000000 | синхронизация: да
+[ 3363.770123] ! 4298031127 : kthread [17416:1] is started
+[ 3363.770189] ! 4298031127 : kthread [17417:2] is started
+[ 3363.777049] ! 4298031134 : kthread [17418:3] is started
+[ 3363.785025] ! 4298031142 : kthread [17419:0] is started
+[ 3373.682929] ! 4298041040 : kthread [17419:0] is finished
+[ 3373.730545] ! 4298041087 : kthread [17418:3] is finished
+[ 3373.771525] ! 4298041128 : kthread [17416:1] is finished
+[ 3373.820331] ! 4298041177 : kthread [17417:2] is finished
+[ 3373.820348] ! время работы: 10.05 сек. (10051), сумма=40000000
+
+
+$ time sudo insmod mlock.ko sync=1 rep=10000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+real	0m0,590s
+user	0m0,043s
+sys	0m0,011s
+
+
+$ dmesg | tail -n10
+[ 3393.430580] ! потоков = 4 | повторов = 10000000 | синхронизация: нет
+[ 3393.430777] ! 4298060788 : kthread [17484:1] is started
+[ 3393.430845] ! 4298060788 : kthread [17485:2] is started
+[ 3393.437505] ! 4298060795 : kthread [17486:3] is started
+[ 3393.443566] ! 4298060801 : kthread [17487:0] is started
+[ 3393.942597] ! 4298061300 : kthread [17485:2] is finished
+[ 3393.955285] ! 4298061312 : kthread [17486:3] is finished
+[ 3393.955341] ! 4298061312 : kthread [17484:1] is finished
+[ 3393.957013] ! 4298061314 : kthread [17487:0] is finished
+[ 3393.957030] ! время работы: 0.52 сек. (526), сумма=20587576
+
+============================================================================================================================
+
+$ time sudo insmod mlock.ko sync=1 rep=10000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+real	0m0,597s
+user	0m0,042s
+sys	0m0,013s
+
+
+$ dmesg | tail -n10
+[ 4009.641894] ! потоков = 4 | повторов = 10000000 | синхронизация: нет
+[ 4009.642139] ! 4298677010 : kthread [19462:1] is started
+[ 4009.642161] ! 4298677011 : kthread [19463:2] is started
+[ 4009.651142] ! 4298677020 : kthread [19464:3] is started
+[ 4009.658137] ! 4298677027 : kthread [19465:0] is started
+[ 4010.144128] ! 4298677513 : kthread [19463:2] is finished
+[ 4010.168708] ! 4298677537 : kthread [19465:0] is finished
+[ 4010.172651] ! 4298677541 : kthread [19462:1] is finished
+[ 4010.172889] ! 4298677541 : kthread [19464:3] is finished
+[ 4010.172908] ! время работы: 0.53 сек. (531), сумма=20370339
+
+
+$ time sudo insmod mlock.ko sync=0 rep=10000000
+insmod: ERROR: could not insert module mlock.ko: Operation not permitted
+
+real	0m10,166s
+user	0m0,042s
+sys	0m0,013s
+
+
+$ dmesg | tail -n10
+[ 4026.438466] ! потоков = 4 | повторов = 10000000 | синхронизация: да
+[ 4026.438570] ! 4298693807 : kthread [19517:1] is started
+[ 4026.438790] ! 4298693807 : kthread [19518:2] is started
+[ 4026.443870] ! 4298693813 : kthread [19519:3] is started
+[ 4026.450833] ! 4298693820 : kthread [19520:0] is started
+[ 4036.071615] ! 4298703440 : kthread [19520:0] is finished
+[ 4036.250586] ! 4298703619 : kthread [19519:3] is finished
+[ 4036.527005] ! 4298703896 : kthread [19517:1] is finished
+[ 4036.539002] ! 4298703908 : kthread [19518:2] is finished
+[ 4036.539019] ! время работы: 10.10 сек. (10101), сумма=40000000
+
+============================================================================================================================

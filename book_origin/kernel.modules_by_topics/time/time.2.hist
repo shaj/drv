@@ -1,0 +1,245 @@
+14.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/time
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/time modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.o
+see include/linux/module.h for more information
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.o
+see include/linux/module.h for more information
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make calibr.o rdtsc.o proc_hz.o set_rt.o
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+gcc -c calibr.c -o calibr.o 
+ar -r libdiag.a calibr.o        
+gcc -c rdtsc.c -o rdtsc.o 
+ar -r libdiag.a rdtsc.o        
+gcc -c proc_hz.c -o proc_hz.o 
+ar -r libdiag.a proc_hz.o        
+gcc -c set_rt.c -o set_rt.o 
+ar -r libdiag.a set_rt.o        
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+ar -t libdiag.a
+calibr.o
+rdtsc.o
+proc_hz.o
+set_rt.o
+make clean
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+gcc clock.c -Bstatic -L./ -ldiag -o clock
+clock.c: In function ‘main’:
+clock.c:4:19: warning: format ‘%llX’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    4 |    printf( "%016llX\n", rdtsc() );
+      |             ~~~~~~^     ~~~~~~~
+      |                   |     |
+      |                   |     uint64_t {aka long unsigned int}
+      |                   long long unsigned int
+      |             %016lX
+clock.c:5:19: warning: format ‘%llX’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    5 |    printf( "%016llX\n", rdtsc() );
+      |             ~~~~~~^     ~~~~~~~
+      |                   |     |
+      |                   |     uint64_t {aka long unsigned int}
+      |                   long long unsigned int
+      |             %016lX
+clock.c:6:19: warning: format ‘%llX’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    6 |    printf( "%016llX\n", rdtsc() );
+      |             ~~~~~~^     ~~~~~~~
+      |                   |     |
+      |                   |     uint64_t {aka long unsigned int}
+      |                   long long unsigned int
+      |             %016lX
+clock.c:7:16: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    7 |    printf( "%lld\n", proc_hz() );
+      |             ~~~^     ~~~~~~~~~
+      |                |     |
+      |                |     uint64_t {aka long unsigned int}
+      |                long long int
+      |             %ld
+gcc pdelay.c -Bstatic -L./ -ldiag -o pdelay
+gcc rtprd.c -Bstatic -L./ -ldiag -o rtprd
+rtprd.c: In function ‘main’:
+rtprd.c:39:4: warning: implicit declaration of function ‘mlockall’ [-Wimplicit-function-declaration]
+   39 |    mlockall( MCL_CURRENT );                 // Avoid paging and related indeterminism
+      |    ^~~~~~~~
+
+========================================================================================================================================
+
+12.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/list$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/list$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/slab$ grep CONFIG_HZ /boot/config-`uname -r`
+# CONFIG_HZ_PERIODIC is not set
+# CONFIG_HZ_100 is not set
+CONFIG_HZ_250=y
+# CONFIG_HZ_300 is not set
+# CONFIG_HZ_1000 is not set
+CONFIG_HZ=250
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+olej@antix21:~/2022/kernel/memory/slab
+$ inxi -S
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64 Console: pty pts/2
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-amd64-smp #1 SMP PREEMPT Sun Aug 8 15:04:18 EEST 2021 x86_64 GNU/Linux
+olej@antix21:~/2022/kernel/memory/slab
+
+$ grep HZ /boot/config-`uname -r`
+CONFIG_NO_HZ_COMMON=y
+# CONFIG_HZ_PERIODIC is not set
+CONFIG_NO_HZ_IDLE=y
+# CONFIG_NO_HZ_FULL is not set
+CONFIG_NO_HZ=y
+# CONFIG_HZ_100 is not set
+# CONFIG_HZ_250 is not set
+# CONFIG_HZ_300 is not set
+CONFIG_HZ_1000=y
+CONFIG_HZ=1000
+CONFIG_MACHZ_WDT=m
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+$ inxi -S
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-486-smp #1 SMP Sun Aug 8 20:59:37 EEST 2021 i686 GNU/Linux
+olej@antix21:~
+
+$ grep HZ /boot/config-`uname -r`
+CONFIG_NO_HZ_COMMON=y
+# CONFIG_HZ_PERIODIC is not set
+CONFIG_NO_HZ_IDLE=y
+CONFIG_NO_HZ=y
+# CONFIG_RCU_FAST_NO_HZ is not set
+# CONFIG_HZ_100 is not set
+# CONFIG_HZ_250 is not set
+# CONFIG_HZ_300 is not set
+CONFIG_HZ_1000=y
+CONFIG_HZ=1000
+CONFIG_MACHZ_WDT=m
+olej@antix21:~
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-486-smp #1 SMP Sun Aug 8 20:59:37 EEST 2021 i686 GNU/Linux
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+[olej@xenix list]$ inxi -S
+System:
+  Host: xenix.localdomain Kernel: 5.18.16-100.fc35.x86_64 arch: x86_64 bits: 64
+    Console: pty pts/3 Distro: Fedora release 35 (Thirty Five)
+
+[olej@xenix list]$ uname -a
+Linux xenix.localdomain 5.18.16-100.fc35.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Aug 4 02:06:53 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+[olej@xenix list]$ grep HZ /boot/config-`uname -r`
+CONFIG_NO_HZ_COMMON=y
+# CONFIG_HZ_PERIODIC is not set
+# CONFIG_NO_HZ_IDLE is not set
+CONFIG_NO_HZ_FULL=y
+CONFIG_NO_HZ=y
+# CONFIG_HZ_100 is not set
+# CONFIG_HZ_250 is not set
+# CONFIG_HZ_300 is not set
+CONFIG_HZ_1000=y
+CONFIG_HZ=1000
+CONFIG_MACHZ_WDT=m
+
+[olej@xenix list]$ grep CONFIG_HZ /boot/config-`uname -r`
+# CONFIG_HZ_PERIODIC is not set
+# CONFIG_HZ_100 is not set
+# CONFIG_HZ_250 is not set
+# CONFIG_HZ_300 is not set
+CONFIG_HZ_1000=y
+CONFIG_HZ=1000
+
+========================================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/memory/list$ inxi -S
+System:
+  Host: orangepione Kernel: 5.15.48-sunxi armv7l bits: 32 Console: tty 3 
+  Distro: Armbian GNU/Linux 10 (buster) 
+
+olej@orangepione:~/2022/kernel/examples/memory/list$ uname -a
+Linux orangepione 5.15.48-sunxi #22.05.3 SMP Wed Jun 22 07:35:10 UTC 2022 armv7l GNU/Linux
+
+olej@orangepione:~/2022/kernel/examples/memory/list$ grep CONFIG_HZ /lib/modules/`uname -r`/build/.config
+# CONFIG_HZ_PERIODIC is not set
+CONFIG_HZ_FIXED=0
+# CONFIG_HZ_100 is not set
+# CONFIG_HZ_200 is not set
+CONFIG_HZ_250=y
+# CONFIG_HZ_300 is not set
+# CONFIG_HZ_500 is not set
+# CONFIG_HZ_1000 is not set
+CONFIG_HZ=250
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ inxi -S
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 Console: tty 3 
+           Distro: Raspbian GNU/Linux 11 (bullseye) 
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ grep HZ /boot/config-`uname -r`
+grep: /boot/config-5.15.32-v7+: Нет такого файла или каталога
+
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ grep HZ /lib/modules/`uname -r`/build/.config
+CONFIG_NO_HZ_COMMON=y
+# CONFIG_HZ_PERIODIC is not set
+CONFIG_NO_HZ_IDLE=y
+# CONFIG_NO_HZ_FULL is not set
+CONFIG_NO_HZ=y
+CONFIG_HZ_FIXED=0
+CONFIG_HZ_100=y
+# CONFIG_HZ_200 is not set
+# CONFIG_HZ_250 is not set
+# CONFIG_HZ_300 is not set
+# CONFIG_HZ_500 is not set
+# CONFIG_HZ_1000 is not set
+CONFIG_HZ=100
+
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ grep CONFIG_HZ /lib/modules/`uname -r`/build/.config
+# CONFIG_HZ_PERIODIC is not set
+CONFIG_HZ_FIXED=0
+CONFIG_HZ_100=y
+# CONFIG_HZ_200 is not set
+# CONFIG_HZ_250 is not set
+# CONFIG_HZ_300 is not set
+# CONFIG_HZ_500 is not set
+# CONFIG_HZ_1000 is not set
+CONFIG_HZ=100
+
+========================================================================================================================================
+
+----------------------------------------------------------------------------------------------------------------------------------------

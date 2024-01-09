@@ -1,0 +1,95 @@
+07.07.2022
+==========
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/fs.h#L2990
+
+extern int kernel_read_file_from_path(const char *, void **, loff_t *, loff_t,
+		      enum kernel_read_file_id);
+
+https://elixir.bootlin.com/linux/v5.4/source/fs/exec.c#L966
+[966]
+int kernel_read_file_from_path(const char *path, void **buf, loff_t *size,
+	           loff_t max_size, enum kernel_read_file_id id)
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+https://elixir.bootlin.com/linux/v5.10/source/fs/kernel_read_file.c#L145
+
+int kernel_read_file_from_path(const char *path, loff_t offset, void **buf,
+	           size_t buf_size, size_t *file_size,
+	           enum kernel_read_file_id id)
+
+===================================================================================================================
+
+08.07.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/mod_rct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/mod_rctk.o
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/mod_rctk.c:13:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/findpk.c: In function ‘find_sym’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/findpk.c:39:5: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+   39 |     loff_t file_size = 0;
+      |     ^~~~~~
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/mod_rct.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/mod_rctk.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find/mod_rctk.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find$ 
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find$ sudo insmod mod_rctk.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rctk.ko: Invalid parameters
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find$ dmesg | tail -n4
+[ 9146.684766] + ============================
+[ 9146.684776] + file_size=0
+[ 9146.684776] + k=-22
+[ 9146.684777] + find error: -22
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/find$ dmesg | tail -n4
+[ 9277.909378] + openning file: /proc/kallsyms
+[ 9278.359878] + close file: /proc/kallsyms
+[ 9278.359882] + sys_call_table address = ffffffffab6013c0
+[ 9278.359888] + sys_call_table : ffffffffaa8cdf00 ffffffffaa8ce020 ffffffffaa8c9bd0 ffffffffaa8c7c80 ffffffffaa8d2fe0 ffffffffaa8d3200 ffffffffaa8d30a0 ffffffffaa8e6ed0 ffffffffaa8cb820 ffffffffaa636820  ...
+
+-------------------------------------------------------------------------------------------------------------------
+
+</lib/modules/5.4.0-121-generic/build/include/uapi/asm-generic/errno-base.h>
+#define EINVAL          22      /* Invalid argument */
+
+
+<https://elixir.bootlin.com/linux/v5.4/source/fs/exec.c#L966>
+[924]
+    if (id != READING_FIRMWARE_PREALLOC_BUFFER)
+	*buf = vmalloc(i_size);
+    if (!*buf) {
+	ret = -ENOMEM;
+	goto out;
+    }
+
+<https://elixir.bootlin.com/linux/v5.4/source/include/linux/fs.h#L2962>
+[2960]
+#define __kernel_read_file_id(id) \
+    id(UNKNOWN, unknown)		\
+    id(FIRMWARE, firmware)		\
+    id(FIRMWARE_PREALLOC_BUFFER, firmware)	\
+    id(MODULE, kernel-module)		\
+    id(KEXEC_IMAGE, kexec-image)		\
+    id(KEXEC_INITRAMFS, kexec-initramfs)	\
+    id(POLICY, security-policy)		\
+    id(X509_CERTIFICATE, x509-certificate)	\
+    id(MAX_ID, )
+
+===================================================================================================================
+

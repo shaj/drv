@@ -1,0 +1,282 @@
+17.08.2022
+==========
+
+olej@R420:~$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/8p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 8: Dev 4, If 3, Class=Human Interface Device, Driver=usbhid, 12M
+        |__ Port 8: Dev 4, If 1, Class=Audio, Driver=snd-usb-audio, 12M
+        |__ Port 8: Dev 4, If 2, Class=Audio, Driver=snd-usb-audio, 12M
+        |__ Port 8: Dev 4, If 0, Class=Audio, Driver=snd-usb-audio, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/6p, 480M
+        |__ Port 6: Dev 3, If 0, Class=Hub, Driver=hub/6p, 480M
+            |__ Port 1: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 480M
+            |__ Port 1: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid, 480M
+            |__ Port 1: Dev 4, If 2, Class=Human Interface Device, Driver=usbhid, 480M
+
+
+olej@R420:~$ lspci -t
+-+-[0000:7f]-+-08.0
+ |           +-09.0
+ |           +-0a.0
+ |           +-0a.1
+ |           +-0a.2
+ |           +-0a.3
+ |           +-0b.0
+ |           +-0b.3
+ |           +-0c.0
+ |           +-0c.1
+ |           +-0c.2
+ |           +-0c.3
+ |           +-0c.4
+ |           +-0d.0
+ |           +-0d.1
+ |           +-0d.2
+ |           +-0d.3
+ |           +-0d.4
+ |           +-0e.0
+ |           +-0e.1
+ |           +-0f.0
+ |           +-0f.1
+ |           +-0f.2
+ |           +-0f.3
+ |           +-0f.4
+ |           +-0f.5
+ |           +-10.0
+ |           +-10.1
+ |           +-10.2
+ |           +-10.3
+ |           +-10.4
+ |           +-10.5
+ |           +-10.7
+ |           +-13.0
+ |           +-13.1
+ |           +-13.4
+ |           +-13.5
+ |           +-16.0
+ |           +-16.1
+ |           \-16.2
+ +-[0000:40]-+-05.0
+ |           \-05.2
+ +-[0000:3f]-+-08.0
+ |           +-09.0
+ |           +-0a.0
+ |           +-0a.1
+ |           +-0a.2
+ |           +-0a.3
+ |           +-0b.0
+ |           +-0b.3
+ |           +-0c.0
+ |           +-0c.1
+ |           +-0c.2
+ |           +-0c.3
+ |           +-0c.4
+ |           +-0d.0
+ |           +-0d.1
+ |           +-0d.2
+ |           +-0d.3
+ |           +-0d.4
+ |           +-0e.0
+ |           +-0e.1
+ |           +-0f.0
+ |           +-0f.1
+ |           +-0f.2
+ |           +-0f.3
+ |           +-0f.4
+ |           +-0f.5
+ |           +-10.0
+ |           +-10.1
+ |           +-10.2
+ |           +-10.3
+ |           +-10.4
+ |           +-10.5
+ |           +-10.7
+ |           +-13.0
+ |           +-13.1
+ |           +-13.4
+ |           +-13.5
+ |           +-16.0
+ |           +-16.1
+ |           \-16.2
+ \-[0000:00]-+-00.0
+             +-01.0-[01]----00.0
+             +-03.0-[08]----00.0
+             +-05.0
+             +-05.2
+             +-11.0-[09]--
+             +-16.0
+             +-16.1
+             +-1a.0
+             +-1c.0-[0a]--
+             +-1c.4-[02]--+-00.0
+             |            \-00.1
+             +-1c.7-[03-07]----00.0-[04-07]--+-00.0-[05-06]----00.0-[06]----00.0
+             |                               \-01.0-[07]--
+             +-1d.0
+             +-1e.0-[0b]--
+             +-1f.0
+             \-1f.2
+
+=================================================================================================================
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/pci$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/pci modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/pci/lab2_pci.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/pci/lab2_pci.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/pci/lab2_pci.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/pci$ lspci
+00:00.0 Host bridge: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 DMI2 (rev 04)
+00:01.0 PCI bridge: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 PCI Express Root Port 1a (rev 04)
+00:03.0 PCI bridge: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 PCI Express Root Port 3a (rev 04)
+00:05.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 VTd/Memory Map/Misc (rev 04)
+00:05.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 IIO RAS (rev 04)
+00:11.0 PCI bridge: Intel Corporation C600/X79 series chipset PCI Express Virtual Root Port (rev 05)
+00:16.0 Communication controller: Intel Corporation C600/X79 series chipset MEI Controller #1 (rev 05)
+00:16.1 Communication controller: Intel Corporation C600/X79 series chipset MEI Controller #2 (rev 05)
+00:1a.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller #2 (rev 05)
+00:1c.0 PCI bridge: Intel Corporation C600/X79 series chipset PCI Express Root Port 1 (rev b5)
+00:1c.4 PCI bridge: Intel Corporation C600/X79 series chipset PCI Express Root Port 5 (rev b5)
+00:1c.7 PCI bridge: Intel Corporation C600/X79 series chipset PCI Express Root Port 8 (rev b5)
+00:1d.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller #1 (rev 05)
+00:1e.0 PCI bridge: Intel Corporation 82801 PCI Bridge (rev a5)
+00:1f.0 ISA bridge: Intel Corporation C600/X79 series chipset LPC Controller (rev 05)
+00:1f.2 SATA controller: Intel Corporation C600/X79 series chipset 6-Port SATA AHCI Controller (rev 05)
+01:00.0 RAID bus controller: Broadcom / LSI MegaRAID SAS 2008 [Falcon] (rev 03)
+02:00.0 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme BCM5720 2-port Gigabit Ethernet PCIe
+02:00.1 Ethernet controller: Broadcom Inc. and subsidiaries NetXtreme BCM5720 2-port Gigabit Ethernet PCIe
+03:00.0 PCI bridge: Renesas Technology Corp. SH7757 PCIe Switch [PS]
+04:00.0 PCI bridge: Renesas Technology Corp. SH7757 PCIe Switch [PS]
+04:01.0 PCI bridge: Renesas Technology Corp. SH7757 PCIe Switch [PS]
+05:00.0 PCI bridge: Renesas Technology Corp. SH7757 PCIe-PCI Bridge [PPB]
+06:00.0 VGA compatible controller: Matrox Electronics Systems Ltd. G200eR2
+08:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd Device a80a
+3f:08.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Link 0 (rev 04)
+3f:09.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Link 1 (rev 04)
+3f:0a.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 0 (rev 04)
+3f:0a.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 1 (rev 04)
+3f:0a.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 2 (rev 04)
+3f:0a.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 3 (rev 04)
+3f:0b.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 UBOX Registers (rev 04)
+3f:0b.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 UBOX Registers (rev 04)
+3f:0c.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0c.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0c.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0c.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0c.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0d.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0d.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0d.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0d.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0d.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+3f:0e.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Home Agent 0 (rev 04)
+3f:0e.1 Performance counters: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Home Agent 0 (rev 04)
+3f:0f.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Target Address/Thermal Registers (rev 04)
+3f:0f.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 RAS Registers (rev 04)
+3f:0f.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+3f:0f.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+3f:0f.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+3f:0f.5 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+3f:10.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 0 (rev 04)
+3f:10.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 1 (rev 04)
+3f:10.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 ERROR Registers 0 (rev 04)
+3f:10.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 ERROR Registers 1 (rev 04)
+3f:10.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 2 (rev 04)
+3f:10.5 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 3 (rev 04)
+3f:10.7 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 ERROR Registers 3 (rev 04)
+3f:13.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 R2PCIe (rev 04)
+3f:13.1 Performance counters: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 R2PCIe (rev 04)
+3f:13.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Ring Registers (rev 04)
+3f:13.5 Performance counters: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Ring Performance Ring Monitoring (rev 04)
+3f:16.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 System Address Decoder (rev 04)
+3f:16.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Broadcast Registers (rev 04)
+3f:16.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Broadcast Registers (rev 04)
+40:05.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 VTd/Memory Map/Misc (rev 04)
+40:05.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 IIO RAS (rev 04)
+7f:08.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Link 0 (rev 04)
+7f:09.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Link 1 (rev 04)
+7f:0a.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 0 (rev 04)
+7f:0a.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 1 (rev 04)
+7f:0a.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 2 (rev 04)
+7f:0a.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Power Control Unit 3 (rev 04)
+7f:0b.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 UBOX Registers (rev 04)
+7f:0b.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 UBOX Registers (rev 04)
+7f:0c.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0c.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0c.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0c.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0c.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0d.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0d.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0d.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0d.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0d.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Unicast Registers (rev 04)
+7f:0e.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Home Agent 0 (rev 04)
+7f:0e.1 Performance counters: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Home Agent 0 (rev 04)
+7f:0f.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Target Address/Thermal Registers (rev 04)
+7f:0f.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 RAS Registers (rev 04)
+7f:0f.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+7f:0f.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+7f:0f.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+7f:0f.5 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 0 Channel Target Address Decoder Registers (rev 04)
+7f:10.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 0 (rev 04)
+7f:10.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 1 (rev 04)
+7f:10.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 ERROR Registers 0 (rev 04)
+7f:10.3 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 ERROR Registers 1 (rev 04)
+7f:10.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 2 (rev 04)
+7f:10.5 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 Thermal Control 3 (rev 04)
+7f:10.7 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Integrated Memory Controller 1 Channel 0-3 ERROR Registers 3 (rev 04)
+7f:13.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 R2PCIe (rev 04)
+7f:13.1 Performance counters: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 R2PCIe (rev 04)
+7f:13.4 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Ring Registers (rev 04)
+7f:13.5 Performance counters: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Ring Performance Ring Monitoring (rev 04)
+7f:16.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 System Address Decoder (rev 04)
+7f:16.1 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Broadcast Registers (rev 04)
+7f:16.2 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 Broadcast Registers (rev 04)
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/pci$ sudo insmod lab2_pci.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/pci$ dmesg | tail -n25
+[45208.545753]  PCI_DEVICE_ID=ec8
+[45208.545754]  PCI_REVISION_ID=4
+[45208.545754]  PCI_INTERRUPT_LINE=0
+[45208.545755]  PCI_LATENCY_TIMER=0
+[45208.545756]  PCI_COMMAND=0
+[45208.545756] 
+               FOUND PCI DEVICE # j = 105, 
+[45208.545757] READING CONFIGURATION REGISTER:
+[45208.545757] Bus,Device,Function=0000:7f:16.1
+[45208.545757]  PCI_VENDOR_ID=8086
+[45208.545758]  PCI_DEVICE_ID=ec9
+[45208.545759]  PCI_REVISION_ID=4
+[45208.545759]  PCI_INTERRUPT_LINE=0
+[45208.545760]  PCI_LATENCY_TIMER=0
+[45208.545761]  PCI_COMMAND=0
+[45208.545761] 
+               FOUND PCI DEVICE # j = 106, 
+[45208.545762] READING CONFIGURATION REGISTER:
+[45208.545762] Bus,Device,Function=0000:7f:16.2
+[45208.545763]  PCI_VENDOR_ID=8086
+[45208.545763]  PCI_DEVICE_ID=eca
+[45208.545764]  PCI_REVISION_ID=4
+[45208.545764]  PCI_INTERRUPT_LINE=0
+[45208.545765]  PCI_LATENCY_TIMER=0
+[45208.545766]  PCI_COMMAND=0
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/pci$ sudo rmmod lab2_pci
+
+=================================================================================================================
+

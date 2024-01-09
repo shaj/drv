@@ -1,0 +1,23 @@
+29.06.2022
+==========
+
+olej@mint-20:~$ uname -a
+Linux mint-20 5.15.0-33-generic #34~20.04.1-Ubuntu SMP Thu May 19 15:51:16 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@mint-20:~$ inxi -Sxxx
+System:    Host: mint-20 Kernel: 5.15.0-33-generic x86_64 bits: 64 compiler: N/A Desktop: Cinnamon 5.2.7 
+           wm: muffin 5.2.1 dm: LightDM 1.30.0 Distro: Linux Mint 20.3 Una base: Ubuntu 20.04 focal 
+
+olej@mint-20:~$ cat /boot/config-`uname -r` | grep KALLSYMS
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@mint-20:~$ sudo cat /proc/kallsyms | grep sys_call_table
+[sudo] пароль для olej:       
+ffffffffaee00320 R sys_call_table
+ffffffffaee01440 R ia32_sys_call_table
+ffffffffaee02260 R x32_sys_call_table
+
+====================================================================================================

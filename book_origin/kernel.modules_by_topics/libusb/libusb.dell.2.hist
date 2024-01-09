@@ -1,0 +1,55 @@
+27.08.2022
+==========
+
+olej@R420:~$ lsusb | grep -i mouse
+Bus 001 Device 004: ID 0624:0249 Avocent Corp. Virtual Keyboard/Mouse
+
+
+Couldn't open device, some information will be missing
+      bInterfaceNumber        0
+      bInterfaceNumber        1
+      bInterfaceNumber        2
+
+olej@R420:~$ lsusb -d 0624:0249 -v | grep bEndpointAddress
+Couldn't open device, some information will be missing
+        bEndpointAddress     0x81  EP 1 IN
+        bEndpointAddress     0x82  EP 2 IN
+        bEndpointAddress     0x83  EP 3 IN
+
+==============================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  ulist.c `pkg-config libusb-1.0 --libs` -o ulist
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ ls -l | grep ^"\-rwx"
+-rwxrwxr-x 1 olej olej 17160 авг 27 19:18 ulist
+-rwxrwxr-x 1 olej olej 17624 авг 27 16:41 utest
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ sudo ./ulist 
+[sudo] пароль для olej:       
+046d:0a45 (bus 2, device 4)
+2101:020f (bus 2, device 3)
+8087:0024 (bus 2, device 2)
+1d6b:0002 (bus 2, device 1)
+0624:0249 (bus 1, device 4)
+0624:0248 (bus 1, device 3)
+8087:0024 (bus 1, device 2)
+1d6b:0002 (bus 1, device 1)
+
+==============================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  ulist.c `pkg-config libusb-1.0 --libs` -o ulist
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ sudo ./ulist 
+046d:0a45 (bus 2, device 4) path: 1.8
+2101:020f (bus 2, device 3) path: 1.2
+8087:0024 (bus 2, device 2) path: 1
+1d6b:0002 (bus 2, device 1)
+0624:0249 (bus 1, device 4) path: 1.6.1
+0624:0248 (bus 1, device 3) path: 1.6
+8087:0024 (bus 1, device 2) path: 1
+1d6b:0002 (bus 1, device 1)
+
+==============================================================================================================

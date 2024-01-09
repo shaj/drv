@@ -1,0 +1,445 @@
+19.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod mulnet.ko num=4 title=abc 
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether ee:8b:90:64:9b:dd brd ff:ff:ff:ff:ff:ff
+5: abc0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+6: abc1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 01:02:03:04:05:06 brd ff:ff:ff:ff:ff:ff
+7: abc2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 02:03:04:05:06:07 brd ff:ff:ff:ff:ff:ff
+8: abc3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 03:04:05:06:07:08 brd ff:ff:ff:ff:ff:ff
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod devices.ko 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ dmesg | tail -n 10
+[18147.771220] Hello: module loaded at 0xffffffffc0d24000
+[18147.771222] Hello: dev_base address=0xffff95f48b20e000
+[18147.771228] name=lo     irq=0   MAC=00:00:00:00:00:00 rx_bytes=9602226  tx_bytes=9602226  
+[18147.771232] name=eno1   irq=16  MAC=90:b1:1c:54:3a:46 rx_bytes=33949503 tx_bytes=11483504 
+[18147.771235] name=eno2   irq=17  MAC=90:b1:1c:54:3a:47 rx_bytes=22621614 tx_bytes=7072507  
+[18147.771240] name=team1  irq=0   MAC=ee:8b:90:64:9b:dd rx_bytes=0        tx_bytes=0        
+[18147.771242] name=abc0   irq=0   MAC=00:01:02:03:04:05 rx_bytes=0        tx_bytes=0        
+[18147.771244] name=abc1   irq=0   MAC=01:02:03:04:05:06 rx_bytes=0        tx_bytes=0        
+[18147.771246] name=abc2   irq=0   MAC=02:03:04:05:06:07 rx_bytes=0        tx_bytes=0        
+[18147.771248] name=abc3   irq=0   MAC=03:04:05:06:07:08 rx_bytes=0        tx_bytes=0        
+
+--------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ifconfig abc3 192.168.1.200 up
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ifconfig abc3 
+abc3: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.200  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 03:04:05:06:07:08  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ping -I abc3 -c3 127.0.0.1
+PING 127.0.0.1 (127.0.0.1) from 192.168.1.200 abc3: 56(84) bytes of data.
+From 192.168.1.200 icmp_seq=1 Destination Host Unreachable
+From 192.168.1.200 icmp_seq=2 Destination Host Unreachable
+From 192.168.1.200 icmp_seq=3 Destination Host Unreachable
+
+--- 127.0.0.1 ping statistics ---
+3 packets transmitted, 0 received, +3 errors, 100% packet loss, time 2044ms
+pipe 3
+
+--------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo rmmod mulnet 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether ee:8b:90:64:9b:dd brd ff:ff:ff:ff:ff:ff
+
+==========================================================================================================================
+
+20.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip a s
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.14/24 brd 192.168.1.255 scope global noprefixroute eno1
+       valid_lft forever preferred_lft forever
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.13/24 brd 192.168.1.255 scope global noprefixroute eno2
+       valid_lft forever preferred_lft forever
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether ca:fd:8b:ac:30:6f brd ff:ff:ff:ff:ff:ff
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod network.ko 
+[sudo] пароль для olej:       
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ Jun 20 16:40:28 R420 kernel: [16015.153291] ! Loading stub network module:....
+Jun 20 16:40:28 R420 kernel: [16015.153599] ! Succeeded in loading fict0!
+Jun 20 16:40:28 R420 kernel: [16015.174906] ! Hit: my_open(fict0)
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ tty
+/dev/pts/13
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip a s
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.14/24 brd 192.168.1.255 scope global noprefixroute eno1
+       valid_lft forever preferred_lft forever
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.13/24 brd 192.168.1.255 scope global noprefixroute eno2
+       valid_lft forever preferred_lft forever
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether ca:fd:8b:ac:30:6f brd ff:ff:ff:ff:ff:ff
+5: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+    inet6 fe80::ed53:fc72:440e:85be/64 scope link noprefixroute 
+       valid_lft forever preferred_lft forever
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether ca:fd:8b:ac:30:6f brd ff:ff:ff:ff:ff:ff
+5: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo rmmod network 
+Jun 20 16:46:40 R420 kernel: [16387.128211] ! Unloading stub network module
+Jun 20 16:46:40 R420 kernel: [16387.128397] ! Hit: my_close(fict0)
+
+==========================================================================================================================
+
+[olej@xenix net]$ sudo inxi -CMxxx
+[sudo] пароль для olej: 
+Machine:
+  Type: Desktop System: FUJITSU product: ESPRIMO P420 v: N/A
+    serial: YLTH128357 Chassis: type: 6 v: C$WH01 serial: YLTH128357
+  Mobo: FUJITSU model: D3230-A1 v: S26361-D3230-A1 serial: B246BE82
+    BIOS: FUJITSU // American Megatrends v: 4.6.5.4 R1.17.0 for D3230-A1x
+    date: 03/06/2014
+CPU:
+  Info: quad core model: Intel Core i7-4870HQ bits: 64 type: MT MCP
+    smt: enabled arch: Haswell rev: 1 cache: L1: 256 KiB L2: 1024 KiB L3: 6 MiB
+  Speed (MHz): avg: 1838 high: 2609 min/max: 800/3700 volts: 1.2 V
+    ext-clock: 100 MHz cores: 1: 2518 2: 2495 3: 855 4: 2586 5: 2609 6: 1558
+    7: 915 8: 1175 bogomips: 39908
+  Flags: avx avx2 ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx
+
+
+[olej@xenix net]$ inxi -Sxxx
+System:
+  Host: xenix.localdomain Kernel: 5.17.13-200.fc35.x86_64 arch: x86_64
+    bits: 64 compiler: gcc v: 2.37-17.fc35 Desktop: Cinnamon v: 5.2.7 tk: GTK
+    v: 3.24.34 wm: Muffin v: 5.2.1 dm: LightDM v: 1.30.0
+    Distro: Fedora release 35 (Thirty Five)
+
+
+
+[olej@xenix net]$ make
+make -C /lib/modules/5.17.13-200.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.c: В функции «my_setup»:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.c:55:24: ошибка: присваивание позиции в памяти «*(dev->dev_addr + (sizetype)j)», доступной только на чтение
+   55 |       dev->dev_addr[j] = (char)(j + ipos);
+      |                        ^
+make[2]: *** [scripts/Makefile.build:288: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o] Ошибка 1
+make[1]: *** [Makefile:1841: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net] Ошибка 2
+make[1]: выход из каталога «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+make: *** [Makefile:21: default] Ошибка 2
+
+
+[olej@xenix net]$ sudo insmod network.ko
+[sudo] пароль для olej: 
+
+[olej@xenix net]$ ip a s
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.20/24 brd 192.168.1.255 scope global noprefixroute enp3s0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::921b:eff:fe2b:e19c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+4: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+
+[olej@xenix net]$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+4: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+
+[olej@xenix net]$ sudo rmmod network
+
+
+[olej@xenix net]$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+
+
+[olej@xenix net]$ lsmod | head -n4
+Module                  Size  Used by
+snd_seq_dummy          16384  0
+snd_hrtimer            16384  1
+vboxnetadp             28672  0
+
+
+[olej@xenix net]$ dmesg | grep -v audit | grep -v nvidia | tail -n5
+[ 7554.813415] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[ 7554.813416] R10: 00007f44250efac0 R11: 0000000000000206 R12: 00007ffc32337c50
+[ 7554.813416] R13: 00007ffc323397bb R14: 00005564f38f62a0 R15: 00005564f38f6800
+[ 7554.813418]  </TASK>
+[ 7554.813419] ---[ end trace 0000000000000000 ]---
+
+????
+
+
+[olej@xenix net]$ dmesg | grep "!" | tail -n7
+[    0.892005] ima: No TPM chip found, activating TPM-bypass!
+[ 7437.693900] ! Loading stub network module:....
+[ 7437.694094] ! Succeeded in loading fict0!
+[ 7437.706654] ! Hit: my_open(fict0)
+[ 7554.802458] ! Unloading stub network module
+[ 7554.802489] ! Hit: my_close(fict0)
+
+==========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+  Building modules, stage 2.
+  MODPOST 6 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+==========================================================================================================================
+
+
+[olej@xenix net]$ inxi -Sxxx
+System:
+  Host: xenix.localdomain Kernel: 5.17.13-200.fc35.x86_64 arch: x86_64
+    bits: 64 compiler: gcc v: 2.37-17.fc35 Desktop: Cinnamon v: 5.2.7 tk: GTK
+    v: 3.24.34 wm: Muffin v: 5.2.1 dm: LightDM v: 1.30.0
+    Distro: Fedora release 35 (Thirty Five)
+
+
+[olej@xenix net]$ make
+make -C /lib/modules/5.17.13-200.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.o
+  MODPOST /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/Module.symvers
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko due to unavailability of vmlinux
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko due to unavailability of vmlinux
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko due to unavailability of vmlinux
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.ko due to unavailability of vmlinux
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.ko due to unavailability of vmlinux
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+
+
+[olej@xenix net]$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 321280 июн 20 17:58 devices.ko
+-rw-rw-r-- 1 olej olej 335712 июн 20 17:58 mulnet.ko
+-rw-rw-r-- 1 olej olej 330256 июн 20 17:58 network.ko
+-rw-rw-r-- 1 olej olej 338336 июн 20 17:58 receive.ko
+-rw-rw-r-- 1 olej olej 338496 июн 20 17:58 transmit.ko
+-rw-rw-r-- 1 olej olej 336504 июн 20 17:58 transmit_simple.ko
+
+
+[olej@xenix net]$ modinfo mulnet.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+license:        GPL v2
+description:    LDD:1.0 s_24/lab1_network.c
+author:         Oleg Tsiliuric
+author:         Tatsuo Kawasaki
+author:         Jerry Cooperstein
+author:         Bill Shubert
+rhelversion:    9.99
+depends:        
+retpoline:      Y
+name:           mulnet
+vermagic:       5.17.13-200.fc35.x86_64 SMP preempt mod_unload 
+parm:           num:int
+parm:           title:charp
+parm:           digit:int
+parm:           mode:int
+
+
+
+[olej@xenix net]$ sudo insmod mulnet.ko num=2
+[sudo] пароль для olej: 
+
+[olej@xenix net]$ ip a s
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.20/24 brd 192.168.1.255 scope global noprefixroute enp3s0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::921b:eff:fe2b:e19c/64 scope link 
+       valid_lft forever preferred_lft forever
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0
+       valid_lft forever preferred_lft forever
+5: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+6: fict1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+
+[olej@xenix net]$ sudo insmod devices.ko 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+[olej@xenix net]$ dmesg | grep -v nvidia | grep -v EXT4-fs | tail -n10
+[13341.285500] audit: type=1105 audit(1655738642.177:454): pid=19085 uid=1000 auid=1000 ses=3 subj=kernel msg='op=PAM:session_open grantors=pam_keyinit,pam_limits,pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/4 res=success'
+[13341.287345] Hello: module loaded at 0xffffffffc19b6000
+[13341.287347] Hello: dev_base address=0xffff921a01357000
+[13341.287349] name=lo     irq=0   MAC=00:00:00:00:00:00 rx_bytes=93681    tx_bytes=93681    
+[13341.287373] name=enp3s0 irq=0   MAC=90:1b:0e:2b:e1:9c rx_bytes=182973138 tx_bytes=11014837 
+[13341.287375] name=virbr0 irq=0   MAC=52:54:00:73:26:0d rx_bytes=0        tx_bytes=0        
+[13341.287376] name=fict0  irq=0   MAC=00:01:02:03:04:05 rx_bytes=0        tx_bytes=0        
+[13341.287378] name=fict1  irq=0   MAC=00:01:02:03:04:05 rx_bytes=0        tx_bytes=0        
+[13341.316941] audit: type=1106 audit(1655738642.208:455): pid=19085 uid=1000 auid=1000 ses=3 subj=kernel msg='op=PAM:session_close grantors=pam_keyinit,pam_limits,pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/4 res=success'
+[13341.317197] audit: type=1104 audit(1655738642.209:456): pid=19085 uid=1000 auid=1000 ses=3 subj=kernel msg='op=PAM:setcred grantors=pam_env,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/4 res=success'
+
+
+
+[olej@xenix net]$ lsmod | head -n4
+Module                  Size  Used by
+mulnet                 16384  0
+snd_seq_dummy          16384  0
+snd_hrtimer            16384  1
+
+[olej@xenix net]$ sudo rmmod mulnet
+
+[olej@xenix net]$ dmesg | grep -v nvidia | grep -v EXT4-fs | tail -n7
+[13533.483052] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[13533.483053] R10: 00007f6d1ada6ac0 R11: 0000000000000206 R12: 00007ffe0c25c4f0
+[13533.483054] R13: 00007ffe0c25c7bd R14: 000055f7154132a0 R15: 000055f715413800
+[13533.483056]  </TASK>
+[13533.483056] ---[ end trace 0000000000000000 ]---
+[13533.496585] audit: type=1106 audit(1655738834.383:475): pid=19198 uid=1000 auid=1000 ses=3 subj=kernel msg='op=PAM:session_close grantors=pam_keyinit,pam_limits,pam_keyinit,pam_limits,pam_systemd,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/4 res=success'
+[13533.496861] audit: type=1104 audit(1655738834.383:476): pid=19198 uid=1000 auid=1000 ses=3 subj=kernel msg='op=PAM:setcred grantors=pam_env,pam_unix acct="root" exe="/usr/bin/sudo" hostname=? addr=? terminal=/dev/pts/4 res=success'
+
+
+
+022-06-20T18:27:14.349770+03:00 xenix kernel: ! unloading network module
+2022-06-20T18:27:14.349887+03:00 xenix kernel: ! my_close(fict0)
+2022-06-20T18:27:14.350008+03:00 xenix NetworkManager[819]: <info>  [1655738834.3499] device (fict0): state change: disconnected -> unmanaged (reason 'removed', sys-
+iface-state: 'removed')
+2022-06-20T18:27:14.361773+03:00 xenix kernel: fict0 (unregistered): Current addr:  00 01 02 03 04 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00
+2022-06-20T18:27:14.361876+03:00 xenix kernel: fict0 (unregistered): Expected addr: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00 00 00 00 00
+2022-06-20T18:27:14.361914+03:00 xenix kernel: ------------[ cut here ]------------
+2022-06-20T18:27:14.361946+03:00 xenix kernel: netdevice: fict0 (unregistered): Incorrect netdev->dev_addr
+2022-06-20T18:27:14.361963+03:00 xenix kernel: WARNING: CPU: 3 PID: 19199 at net/core/dev_addr_lists.c:517 dev_addr_check.cold+0x43/0x7d
+
+==========================================================================================================================

@@ -1,0 +1,349 @@
+18.06.2022
+==========
+
+https://elixir.bootlin.com/linux/v3.19.8/source/include/linux/netdevice.h
+[577]
+struct netdev_queue {
+...
+    /*
+     * please use this field instead of dev->trans_start
+     */
+    unsigned long		trans_start;
+...
+
+https://elixir.bootlin.com/linux/v4.20.17/source/include/linux/netdevice.h
+    /*
+     * Time (in jiffies) of last Tx
+     */
+
+https://elixir.bootlin.com/linux/v5.18/source/include/linux/netdevice.h
+[621]
+    unsigned long		trans_start;
+
+----------------------------------------------------------------------------------------------------------------------
+
+https://elixir.bootlin.com/linux/v5.4.120/source/include/linux/netdevice.h
+
+struct net_device {
+[1963]
+    struct netdev_queue __rcu *ingress_queue;
+
+[1975]
+// Кэш-линии в основном используются на пути передачи
+    struct netdev_queue	*_tx ____cacheline_aligned_in_smp;
+
+[2128]
+static inline
+struct netdev_queue *netdev_get_tx_queue(const struct net_device *dev,
+		     unsigned int index)
+{
+    return &dev->_tx[index];
+}
+
+static inline struct netdev_queue *skb_get_tx_queue(const struct net_device *dev,
+			    const struct sk_buff *skb)
+{
+    return netdev_get_tx_queue(dev, skb_get_queue_mapping(skb));
+}
+
+static inline void netdev_for_each_tx_queue(struct net_device *dev,
+		        void (*f)(struct net_device *,
+			      struct netdev_queue *,
+			      void *),
+		        void *arg)
+{
+    unsigned int i;
+
+    for (i = 0; i < dev->num_tx_queues; i++)
+	f(dev, &dev->_tx[i], arg);
+}
+
+
+
+
+struct net_device {
+...
+[1712]
+ *	@_tx:			Array of TX queues
+ *	@num_tx_queues:		Number of TX queues allocated at alloc_netdev_mq() time
+ *	@real_num_tx_queues: 	Number of TX queues currently active in device
+
+======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod transmit_simple.ko 
+[sudo] пароль для olej:    
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ lsmod | head -n3
+Module                  Size  Used by
+transmit_simple        16384  0
+vboxnetadp             28672  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ dmesg | tail -n25
+[12078.850433] 00 
+[12078.850433] 0c 
+[12078.850433] 00 
+[12078.850434] 01 
+[12078.850434] 0b 
+[12078.850434] 5f 
+[12078.850435] 61 
+[12078.850435] 66 
+[12078.850435] 70 
+[12078.850436] 6f 
+[12078.850436] 76 
+[12078.850436] 
+                 
+[12078.850437] 65 
+[12078.850437] 72 
+[12078.850437] 74 
+[12078.850438] 63 
+[12078.850438] 70 
+[12078.850438] c0 
+[12078.850439] 11 
+[12078.850439] 00 
+[12078.850439] 0c 
+[12078.850440] 00 
+[12078.850440] 01 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:69:98:e9:21:cc brd ff:ff:ff:ff:ff:ff
+5: mynet0: <BROADCAST,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ifconfig mynet0 up 192.168.1.200
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ifconfig mynet0 
+mynet0: flags=4291<UP,BROADCAST,RUNNING,NOARP,MULTICAST>  mtu 1500
+        inet 192.168.1.200  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::d01b:f35b:ed3c:269a  prefixlen 64  scopeid 0x20<link>
+        ether 00:01:02:03:04:05  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ping -I mynet0 -c3 localhost
+PING localhost (127.0.0.1) from 192.168.1.200 mynet0: 56(84) bytes of data.
+
+--- localhost ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2032ms
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ lsmod | head -n3
+Module                  Size  Used by
+transmit_simple        16384  0
+vboxnetadp             28672  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo rmmod transmit_simple
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:69:98:e9:21:cc brd ff:ff:ff:ff:ff:ff
+
+======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.o
+  Building modules, stage 2.
+  MODPOST 4 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod transmit.ko 
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ lsmod | head -n3
+Module                  Size  Used by
+transmit               16384  0
+vboxnetadp             28672  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:69:98:e9:21:cc brd ff:ff:ff:ff:ff:ff
+6: mynet0: <BROADCAST,MULTICAST,NOARP,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ifconfig mynet0
+mynet0: flags=4291<UP,BROADCAST,RUNNING,NOARP,MULTICAST>  mtu 1500
+        inet6 fe80::d01b:f35b:ed3c:269a  prefixlen 64  scopeid 0x20<link>
+        ether 00:01:02:03:04:05  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 97  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 50
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ifconfig mynet0 192.168.1.200 up
+[sudo] пароль для olej:       
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ifconfig mynet0
+mynet0: flags=4291<UP,BROADCAST,RUNNING,NOARP,MULTICAST>  mtu 1500
+        inet 192.168.1.200  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 00:01:02:03:04:05  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 390  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 50
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ping -I mynet0 192.168.1.13
+PING 192.168.1.13 (192.168.1.13) from 192.168.1.200 mynet0: 56(84) bytes of data.
+^C
+--- 192.168.1.13 ping statistics ---
+2 packets transmitted, 0 received, 100% packet loss, time 1029ms
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ping -I mynet0 -c3 192.168.1.13
+PING 192.168.1.13 (192.168.1.13) from 192.168.1.200 mynet0: 56(84) bytes of data.
+
+--- 192.168.1.13 ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2044ms
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo rmmod transmit
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ lsmod | head -n3
+Module                  Size  Used by
+vboxnetadp             28672  0
+vboxnetflt             28672  0
+
+======================================================================================================================
+
+https://elixir.bootlin.com/linux/v5.4.120/source/include/linux/netdevice.h
+
+int (*ndo_set_mac_address)(struct net_device *dev, void *addr);
+ *	This function  is called when the Media Access Control address
+ *	needs to be changed. If this interface is not defined, the
+ *	MAC address can not be changed.
+
+int			(*ndo_set_mac_address)(struct net_device *dev,
+			       void *addr);
+
+https://elixir.bootlin.com/linux/v5.4.120/source/include/linux/socket.h#L31
+[31]]
+struct sockaddr {
+    sa_family_t	sa_family;	/* address family, AF_xxx	*/
+    char		sa_data[14];	/* 14 bytes of protocol address	*/
+};
+
+
+/lib/modules/5.4.0-120-generic/build/include/net/sock.h
+ *              Definitions for the AF_INET socket handler.
+
+
+
+https://elixir.bootlin.com/linux/v5.4.120/source/include/linux/socket.h#L165
+
+/lib/modules/5.4.0-120-generic/build/include/linux/socket.h
+[161]
+/* Supported address families. */
+#define AF_UNSPEC       0
+#define AF_UNIX         1       /* Unix domain sockets          */
+#define AF_LOCAL        1       /* POSIX name for AF_UNIX       */
+#define AF_INET         2       /* Internet IP Protocol         */
+#define AF_AX25         3       /* Amateur Radio AX.25          */
+#define AF_IPX          4       /* Novell IPX                   */
+#define AF_APPLETALK    5       /* AppleTalk DDP                */
+#define AF_NETROM       6       /* Amateur Radio NET/ROM        */
+#define AF_BRIDGE       7       /* Multiprotocol bridge         */
+#define AF_ATMPVC       8       /* ATM PVCs                     */
+#define AF_X25          9       /* Reserved for X.25 project    */
+#define AF_INET6        10      /* IP version 6                 */
+
+======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+  Building modules, stage 2.
+  MODPOST 6 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ modinfo transmit_simple.ko 
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko
+license:        GPL v2
+description:    
+author:         Oleg Tsiliuric
+author:         Jerry Cooperstein
+author:         Bill Shubert
+srcversion:     2F83A52E81ED255AA8B40F2
+depends:        
+retpoline:      Y
+name:           transmit_simple
+vermagic:       5.4.0-120-generic SMP mod_unload modversions 
+parm:           debug:bool
+
+
+======================================================================================================================

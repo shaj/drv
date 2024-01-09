@@ -1,0 +1,561 @@
+22.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c: In function ‘init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:22:7: error: implicit declaration of function ‘rdtscll’; did you mean ‘rdtsc’? [-Werror=implicit-function-declaration]
+   22 |       rdtscll( t1 );
+      |       ^~~~~~~
+      |       rdtsc
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:22:7: warning: ‘t1’ is used uninitialized in this function [-Wuninitialized]
+   22 |       rdtscll( t1 );
+      |       ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:23:7: warning: ‘t2’ is used uninitialized in this function [-Wuninitialized]
+   23 |       rdtscll( t2 );
+      |       ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:36:10: warning: ‘t1’ is used uninitialized in this function [-Wuninitialized]
+   36 |          rdtscll( t1 );
+      |          ^~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo inxi -Mxxx
+[sudo] пароль для olej:       
+Machine:   Type: Server System: Dell product: PowerEdge R420 v: N/A serial: 9DDFKY1 Chassis: type: 23 serial: 9DDFKY1 
+           Mobo: Dell model: 0CN7CM v: A06 serial: ..CN1374035400RO. BIOS: Dell v: 2.9.0 date: 01/09/2020 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo inxi -Sxxx
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 compiler: gcc v: 9.4.0 Desktop: Cinnamon 5.2.7 wm: motif 
+           dm: LightDM 1.30.0 Distro: Linux Mint 20.3 Una base: Ubuntu 20.04 focal 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	Linux Mint 20.3
+Release:	20.3
+Codename:	una
+
+----------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo inxi -mxxx
+Memory:    RAM: total: 94.35 GiB used: 24.44 GiB (25.9%) 
+           Array-1: capacity: 384 GiB slots: 12 EC: Multi-bit ECC max module size: 32 GiB note: est. 
+           Device-1: DIMM_A1 size: 8 GiB speed: 1600 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1G70BH0-YK0 serial: 14048408 
+           Device-2: DIMM_A2 size: 8 GiB speed: 1600 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1G70BH0-YK0 serial: 12040DD8 
+           Device-3: DIMM_A3 size: 8 GiB speed: 1600 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00AD00B300AD part-no: HMT41GR7MFR4C-PB serial: 309411A3 
+           Device-4: DIMM_A4 size: 8 GiB speed: 1600 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1G70BH0-YK0 serial: 1404840E 
+           Device-5: DIMM_A5 size: 8 GiB speed: 1600 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE04B300CE part-no: M393B1K70DH0-YK0 serial: 3513F526 
+           Device-6: DIMM_A6 size: 8 GiB speed: 1600 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00AD00B300AD part-no: HMT41GR7MFR4C-PB serial: 30241177 
+           Device-7: DIMM_B1 size: 8 GiB speed: 1333 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1K70CHD-CH9 serial: 87598E30 
+           Device-8: DIMM_B2 size: 8 GiB speed: 1333 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1K70CHD-CH9 serial: 87598E31 
+           Device-9: DIMM_B3 size: 8 GiB speed: 1333 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1K70CHD-CH9 serial: 82696D83 
+           Device-10: DIMM_B4 size: 8 GiB speed: 1333 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1K70CHD-CH9 serial: 82696D73 
+           Device-11: DIMM_B5 size: 8 GiB speed: 1333 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1K70CHD-CH9 serial: 87598DE0 
+           Device-12: DIMM_B6 size: 8 GiB speed: 1333 MT/s type: DDR3 detail: synchronous registered (buffered) 
+           bus width: 64 bits total: 72 bits manufacturer: 00CE00B300CE part-no: M393B1K70CHD-CH9 serial: 82696D98 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ cat /proc/meminfo | grep MemTotal
+MemTotal:       98936056 kB
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ free
+              всего        занято        свободно      общая  буф./врем.   доступно
+Память:    98936056    25157692    68534048      336924     5244316    72580360
+Подкачка:     2097148           0     2097148
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=0
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n80
+...
+Aug 23 00:17:05 R420 kernel: [46914.471632] order= 0, pages=     1, size=     4096 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.471635] order= 1, pages=     2, size=     8192 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.471639] order= 2, pages=     4, size=    16384 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.471647] order= 3, pages=     8, size=    32768 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.471664] order= 4, pages=    16, size=    65536 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.471695] order= 5, pages=    32, size=   131072 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.471756] order= 6, pages=    64, size=   262144 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.471843] order= 7, pages=   128, size=   524288 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.472004] order= 8, pages=   256, size=  1048576 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.472497] order= 9, pages=   512, size=  2097152 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.473160] order=10, pages=  1024, size=  4194304 - kmalloc OK
+Aug 23 00:17:05 R420 kernel: [46914.473171] ------------[ cut here ]------------
+Aug 23 00:17:05 R420 kernel: [46914.473180] WARNING: CPU: 4 PID: 65201 at mm/page_alloc.c:4744 __alloc_pages_nodemask+0x1ee/0x320
+...
+Aug 23 00:17:05 R420 kernel: [46914.473296] ---[ end trace 9d20983f0b72b876 ]---
+Aug 23 00:17:05 R420 kernel: [46914.473297] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n80 | grep kmalloc | grep order
+[46914.471632] order= 0, pages=     1, size=     4096 - kmalloc OK
+[46914.471635] order= 1, pages=     2, size=     8192 - kmalloc OK
+[46914.471639] order= 2, pages=     4, size=    16384 - kmalloc OK
+[46914.471647] order= 3, pages=     8, size=    32768 - kmalloc OK
+[46914.471664] order= 4, pages=    16, size=    65536 - kmalloc OK
+[46914.471695] order= 5, pages=    32, size=   131072 - kmalloc OK
+[46914.471756] order= 6, pages=    64, size=   262144 - kmalloc OK
+[46914.471843] order= 7, pages=   128, size=   524288 - kmalloc OK
+[46914.472004] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[46914.472497] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[46914.473160] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[46914.473242]  kmalloc_order+0x1f/0x80
+[46914.473244]  kmalloc_order_trace+0x24/0xa0
+[46914.473297] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+----------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n12 
+Aug 23 00:20:49 R420 kernel: [47138.492823] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.492827] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.492832] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.492841] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.492857] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.492887] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.492946] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.493027] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.493169] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.493631] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.494190] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+Aug 23 00:20:49 R420 kernel: [47138.494206] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+----------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n100 | grep vmalloc | grep order
+[47225.572831] order= 0, pages=     1, size=     4096 - vmalloc OK
+[47225.572835] order= 1, pages=     2, size=     8192 - vmalloc OK
+[47225.572841] order= 2, pages=     4, size=    16384 - vmalloc OK
+[47225.572850] order= 3, pages=     8, size=    32768 - vmalloc OK
+[47225.572869] order= 4, pages=    16, size=    65536 - vmalloc OK
+[47225.572894] order= 5, pages=    32, size=   131072 - vmalloc OK
+[47225.572940] order= 6, pages=    64, size=   262144 - vmalloc OK
+[47225.573046] order= 7, pages=   128, size=   524288 - vmalloc OK
+[47225.573241] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[47225.573699] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[47225.574611] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[47225.576052] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[47225.579312] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[47225.584758] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[47225.601853] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[47225.644835] order=15, pages= 32768, size=134217728 - vmalloc OK
+[47225.729240] order=16, pages= 65536, size=268435456 - vmalloc OK
+[47225.940186] order=17, pages=131072, size=536870912 - vmalloc OK
+[47226.323560] order=18, pages=262144, size=1073741824 - vmalloc OK
+[47226.961322] order=19, pages=524288, size=2147483648 - vmalloc OK
+[47228.104785] order=20, pages=1048576, size=4294967296 - vmalloc OK
+[47230.397710] order=21, pages=2097152, size=8589934592 - vmalloc OK
+[47235.035695] order=22, pages=4194304, size=17179869184 - vmalloc OK
+[47244.582550] order=23, pages=8388608, size=34359738368 - vmalloc OK
+[47268.927730] order=24, pages=16777216, size=68719476736 - vmalloc OK
+[47270.248160] order=25, pages=33554432, size=137438953472 - vmalloc failed
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ tty
+/dev/pts/13
+
+olej@R420:/etc/rsyslog.d$ cat /etc/rsyslog.d/70-my.conf 
+kern.info;kern.notice;kern.warn              /dev/pts/13
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod ./memtim.ko
+Aug 23 00:27:31 R420 kernel: [47539.707160] size = 1000 order = 1(4096)
+Aug 23 00:27:31 R420 kernel: [47539.707720] proc. cycles for allocate kmalloc : 0
+Aug 23 00:27:31 R420 kernel: [47539.708661] proc. cycles for allocate __get_free_pages : 0
+Aug 23 00:27:31 R420 kernel: [47539.711125] proc. cycles for allocate vmalloc : 0
+insmod: ERROR: could not insert module ./memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=4096
+Aug 23 00:36:07 R420 kernel: [48056.554204] size = 4096 order = 1(4096)
+Aug 23 00:36:07 R420 kernel: [48056.555027] proc. cycles for allocate kmalloc : 0
+Aug 23 00:36:07 R420 kernel: [48056.555896] proc. cycles for allocate __get_free_pages : 0
+Aug 23 00:36:07 R420 kernel: [48056.557320] proc. cycles for allocate vmalloc : 0
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=65536
+Aug 23 00:36:38 R420 kernel: [48087.530571] size = 65536 order = 5(65536)
+Aug 23 00:36:38 R420 kernel: [48087.536717] proc. cycles for allocate kmalloc : 0
+Aug 23 00:36:38 R420 kernel: [48087.546437] proc. cycles for allocate __get_free_pages : 0
+Aug 23 00:36:38 R420 kernel: [48087.553640] proc. cycles for allocate vmalloc : 0
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+====================================================================================================
+
+23.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 7624 авг 23 13:04 memmax.ko
+-rw-rw-r-- 1 olej olej 7720 авг 23 13:04 memtim.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ free
+              всего        занято        свободно      общая  буф./врем.   доступно
+Память:    98936048     1804512    95151500       67068     1980036    96257540
+Подкачка:     2097148           0     2097148
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=1024
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[ 2342.024443] size = 1024 order = 1(4096)
+[ 2342.025002] proc. cycles for allocate kmalloc : 211
+[ 2342.025909] proc. cycles for allocate __get_free_pages : 1217
+[ 2342.027224] proc. cycles for allocate vmalloc : 1846
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=4096
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[ 2530.316213] size = 4096 order = 1(4096)
+[ 2530.317164] proc. cycles for allocate kmalloc : 571
+[ 2530.318033] proc. cycles for allocate __get_free_pages : 1148
+[ 2530.320356] proc. cycles for allocate vmalloc : 3178
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=65535
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[ 2305.744905] size = 65535 order = 5(65536)
+[ 2305.749509] proc. cycles for allocate kmalloc : 9177
+[ 2305.758362] proc. cycles for allocate __get_free_pages : 19443
+[ 2305.763539] proc. cycles for allocate vmalloc : 9343
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=524280
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[ 2322.522974] size = 524280 order = 8(524288)
+[ 2322.549983] proc. cycles for allocate kmalloc : 61410
+[ 2322.594154] proc. cycles for allocate __get_free_pages : 101381
+[ 2322.630129] proc. cycles for allocate vmalloc : 69913
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=2097120
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[ 2388.933769] size = 2097120 order = 10(2097152)
+[ 2389.064986] proc. cycles for allocate kmalloc : 302516
+[ 2389.517347] proc. cycles for allocate __get_free_pages : 1044219
+[ 2389.667594] proc. cycles for allocate vmalloc : 290199
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=8388480
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[ 2434.375432] ---[ end trace bd19ae3c1050c038 ]---
+[ 2434.375433] proc. cycles for allocate kmalloc : failed
+[ 2434.375437] proc. cycles for allocate __get_free_pages : failed
+[ 2435.315304] proc. cycles for allocate vmalloc : 1765741
+
+
+====================================================================================================
+
+https://elixir.bootlin.com/linux/v5.4.112/source/include/linux/slab.h#L542
+
+ * kmalloc - allocate memory
+ * @size: how many bytes of memory are required.
+ * @flags: the type of memory to allocate.
+ *
+ * kmalloc is the normal method of allocating memory
+ * for objects smaller than page size in the kernel.
+
+
+* Below is a brief outline of the most useful GFP flags
+ *
+ * %GFP_KERNEL
+ *	Allocate normal kernel ram. May sleep.
+ *
+ * %GFP_NOWAIT
+ *	Allocation will not sleep.
+ *
+ * %GFP_ATOMIC
+ *	Allocation will not sleep.  May use emergency pools.
+ *
+ * %GFP_HIGHUSER
+ *	Allocate memory from high memory on behalf of user.
+ *
+ * Also it is possible to set different flags by OR'ing
+ * in one or more of the following additional @flags:
+ *
+ * %__GFP_HIGH
+ *	This allocation has high priority and may use emergency pools.
+ *
+ * %__GFP_NOFAIL
+ *	Indicate that this allocation is in no way allowed to fail
+ *	(think twice before using).
+ *
+ * %__GFP_NORETRY
+ *	If memory is not immediately available,
+ *	then give up at once.
+ *
+ * %__GFP_NOWARN
+ *	If allocation fails, don't issue any warnings.
+ *
+ * %__GFP_RETRY_MAYFAIL
+ *	Try really hard to succeed the allocation but fail
+ *	eventually.
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/page.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/page.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/page.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod page.ko
+insmod: ERROR: could not insert module page.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n2
+[ 7966.807993] разрядность системы 64
+[ 7966.807995] размер страницы RAM = 4096 [4Kb]
+
+----------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ getconf PAGESIZE
+4096
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ grep nr_mapped /proc/vmstat
+nr_mapped 205437
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ grep ^Mapped /proc/meminfo 
+Mapped:           821740 kB
+
+
+821740×1024÷205437 = 4095,960124028
+
+https://ru.wikipedia.org/wiki/%D0%A1%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%BD%D0%B0%D1%8F_%D0%BF%D0%B0%D0%BC%D1%8F%D1%82%D1%8C
+
+Исторически x86 использует 32-битные PTE, 32-битные виртуальные адреса, 4-КБ страницы, 1024 записи в таблице, двухуровневые таблицы.
+Старшие 10 битов виртуального адреса — номер записи в каталоге, следующие 10 — номер записи в таблице, младшие 12 — адрес внутри страницы. 
+
+В архитектуре x86_64 возможно использовать страницы размером 4 килобайта (4096 байтов), 2 мегабайта, и (в некоторых AMD64) 1 гигабайт. 
+
+Процессор x86 вне режима PAE использует 32-битные PTE и физические адреса, то есть ему не доступно ничего, находящееся выше 
+отметки 4 ГБ (см. также PSE-36 об одном из вариантов обхода данного ограничения). Таким образом, для использования памяти более, 
+чем примерно 3,2 ГБ в ОС она должна поддерживать PAE. Для Windows — это опция загрузки, для Linux — опция построения ядра. 
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=0
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n12
+[11121.592421] order= 0, pages=     1, size=     4096 - kmalloc OK
+[11121.592427] order= 1, pages=     2, size=     8192 - kmalloc OK
+[11121.592432] order= 2, pages=     4, size=    16384 - kmalloc OK
+[11121.592442] order= 3, pages=     8, size=    32768 - kmalloc OK
+[11121.592458] order= 4, pages=    16, size=    65536 - kmalloc OK
+[11121.592489] order= 5, pages=    32, size=   131072 - kmalloc OK
+[11121.592549] order= 6, pages=    64, size=   262144 - kmalloc OK
+[11121.592640] order= 7, pages=   128, size=   524288 - kmalloc OK
+[11121.592847] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[11121.593511] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[11121.594340] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[11121.594346] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/page.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/page.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/page.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n12
+[31651.671219] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[31651.671222] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[31651.671226] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[31651.671233] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[31651.671248] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[31651.671278] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[31651.671334] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[31651.671448] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[31651.671583] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[31651.671852] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[31651.672385] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[31651.672389] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+====================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=5
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[33757.773426] size = 5 order = 1(4096)
+[33757.774004] proc. cycles for allocate kmalloc : 148
+[33757.774662] proc. cycles for allocate __get_free_pages : 905
+[33757.775933] proc. cycles for allocate vmalloc : 1718
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=100
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[33741.795136] size = 100 order = 1(4096)
+[33741.795597] proc. cycles for allocate kmalloc : 162
+[33741.796556] proc. cycles for allocate __get_free_pages : 1376
+[33741.797724] proc. cycles for allocate vmalloc : 1605
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=4096
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[33825.311573] size = 4096 order = 1(4096)
+[33825.312033] proc. cycles for allocate kmalloc : 267
+[33825.312582] proc. cycles for allocate __get_free_pages : 731
+[33825.313838] proc. cycles for allocate vmalloc : 1729
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=32768
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[33897.690214] size = 32768 order = 4(32768)
+[33897.692314] proc. cycles for allocate kmalloc : 3630
+[33897.696391] proc. cycles for allocate __get_free_pages : 8498
+[33897.700310] proc. cycles for allocate vmalloc : 6598
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=65535 
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[33999.861085] size = 65535 order = 5(65536)
+[33999.865133] proc. cycles for allocate kmalloc : 8096
+[33999.871115] proc. cycles for allocate __get_free_pages : 13143
+[33999.876916] proc. cycles for allocate vmalloc : 10495
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=262144
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[34086.923521] size = 262144 order = 7(262144)
+[34086.937966] proc. cycles for allocate kmalloc : 31991
+[34086.962632] proc. cycles for allocate __get_free_pages : 56218
+[34086.983566] proc. cycles for allocate vmalloc : 39976
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ sudo insmod memtim.ko size=4096000
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/mtest$ dmesg | tail -n4
+[34137.772481] size = 4096000 order = 11(4194304)
+[34137.969551] proc. cycles for allocate kmalloc : 454649
+[34137.969559] proc. cycles for allocate __get_free_pages : failed
+[34138.298610] proc. cycles for allocate vmalloc : 621984
+
+====================================================================================================
+
+

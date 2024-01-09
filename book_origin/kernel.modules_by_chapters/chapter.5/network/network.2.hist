@@ -1,0 +1,882 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/network$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/network$ make
+=============== making all in virt-full =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-full»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-full modules 
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-full/virt.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-full/virt.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-full/virt.ko
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-full»
+=============== making all in virt =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt modules 
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt1.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt2.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt1.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt1.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt2.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt/virt2.ko
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt»
+=============== making all in net =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net/devices.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net/devices.c: In function ‘my_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net/devices.c:20:39: error: ‘struct net_device’ has no member named ‘trans_start’
+   20 |               dev->name, dev->irq, dev->trans_start, dev->last_rx );
+      |                                       ^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net/devices.c:20:57: error: ‘struct net_device’ has no member named ‘last_rx’
+   20 |               dev->name, dev->irq, dev->trans_start, dev->last_rx );
+      |                                                         ^~
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net/devices.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:21: default] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/net»
+=============== making all in virt-proto =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto modules 
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto/virt.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto/virt.c:123:4: error: initialization of ‘struct net_device *’ from incompatible pointer type ‘int (*)(struct sk_buff *, struct net_device *, struct packet_type *, struct net_device *)’ [-Werror=incompatible-pointer-types]
+  123 |    arp_pack_rcv,  // фильтр пртокола ETH_P_ARP
+      |    ^~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto/virt.c:123:4: note: (near initialization for ‘arp_proto.dev’)
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto/virt.c:151:4: error: initialization of ‘struct net_device *’ from incompatible pointer type ‘int (*)(struct sk_buff *, struct net_device *, struct packet_type *, struct net_device *)’ [-Werror=incompatible-pointer-types]
+  151 |    ip4_pack_rcv,    // фильтр пртокола ETH_P_IP
+      |    ^~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto/virt.c:151:4: note: (near initialization for ‘ip4_proto.dev’)
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto/virt.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:12: default] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/virt-proto»
+=============== making all in netproto =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto/net_proto.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto/net_proto.c:14:4: error: initialization of ‘struct net_device *’ from incompatible pointer type ‘int (*)(struct sk_buff *, struct net_device *, struct packet_type *, struct net_device *)’ [-Werror=incompatible-pointer-types]
+   14 |    test_pack_rcv,
+      |    ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto/net_proto.c:14:4: note: (near initialization for ‘test_proto.dev’)
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto/net_proto.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:17: modules] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/tools/network/netproto»
+make: *** [Makefile:4: all] Ошибка 2
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network$ ls -lR */*.ko
+-rw-rw-r-- 1 olej olej 14552 июн 15 10:52 virt-full/virt.ko
+-rw-rw-r-- 1 olej olej 12328 июн 15 10:52 virt/virt1.ko
+-rw-rw-r-- 1 olej olej 12208 июн 15 10:52 virt/virt2.ko
+-rw-rw-r-- 1 olej olej 12248 июн 15 10:52 virt/virt.ko
+
+======================================================================================================================================================
+
+16.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 8096 июн 16 17:30 network.ko
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ modinfo network.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+license:        GPL v2
+description:    
+author:         Oleg Tsiliuric
+author:         Tatsuo Kawasaki
+author:         Jerry Cooperstein
+author:         Bill Shubert
+srcversion:     082CF520382735CAD6901DD
+depends:        
+retpoline:      Y
+name:           network
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod network.ko
+[sudo] пароль для olej:       
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 32:03:41:f2:ad:c6 brd ff:ff:ff:ff:ff:ff
+5: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip a s dev fict0
+5: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo rmmod network
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip a s dev fict0
+Device "fict0" does not exist.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ls *.ko
+mulnet.ko  network.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod mulnet.ko num=3 title=zz mode=2 
+[sudo] пароль для olej:  
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo cat /proc/modules | grep mulnet
+mulnet 16384 0 - Live 0xffffffffc0f4c000 (OE)
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip link
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 32:03:41:f2:ad:c6 brd ff:ff:ff:ff:ff:ff
+6: zz0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+7: zz1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 01:02:03:04:05:06 brd ff:ff:ff:ff:ff:ff
+8: zz2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 02:03:04:05:06:07 brd ff:ff:ff:ff:ff:ff
+
+
+======================================================================================================================================================
+
+/lib/modules/5.4.0-120-generic/build/include/linux/netdevice.h
+[1249]
+struct net_device_ops {
+        int                     (*ndo_init)(struct net_device *dev);
+        void                    (*ndo_uninit)(struct net_device *dev);
+        int                     (*ndo_open)(struct net_device *dev);
+        int                     (*ndo_stop)(struct net_device *dev);
+        netdev_tx_t             (*ndo_start_xmit)(struct sk_buff *skb,
+                                                  struct net_device *dev);
+        netdev_features_t       (*ndo_features_check)(struct sk_buff *skb,
+                                                      struct net_device *dev,
+                                                      netdev_features_t features);
+        u16                     (*ndo_select_queue)(struct net_device *dev,
+                                                    struct sk_buff *skb,
+                                                    struct net_device *sb_dev);
+        void                    (*ndo_change_rx_flags)(struct net_device *dev,
+                                                       int flags);
+        void                    (*ndo_set_rx_mode)(struct net_device *dev);
+        int                     (*ndo_set_mac_address)(struct net_device *dev,
+                                                       void *addr);
+        int                     (*ndo_validate_addr)(struct net_device *dev);
+        int                     (*ndo_do_ioctl)(struct net_device *dev,
+                                                struct ifreq *ifr, int cmd);
+        int                     (*ndo_set_config)(struct net_device *dev,
+                                                  struct ifmap *map);
+        int                     (*ndo_change_mtu)(struct net_device *dev,
+                                                  int new_mtu);
+        int                     (*ndo_neigh_setup)(struct net_device *dev,
+                                                   struct neigh_parms *);
+        void                    (*ndo_tx_timeout) (struct net_device *dev);
+
+        void                    (*ndo_get_stats64)(struct net_device *dev,
+...
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod network.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ dmesg | tail -n3
+[34539.455022] ! Loading stub network module:....
+[34539.455398] ! Succeeded in loading fict0!
+[34539.479321] ! Hit: my_open(fict0)
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ifconfig fict0 192.168.1.222 up
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ping -c4 192.168.1.222
+PING 192.168.1.222 (192.168.1.222) 56(84) bytes of data.
+64 bytes from 192.168.1.222: icmp_seq=1 ttl=64 time=0.030 ms
+64 bytes from 192.168.1.222: icmp_seq=2 ttl=64 time=0.056 ms
+64 bytes from 192.168.1.222: icmp_seq=3 ttl=64 time=0.058 ms
+64 bytes from 192.168.1.222: icmp_seq=4 ttl=64 time=0.072 ms
+
+--- 192.168.1.222 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3065ms
+rtt min/avg/max/mdev = 0.030/0.054/0.072/0.015 ms
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9$ route -n
+Таблица маршутизации ядра протокола IP
+Destination Gateway Genmask Flags Metric Ref Use Iface
+0.0.0.0         192.168.1.3     0.0.0.0         UG    100    0        0 eno1
+0.0.0.0         192.168.1.6     0.0.0.0         UG    101    0        0 eno2
+169.254.0.0     0.0.0.0         255.255.0.0     U     1000   0        0 eno1
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 fict0
+192.168.1.0     0.0.0.0         255.255.255.0   U     100    0        0 eno1
+192.168.1.0     0.0.0.0         255.255.255.0   U     101    0        0 eno2
+
+
+======================================================================================================================================================
+
+/lib/modules/5.4.0-120-generic/build/include/linux/netdevice.h
+[1790]
+struct net_device {
+        char                    name[IFNAMSIZ];
+        struct hlist_node       name_hlist;
+        struct dev_ifalias      __rcu *ifalias;
+        /*
+         *      I/O specific fields
+         *      FIXME: Merge these and struct ifmap into one
+         */
+        unsigned long           mem_end;
+        unsigned long           mem_start;
+        unsigned long           base_addr;
+        int                     irq;
+
+        /*
+         *      Some hardware also needs these fields (state,dev_list,
+         *      napi_list,unreg_list,close_list) but they are not
+         *      part of the usual set specified in Space.c.
+         */
+
+        unsigned long           state;
+
+        struct list_head        dev_list;
+        struct list_head        napi_list;
+        struct list_head        unreg_list;
+        struct list_head        close_list;
+        struct list_head        ptype_all;
+        struct list_head        ptype_specific;
+
+        struct {
+                struct list_head upper;
+                struct list_head lower;
+        } adj_list;
+...
+
+
+[2217]
+/**     
+ *      netdev_priv - access network device private data
+ *      @dev: network device
+ *
+ * Get network device private data
+ */
+static inline void *netdev_priv(const struct net_device *dev)
+{
+        return (char *)dev + ALIGN(sizeof(struct net_device), NETDEV_ALIGN);
+}
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.c: In function ‘my_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.c:20:39: error: ‘struct net_device’ has no member named ‘trans_start’
+   20 |               dev->name, dev->irq, dev->trans_start, dev->last_rx );
+      |                                       ^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.c:20:57: error: ‘struct net_device’ has no member named ‘last_rx’
+   20 |               dev->name, dev->irq, dev->trans_start, dev->last_rx );
+      |                                                         ^~
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:23: default] Ошибка 2
+
+======================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ifconfig
+eno1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.14  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 90:b1:1c:54:3a:46  txqueuelen 1000  (Ethernet)
+        RX packets 1133372  bytes 1297380095 (1.2 GB)
+        RX errors 0  dropped 9  overruns 0  frame 0
+        TX packets 801803  bytes 273019376 (273.0 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 16  
+
+eno2: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.13  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 90:b1:1c:54:3a:47  txqueuelen 1000  (Ethernet)
+        RX packets 260432  bytes 251362741 (251.3 MB)
+        RX errors 0  dropped 9  overruns 0  frame 0
+        TX packets 162397  bytes 47505583 (47.5 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 17  
+
+fict0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.222  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 00:01:02:03:04:05  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Локальная петля (Loopback))
+        RX packets 230073  bytes 202732114 (202.7 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 230073  bytes 202732114 (202.7 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+team1: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 32:03:41:f2:ad:c6  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod devices.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ dmesg | tail -n8 
+[34539.479321] ! Hit: my_open(fict0)
+[37464.871744] Hello: module loaded at 0x0000000074d17501
+[37464.871746] Hello: dev_base address=0x00000000f3707985
+[37464.871749] name =     lo irq=   0 tx_bytes=           0 last_rx=           0
+[37464.871750] name =   eno1 irq=  16 tx_bytes=           0 last_rx=           0
+[37464.871752] name =   eno2 irq=  17 tx_bytes=           0 last_rx=           0
+[37464.871753] name =  team1 irq=   0 tx_bytes=           0 last_rx=           0
+[37464.871754] name =  fict0 irq=   0 tx_bytes=           0 last_rx=           0
+
+======================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod devices.ko
+[sudo] пароль для olej:       
+Убито
+
+...
+[39369.272175] Hello: module loaded at 0xffffffffc0f70000
+[39369.272177] Hello: dev_base address=0xffff96754b20f000
+[39369.272181] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[39369.272184] #PF: supervisor instruction fetch in kernel mode
+[39369.272185] #PF: error_code(0x0010) - not-present page
+[39369.272187] PGD 0 P4D 0 
+[39369.272190] Oops: 0010 [#1] SMP PTI
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ lsmod | head -n5
+Module                  Size  Used by
+devices                12288  1
+network                16384  0
+ufs                    81920  0
+qnx4                   16384  0
+
+======================================================================================================================================================
+
+17.06.2022
+==========
+
+</lib/modules/5.4.0-120-generic/build/include/linux/netdevice.h>
+
+@ifindex:	interface index
+
+@stats:		Statistics struct, which was left as a legacy, use
+ *			rtnl_link_stats64 instead
+
+@mtu:		Interface MTU value
+
+ *	@uc:			unicast mac addresses
+ *	@mc:			multicast mac addresses
+
+
+ *      @dev_addr:      Hw address (before bcast,
+ *                      because most packets are unicast)
+
+
+ *	@ip_ptr:	IPv4 specific data
+...
+ *	@ip6_ptr:	IPv6 specific data
+
+ *	@rx_handler:		handler for received packets
+ *	@rtnl_link_ops:	Rtnl_link_ops
+
+
+[1781]
+struct net_device {
+    char			name[IFNAMSIZ];
+...
+    unsigned char		perm_addr[MAX_ADDR_LEN];
+...
+    struct net_device_stats	stats;
+...
+    struct netdev_hw_addr_list	uc;
+    struct netdev_hw_addr_list	mc;
+
+
+    /* Interface address info used in eth_type_trans() */
+    unsigned char           *dev_addr;
+
+
+    struct in_device __rcu	*ip_ptr;
+    struct inet6_dev __rcu	*ip6_ptr;
+...
+    const struct rtnl_link_ops *rtnl_link_ops;
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+</include/uapi/linux/if_link.h>
+[44]
+/* The main device statistics structure */
+struct rtnl_link_stats64 {
+    __u64	rx_packets;		/* total packets received	*/
+    __u64	tx_packets;		/* total packets transmitted	*/
+    __u64	rx_bytes;		/* total bytes received 	*/
+    __u64	tx_bytes;		/* total bytes transmitted	*/
+    __u64	rx_errors;		/* bad packets received		*/
+    __u64	tx_errors;		/* packet transmit problems	*/
+...
+
+
+</lib/modules/5.4.0-120-generic/build/include/linux/netdevice.h>
+struct net_device_ops {
+[1277]
+    void			(*ndo_get_stats64)(struct net_device *dev,
+				   struct rtnl_link_stats64 *storage);
+...
+    struct net_device_stats* (*ndo_get_stats)(struct net_device *dev);
+
+[1011]
+ * void (*ndo_get_stats64)(struct net_device *dev,
+ *                         struct rtnl_link_stats64 *storage);
+ * struct net_device_stats* (*ndo_get_stats)(struct net_device *dev);
+ *	Called when a user wants to get the network device usage
+ *	statistics. Drivers must do one of the following:
+ *	1. Define @ndo_get_stats64 to fill in a zero-initialised
+ *	   rtnl_link_stats64 structure passed by the caller.
+ *	2. Define @ndo_get_stats to update a net_device_stats structure
+ *	   (which should normally be dev->stats) and return a pointer to
+ *	   it. The structure may be changed asynchronously only if each
+ *	   field is written atomically.
+ *	3. Update dev->stats asynchronously and atomically, and define
+ *	   neither operation.
+
+
+</include/linux/netdevice.h>
+[161]
+struct net_device_stats {
+    unsigned long	rx_packets;
+    unsigned long	tx_packets;
+    unsigned long	rx_bytes;
+    unsigned long	tx_bytes;
+    unsigned long	rx_errors;
+    unsigned long	tx_errors;
+...
+
+======================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod devices.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ dmesg | grep Hello -A14
+[ 7380.985033] Hello: module loaded at 0xffffffffc0e80000
+[ 7380.985035] Hello: dev_base address=0xffffa08f0b1a1000
+[ 7380.985037] name =     lo irq=   0
+
+[ 7380.985039] &net_device_ops=ffffffffb4d33780
+[ 7380.985040] name =   eno1 irq=  16
+[ 7380.985041] \x90\xb1T:F
+[ 7380.985042] &net_device_ops=ffffffffc0428fc0
+[ 7380.985053] name =   eno2 irq=  17
+[ 7380.985054] \x90\xb1T:G
+[ 7380.985054] &net_device_ops=ffffffffc0428fc0
+[ 7380.985056] name =  team1 irq=   0
+
+[ 7380.985057] &net_device_ops=ffffffffc0c59f20
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether da:0a:b2:63:55:3c brd ff:ff:ff:ff:ff:ff
+
+
+======================================================================================================================================================
+
+18.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ aptitude search ethtool
+i   ethtool                                                                    - просмотр и настройка параметров устройств Ethernet                                   
+p   golang-github-safchain-ethtool-dev                                         - simple ethtool-like library for Go                                                   
+p   python3-ethtool                                                            - Python bindings for the ethtool kernel interface - Python 3.x                        
+p   ruby-rethtool                                                              - partial wrapper around the SIOCETHTOOL ioctl                                         
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ aptitude show ethtool
+Пакет: ethtool                                   
+Версия: 1:5.4-1
+Состояние: установлен
+Установлен автоматически: нет
+Приоритет: необязательный
+Раздел: utils
+Сопровождающий: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Архитектура: amd64
+Размер в распакованном виде: 461 k
+Зависит: libc6 (>= 2.14)
+Описание: просмотр и настройка параметров устройств Ethernet
+ ethtool может использоваться для просмотра и настройки параметров (таких как скорость, автоматическое определение характеристик и разгрузка от контрольной суммы)
+ многих сетевых устройств, особенно, устройств Ethernet.
+Домашняя страница: https://www.kernel.org/pub/software/network/ethtool/
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod network.ko
+[sudo] пароль для olej:       
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eno1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:46 brd ff:ff:ff:ff:ff:ff
+3: eno2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 90:b1:1c:54:3a:47 brd ff:ff:ff:ff:ff:ff
+4: team1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:69:98:e9:21:cc brd ff:ff:ff:ff:ff:ff
+7: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ethtool -S fict0
+no stats available
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ethtool -S team1
+no stats available
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo ethtool -S eno1
+NIC statistics:
+     rx_octets: 109579493
+     rx_fragments: 0
+     rx_ucast_packets: 111837
+     rx_mcast_packets: 33640
+     rx_bcast_packets: 17090
+     rx_fcs_errors: 0
+     rx_align_errors: 0
+     rx_xon_pause_rcvd: 3
+     rx_xoff_pause_rcvd: 3
+     rx_mac_ctrl_rcvd: 0
+     rx_xoff_entered: 3
+     rx_frame_too_long_errors: 0
+     rx_jabbers: 0
+     rx_undersize_packets: 0
+     rx_in_length_errors: 0
+     rx_out_length_errors: 0
+     rx_64_or_less_octet_packets: 0
+     rx_65_to_127_octet_packets: 0
+     rx_128_to_255_octet_packets: 0
+     rx_256_to_511_octet_packets: 0
+     rx_512_to_1023_octet_packets: 0
+     rx_1024_to_1522_octet_packets: 0
+     rx_1523_to_2047_octet_packets: 0
+     rx_2048_to_4095_octet_packets: 0
+     rx_4096_to_8191_octet_packets: 0
+     rx_8192_to_9022_octet_packets: 0
+     tx_octets: 39030357
+     tx_collisions: 0
+     tx_xon_sent: 0
+     tx_xoff_sent: 0
+     tx_flow_control: 0
+     tx_mac_errors: 0
+     tx_single_collisions: 0
+     tx_mult_collisions: 0
+     tx_deferred: 0
+     tx_excessive_collisions: 0
+     tx_late_collisions: 0
+     tx_collide_2times: 0
+     tx_collide_3times: 0
+     tx_collide_4times: 0
+     tx_collide_5times: 0
+     tx_collide_6times: 0
+     tx_collide_7times: 0
+     tx_collide_8times: 0
+     tx_collide_9times: 0
+     tx_collide_10times: 0
+     tx_collide_11times: 0
+     tx_collide_12times: 0
+     tx_collide_13times: 0
+     tx_collide_14times: 0
+     tx_collide_15times: 0
+     tx_ucast_packets: 100469
+     tx_mcast_packets: 3547
+     tx_bcast_packets: 4
+     tx_carrier_sense_errors: 0
+     tx_discards: 0
+     tx_errors: 0
+     dma_writeq_full: 0
+     dma_write_prioq_full: 0
+     rxbds_empty: 0
+     rx_discards: 0
+     rx_errors: 0
+     rx_threshold_hit: 0
+     dma_readq_full: 0
+     dma_read_prioq_full: 0
+     tx_comp_queue_full: 0
+     ring_set_send_prod_index: 0
+     ring_status_update: 0
+     nic_irqs: 0
+     nic_avoided_irqs: 0
+     nic_tx_threshold_hit: 0
+     mbuf_lwm_thresh_hit: 0
+
+
+======================================================================================================================================================
+
+olej@orangepione:~$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 02:81:5f:d5:e7:17 brd ff:ff:ff:ff:ff:ff
+
+olej@orangepione:~$ sudo ethtool -S eth0
+[sudo] пароль для olej: 
+NIC statistics:
+     tx_underflow: 0
+     tx_carrier: 0
+     tx_losscarrier: 0
+     vlan_tag: 0
+     tx_deferred: 0
+     tx_vlan: 0
+     tx_jabber: 0
+     tx_frame_flushed: 0
+     tx_payload_error: 0
+     tx_ip_header_error: 0
+     rx_desc: 0
+     sa_filter_fail: 0
+     overflow_error: 0
+     ipc_csum_error: 0
+     rx_collision: 0
+     rx_crc_errors: 0
+     dribbling_bit: 0
+     rx_length: 0
+     rx_mii: 0
+     rx_multicast: 0
+     rx_gmac_overflow: 0
+     rx_watchdog: 0
+     da_rx_filter_fail: 0
+     sa_rx_filter_fail: 0
+     rx_missed_cntr: 0
+     rx_overflow_cntr: 0
+     rx_vlan: 0
+     rx_split_hdr_pkt_n: 0
+     tx_undeflow_irq: 0
+     tx_process_stopped_irq: 11857
+     tx_jabber_irq: 0
+     rx_overflow_irq: 0
+     rx_buf_unav_irq: 0
+     rx_process_stopped_irq: 0
+     rx_watchdog_irq: 0
+     tx_early_irq: 11856
+     fatal_bus_error_irq: 0
+     rx_early_irq: 0
+     threshold: 1
+     tx_pkt_n: 12009
+     rx_pkt_n: 55142
+     normal_irq_n: 0
+     rx_normal_irq_n: 55125
+     napi_poll: 67566
+     tx_normal_irq_n: 485
+     tx_clean: 12441
+     tx_set_ic_bit: 485
+     irq_receive_pmt_irq_n: 0
+     mmc_tx_irq_n: 0
+     mmc_rx_irq_n: 0
+     mmc_rx_csum_offload_irq_n: 0
+     irq_tx_path_in_lpi_mode_n: 0
+     irq_tx_path_exit_lpi_mode_n: 0
+     irq_rx_path_in_lpi_mode_n: 0
+     irq_rx_path_exit_lpi_mode_n: 0
+     phy_eee_wakeup_error_n: 0
+     ip_hdr_err: 0
+     ip_payload_err: 0
+     ip_csum_bypassed: 0
+     ipv4_pkt_rcvd: 0
+     ipv6_pkt_rcvd: 0
+     no_ptp_rx_msg_type_ext: 0
+     ptp_rx_msg_type_sync: 0
+     ptp_rx_msg_type_follow_up: 0
+     ptp_rx_msg_type_delay_req: 0
+     ptp_rx_msg_type_delay_resp: 0
+     ptp_rx_msg_type_pdelay_req: 0
+     ptp_rx_msg_type_pdelay_resp: 0
+     ptp_rx_msg_type_pdelay_follow_up: 0
+     ptp_rx_msg_type_announce: 0
+     ptp_rx_msg_type_management: 0
+     ptp_rx_msg_pkt_reserved_type: 0
+     ptp_frame_type: 0
+     ptp_ver: 0
+     timestamp_dropped: 0
+     av_pkt_rcvd: 0
+     av_tagged_pkt_rcvd: 0
+     vlan_tag_priority_val: 0
+     l3_filter_match: 0
+     l4_filter_match: 0
+     l3_l4_filter_no_match: 0
+     irq_pcs_ane_n: 0
+     irq_pcs_link_n: 0
+     irq_rgmii_n: 0
+     mtl_tx_status_fifo_full: 0
+     mtl_tx_fifo_not_empty: 0
+     mmtl_fifo_ctrl: 0
+     mtl_tx_fifo_read_ctrl_write: 0
+     mtl_tx_fifo_read_ctrl_wait: 0
+     mtl_tx_fifo_read_ctrl_read: 0
+     mtl_tx_fifo_read_ctrl_idle: 0
+     mac_tx_in_pause: 0
+     mac_tx_frame_ctrl_xfer: 0
+     mac_tx_frame_ctrl_idle: 0
+     mac_tx_frame_ctrl_wait: 0
+     mac_tx_frame_ctrl_pause: 0
+     mac_gmii_tx_proto_engine: 0
+     mtl_rx_fifo_fill_level_full: 0
+     mtl_rx_fifo_fill_above_thresh: 0
+     mtl_rx_fifo_fill_below_thresh: 0
+     mtl_rx_fifo_fill_level_empty: 0
+     mtl_rx_fifo_read_ctrl_flush: 0
+     mtl_rx_fifo_read_ctrl_read_data: 0
+     mtl_rx_fifo_read_ctrl_status: 0
+     mtl_rx_fifo_read_ctrl_idle: 0
+     mtl_rx_fifo_ctrl_active: 0
+     mac_rx_frame_ctrl_fifo: 0
+     mac_gmii_rx_proto_engine: 0
+     tx_tso_frames: 0
+     tx_tso_nfrags: 0
+     mtl_est_cgce: 0
+     mtl_est_hlbs: 0
+     mtl_est_hlbf: 0
+     mtl_est_btre: 0
+     mtl_est_btrlm: 0
+     q0_tx_pkt_n: 12009
+     q0_tx_irq_n: 0
+     q0_rx_pkt_n: 55142
+     q0_rx_irq_n: 0
+
+olej@orangepione:~$ sudo ethtool --help | wc -l
+165
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~ $ inxi -S
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 Console: tty 0 Distro: Raspbian GNU/Linux 11 (bullseye) 
+
+olej@raspberrypi:~ $ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether b8:27:eb:7e:2c:a8 brd ff:ff:ff:ff:ff:ff
+
+olej@raspberrypi:~ $ sudo ethtool -S eth0
+no stats available
+
+
+======================================================================================================================================================
+
+olej@R420:~$ aptitude search ndiswrapper
+p   ndiswrapper                                                         - пользовательские инструменты для модуля ndiswrapper ядра Linux               
+v   ndiswrapper-common                                                  -                                                                              
+p   ndiswrapper-dkms                                                    - исходный код модуля ndiswrapper для ядра Linux (DKMS)                        
+p   ndiswrapper-source                                                  - Source for the ndiswrapper Linux kernel module                               
+v   ndiswrapper-utils-1.9                                               -                                                                              
+
+
+olej@R420:~$ aptitude show ndiswrapper
+Пакет: ndiswrapper                               
+Версия: 1.60-8ubuntu3
+Новый: да
+Состояние: не установлен
+Приоритет: необязательный
+Раздел: universe/misc
+Сопровождающий: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Архитектура: amd64
+Размер в распакованном виде: 85,0 k
+Зависит: libc6 (>= 2.14), perl:any
+Рекомендует: ndiswrapper-dkms
+Предлагает: ndiswrapper-source
+Ломает: ndiswrapper-common (< 1.59-4~), ndiswrapper-utils-1.9 (< 1.59-4~)
+Заменяет: ndiswrapper-common (< 1.59-4~), ndiswrapper-utils-1.9 (< 1.59-4~)
+Предоставляет: ndiswrapper-common, ndiswrapper-utils-1.9
+Описание: пользовательские инструменты для модуля ndiswrapper ядра Linux
+ Некоторые производители оборудования не выпускают спецификации на устройства или Linux драйверы для своих беспроводных сетевых карт. В этом проекте
+ реализованы программные интерфейсы Windows и NDIS (Network Driver Interface Specification) внутри ядра Linux. Windows драйвер для беспроводной сетевой
+ карты связывается этим программным интерфейсом в Linux и работает также как будто он работает в Windows, то есть без бинарной эмуляции. 
+ 
+ Этот пакет содержит инструменты пользователя. Для работы необходимо установить пакет с модулем ядра.
+Домашняя страница: http://ndiswrapper.sourceforge.net/
+
+======================================================================================================================================================

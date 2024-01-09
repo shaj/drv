@@ -1,0 +1,79 @@
+28.08.2022
+
+$ hostname
+antix21
+
+$ inxi -Cxxxf
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64
+    type: MCP smt: <unsupported> arch: Puma rev: 1 cache: L1: 128 KiB
+    L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A cores: 1: 1198 2: 1198 bogomips: 4791
+  Flags: 3dnowprefetch abm acc_power aes aperfmperf apic arat avx bmi1
+    bpext clflush cmov cmp_legacy constant_tsc cpb cr8_legacy cx16 cx8 de
+    decodeassists extapic extd_apicid f16c flushbyasid fpu fxsr fxsr_opt ht
+    hw_pstate ibs lahf_lm lbrv lm mca mce misalignsse mmx mmxext monitor
+    movbe msr mtrr nonstop_tsc nopl npt nrip_save nx osvw overflow_recov pae
+    pat pausefilter pclmulqdq pdpe1gb perfctr_l2 perfctr_nb pfthreshold pge
+    pni popcnt pse pse36 ptsc rdtscp rep_good sep skinit ssbd sse sse2 sse4_1
+    sse4_2 sse4a ssse3 svm svm_lock syscall topoext tsc tsc_scale vme vmmcall
+    wdt xsave xsaveopt
+
+-------------------------------------------------------------------------------------
+
+[olej@xenix ~]$ hostname
+xenix.localdomain
+
+[olej@xenix ~]$ inxi -Cxxxf
+CPU:
+  Info: quad core model: Intel Core i7-4870HQ bits: 64 type: MT MCP
+    smt: enabled arch: Haswell rev: 1 cache: L1: 256 KiB L2: 1024 KiB L3: 6 MiB
+  Speed (MHz): avg: 2493 high: 2497 min/max: 800/3700 cores: 1: 2495
+    2: 2477 3: 2495 4: 2495 5: 2497 6: 2495 7: 2496 8: 2497 bogomips: 39910
+  Flags: abm acpi aes aperfmperf apic arat arch_perfmon avx avx2 bmi1 bmi2
+    bts clflush cmov constant_tsc cpuid cpuid_fault cx16 cx8 de ds_cpl dtes64
+    dtherm dts epb ept ept_ad erms est f16c flexpriority flush_l1d fma fpu
+    fsgsbase fxsr ht ibpb ibrs ida invpcid invpcid_single lahf_lm lm mca mce
+    md_clear mmx monitor movbe msr mtrr nonstop_tsc nopl nx pae pat pbe pcid
+    pclmulqdq pdcm pdpe1gb pebs pge pln pni popcnt pse pse36 pti pts rdrand
+    rdtscp rep_good sdbg sep smep smx ss ssbd sse sse2 sse4_1 sse4_2 ssse3
+    stibp syscall tm tm2 tpr_shadow tsc tsc_adjust tsc_deadline_timer vme vmx
+    vnmi vpid x2apic xsave xsaveopt xtopology xtpr
+
+-------------------------------------------------------------------------------------
+
+olej@esprimop420:~$ hostname
+esprimop420
+
+olej@esprimop420:~$ inxi -Cxxxf
+CPU:       Info: Quad Core model: Intel Xeon E3-1240 v3 bits: 64 type: MT MCP arch: Haswell rev: 3 
+           L2 cache: 8 MiB bogomips: 54276 
+           Speed: 2124 MHz min/max: 800/3800 MHz Core speeds (MHz): 1: 2124 2: 3156 3: 2489 4: 2917 
+           5: 1628 6: 2942 7: 2767 8: 3127 
+           Flags: abm acpi aes aperfmperf apic arat arch_perfmon avx avx2 bmi1 bmi2 bts clflush cmov 
+           constant_tsc cpuid cpuid_fault cx16 cx8 de ds_cpl dtes64 dtherm dts epb ept ept_ad erms 
+           est f16c flexpriority fma fpu fsgsbase fxsr hle ht ida invpcid invpcid_single lahf_lm lm 
+           mca mce mmx monitor movbe msr mtrr nonstop_tsc nopl nx pae pat pbe pcid pclmulqdq pdcm 
+           pdpe1gb pebs pge pln pni popcnt pse pse36 pti pts rdrand rdtscp rep_good rtm sdbg sep 
+           smep smx ss sse sse2 sse4_1 sse4_2 ssse3 syscall tm tm2 tpr_shadow tsc tsc_adjust vme vmx 
+           vnmi vpid x2apic xsave xsaveopt xtopology xtpr 
+
+-------------------------------------------------------------------------------------
+
+olej@R420:~$ hostname
+R420
+
+olej@R420:~$ inxi -Cxxxf
+CPU:       Topology: 2x 10-Core model: Intel Xeon E5-2470 v2 bits: 64 type: MT MCP SMP arch: Ivy Bridge rev: 4 
+           L2 cache: 50.0 MiB bogomips: 192100 
+           Speed: 1261 MHz min/max: 1200/3200 MHz Core speeds (MHz): 1: 1229 2: 1200 3: 1229 4: 1200 5: 1230 6: 1200 7: 1230 
+           8: 1200 9: 1230 10: 1201 11: 1230 12: 1201 13: 1230 14: 1507 15: 1201 16: 1471 17: 1200 18: 1552 19: 1201 20: 1559 
+           21: 1200 22: 1557 23: 1201 24: 1201 25: 1378 26: 1200 27: 1516 28: 1201 29: 1514 30: 1200 31: 1513 32: 1200 
+           33: 1645 34: 1200 35: 1596 36: 1200 37: 1601 38: 1201 39: 1600 40: 1200 
+           Flags: acpi aes aperfmperf apic arat arch_perfmon avx bts clflush cmov constant_tsc cpuid cpuid_fault cx16 cx8 dca 
+           de ds_cpl dtes64 dtherm dts ept erms est f16c flexpriority flush_l1d fpu fsgsbase fxsr ht ibpb ibrs ida lahf_lm lm 
+           mca mce md_clear mmx monitor msr mtrr nonstop_tsc nopl nx pae pat pbe pcid pclmulqdq pdcm pdpe1gb pebs pge pln pni 
+           popcnt pse pse36 pti pts rdrand rdtscp rep_good sep smep smx ss ssbd sse sse2 sse4_1 sse4_2 ssse3 stibp syscall tm 
+           tm2 tpr_shadow tsc tsc_deadline_timer vme vmx vnmi vpid x2apic xsave xsaveopt xtopology xtpr 
+
+-------------------------------------------------------------------------------------

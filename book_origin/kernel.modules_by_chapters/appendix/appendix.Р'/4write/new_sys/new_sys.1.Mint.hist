@@ -1,0 +1,55 @@
+30.06.2022
+==========
+
+olej@mint:~/kernel/sys_call_table/new_sys$ make
+make -C /lib/modules/5.4.0-91-generic/build M=/home/olej/kernel/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-91-generic»
+  CC [M]  /home/olej/kernel/sys_call_table/new_sys/mod_wrc.o
+  CC [M]  /home/olej/kernel/sys_call_table/new_sys/mod_wrchg.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/kernel/sys_call_table/new_sys/mod_wrc.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/new_sys/mod_wrc.ko
+  CC [M]  /home/olej/kernel/sys_call_table/new_sys/mod_wrchg.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/new_sys/mod_wrchg.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-91-generic»
+
+
+olej@mint:~/kernel/sys_call_table/new_sys$ ls
+Makefile  mod_wrc.c  mod_wrchg.c  mod_wrchg.ko  mod_wrchg.mod  mod_wrc.ko  mod_wrc.mod  new_sys.1.Mint.hist  wr.hist
+
+
+olej@mint:~/kernel/sys_call_table/new_sys$ sudo insmod mod_wrc.ko 
+[sudo] пароль для olej:       
+Убито
+
+olej@mint:~/kernel/sys_call_table/new_sys$ lsmod | head -n3
+Module                  Size  Used by
+mod_wrc                16384  1
+ufs                    81920  0
+
+
+lej@mint:~/kernel/sys_call_table/new_sys$ dmesg | tail -n60
+[33724.381588] input: VirtualBox USB Tablet as /devices/pci0000:00/0000:00:06.0/usb2/2-1/2-1:1.0/0003:80EE:0021.0002/input/input8
+[33724.381843] hid-generic 0003:80EE:0021.0002: input,hidraw0: USB HID v1.10 Mouse [VirtualBox USB Tablet] on usb-0000:00:06.0-1/input0
+[33724.531791] e1000: enp0s3 NIC Link is Down
+[33724.531947] e1000 0000:00:03.0 enp0s3: Reset adapter
+[33726.618799] e1000: enp0s3 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+[44742.371257] + [85]: адрес системного обработчика sys_write = ffffffffc0a6c380
+[44742.371264] kernel tried to execute NX-protected page - exploit attempt? (uid: 0)
+[44742.371267] BUG: unable to handle page fault for address: ffffffffc0a6c380
+[44742.371268] #PF: supervisor instruction fetch in kernel mode
+[44742.371269] #PF: error_code(0x0011) - permissions violation
+[44742.371270] PGD ca60e067 P4D ca60e067 PUD ca610067 PMD 10c6f5067 PTE 800000010d01a063
+[44742.371274] Oops: 0011 [#1] SMP PTI
+...
+
+===============================================================================================================
+
+WP (Защита записи, бит 16: Intel486 …)
+
+Установка этого бита позволяет защитить страницы пользовательского уровня (которые определены как страницы только для чтения)
+от изменения их программой супервизором, работающей на более высоком уровне привилегий. Если этот бит сброшен, то супервизор 
+может осуществлять запись в страницы пользовательского уровня защищенные от записи.
+
+===============================================================================================================

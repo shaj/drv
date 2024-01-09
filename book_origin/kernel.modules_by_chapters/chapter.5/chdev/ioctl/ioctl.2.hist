@@ -1,0 +1,209 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc ioctl.c -o ioctl
+ioctl.c: In function ‘main’:
+ioctl.c:14:28: warning: format not a string literal and no format arguments [-Wformat-security]
+   14 |    fprintf( stdout, (char*)&buf );
+      |                            ^~~~
+ioctl.c:15:4: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   15 |    close( dfd );
+      |    ^~~~~
+      |    pclose
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 7640 июн 15 10:27 ioctl_dev.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ modinfo ioctl_dev.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.ko
+version:        7.4
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>
+license:        GPL
+srcversion:     354DA7B14C06421040F8B3C
+depends:        
+retpoline:      Y
+name:           ioctl_dev
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 7640 июн 15 18:04 ioctl_dev.ko
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ make disclean
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc ioctl.c -o ioctl
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo insmod ioctl_dev.ko
+[sudo] пароль для olej:   
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ cat /proc/devices | grep ioctl 
+200 my_ioctl_dev
+242 megaraid_sas_ioctl
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl c 200 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l /dev/ioctl
+crw-rw-rw- 1 root root 200, 0 июн 15 18:25 /dev/ioctl
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ cat /dev/ioctl 
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ./ioctl 
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ./ioctl 
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo rmmod ioctl_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l /dev/ioctl
+crw-rw-rw- 1 root root 200, 0 июн 15 18:25 /dev/ioctl
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc ioctl.c -o ioctl
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ cat /dev/ioctl 
+cat: /dev/ioctl: Нет такого устройства или адреса
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo insmod ioctl_dev.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ cat /dev/ioctl 
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ./ioctl 
+Hello, world!
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l /dev/ioctl
+crw-rw-rw- 1 root root 200, 0 июн 15 18:25 /dev/ioctl
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl10000 c 200 10000 
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl256 c 200 256
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl255 c 200 255
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl5 c 200 5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo rm /dev/ioctl
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl c 200 200
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l /dev/ioctl*
+crw-rw-rw- 1 root root 200,   200 июн 15 18:57 /dev/ioctl
+crw-rw-rw- 1 root root 200, 10000 июн 15 18:55 /dev/ioctl10000
+crw-rw-rw- 1 root root 200,   255 июн 15 18:55 /dev/ioctl255
+crw-rw-rw- 1 root root 200,   256 июн 15 18:55 /dev/ioctl256
+crw-rw-rw- 1 root root 200,     5 июн 15 18:56 /dev/ioctl5
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl/ioctl_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo insmod ioctl_dev.ko
+insmod: ERROR: could not insert module ioctl_dev.ko: File exists
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo rmmod ioctl_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo insmod ioctl_dev.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l /dev/ioctl*
+crw-rw-rw- 1 root root 200, 10000 июн 15 18:55 /dev/ioctl10000
+crw-rw-rw- 1 root root 200,     5 июн 15 19:00 /dev/ioctl5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl256 c 200 256
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ ls -l /dev/ioctl*
+crw-rw-rw- 1 root root 200, 10000 июн 15 18:55 /dev/ioctl10000
+crw-rw-rw- 1 root root 200,   256 июн 15 19:13 /dev/ioctl256
+crw-rw-rw- 1 root root 200,     5 июн 15 19:00 /dev/ioctl5
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ cat /dev/ioctl5
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ dmesg | tail -n5
+[33249.800620] === open device 200:5
+[33249.800641] === read : 131072
+[33249.800645] === read return : 14
+[33249.800661] === read : 131072
+[33249.800662] === read return : 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ cat /dev/ioctl256
+cat: /dev/ioctl256: Нет такого устройства или адреса
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ dmesg | tail -n5
+[33249.800620] === open device 200:5
+[33249.800641] === read : 131072
+[33249.800645] === read return : 14
+[33249.800661] === read : 131072
+[33249.800662] === read return : 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ sudo mknod -m0666 /dev/ioctl255 c 200 255
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ cat /dev/ioctl255
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/ioctl$ dmesg | tail -n5
+[33331.065008] === open device 200:255
+[33331.065032] === read : 131072
+[33331.065037] === read return : 14
+[33331.065056] === read : 131072
+[33331.065057] === read return : 0
+
+====================================================================================================================================

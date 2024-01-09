@@ -1,0 +1,65 @@
+22.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/simple-debug$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+make[2]: *** Нет правила для сборки цели «/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys», требуемой для «__build».  Останов.
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:15: default] Ошибка 2
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/simple-debug$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c:42:17: error: expected ‘)’ before numeric constant
+   42 | CLASS_ATTR( mds, 0666, &show, &store ); // => struct class_attribute class_attr_mds
+      |                 ^~~~~
+      |                 )
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c: In function ‘init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c:51:41: error: ‘class_attr_mds’ undeclared (first use in this function); did you mean ‘class_attribute’?
+   51 |    res = class_create_file( mds_class, &class_attr_mds );
+      |                                         ^~~~~~~~~~~~~~
+      |                                         class_attribute
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c:51:41: note: each undeclared identifier is reported only once for each function it appears in
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c: In function ‘cleanup’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c:61:35: error: ‘class_attr_mds’ undeclared (first use in this function); did you mean ‘class_attribute’?
+   61 |    class_remove_file( mds_class, &class_attr_mds );
+      |                                   ^~~~~~~~~~~~~~
+      |                                   class_attribute
+At top level:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c:27:16: warning: ‘store’ defined but not used [-Wunused-function]
+   27 | static ssize_t store( struct class *class, struct class_attribute *attr, const char *buf, size_t count ) {
+      |                ^~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.c:18:16: warning: ‘show’ defined but not used [-Wunused-function]
+   18 | static ssize_t show( struct class *class, struct class_attribute *attr, char *buf ) {
+      |                ^~~~
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug/mdsys.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/simple-debug] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:15: default] Ошибка 2
+
+==========================================================================================================
+
+https://elixir.bootlin.com/linux/v3.19.8/source/include/linux/device.h#L426
+#define CLASS_ATTR(_name, _mode, _show, _store) \
+    struct class_attribute class_attr_##_name = __ATTR(_name, _mode, _show, _store)
+#define CLASS_ATTR_RW(_name) \
+    struct class_attribute class_attr_##_name = __ATTR_RW(_name)
+#define CLASS_ATTR_RO(_name) \
+    struct class_attribute class_attr_##_name = __ATTR_RO(_name)
+
+
+https://elixir.bootlin.com/linux/v4.20.17/source/include/linux/device.h
+#define BUS_ATTR(_name, _mode, _show, _store)	\
+    struct bus_attribute bus_attr_##_name = __ATTR(_name, _mode, _show, _store)
+#define BUS_ATTR_RW(_name) \
+    struct bus_attribute bus_attr_##_name = __ATTR_RW(_name)
+#define BUS_ATTR_RO(_name) \
+    struct bus_attribute bus_attr_##_name = __ATTR_RO(_name)
+#define BUS_ATTR_WO(_name) \
+    struct bus_attribute bus_attr_##_name = __ATTR_WO(_name)
+
+==========================================================================================================
+
+

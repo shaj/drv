@@ -1,0 +1,39 @@
+10.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev$ make
+--- эти примеры требуют индивидуальной сборки
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/blkdev$ make disclean
+=============== making disclean in ?old_vers =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers»
+=============== making disclean in 2.6.42 =================
+make[2]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/2.6.42»
+make[2]: *** Нет правила для сборки цели «disclean».  Останов.
+make[2]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/2.6.42»
+=============== making disclean in 3.2 =================
+make[2]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.2»
+make[2]: *** Нет правила для сборки цели «disclean».  Останов.
+make[2]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.2»
+=============== making disclean in 3.5 =================
+make[2]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.5»
+=============== making disclean in block_mod.LDD3 ===============
+make[3]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.5/block_mod.LDD3»
+make[3]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.5/block_mod.LDD3»
+rm -f test_blk test_seq
+make[2]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.5»
+=============== making disclean in 3.13 =================
+make[2]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.13»
+=============== making disclean in block_mod.LDD3 ===============
+make[3]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.13/block_mod.LDD3»
+make[3]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.13/block_mod.LDD3»
+=============== making disclean in block_mod.LDD_35 ===============
+make[3]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.13/block_mod.LDD_35»
+make[3]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.13/block_mod.LDD_35»
+rm -f test_blk test_seq *tmp*
+make[2]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers/3.13»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/blkdev/?old_vers»
+
+=====================================================================================================================
+

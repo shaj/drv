@@ -1,0 +1,54 @@
+#!/bin/bash
+
+
+#fib () {
+#   if [ "$1" -lt 2 ]
+#   then
+#      res[ $1 ]=1
+#   else
+#      fib `expr $1 - 1`
+#      let s=${res[ `expr $1 - 1` ]}+${res[ `expr $1 - 2` ]}
+#      res[ $1 ]=$s
+#   fi
+#}
+
+#res[ 0 ]=1 
+#fib $1
+#echo ${res[ $1 ]}
+
+KER=`uname -r`
+KALL1='kallsyms_lookup'
+KALL2='kallsyms_on_each_symbol'
+
+test_export() {
+#    RES=`grep $1 /lib/modules/$KER/build/Module.symvers | grep EXPORT`
+#    echo $RES
+#    if($RES)
+    if(grep $1 /lib/modules/$KER/build/Module.symvers | grep EXPORT > /dev/null)
+    then
+	echo $1 - exported
+	EXP=0
+    else
+	echo $1 - not exported
+	EXP=1
+    fi
+}
+
+EXP=-1
+
+#test_export kallsyms_lookup
+test_export $KALL1
+echo $EXP
+#echo $(test_export $KALL1)
+#test_export kallsyms_on_each_symbol
+test_export $KALL2
+echo $EXP
+
+
+#grep kallsyms_on_each_symbol /lib/modules/`uname -r`/build/Module.symvers | 
+#0x6d1d3389      kallsyms_on_each_symbo vmlinux EXPORT_SYMBOL_GPL
+
+#grep kallsyms_lookup /lib/modules/`uname -r`/build/Module.symvers | 
+#0xe007de41      kallsyms_lookup_name    vmlinux EXPORT_SYMBOL_GPL
+
+#cat /lib/modules/`uname -r`/build/.config | grep CONFIG_KALLSYMS

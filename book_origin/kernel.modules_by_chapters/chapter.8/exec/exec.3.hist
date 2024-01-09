@@ -1,0 +1,41 @@
+18.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_execho.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_execho.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_execho.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+=========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo insmod mod_exec.ko str="new_string"
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_exec.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ dmesg | tail -n2
+[38652.571756] execute : wall 
+               new_string
+
+-------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo insmod mod_exec.ko
+insmod: ERROR: could not insert module mod_exec.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ dmesg | tail -n2
+[39162.307779] execute : wall 
+               this is wall message 
+
+olej@R420:/etc$ journalctl -n30 | grep wall
+авг 18 21:08:09 R420 kernel: execute : wall 
+                                this is wall message 
+
+=========================================================================================================================

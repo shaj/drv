@@ -1,0 +1,1074 @@
+28.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  Building modules, stage 2.
+  MODPOST 3 modules
+ERROR: "sys_close" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:94: __modpost] Ошибка 1
+make[1]: *** [Makefile:1675: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+make: *** [Makefile:12: all] Ошибка 2
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ head -n15 /usr/include/asm/unistd_32.h
+#ifndef _ASM_X86_UNISTD_32_H
+#define _ASM_X86_UNISTD_32_H 1
+
+#define __NR_restart_syscall 0
+#define __NR_exit 1
+#define __NR_fork 2
+#define __NR_read 3
+#define __NR_write 4
+#define __NR_open 5
+#define __NR_close 6
+#define __NR_waitpid 7
+#define __NR_creat 8
+#define __NR_link 9
+#define __NR_unlink 10
+#define __NR_execve 11
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ head -n15 /usr/include/asm/unistd_64.h
+#ifndef _ASM_X86_UNISTD_64_H
+#define _ASM_X86_UNISTD_64_H 1
+
+#define __NR_read 0
+#define __NR_write 1
+#define __NR_open 2
+#define __NR_close 3
+#define __NR_stat 4
+#define __NR_fstat 5
+#define __NR_lstat 6
+#define __NR_poll 7
+#define __NR_lseek 8
+#define __NR_mmap 9
+#define __NR_mprotect 10
+#define __NR_munmap 11
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c: In function ‘verify_close’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:26:19: warning: unused variable ‘ca’ [-Wunused-variable]
+   26 |     unsigned long ca = *(a + __NR_close);
+      |                   ^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c: In function ‘stread_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:67:35: warning: passing argument 2 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   67 |            if((k = kernel_read(f, n, p++, 1)) < 0) {
+      |                                   ^
+      |                                   |
+      |                                   size_t {aka long unsigned int}
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:3022:43: note: expected ‘void *’ but argument is of type ‘size_t’ {aka ‘long unsigned int’}
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                           ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:67:39: warning: passing argument 3 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   67 |            if((k = kernel_read(f, n, p++, 1)) < 0) {
+      |                                      ~^~
+      |                                       |
+      |                                       char *
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:3022:51: note: expected ‘size_t’ {aka ‘long unsigned int’} but argument is of type ‘char *’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                   ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:67:43: warning: passing argument 4 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   67 |            if((k = kernel_read(f, n, p++, 1)) < 0) {
+      |                                           ^
+      |                                           |
+      |                                           int
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:3022:59: note: expected ‘loff_t *’ {aka ‘long long int *’} but argument is of type ‘int’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                           ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c: In function ‘verify_close’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:28:12: warning: ‘cmp’ is used uninitialized in this function [-Wuninitialized]
+   28 |     return cmp;
+      |            ^~~
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  _ia32_sys_
+ffffffff8b403390 T __ia32_sys_ni_syscall
+ffffffff8b42fa50 T __ia32_sys_arch_prctl
+ffffffff8b4306c0 T __ia32_sys_rt_sigreturn
+ffffffff8b434060 T __ia32_sys_iopl
+ffffffff8b4343d0 T __ia32_sys_ioperm
+ffffffff8b435950 T __ia32_sys_modify_ldt
+ffffffff8b436860 T __ia32_sys_mmap
+ffffffff8b440de0 T __ia32_sys_set_thread_area
+ffffffff8b440ee0 T __ia32_sys_get_thread_area
+ffffffff8b4952e0 T __ia32_sys_set_tid_address
+ffffffff8b498a80 T __ia32_sys_fork
+ffffffff8b498ad0 T __ia32_sys_vfork
+ffffffff8b498b30 T __ia32_sys_clone3
+ffffffff8b498ba0 T __ia32_sys_clone
+ffffffff8b4992b0 T __ia32_sys_unshare
+ffffffff8b499460 T __ia32_sys_personality
+ffffffff8b49dbd0 T __ia32_sys_waitid
+ffffffff8b49eb70 T __ia32_sys_exit
+ffffffff8b49ec60 T __ia32_sys_exit_group
+ffffffff8b49eeb0 T __ia32_sys_wait4
+ffffffff8b49eef0 T __ia32_sys_waitpid
+ffffffff8b4a3f70 T __ia32_sys_sysctl
+ffffffff8b4a4420 T __ia32_sys_capget
+ffffffff8b4a45b0 T __ia32_sys_capset
+ffffffff8b4a5e70 T __ia32_sys_ptrace
+ffffffff8b4a7230 T __ia32_sys_restart_syscall
+ffffffff8b4a72c0 T __ia32_sys_sgetmask
+ffffffff8b4a78b0 T __ia32_sys_pause
+ffffffff8b4a7f60 T __ia32_sys_sigaltstack
+ffffffff8b4a82d0 T __ia32_sys_rt_sigpending
+ffffffff8b4a8430 T __ia32_sys_sigpending
+ffffffff8b4aa480 T __ia32_sys_sigprocmask
+ffffffff8b4aa5f0 T __ia32_sys_ssetmask
+ffffffff8b4aa6c0 T __ia32_sys_rt_sigsuspend
+ffffffff8b4aa7f0 T __ia32_sys_sigsuspend
+ffffffff8b4aa9c0 T __ia32_sys_rt_sigprocmask
+ffffffff8b4abd30 T __ia32_sys_rt_sigqueueinfo
+ffffffff8b4ac040 T __ia32_sys_kill
+ffffffff8b4ac420 T __ia32_sys_tgkill
+ffffffff8b4ac480 T __ia32_sys_tkill
+ffffffff8b4ac530 T __ia32_sys_rt_tgsigqueueinfo
+ffffffff8b4ad890 T __ia32_sys_rt_sigtimedwait
+ffffffff8b4ad960 T __ia32_sys_rt_sigtimedwait_time32
+ffffffff8b4ae1f0 T __ia32_sys_pidfd_send_signal
+ffffffff8b4ae870 T __ia32_sys_rt_sigaction
+ffffffff8b4aecf0 T __ia32_sys_signal
+ffffffff8b4af430 T __ia32_sys_umask
+ffffffff8b4af740 T __ia32_sys_gettid
+ffffffff8b4af760 T __ia32_sys_getpid
+ffffffff8b4af790 T __ia32_sys_getppid
+ffffffff8b4af870 T __ia32_sys_setpriority
+ffffffff8b4afb10 T __ia32_sys_getuid
+ffffffff8b4afb40 T __ia32_sys_geteuid
+ffffffff8b4afb70 T __ia32_sys_getresuid
+ffffffff8b4afca0 T __ia32_sys_getcpu
+ffffffff8b4afd10 T __ia32_sys_getresgid
+ffffffff8b4afdc0 T __ia32_sys_getgid
+ffffffff8b4afdf0 T __ia32_sys_getegid
+ffffffff8b4afed0 T __ia32_sys_times
+ffffffff8b4b0090 T __ia32_sys_setpgid
+ffffffff8b4b02f0 T __ia32_sys_getpgid
+ffffffff8b4b0310 T __ia32_sys_getpgrp
+ffffffff8b4b0330 T __ia32_sys_getsid
+ffffffff8b4b03b0 T __ia32_sys_sethostname
+ffffffff8b4b05e0 T __ia32_sys_setdomainname
+ffffffff8b4b0820 T __ia32_sys_gethostname
+ffffffff8b4b0bd0 T __ia32_sys_sysinfo
+ffffffff8b4b1460 T __ia32_sys_newuname
+ffffffff8b4b15c0 T __ia32_sys_uname
+ffffffff8b4b15e0 T __ia32_sys_olduname
+ffffffff8b4b1cb0 T __ia32_sys_old_getrlimit
+ffffffff8b4b2c10 T __ia32_sys_getpriority
+ffffffff8b4b32e0 T __ia32_sys_setregid
+ffffffff8b4b33e0 T __ia32_sys_setgid
+ffffffff8b4b3640 T __ia32_sys_setreuid
+ffffffff8b4b3780 T __ia32_sys_setuid
+ffffffff8b4b3980 T __ia32_sys_setresuid
+ffffffff8b4b3b50 T __ia32_sys_setresgid
+ffffffff8b4b3c70 T __ia32_sys_setfsuid
+ffffffff8b4b3d80 T __ia32_sys_setfsgid
+ffffffff8b4b3eb0 T __ia32_sys_setsid
+ffffffff8b4b40c0 T __ia32_sys_getrlimit
+ffffffff8b4b4290 T __ia32_sys_prlimit64
+ffffffff8b4b44e0 T __ia32_sys_setrlimit
+ffffffff8b4b4ee0 T __ia32_sys_getrusage
+ffffffff8b4b4fe0 T __ia32_sys_prctl
+ffffffff8b4bd510 T __ia32_sys_pidfd_open
+ffffffff8b4c40c0 T __ia32_sys_setns
+ffffffff8b4c5f60 T __ia32_sys_reboot
+ffffffff8b4c7c80 T __ia32_sys_getgroups
+ffffffff8b4c7de0 T __ia32_sys_setgroups
+ffffffff8b4c8260 T __ia32_sys_sched_get_priority_max
+ffffffff8b4c8300 T __ia32_sys_sched_get_priority_min
+ffffffff8b4ca0b0 T __ia32_sys_sched_getscheduler
+ffffffff8b4ca120 T __ia32_sys_sched_getparam
+ffffffff8b4cb020 T __ia32_sys_sched_getattr
+ffffffff8b4ccee0 T __ia32_sys_sched_rr_get_interval
+ffffffff8b4ccf40 T __ia32_sys_sched_rr_get_interval_time32
+ffffffff8b4ce510 T __ia32_sys_sched_setscheduler
+ffffffff8b4ce560 T __ia32_sys_sched_setparam
+ffffffff8b4ce5c0 T __ia32_sys_sched_setattr
+ffffffff8b4cf210 T __ia32_sys_nice
+ffffffff8b4d05d0 T __ia32_sys_sched_yield
+ffffffff8b4d4380 T __ia32_sys_sched_setaffinity
+ffffffff8b4d4560 T __ia32_sys_sched_getaffinity
+ffffffff8b4f6cc0 T __ia32_sys_membarrier
+ffffffff8b5073b0 T __ia32_sys_syslog
+ffffffff8b521c30 T __ia32_sys_kcmp
+ffffffff8b5233c0 T __ia32_sys_time
+ffffffff8b523440 T __ia32_sys_time32
+ffffffff8b523480 T __ia32_sys_stime
+ffffffff8b523500 T __ia32_sys_stime32
+ffffffff8b523720 T __ia32_sys_gettimeofday
+ffffffff8b523ab0 T __ia32_sys_adjtimex
+ffffffff8b524100 T __ia32_sys_settimeofday
+ffffffff8b5247e0 T __ia32_sys_adjtimex_time32
+ffffffff8b529c10 T __ia32_sys_nanosleep
+ffffffff8b529cb0 T __ia32_sys_nanosleep_time32
+ffffffff8b531350 T __ia32_sys_timer_getoverrun
+ffffffff8b531c60 T __ia32_sys_timer_delete
+ffffffff8b531d80 T __ia32_sys_timer_gettime
+ffffffff8b531df0 T __ia32_sys_timer_gettime32
+ffffffff8b531e60 T __ia32_sys_clock_settime
+ffffffff8b531f20 T __ia32_sys_clock_nanosleep
+ffffffff8b532050 T __ia32_sys_clock_gettime
+ffffffff8b532110 T __ia32_sys_clock_getres
+ffffffff8b5321e0 T __ia32_sys_clock_settime32
+ffffffff8b5322a0 T __ia32_sys_clock_nanosleep_time32
+ffffffff8b5323d0 T __ia32_sys_clock_gettime32
+ffffffff8b532490 T __ia32_sys_clock_getres_time32
+ffffffff8b532650 T __ia32_sys_timer_settime32
+ffffffff8b532830 T __ia32_sys_timer_settime
+ffffffff8b533750 T __ia32_sys_timer_create
+ffffffff8b533dc0 T __ia32_sys_clock_adjtime
+ffffffff8b533e90 T __ia32_sys_clock_adjtime32
+ffffffff8b536430 T __ia32_sys_getitimer
+ffffffff8b536970 T __ia32_sys_alarm
+ffffffff8b536990 T __ia32_sys_setitimer
+ffffffff8b53adf0 T __ia32_sys_set_robust_list
+ffffffff8b53afc0 T __ia32_sys_get_robust_list
+ffffffff8b53efb0 T __ia32_sys_futex
+ffffffff8b53f120 T __ia32_sys_futex_time32
+ffffffff8b540280 T __ia32_sys_chown16
+ffffffff8b540310 T __ia32_sys_lchown16
+ffffffff8b5403a0 T __ia32_sys_fchown16
+ffffffff8b540420 T __ia32_sys_setregid16
+ffffffff8b540480 T __ia32_sys_setgid16
+ffffffff8b5404f0 T __ia32_sys_setreuid16
+ffffffff8b540550 T __ia32_sys_setuid16
+ffffffff8b5405d0 T __ia32_sys_setresuid16
+ffffffff8b540610 T __ia32_sys_getresuid16
+ffffffff8b540770 T __ia32_sys_setresgid16
+ffffffff8b5407b0 T __ia32_sys_getresgid16
+ffffffff8b540970 T __ia32_sys_getgroups16
+ffffffff8b540a00 T __ia32_sys_setfsuid16
+ffffffff8b540a60 T __ia32_sys_setfsgid16
+ffffffff8b540b40 T __ia32_sys_setgroups16
+ffffffff8b540c00 T __ia32_sys_getuid16
+ffffffff8b540c60 T __ia32_sys_geteuid16
+ffffffff8b540cc0 T __ia32_sys_getgid16
+ffffffff8b540d20 T __ia32_sys_getegid16
+ffffffff8b544ef0 T __ia32_sys_delete_module
+ffffffff8b547840 T __ia32_sys_init_module
+ffffffff8b5479a0 T __ia32_sys_finit_module
+ffffffff8b549660 T __ia32_sys_acct
+ffffffff8b54baf0 T __ia32_sys_kexec_load
+ffffffff8b54ced0 T __ia32_sys_kexec_file_load
+ffffffff8b5834a0 T __ia32_sys_seccomp
+ffffffff8b5d3a20 T __ia32_sys_bpf
+ffffffff8b605180 T __ia32_sys_perf_event_open
+ffffffff8b610bf0 T __ia32_sys_rseq
+ffffffff8b61c090 T __ia32_sys_fadvise64_64
+ffffffff8b61c0e0 T __ia32_sys_fadvise64
+ffffffff8b6214a0 T __ia32_sys_readahead
+ffffffff8b656c60 T __ia32_sys_mincore
+ffffffff8b658670 T __ia32_sys_mlock
+ffffffff8b6586e0 T __ia32_sys_mlock2
+ffffffff8b658730 T __ia32_sys_munlock
+ffffffff8b658970 T __ia32_sys_mlockall
+ffffffff8b658b00 T __ia32_sys_munlockall
+ffffffff8b65ace0 T __ia32_sys_mmap_pgoff
+ffffffff8b65b9a0 T __ia32_sys_munmap
+ffffffff8b65c980 T __ia32_sys_brk
+ffffffff8b65db20 T __ia32_sys_remap_file_pages
+ffffffff8b65eac0 T __ia32_sys_pkey_alloc
+ffffffff8b65f0d0 T __ia32_sys_pkey_free
+ffffffff8b660000 T __ia32_sys_mprotect
+ffffffff8b660050 T __ia32_sys_pkey_mprotect
+ffffffff8b661440 T __ia32_sys_mremap
+ffffffff8b661c30 T __ia32_sys_msync
+ffffffff8b66c410 T __ia32_sys_process_vm_readv
+ffffffff8b66c470 T __ia32_sys_process_vm_writev
+ffffffff8b674ea0 T __ia32_sys_madvise
+ffffffff8b67c780 T __ia32_sys_swapoff
+ffffffff8b67d940 T __ia32_sys_swapon
+ffffffff8b689c60 T __ia32_sys_migrate_pages
+ffffffff8b68af00 T __ia32_sys_set_mempolicy
+ffffffff8b68b940 T __ia32_sys_get_mempolicy
+ffffffff8b68cd80 T __ia32_sys_mbind
+ffffffff8b6a1f60 T __ia32_sys_move_pages
+ffffffff8b6c6810 T __ia32_sys_memfd_create
+ffffffff8b6c73a0 T __ia32_sys_fchdir
+ffffffff8b6c74e0 T __ia32_sys_close
+ffffffff8b6c7530 T __ia32_sys_vhangup
+ffffffff8b6c85b0 T __ia32_sys_truncate
+ffffffff8b6c8c10 T __ia32_sys_ftruncate
+ffffffff8b6c8d20 T __ia32_sys_fallocate
+ffffffff8b6c8fb0 T __ia32_sys_faccessat
+ffffffff8b6c8ff0 T __ia32_sys_access
+ffffffff8b6c9100 T __ia32_sys_chdir
+ffffffff8b6c9250 T __ia32_sys_chroot
+ffffffff8b6c9320 T __ia32_sys_fchmod
+ffffffff8b6c9410 T __ia32_sys_fchmodat
+ffffffff8b6c9450 T __ia32_sys_chmod
+ffffffff8b6c9590 T __ia32_sys_fchownat
+ffffffff8b6c95f0 T __ia32_sys_chown
+ffffffff8b6c9650 T __ia32_sys_lchown
+ffffffff8b6c9750 T __ia32_sys_fchown
+ffffffff8b6c9c00 T __ia32_sys_open
+ffffffff8b6c9c60 T __ia32_sys_openat
+ffffffff8b6c9d50 T __ia32_sys_creat
+ffffffff8b6ca860 T __ia32_sys_llseek
+ffffffff8b6cb840 T __ia32_sys_lseek
+ffffffff8b6cc550 T __ia32_sys_writev
+ffffffff8b6cc670 T __ia32_sys_pwritev
+ffffffff8b6cc690 T __ia32_sys_pwritev2
+ffffffff8b6ccf60 T __ia32_sys_sendfile
+ffffffff8b6cd000 T __ia32_sys_sendfile64
+ffffffff8b6cd810 T __ia32_sys_copy_file_range
+ffffffff8b6cdf20 T __ia32_sys_read
+ffffffff8b6ce040 T __ia32_sys_write
+ffffffff8b6ce120 T __ia32_sys_pread64
+ffffffff8b6ce200 T __ia32_sys_pwrite64
+ffffffff8b6ce650 T __ia32_sys_readv
+ffffffff8b6ce770 T __ia32_sys_preadv
+ffffffff8b6ce790 T __ia32_sys_preadv2
+ffffffff8b6d2c50 T __ia32_sys_stat
+ffffffff8b6d2d10 T __ia32_sys_lstat
+ffffffff8b6d2dc0 T __ia32_sys_fstat
+ffffffff8b6d3000 T __ia32_sys_newstat
+ffffffff8b6d30c0 T __ia32_sys_newlstat
+ffffffff8b6d3170 T __ia32_sys_newfstatat
+ffffffff8b6d3220 T __ia32_sys_newfstat
+ffffffff8b6d34a0 T __ia32_sys_statx
+ffffffff8b6d3ae0 T __ia32_sys_readlinkat
+ffffffff8b6d3b30 T __ia32_sys_readlink
+ffffffff8b6d4d10 T __ia32_sys_uselib
+ffffffff8b6d5f40 T __ia32_sys_execve
+ffffffff8b6d5f90 T __ia32_sys_execveat
+ffffffff8b6d8360 T __ia32_sys_pipe2
+ffffffff8b6d83a0 T __ia32_sys_pipe
+ffffffff8b6dfb80 T __ia32_sys_renameat2
+ffffffff8b6dfbe0 T __ia32_sys_renameat
+ffffffff8b6dfc40 T __ia32_sys_rename
+ffffffff8b6e05c0 T __ia32_sys_mknodat
+ffffffff8b6e0610 T __ia32_sys_mknod
+ffffffff8b6e0760 T __ia32_sys_mkdirat
+ffffffff8b6e07a0 T __ia32_sys_mkdir
+ffffffff8b6e09a0 T __ia32_sys_rmdir
+ffffffff8b6e0c90 T __ia32_sys_unlinkat
+ffffffff8b6e0cf0 T __ia32_sys_unlink
+ffffffff8b6e0ec0 T __ia32_sys_symlinkat
+ffffffff8b6e0f00 T __ia32_sys_symlink
+ffffffff8b6e1290 T __ia32_sys_linkat
+ffffffff8b6e12f0 T __ia32_sys_link
+ffffffff8b6e2070 T __ia32_sys_fcntl
+ffffffff8b6e38e0 T __ia32_sys_ioctl
+ffffffff8b6e4430 T __ia32_sys_old_readdir
+ffffffff8b6e4630 T __ia32_sys_getdents
+ffffffff8b6e4b60 T __ia32_sys_getdents64
+ffffffff8b6e62b0 T __ia32_sys_poll
+ffffffff8b6e6400 T __ia32_sys_ppoll
+ffffffff8b6e7510 T __ia32_sys_select
+ffffffff8b6e7620 T __ia32_sys_pselect6
+ffffffff8b6efc50 T __ia32_sys_dup3
+ffffffff8b6efc70 T __ia32_sys_dup2
+ffffffff8b6f09c0 T __ia32_sys_dup
+ffffffff8b6f0d90 T __ia32_sys_sysfs
+ffffffff8b6f4270 T __ia32_sys_umount
+ffffffff8b6f42b0 T __ia32_sys_oldumount
+ffffffff8b6f48f0 T __ia32_sys_open_tree
+ffffffff8b6f4c40 T __ia32_sys_fsmount
+ffffffff8b6f5b60 T __ia32_sys_move_mount
+ffffffff8b6f6e90 T __ia32_sys_mount
+ffffffff8b6f6f60 T __ia32_sys_pivot_root
+ffffffff8b6f9c50 T __ia32_sys_listxattr
+ffffffff8b6f9c90 T __ia32_sys_llistxattr
+ffffffff8b6f9fe0 T __ia32_sys_getxattr
+ffffffff8b6fa040 T __ia32_sys_lgetxattr
+ffffffff8b6fa2e0 T __ia32_sys_flistxattr
+ffffffff8b6fa430 T __ia32_sys_fgetxattr
+ffffffff8b6fa880 T __ia32_sys_removexattr
+ffffffff8b6fa8c0 T __ia32_sys_lremovexattr
+ffffffff8b6fa8e0 T __ia32_sys_fremovexattr
+ffffffff8b6fb130 T __ia32_sys_setxattr
+ffffffff8b6fb190 T __ia32_sys_lsetxattr
+ffffffff8b6fb1c0 T __ia32_sys_fsetxattr
+ffffffff8b7077c0 T __ia32_sys_splice
+ffffffff8b707bb0 T __ia32_sys_tee
+ffffffff8b708190 T __ia32_sys_vmsplice
+ffffffff8b708d50 T __ia32_sys_fsync
+ffffffff8b708d90 T __ia32_sys_fdatasync
+ffffffff8b708e30 T __ia32_sys_syncfs
+ffffffff8b708fe0 T __ia32_sys_sync
+ffffffff8b709200 T __ia32_sys_sync_file_range
+ffffffff8b709250 T __ia32_sys_sync_file_range2
+ffffffff8b7095a0 T __ia32_sys_utimensat
+ffffffff8b709760 T __ia32_sys_futimesat
+ffffffff8b7097a0 T __ia32_sys_utimes
+ffffffff8b7097c0 T __ia32_sys_utime
+ffffffff8b709860 T __ia32_sys_utime32
+ffffffff8b709900 T __ia32_sys_utimensat_time32
+ffffffff8b709ad0 T __ia32_sys_futimesat_time32
+ffffffff8b709b10 T __ia32_sys_utimes_time32
+ffffffff8b70a2d0 T __ia32_sys_getcwd
+ffffffff8b70b7d0 T __ia32_sys_ustat
+ffffffff8b70bae0 T __ia32_sys_statfs
+ffffffff8b70bb90 T __ia32_sys_statfs64
+ffffffff8b70bd40 T __ia32_sys_fstatfs
+ffffffff8b70bdf0 T __ia32_sys_fstatfs64
+ffffffff8b70e0a0 T __ia32_sys_fsconfig
+ffffffff8b70e660 T __ia32_sys_fspick
+ffffffff8b70e810 T __ia32_sys_fsopen
+ffffffff8b70fb70 T __ia32_sys_bdflush
+ffffffff8b71e9e0 T __ia32_sys_inotify_init1
+ffffffff8b71ea00 T __ia32_sys_inotify_init
+ffffffff8b71ebc0 T __ia32_sys_inotify_rm_watch
+ffffffff8b71f4b0 T __ia32_sys_inotify_add_watch
+ffffffff8b721280 T __ia32_sys_fanotify_mark
+ffffffff8b721af0 T __ia32_sys_fanotify_init
+ffffffff8b722b20 T __ia32_sys_epoll_create1
+ffffffff8b722b70 T __ia32_sys_epoll_create
+ffffffff8b7237c0 T __ia32_sys_epoll_ctl
+ffffffff8b724890 T __ia32_sys_epoll_wait
+ffffffff8b7248c0 T __ia32_sys_epoll_pwait
+ffffffff8b725200 T __ia32_sys_signalfd4
+ffffffff8b725290 T __ia32_sys_signalfd
+ffffffff8b7259e0 T __ia32_sys_timerfd_create
+ffffffff8b7266d0 T __ia32_sys_timerfd_settime
+ffffffff8b726770 T __ia32_sys_timerfd_settime32
+ffffffff8b726ac0 T __ia32_sys_timerfd_gettime
+ffffffff8b726b30 T __ia32_sys_timerfd_gettime32
+ffffffff8b7270e0 T __ia32_sys_eventfd2
+ffffffff8b727120 T __ia32_sys_eventfd
+ffffffff8b727760 T __ia32_sys_userfaultfd
+ffffffff8b72b800 T __ia32_sys_io_cancel
+ffffffff8b72bdb0 T __ia32_sys_io_getevents
+ffffffff8b72be60 T __ia32_sys_io_pgetevents
+ffffffff8b72bfb0 T __ia32_sys_io_getevents_time32
+ffffffff8b72de20 T __ia32_sys_io_submit
+ffffffff8b72e4b0 T __ia32_sys_io_destroy
+ffffffff8b72efc0 T __ia32_sys_io_setup
+ffffffff8b733ae0 T __ia32_sys_io_uring_enter
+ffffffff8b734ed0 T __ia32_sys_io_uring_setup
+ffffffff8b735930 T __ia32_sys_io_uring_register
+ffffffff8b745370 T __ia32_sys_flock
+ffffffff8b751a70 T __ia32_sys_name_to_handle_at
+ffffffff8b751e60 T __ia32_sys_open_by_handle_at
+ffffffff8b75c2b0 T __ia32_sys_quotactl
+ffffffff8b77c290 T __ia32_sys_lookup_dcookie
+ffffffff8b8249a0 T __ia32_sys_msgget
+ffffffff8b8257b0 T __ia32_sys_msgsnd
+ffffffff8b825ff0 T __ia32_sys_msgctl
+ffffffff8b826670 T __ia32_sys_msgrcv
+ffffffff8b829ae0 T __ia32_sys_semop
+ffffffff8b82a2e0 T __ia32_sys_semctl
+ffffffff8b82a440 T __ia32_sys_semget
+ffffffff8b82a530 T __ia32_sys_semtimedop
+ffffffff8b82a600 T __ia32_sys_semtimedop_time32
+ffffffff8b82ae90 T __ia32_sys_shmget
+ffffffff8b82c410 T __ia32_sys_shmctl
+ffffffff8b82d070 T __ia32_sys_shmat
+ffffffff8b82d320 T __ia32_sys_shmdt
+ffffffff8b82e050 T __ia32_sys_mq_open
+ffffffff8b82e240 T __ia32_sys_mq_unlink
+ffffffff8b82ee30 T __ia32_sys_mq_getsetattr
+ffffffff8b82f690 T __ia32_sys_mq_timedsend
+ffffffff8b82f740 T __ia32_sys_mq_timedsend_time32
+ffffffff8b82fe00 T __ia32_sys_mq_notify
+ffffffff8b8304f0 T __ia32_sys_mq_timedreceive
+ffffffff8b8305a0 T __ia32_sys_mq_timedreceive_time32
+ffffffff8b834dc0 T __ia32_sys_request_key
+ffffffff8b834f60 T __ia32_sys_add_key
+ffffffff8b836df0 T __ia32_sys_keyctl
+ffffffff8b8e6850 T __ia32_sys_ioprio_get
+ffffffff8b8e6f00 T __ia32_sys_ioprio_set
+ffffffff8ba998d0 T __ia32_sys_getrandom
+ffffffff8bcc6e20 T __ia32_sys_getsockopt
+ffffffff8bcc9060 T __ia32_sys_setsockopt
+ffffffff8bcc91d0 T __ia32_sys_socket
+ffffffff8bcc9480 T __ia32_sys_socketpair
+ffffffff8bcc95e0 T __ia32_sys_bind
+ffffffff8bcc96d0 T __ia32_sys_listen
+ffffffff8bcc9930 T __ia32_sys_accept4
+ffffffff8bcc9970 T __ia32_sys_accept
+ffffffff8bcc9ae0 T __ia32_sys_connect
+ffffffff8bcc9c00 T __ia32_sys_getsockname
+ffffffff8bcc9d20 T __ia32_sys_getpeername
+ffffffff8bcc9f00 T __ia32_sys_sendto
+ffffffff8bcc9f60 T __ia32_sys_send
+ffffffff8bcca190 T __ia32_sys_recvfrom
+ffffffff8bcca1f0 T __ia32_sys_recv
+ffffffff8bcca2e0 T __ia32_sys_shutdown
+ffffffff8bcca4c0 T __ia32_sys_sendmsg
+ffffffff8bcca730 T __ia32_sys_sendmmsg
+ffffffff8bcca930 T __ia32_sys_recvmsg
+ffffffff8bccaae0 T __ia32_sys_recvmmsg
+ffffffff8bccab60 T __ia32_sys_recvmmsg_time32
+ffffffff8bccaba0 T __ia32_sys_socketcall
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  _ia32_sys_ | wc -l
+409
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  _x64_sys_ 
+ffffffff8b403390 T __x64_sys_ni_syscall
+ffffffff8b42faa0 T __x64_sys_arch_prctl
+ffffffff8b4306c0 T __x64_sys_rt_sigreturn
+ffffffff8b434100 T __x64_sys_iopl
+ffffffff8b4343b0 T __x64_sys_ioperm
+ffffffff8b435a80 T __x64_sys_modify_ldt
+ffffffff8b436820 T __x64_sys_mmap
+ffffffff8b440db0 T __x64_sys_set_thread_area
+ffffffff8b440eb0 T __x64_sys_get_thread_area
+ffffffff8b4952b0 T __x64_sys_set_tid_address
+ffffffff8b498a80 T __x64_sys_fork
+ffffffff8b498ad0 T __x64_sys_vfork
+ffffffff8b498c40 T __x64_sys_clone
+ffffffff8b498ce0 T __x64_sys_clone3
+ffffffff8b499290 T __x64_sys_unshare
+ffffffff8b499430 T __x64_sys_personality
+ffffffff8b49dba0 T __x64_sys_waitid
+ffffffff8b49eb50 T __x64_sys_exit
+ffffffff8b49ec40 T __x64_sys_exit_group
+ffffffff8b49ee90 T __x64_sys_wait4
+ffffffff8b49eed0 T __x64_sys_waitpid
+ffffffff8b4a4140 T __x64_sys_sysctl
+ffffffff8b4a48c0 T __x64_sys_capget
+ffffffff8b4a4a50 T __x64_sys_capset
+ffffffff8b4a6180 T __x64_sys_ptrace
+ffffffff8b4a7230 T __x64_sys_restart_syscall
+ffffffff8b4a72c0 T __x64_sys_sgetmask
+ffffffff8b4a78b0 T __x64_sys_pause
+ffffffff8b4a8160 T __x64_sys_sigaltstack
+ffffffff8b4a8630 T __x64_sys_sigpending
+ffffffff8b4a86a0 T __x64_sys_rt_sigpending
+ffffffff8b4aa580 T __x64_sys_ssetmask
+ffffffff8b4aa7a0 T __x64_sys_sigsuspend
+ffffffff8b4aa8b0 T __x64_sys_rt_sigsuspend
+ffffffff8b4aac30 T __x64_sys_rt_sigprocmask
+ffffffff8b4aad00 T __x64_sys_sigprocmask
+ffffffff8b4abda0 T __x64_sys_rt_sigqueueinfo
+ffffffff8b4abf80 T __x64_sys_kill
+ffffffff8b4ac3f0 T __x64_sys_tgkill
+ffffffff8b4ac450 T __x64_sys_tkill
+ffffffff8b4ac5b0 T __x64_sys_rt_tgsigqueueinfo
+ffffffff8b4ada30 T __x64_sys_rt_sigtimedwait
+ffffffff8b4adb00 T __x64_sys_rt_sigtimedwait_time32
+ffffffff8b4ae400 T __x64_sys_pidfd_send_signal
+ffffffff8b4aec80 T __x64_sys_signal
+ffffffff8b4aed60 T __x64_sys_rt_sigaction
+ffffffff8b4af400 T __x64_sys_umask
+ffffffff8b4af4b0 T __x64_sys_getpriority
+ffffffff8b4af740 T __x64_sys_gettid
+ffffffff8b4af760 T __x64_sys_getpid
+ffffffff8b4af790 T __x64_sys_getppid
+ffffffff8b4afb10 T __x64_sys_getuid
+ffffffff8b4afb40 T __x64_sys_geteuid
+ffffffff8b4afc30 T __x64_sys_getcpu
+ffffffff8b4afdc0 T __x64_sys_getgid
+ffffffff8b4afdf0 T __x64_sys_getegid
+ffffffff8b4b02d0 T __x64_sys_getpgid
+ffffffff8b4b0310 T __x64_sys_getpgrp
+ffffffff8b4b0bb0 T __x64_sys_sysinfo
+ffffffff8b4b1440 T __x64_sys_newuname
+ffffffff8b4b15a0 T __x64_sys_uname
+ffffffff8b4b1730 T __x64_sys_times
+ffffffff8b4b17b0 T __x64_sys_getresgid
+ffffffff8b4b1860 T __x64_sys_getresuid
+ffffffff8b4b1920 T __x64_sys_getsid
+ffffffff8b4b19a0 T __x64_sys_old_getrlimit
+ffffffff8b4b1f60 T __x64_sys_gethostname
+ffffffff8b4b2050 T __x64_sys_sethostname
+ffffffff8b4b2280 T __x64_sys_setdomainname
+ffffffff8b4b28f0 T __x64_sys_setpgid
+ffffffff8b4b2ac0 T __x64_sys_olduname
+ffffffff8b4b2ea0 T __x64_sys_setpriority
+ffffffff8b4b32c0 T __x64_sys_setregid
+ffffffff8b4b33c0 T __x64_sys_setgid
+ffffffff8b4b3620 T __x64_sys_setreuid
+ffffffff8b4b3760 T __x64_sys_setuid
+ffffffff8b4b3960 T __x64_sys_setresuid
+ffffffff8b4b3b30 T __x64_sys_setresgid
+ffffffff8b4b3c50 T __x64_sys_setfsuid
+ffffffff8b4b3d60 T __x64_sys_setfsgid
+ffffffff8b4b3eb0 T __x64_sys_setsid
+ffffffff8b4b4560 T __x64_sys_setrlimit
+ffffffff8b4b45e0 T __x64_sys_getrlimit
+ffffffff8b4b47b0 T __x64_sys_prlimit64
+ffffffff8b4b4ec0 T __x64_sys_getrusage
+ffffffff8b4b55f0 T __x64_sys_prctl
+ffffffff8b4bd590 T __x64_sys_pidfd_open
+ffffffff8b4c41b0 T __x64_sys_setns
+ffffffff8b4c5f40 T __x64_sys_reboot
+ffffffff8b4c7ce0 T __x64_sys_getgroups
+ffffffff8b4c7f50 T __x64_sys_setgroups
+ffffffff8b4c8210 T __x64_sys_sched_get_priority_max
+ffffffff8b4c82b0 T __x64_sys_sched_get_priority_min
+ffffffff8b4ca8c0 T __x64_sys_sched_getscheduler
+ffffffff8b4cac90 T __x64_sys_sched_getparam
+ffffffff8b4cb170 T __x64_sys_sched_getattr
+ffffffff8b4ccfa0 T __x64_sys_sched_rr_get_interval
+ffffffff8b4cd000 T __x64_sys_sched_rr_get_interval_time32
+ffffffff8b4ce4e0 T __x64_sys_sched_setscheduler
+ffffffff8b4ce540 T __x64_sys_sched_setparam
+ffffffff8b4ce6d0 T __x64_sys_sched_setattr
+ffffffff8b4cf2e0 T __x64_sys_nice
+ffffffff8b4d05d0 T __x64_sys_sched_yield
+ffffffff8b4d4420 T __x64_sys_sched_setaffinity
+ffffffff8b4d4660 T __x64_sys_sched_getaffinity
+ffffffff8b4f6d90 T __x64_sys_membarrier
+ffffffff8b507390 T __x64_sys_syslog
+ffffffff8b521c00 T __x64_sys_kcmp
+ffffffff8b523380 T __x64_sys_time
+ffffffff8b523400 T __x64_sys_time32
+ffffffff8b523a90 T __x64_sys_adjtimex
+ffffffff8b523db0 T __x64_sys_stime
+ffffffff8b523e30 T __x64_sys_stime32
+ffffffff8b523f70 T __x64_sys_gettimeofday
+ffffffff8b5243e0 T __x64_sys_settimeofday
+ffffffff8b5247c0 T __x64_sys_adjtimex_time32
+ffffffff8b529d50 T __x64_sys_nanosleep
+ffffffff8b529df0 T __x64_sys_nanosleep_time32
+ffffffff8b532750 T __x64_sys_timer_gettime
+ffffffff8b5327c0 T __x64_sys_timer_gettime32
+ffffffff8b532930 T __x64_sys_timer_getoverrun
+ffffffff8b5329b0 T __x64_sys_timer_settime
+ffffffff8b532ab0 T __x64_sys_timer_settime32
+ffffffff8b532bb0 T __x64_sys_clock_gettime
+ffffffff8b532c70 T __x64_sys_clock_gettime32
+ffffffff8b532d30 T __x64_sys_clock_settime32
+ffffffff8b532df0 T __x64_sys_clock_settime
+ffffffff8b532eb0 T __x64_sys_clock_getres_time32
+ffffffff8b532f80 T __x64_sys_clock_getres
+ffffffff8b533050 T __x64_sys_clock_nanosleep
+ffffffff8b533180 T __x64_sys_clock_nanosleep_time32
+ffffffff8b533900 T __x64_sys_timer_create
+ffffffff8b533990 T __x64_sys_timer_delete
+ffffffff8b533da0 T __x64_sys_clock_adjtime
+ffffffff8b533e70 T __x64_sys_clock_adjtime32
+ffffffff8b536590 T __x64_sys_getitimer
+ffffffff8b536950 T __x64_sys_alarm
+ffffffff8b536c50 T __x64_sys_setitimer
+ffffffff8b53ada0 T __x64_sys_set_robust_list
+ffffffff8b53b3d0 T __x64_sys_get_robust_list
+ffffffff8b53f290 T __x64_sys_futex
+ffffffff8b53f400 T __x64_sys_futex_time32
+ffffffff8b540230 T __x64_sys_chown16
+ffffffff8b5402c0 T __x64_sys_lchown16
+ffffffff8b540360 T __x64_sys_fchown16
+ffffffff8b5403e0 T __x64_sys_setregid16
+ffffffff8b540450 T __x64_sys_setgid16
+ffffffff8b5404b0 T __x64_sys_setreuid16
+ffffffff8b540520 T __x64_sys_setuid16
+ffffffff8b540580 T __x64_sys_setresuid16
+ffffffff8b540720 T __x64_sys_setresgid16
+ffffffff8b5409d0 T __x64_sys_setfsuid16
+ffffffff8b540a30 T __x64_sys_setfsgid16
+ffffffff8b540c00 T __x64_sys_getuid16
+ffffffff8b540c60 T __x64_sys_geteuid16
+ffffffff8b540cc0 T __x64_sys_getgid16
+ffffffff8b540d20 T __x64_sys_getegid16
+ffffffff8b540d80 T __x64_sys_getgroups16
+ffffffff8b540de0 T __x64_sys_setgroups16
+ffffffff8b540ea0 T __x64_sys_getresuid16
+ffffffff8b540fb0 T __x64_sys_getresgid16
+ffffffff8b5451a0 T __x64_sys_delete_module
+ffffffff8b547820 T __x64_sys_init_module
+ffffffff8b547980 T __x64_sys_finit_module
+ffffffff8b5497a0 T __x64_sys_acct
+ffffffff8b54ba00 T __x64_sys_kexec_load
+ffffffff8b54d160 T __x64_sys_kexec_file_load
+ffffffff8b583480 T __x64_sys_seccomp
+ffffffff8b5d3a00 T __x64_sys_bpf
+ffffffff8b605150 T __x64_sys_perf_event_open
+ffffffff8b610dd0 T __x64_sys_rseq
+ffffffff8b61c060 T __x64_sys_fadvise64_64
+ffffffff8b61c0b0 T __x64_sys_fadvise64
+ffffffff8b621480 T __x64_sys_readahead
+ffffffff8b657290 T __x64_sys_mincore
+ffffffff8b658650 T __x64_sys_mlock
+ffffffff8b658690 T __x64_sys_mlock2
+ffffffff8b6587c0 T __x64_sys_munlock
+ffffffff8b658b00 T __x64_sys_munlockall
+ffffffff8b658b60 T __x64_sys_mlockall
+ffffffff8b65acb0 T __x64_sys_mmap_pgoff
+ffffffff8b65b960 T __x64_sys_munmap
+ffffffff8b65cc40 T __x64_sys_brk
+ffffffff8b65de00 T __x64_sys_remap_file_pages
+ffffffff8b65f7e0 T __x64_sys_pkey_free
+ffffffff8b65f8e0 T __x64_sys_pkey_alloc
+ffffffff8b65ffd0 T __x64_sys_mprotect
+ffffffff8b660020 T __x64_sys_pkey_mprotect
+ffffffff8b661820 T __x64_sys_mremap
+ffffffff8b661e30 T __x64_sys_msync
+ffffffff8b66c3e0 T __x64_sys_process_vm_readv
+ffffffff8b66c440 T __x64_sys_process_vm_writev
+ffffffff8b674e80 T __x64_sys_madvise
+ffffffff8b67c760 T __x64_sys_swapoff
+ffffffff8b67d920 T __x64_sys_swapon
+ffffffff8b689c30 T __x64_sys_migrate_pages
+ffffffff8b68aee0 T __x64_sys_set_mempolicy
+ffffffff8b68b910 T __x64_sys_get_mempolicy
+ffffffff8b68cd50 T __x64_sys_mbind
+ffffffff8b6a1f30 T __x64_sys_move_pages
+ffffffff8b6c6e50 T __x64_sys_memfd_create
+ffffffff8b6c7530 T __x64_sys_vhangup
+ffffffff8b6c7c80 T __x64_sys_close
+ffffffff8b6c8260 T __x64_sys_fchdir
+ffffffff8b6c8580 T __x64_sys_truncate
+ffffffff8b6c8bf0 T __x64_sys_ftruncate
+ffffffff8b6c8cf0 T __x64_sys_fallocate
+ffffffff8b6c8f90 T __x64_sys_faccessat
+ffffffff8b6c8fd0 T __x64_sys_access
+ffffffff8b6c90e0 T __x64_sys_chdir
+ffffffff8b6c9230 T __x64_sys_chroot
+ffffffff8b6c9300 T __x64_sys_fchmod
+ffffffff8b6c93f0 T __x64_sys_fchmodat
+ffffffff8b6c9430 T __x64_sys_chmod
+ffffffff8b6c9560 T __x64_sys_fchownat
+ffffffff8b6c95c0 T __x64_sys_chown
+ffffffff8b6c9620 T __x64_sys_lchown
+ffffffff8b6c9730 T __x64_sys_fchown
+ffffffff8b6c9bd0 T __x64_sys_open
+ffffffff8b6c9c30 T __x64_sys_openat
+ffffffff8b6c9d20 T __x64_sys_creat
+ffffffff8b6ca740 T __x64_sys_llseek
+ffffffff8b6cb820 T __x64_sys_lseek
+ffffffff8b6cc530 T __x64_sys_writev
+ffffffff8b6cc640 T __x64_sys_pwritev
+ffffffff8b6cc6c0 T __x64_sys_pwritev2
+ffffffff8b6cd2e0 T __x64_sys_sendfile
+ffffffff8b6cd380 T __x64_sys_sendfile64
+ffffffff8b6cda30 T __x64_sys_copy_file_range
+ffffffff8b6cdf00 T __x64_sys_read
+ffffffff8b6ce020 T __x64_sys_write
+ffffffff8b6ce100 T __x64_sys_pread64
+ffffffff8b6ce1e0 T __x64_sys_pwrite64
+ffffffff8b6ce630 T __x64_sys_readv
+ffffffff8b6ce740 T __x64_sys_preadv
+ffffffff8b6ce7c0 T __x64_sys_preadv2
+ffffffff8b6d2c30 T __x64_sys_stat
+ffffffff8b6d2cf0 T __x64_sys_lstat
+ffffffff8b6d2da0 T __x64_sys_fstat
+ffffffff8b6d2fe0 T __x64_sys_newstat
+ffffffff8b6d30a0 T __x64_sys_newlstat
+ffffffff8b6d3150 T __x64_sys_newfstatat
+ffffffff8b6d3200 T __x64_sys_newfstat
+ffffffff8b6d3470 T __x64_sys_statx
+ffffffff8b6d3ab0 T __x64_sys_readlinkat
+ffffffff8b6d3b00 T __x64_sys_readlink
+ffffffff8b6d54b0 T __x64_sys_uselib
+ffffffff8b6d6040 T __x64_sys_execve
+ffffffff8b6d6090 T __x64_sys_execveat
+ffffffff8b6d8340 T __x64_sys_pipe2
+ffffffff8b6d8380 T __x64_sys_pipe
+ffffffff8b6dfb50 T __x64_sys_renameat2
+ffffffff8b6dfbb0 T __x64_sys_renameat
+ffffffff8b6dfc10 T __x64_sys_rename
+ffffffff8b6e05a0 T __x64_sys_mknodat
+ffffffff8b6e05e0 T __x64_sys_mknod
+ffffffff8b6e0740 T __x64_sys_mkdirat
+ffffffff8b6e0780 T __x64_sys_mkdir
+ffffffff8b6e0980 T __x64_sys_rmdir
+ffffffff8b6e0d20 T __x64_sys_unlink
+ffffffff8b6e0d50 T __x64_sys_unlinkat
+ffffffff8b6e0ea0 T __x64_sys_symlinkat
+ffffffff8b6e0ee0 T __x64_sys_symlink
+ffffffff8b6e1260 T __x64_sys_linkat
+ffffffff8b6e12c0 T __x64_sys_link
+ffffffff8b6e2510 T __x64_sys_fcntl
+ffffffff8b6e38c0 T __x64_sys_ioctl
+ffffffff8b6e41c0 T __x64_sys_old_readdir
+ffffffff8b6e48b0 T __x64_sys_getdents
+ffffffff8b6e4b40 T __x64_sys_getdents64
+ffffffff8b6e6df0 T __x64_sys_ppoll
+ffffffff8b6e6ed0 T __x64_sys_poll
+ffffffff8b6e74e0 T __x64_sys_select
+ffffffff8b6e76b0 T __x64_sys_pselect6
+ffffffff8b6efc30 T __x64_sys_dup3
+ffffffff8b6efce0 T __x64_sys_dup2
+ffffffff8b6f09a0 T __x64_sys_dup
+ffffffff8b6f0fa0 T __x64_sys_sysfs
+ffffffff8b6f4250 T __x64_sys_umount
+ffffffff8b6f4290 T __x64_sys_oldumount
+ffffffff8b6f4a90 T __x64_sys_open_tree
+ffffffff8b6f4f40 T __x64_sys_fsmount
+ffffffff8b6f5cc0 T __x64_sys_move_mount
+ffffffff8b6f6e60 T __x64_sys_mount
+ffffffff8b6f7340 T __x64_sys_pivot_root
+ffffffff8b6f9c20 T __x64_sys_listxattr
+ffffffff8b6f9c70 T __x64_sys_llistxattr
+ffffffff8b6f9fb0 T __x64_sys_getxattr
+ffffffff8b6fa010 T __x64_sys_lgetxattr
+ffffffff8b6fa240 T __x64_sys_flistxattr
+ffffffff8b6fa380 T __x64_sys_fgetxattr
+ffffffff8b6fa860 T __x64_sys_removexattr
+ffffffff8b6fa8a0 T __x64_sys_lremovexattr
+ffffffff8b6fa980 T __x64_sys_fremovexattr
+ffffffff8b6fb100 T __x64_sys_setxattr
+ffffffff8b6fb160 T __x64_sys_lsetxattr
+ffffffff8b6fb290 T __x64_sys_fsetxattr
+ffffffff8b708170 T __x64_sys_vmsplice
+ffffffff8b7086d0 T __x64_sys_splice
+ffffffff8b708820 T __x64_sys_tee
+ffffffff8b708d30 T __x64_sys_fsync
+ffffffff8b708d70 T __x64_sys_fdatasync
+ffffffff8b708eb0 T __x64_sys_syncfs
+ffffffff8b708fe0 T __x64_sys_sync
+ffffffff8b7091d0 T __x64_sys_sync_file_range
+ffffffff8b709220 T __x64_sys_sync_file_range2
+ffffffff8b709740 T __x64_sys_futimesat
+ffffffff8b709780 T __x64_sys_utimes
+ffffffff8b709ab0 T __x64_sys_futimesat_time32
+ffffffff8b709af0 T __x64_sys_utimes_time32
+ffffffff8b709b30 T __x64_sys_utime
+ffffffff8b709bd0 T __x64_sys_utime32
+ffffffff8b709c70 T __x64_sys_utimensat
+ffffffff8b709d30 T __x64_sys_utimensat_time32
+ffffffff8b70a630 T __x64_sys_getcwd
+ffffffff8b70b7b0 T __x64_sys_ustat
+ffffffff8b70bac0 T __x64_sys_statfs
+ffffffff8b70bb70 T __x64_sys_statfs64
+ffffffff8b70bd20 T __x64_sys_fstatfs
+ffffffff8b70bdd0 T __x64_sys_fstatfs64
+ffffffff8b70e970 T __x64_sys_fsopen
+ffffffff8b70ead0 T __x64_sys_fspick
+ffffffff8b70ec80 T __x64_sys_fsconfig
+ffffffff8b70ffc0 T __x64_sys_bdflush
+ffffffff8b71e9c0 T __x64_sys_inotify_init1
+ffffffff8b71ea00 T __x64_sys_inotify_init
+ffffffff8b71eaf0 T __x64_sys_inotify_rm_watch
+ffffffff8b71f5e0 T __x64_sys_inotify_add_watch
+ffffffff8b720280 T __x64_sys_fanotify_init
+ffffffff8b721250 T __x64_sys_fanotify_mark
+ffffffff8b722b00 T __x64_sys_epoll_create1
+ffffffff8b722b40 T __x64_sys_epoll_create
+ffffffff8b723d80 T __x64_sys_epoll_ctl
+ffffffff8b724860 T __x64_sys_epoll_wait
+ffffffff8b724ae0 T __x64_sys_epoll_pwait
+ffffffff8b725410 T __x64_sys_signalfd4
+ffffffff8b7254a0 T __x64_sys_signalfd
+ffffffff8b725da0 T __x64_sys_timerfd_create
+ffffffff8b726810 T __x64_sys_timerfd_settime
+ffffffff8b7268b0 T __x64_sys_timerfd_settime32
+ffffffff8b726ba0 T __x64_sys_timerfd_gettime32
+ffffffff8b726c10 T __x64_sys_timerfd_gettime
+ffffffff8b7270c0 T __x64_sys_eventfd2
+ffffffff8b727100 T __x64_sys_eventfd
+ffffffff8b727990 T __x64_sys_userfaultfd
+ffffffff8b72b6b0 T __x64_sys_io_cancel
+ffffffff8b72c300 T __x64_sys_io_getevents
+ffffffff8b72c3b0 T __x64_sys_io_getevents_time32
+ffffffff8b72c700 T __x64_sys_io_pgetevents
+ffffffff8b72e0e0 T __x64_sys_io_submit
+ffffffff8b72e5b0 T __x64_sys_io_destroy
+ffffffff8b72f180 T __x64_sys_io_setup
+ffffffff8b733da0 T __x64_sys_io_uring_enter
+ffffffff8b734eb0 T __x64_sys_io_uring_setup
+ffffffff8b7359f0 T __x64_sys_io_uring_register
+ffffffff8b7454b0 T __x64_sys_flock
+ffffffff8b751e40 T __x64_sys_open_by_handle_at
+ffffffff8b751ec0 T __x64_sys_name_to_handle_at
+ffffffff8b75c280 T __x64_sys_quotactl
+ffffffff8b77c270 T __x64_sys_lookup_dcookie
+ffffffff8b824930 T __x64_sys_msgget
+ffffffff8b825770 T __x64_sys_msgsnd
+ffffffff8b826010 T __x64_sys_msgctl
+ffffffff8b826640 T __x64_sys_msgrcv
+ffffffff8b829ac0 T __x64_sys_semop
+ffffffff8b82a300 T __x64_sys_semctl
+ffffffff8b82a420 T __x64_sys_semget
+ffffffff8b82a510 T __x64_sys_semtimedop
+ffffffff8b82a5e0 T __x64_sys_semtimedop_time32
+ffffffff8b82ae10 T __x64_sys_shmget
+ffffffff8b82c430 T __x64_sys_shmctl
+ffffffff8b82d010 T __x64_sys_shmat
+ffffffff8b82d300 T __x64_sys_shmdt
+ffffffff8b82e1b0 T __x64_sys_mq_open
+ffffffff8b82e760 T __x64_sys_mq_unlink
+ffffffff8b82ee10 T __x64_sys_mq_getsetattr
+ffffffff8b82f7f0 T __x64_sys_mq_timedsend_time32
+ffffffff8b82f8a0 T __x64_sys_mq_timedsend
+ffffffff8b82ff00 T __x64_sys_mq_notify
+ffffffff8b830650 T __x64_sys_mq_timedreceive
+ffffffff8b830700 T __x64_sys_mq_timedreceive_time32
+ffffffff8b8351a0 T __x64_sys_request_key
+ffffffff8b835330 T __x64_sys_add_key
+ffffffff8b837080 T __x64_sys_keyctl
+ffffffff8b8e6b70 T __x64_sys_ioprio_get
+ffffffff8b8e71d0 T __x64_sys_ioprio_set
+ffffffff8ba99a00 T __x64_sys_getrandom
+ffffffff8bcc6df0 T __x64_sys_getsockopt
+ffffffff8bcc9030 T __x64_sys_setsockopt
+ffffffff8bcc91b0 T __x64_sys_socket
+ffffffff8bcc9450 T __x64_sys_socketpair
+ffffffff8bcc95c0 T __x64_sys_bind
+ffffffff8bcc96b0 T __x64_sys_listen
+ffffffff8bcc9900 T __x64_sys_accept4
+ffffffff8bcc9950 T __x64_sys_accept
+ffffffff8bcc9ac0 T __x64_sys_connect
+ffffffff8bcc9be0 T __x64_sys_getsockname
+ffffffff8bcc9d00 T __x64_sys_getpeername
+ffffffff8bcc9ed0 T __x64_sys_sendto
+ffffffff8bcc9f30 T __x64_sys_send
+ffffffff8bcca160 T __x64_sys_recvfrom
+ffffffff8bcca1c0 T __x64_sys_recv
+ffffffff8bcca2c0 T __x64_sys_shutdown
+ffffffff8bcca490 T __x64_sys_sendmsg
+ffffffff8bcca700 T __x64_sys_sendmmsg
+ffffffff8bcca900 T __x64_sys_recvmsg
+ffffffff8bccaaa0 T __x64_sys_recvmmsg
+ffffffff8bccab20 T __x64_sys_recvmmsg_time32
+ffffffff8bccaef0 T __x64_sys_socketcall
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  _x64_sys_ | wc -l
+409
+
+==============================================================================================================================
+
+</include/linux/kallsyms.h>
+[73]
+#ifdef CONFIG_KALLSYMS
+/* Lookup the address for a symbol. Returns 0 if not found. */
+unsigned long kallsyms_lookup_name(const char *name);
+
+/* Call a function on each kallsyms symbol in the core kernel */
+int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+		      unsigned long),
+	        void *data);
+
+extern int kallsyms_lookup_size_offset(unsigned long addr,
+		  unsigned long *symbolsize,
+		  unsigned long *offset);
+
+/* Lookup an address.  modname is set to NULL if it's in the kernel. */
+const char *kallsyms_lookup(unsigned long addr,
+	        unsigned long *symbolsize,
+	        unsigned long *offset,
+	        char **modname, char *namebuf);
+
+/* Look up a kernel symbol and return it in a text buffer. */
+extern int sprint_symbol(char *buffer, unsigned long address);
+extern int sprint_symbol_no_offset(char *buffer, unsigned long address);
+extern int sprint_backtrace(char *buffer, unsigned long address);
+
+int lookup_symbol_name(unsigned long addr, char *symname);
+int lookup_symbol_attrs(unsigned long addr, unsigned long *size, unsigned long *offset, char *modname, char *name);
+
+/* How and when do we show kallsyms values? */
+extern int kallsyms_show_value(void);
+
+#else /* !CONFIG_KALLSYMS */
+
+==============================================================================================================================
+
+#if defined(CONFIG_SMP)
+        printk("CONFIG_SMP = %d\n", CONFIG_SMP);
+
+        if (IS_ENABLED(CONFIG_NET_ACT_BPF))
+                printk("CONFIG_NET_ACT_BPF определено\n");
+
+------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ inxi -Sxxx
+System:    Host: R420 Kernel: 5.4.0-121-generic x86_64 bits: 64 compiler: gcc v: 9.4.0 Desktop: Cinnamon 5.2.7 
+           wm: muffin 5.2.1 dm: LightDM 1.30.0 Distro: Linux Mint 20.3 Una base: Ubuntu 20.04 focal 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ ls /boot
+config-5.4.0-120-generic  grub                          initrd.img-5.4.0-121-generic  System.map-5.4.0-121-generic  vmlinuz-5.4.0-121-generic
+config-5.4.0-121-generic  initrd.img                    initrd.img.old                vmlinuz                       vmlinuz.old
+efi                       initrd.img-5.4.0-120-generic  System.map-5.4.0-120-generic  vmlinuz-5.4.0-120-generic
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ cat /boot/config-`uname -r` | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ sudo cat /proc/kallsyms | grep sys_call_table
+[sudo] пароль для olej:       
+ffffffff8c4002a0 R x32_sys_call_table
+ffffffff8c4013c0 R sys_call_table
+ffffffff8c402400 R ia32_sys_call_table
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+olej@orangepione:/usr/src$ cat /boot/config-`uname -r` | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@orangepione:/usr/src$ inxi -Sxxx
+System:    Host: orangepione Kernel: 5.15.25-sunxi armv7l bits: 32 compiler: N/A Console: tty 3 dm: LightDM 1.26.0 
+           Distro: Armbian GNU/Linux 10 (buster) 
+
+olej@orangepione:/usr/src$ sudo cat /proc/kallsyms | grep sys_call_table
+[sudo] пароль для olej: 
+c0100264 T sys_call_table
+
+------------------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/file $ cat /boot/config-`uname -r` | grep CONFIG_KALLSYMS
+cat: /boot/config-5.15.32-v7+: Нет такого файла или каталога
+
+olej@raspberrypi:~/kernel/examples/file $ inxi -Sxxx
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 compiler: gcc v: 10.2.1 Console: tty 4 
+           DM: LightDM 1.26.0 Distro: Raspbian GNU/Linux 11 (bullseye) 
+
+olej@raspberrypi:~/kernel/examples/file $ sudo cat /proc/kallsyms | grep sys_call_table
+80100244 T sys_call_table
+
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko 
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Input/output error
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n2
+[39349.950144] + openning file: /proc/kallsyms
+[39349.950145] + failed to read
+
+------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko 
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n3
+[43908.153163] + sys_call_table address = ffffffff8c4002a0 R x32_sys_call_table
+
+[43908.153165] + close file: /proc/kallsyms
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call_table
+ffffffff8c4002a0 R x32_sys_call_table
+ffffffff8c4013c0 R sys_call_table
+ffffffff8c402400 R ia32_sys_call_table
+
+------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo insmod mod_rct.ko 
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n3
+[44474.948622] + openning file: /proc/kallsyms
+[44475.398112] + ffffffff8c4013c0 R sys_call_table
+[44475.398114] + close file: /proc/kallsyms
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call_table
+ffffffff8c4002a0 R x32_sys_call_table
+ffffffff8c4013c0 R sys_call_table
+ffffffff8c402400 R ia32_sys_call_table
+
+==============================================================================================================================

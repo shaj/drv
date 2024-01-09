@@ -1,0 +1,202 @@
+18.08.2022
+==========
+
+olej@R420:/etc$ sudo inxi -M
+Machine:   Type: Server System: Dell product: PowerEdge R420 v: N/A serial: 9DDFKY1 
+           Mobo: Dell model: 0CN7CM v: A06 serial: ..CN1374035400RO. BIOS: Dell v: 2.9.0 date: 01/09/2020 
+
+
+olej@R420:/etc$ sudo cat /proc/ioports
+[sudo] пароль для olej:       
+0000-03af : PCI Bus 0000:00
+  0000-001f : dma1
+  0020-0021 : pic1
+  0040-0043 : timer0
+  0050-0053 : timer1
+  0060-0060 : keyboard
+  0064-0064 : keyboard
+  0070-007f : rtc0
+  0080-008f : dma page reg
+  00a0-00a1 : pic2
+  00b2-00b2 : APEI ERST
+  00c0-00df : dma2
+  00f0-00ff : PNP0C04:00
+    00f0-00ff : fpu
+  02f8-02ff : serial
+  0370-0377 : pnp 00:04
+03b0-03df : PCI Bus 0000:00
+  03c0-03df : vesafb
+03e0-0cf7 : PCI Bus 0000:00
+  03f8-03ff : serial
+  0800-087f : pnp 00:04
+    0800-0803 : ACPI PM1a_EVT_BLK
+    0804-0805 : ACPI PM1a_CNT_BLK
+    0808-080b : ACPI PM_TMR
+    0820-082f : ACPI GPE0_BLK
+    0830-0833 : iTCO_wdt.1.auto
+    0850-0850 : ACPI PM2_CNT_BLK
+    0860-087f : iTCO_wdt.1.auto
+  0880-08ff : pnp 00:04
+  0900-091f : pnp 00:04
+  0920-0923 : pnp 00:04
+  0924-0924 : pnp 00:04
+  0ca0-0ca7 : pnp 00:04
+  0ca8-0ca8 : IPMI Address 1
+    0ca8-0ca8 : pnp 00:05
+      0ca8-0ca8 : ipmi_si
+  0ca9-0cab : pnp 00:04
+  0cac-0cac : IPMI Address 2
+    0cac-0cac : pnp 00:05
+      0cac-0cac : ipmi_si
+  0cad-0caf : pnp 00:04
+  0cb0-0cbf : pnp 00:04
+0cf8-0cff : PCI conf1
+0d00-1fff : PCI Bus 0000:00
+2000-3fff : PCI Bus 0000:40
+4000-5fff : PCI Bus 0000:40
+6000-7fff : PCI Bus 0000:40
+8000-9fff : PCI Bus 0000:40
+a000-bfff : PCI Bus 0000:40
+c000-dfff : PCI Bus 0000:40
+e000-ffff : PCI Bus 0000:00
+  ecc0-ecdf : 0000:00:1f.2
+    ecc0-ecdf : ahci
+  ece8-ecef : 0000:00:1f.2
+    ece8-ecef : ahci
+  ecf0-ecf7 : 0000:00:1f.2
+    ecf0-ecf7 : ahci
+  ecf8-ecfb : 0000:00:1f.2
+    ecf8-ecfb : ahci
+  ecfc-ecff : 0000:00:1f.2
+    ecfc-ecff : ahci
+  f000-ffff : PCI Bus 0000:01
+    fc00-fcff : 0000:01:00.0
+
+==========================================================================================================
+
+$ sudo inxi -M
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC v: N/A
+    serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI v: L41 v01.09
+    date: 10/19/2016
+
+$ sudo cat /proc/ioports
+0000-03af : PCI Bus 0000:00
+  0000-001f : dma1
+  0020-0021 : pic1
+  0040-0043 : timer0
+  0050-0053 : timer1
+  0060-0060 : keyboard
+  0061-0061 : PNP0800:00
+  0064-0064 : keyboard
+  0070-0071 : rtc0
+  0080-008f : dma page reg
+  00a0-00a1 : pic2
+  00c0-00df : dma2
+  00f0-00ff : PNP0C04:00
+    00f0-00ff : fpu
+03b0-03df : PCI Bus 0000:00
+03e0-0cf7 : PCI Bus 0000:00
+  040b-040b : pnp 00:06
+  04d0-04d1 : pnp 00:05
+    04d0-04d1 : pnp 00:06
+  04d6-04d6 : pnp 00:06
+  0800-089f : pnp 00:06
+    0800-0803 : ACPI PM1a_EVT_BLK
+    0804-0805 : ACPI PM1a_CNT_BLK
+    0808-080b : ACPI PM_TMR
+    0810-0815 : ACPI CPU throttle
+    0820-0827 : ACPI GPE0_BLK
+  0900-090f : pnp 00:06
+  0910-091f : pnp 00:06
+  0a00-0a1f : pnp 00:02
+  0a50-0a5f : pnp 00:02
+  0a80-0a9f : pnp 00:02
+  0b00-0b08 : piix4_smbus
+  0b20-0b3f : pnp 00:06
+    0b20-0b28 : piix4_smbus
+  0c00-0c01 : pnp 00:06
+  0c14-0c14 : pnp 00:06
+  0c50-0c51 : pnp 00:06
+  0c52-0c52 : pnp 00:06
+  0c6c-0c6c : pnp 00:06
+  0c6f-0c6f : pnp 00:06
+  0cd0-0cd1 : pnp 00:06
+  0cd2-0cd3 : pnp 00:06
+  0cd4-0cd5 : pnp 00:06
+  0cd6-0cd7 : pnp 00:06
+    0cd6-0cd7 : smba_idx
+  0cd8-0cdf : pnp 00:06
+0cf8-0cff : PCI conf1
+0d00-ffff : PCI Bus 0000:00
+  e000-efff : PCI Bus 0000:01
+    e000-e0ff : 0000:01:00.0
+      e000-e0ff : r8169
+  f000-f0ff : 0000:00:01.0
+  f100-f10f : 0000:00:11.0
+    f100-f10f : ahci
+  f110-f113 : 0000:00:11.0
+    f110-f113 : ahci
+  f120-f127 : 0000:00:11.0
+    f120-f127 : ahci
+  f130-f133 : 0000:00:11.0
+    f130-f133 : ahci
+  f140-f147 : 0000:00:11.0
+    f140-f147 : ahci
+  fe00-fefe : pnp 00:06
+
+==========================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/user_io$ make
+gcc -Wall     ioports.c   -o ioports
+gcc -Wall     ioperm.c   -o ioperm
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/user_io$ sudo ./ioports 200
+[sudo] пароль для olej:       
+/dev/port :
+    writing: 0x00 to 0x200
+    reading: 0xff from 0x201
+ioperm :
+    writing: 0x00 to 0x200
+    reading: 0xff from 0x201
+iopl :
+    writing: 0x00 to 0x200
+    reading: 0xff from 0x201
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/user_io$ sudo ./ioports 
+/dev/port :
+    writing: 0x00 to 0x378
+    reading: 0xff from 0x379
+ioperm :
+    writing: 0x00 to 0x378
+    reading: 0xff from 0x379
+iopl :
+    writing: 0x00 to 0x378
+    reading: 0xff from 0x379
+
+==========================================================================================================
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/user_io$ ./ioperm 
+    writing: 0x00 to 0x378
+Ошибка сегментирования (стек памяти сброшен на диск)
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/user_io$ sudo ./ioperm 
+[sudo] пароль для olej:       
+    writing: 0x00 to 0x378
+Ошибка сегментирования
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/user_io$ dmesg | tail -n2
+[20314.668678] traps: ioperm[16406] general protection fault ip:555a836d91da sp:7fff124dbac0 error:0 in ioperm[555a836d9000+1000]
+[20327.584689] traps: ioperm[16435] general protection fault ip:55eda2b3e1da sp:7ffd31c52230 error:0 in ioperm[55eda2b3e000+1000]
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/user_io$ echo $?
+139
+
+==========================================================================================================

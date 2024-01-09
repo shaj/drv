@@ -1,0 +1,179 @@
+27.09.2015
+==========
+
+olej@osboxes:~/common$ mount
+/dev/sda1 on / type ext4 (rw,errors=remount-ro)
+proc on /proc type proc (rw,noexec,nosuid,nodev)
+sysfs on /sys type sysfs (rw,noexec,nosuid,nodev)
+none on /sys/fs/cgroup type tmpfs (rw)
+none on /sys/fs/fuse/connections type fusectl (rw)
+none on /sys/kernel/debug type debugfs (rw)
+none on /sys/kernel/security type securityfs (rw)
+udev on /dev type devtmpfs (rw,mode=0755)
+devpts on /dev/pts type devpts (rw,noexec,nosuid,gid=5,mode=0620)
+tmpfs on /run type tmpfs (rw,noexec,nosuid,size=10%,mode=0755)
+none on /run/lock type tmpfs (rw,noexec,nosuid,nodev,size=5242880)
+none on /run/shm type tmpfs (rw,nosuid,nodev)
+none on /run/user type tmpfs (rw,noexec,nosuid,nodev,size=104857600,mode=0755)
+none on /sys/fs/pstore type pstore (rw)
+systemd on /sys/fs/cgroup/systemd type cgroup (rw,noexec,nosuid,nodev,none,name=systemd)
+/dev/sr0 on /media/olej/VBOXADDITIONS_5.0.2_102096 type iso9660 (ro,nosuid,nodev,uid=1001,gid=1001,iocharset=utf8,mode=0400,dmode=0500,uhelper=udisks2)
+
+-------------------------------------------------------------------------------------------
+
+olej@osboxes:~$ ls /lib/modules
+3.16.0-33-generic  3.16.0-48-generic
+
+olej@osboxes:~$ ls /boot/vml*
+/boot/vmlinuz-3.16.0-33-generic  /boot/vmlinuz-3.16.0-48-generic
+
+olej@osboxes:~$ sudo apt-get install aptitude
+[sudo] password for olej: 
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  aptitude-common libcwidget3 libept1.4.12
+Suggested packages:
+  aptitude-doc-en aptitude-doc tasksel debtags libcwidget-dev
+The following NEW packages will be installed
+  aptitude aptitude-common libcwidget3 libept1.4.12
+0 to upgrade, 4 to newly install, 0 to remove and 10 not to upgrade.
+Need to get 2 520 kB of archives.
+After this operation, 10,5 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Err http://ru.archive.ubuntu.com/ubuntu/ trusty/main libept1.4.12 amd64 1.0.12
+  Could not resolve 'ru.archive.ubuntu.com'
+Err http://gb.archive.ubuntu.com/ubuntu/ trusty/main libept1.4.12 amd64 1.0.12
+  Could not resolve 'gb.archive.ubuntu.com'
+Err http://gb.archive.ubuntu.com/ubuntu/ trusty/main aptitude-common all 0.6.8.2-1ubuntu4
+  Could not resolve 'gb.archive.ubuntu.com'
+Err http://gb.archive.ubuntu.com/ubuntu/ trusty/main libcwidget3 amd64 0.5.16-3.5ubuntu1
+  Could not resolve 'gb.archive.ubuntu.com'
+Err http://gb.archive.ubuntu.com/ubuntu/ trusty/main aptitude amd64 0.6.8.2-1ubuntu4
+  Could not resolve 'gb.archive.ubuntu.com'
+E: Failed to fetch http://gb.archive.ubuntu.com/ubuntu/pool/main/libe/libept/libept1.4.12_1.0.12_amd64.deb  Could not resolve 'gb.archive.ubuntu.com'
+
+E: Failed to fetch http://gb.archive.ubuntu.com/ubuntu/pool/main/a/aptitude/aptitude-common_0.6.8.2-1ubuntu4_all.deb  Could not resolve 'gb.archive.ubuntu.com'
+
+E: Failed to fetch http://gb.archive.ubuntu.com/ubuntu/pool/main/c/cwidget/libcwidget3_0.5.16-3.5ubuntu1_amd64.deb  Could not resolve 'gb.archive.ubuntu.com'
+
+E: Failed to fetch http://gb.archive.ubuntu.com/ubuntu/pool/main/a/aptitude/aptitude_0.6.8.2-1ubuntu4_amd64.deb  Could not resolve 'gb.archive.ubuntu.com'
+
+E: Unable to fetch some archives, maybe run apt-get update or try with --fix-missing?
+
+-------------------------------------------------------------------------------------------
+
+olej@osboxes:/media/olej/VBOXADDITIONS_5.0.2_102096$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 08:00:27:16:7b:55  
+          inet6 addr: fe80::a00:27ff:fe16:7b55/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:82 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:766 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:6587 (6.5 KB)  TX bytes:146906 (146.9 KB)
+
+eth1      Link encap:Ethernet  HWaddr 08:00:27:e7:78:8f  
+          inet addr:192.168.56.101  Bcast:192.168.56.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fee7:788f/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:22 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:101 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:6724 (6.7 KB)  TX bytes:14192 (14.1 KB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:5450 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:5450 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:420665 (420.6 KB)  TX bytes:420665 (420.6 KB)
+
+root@osboxes:/media# sudo ifconfig eth0 down
+
+root@osboxes:/media# sudo ifconfig eth0 up
+
+root@osboxes:/media# ifconfig eth0 
+eth0      Link encap:Ethernet  HWaddr 08:00:27:16:7b:55  
+          inet addr:192.168.1.100  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fe16:7b55/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:3966 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3181 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:4182210 (4.1 MB)  TX bytes:467702 (467.7 KB)
+
+-------------------------------------------------------------------------------------------
+
+olej@osboxes:/lib/modules/3.16.0-48-generic/build/include/linux$ lsmod | grep vb
+vboxvideo              12669  0 
+drm                   311018  2 vboxvideo
+vboxsf                 39702  1 
+vboxguest             276769  2 vboxsf
+
+olej@osboxes:~$ uname -r
+3.16.0-48-generic
+
+olej@osboxes:~$ aptitude search header | grep 3.16.0-48
+i   linux-headers-3.16.0-48         - Header files related to Linux kernel versi
+v   linux-headers-3.16.0-48:i386    -                                           
+i   linux-headers-3.16.0-48-generic - Linux kernel headers for version 3.16.0 on
+p   linux-headers-3.16.0-48-generic - Linux kernel headers for version 3.16.0 on
+p   linux-headers-3.16.0-48-lowlate - Linux kernel headers for version 3.16.0 on
+p   linux-headers-3.16.0-48-lowlate - Linux kernel headers for version 3.16.0 on
+
+olej@osboxes:/lib/modules/3.16.0-48-generic/build/include/linux$ modinfo vboxsf
+filename:       /lib/modules/3.16.0-48-generic/misc/vboxsf.ko
+version:        5.0.2 (interface 0x00010004)
+license:        GPL
+author:         Oracle Corporation
+description:    Oracle VM VirtualBox VFS Module for Host File System Access
+srcversion:     890FF42CEBE71F771960D27
+depends:        vboxguest
+vermagic:       3.16.0-48-generic SMP mod_unload modversions 
+parm:           follow_symlinks:Let host resolve symlinks rather than showing them (int)
+
+-------------------------------------------------------------------------------------------
+
+olej@osboxes:~$ sudo mount -t vboxsf common2 -o uid=1001,gid=1001 ./common2
+[sudo] password for olej: 
+
+olej@osboxes:~$ sudo mount -t vboxsf common -o uid=1001,gid=1001 ./common
+
+olej@osboxes:~$ ls -l common
+total 344
+-rw-r--r-- 1 olej olej 211932 сент.  4 21:37 chromium.1.hist
+-rw-r--r-- 1 olej olej  54816 сент.  6 00:23 chromium.2.hist
+-rw-rw-r-- 1 olej olej   5843 сент.  6 17:48 chromium.3.hist
+-rw-rw-r-- 1 olej olej  39564 сент.  7 16:33 chromium.4.hist
+-rw-rw-r-- 1 olej olej  11094 сент.  8 13:10 chromium.5.hist
+-rw-r--r-- 1 olej olej    227 апр.  30  2014 fibo_c.c
+-rw-r--r-- 1 olej olej   4132 сент. 27 12:37 Netm.hist
+-rwxrwx--- 1 olej olej   5235 сент.  7 17:48 vb.hist
+
+olej@osboxes:~$ ls -l common2
+total 8
+-rw-r--r-- 1 olej olej 4132 сент. 27 12:37 Netm.hist
+
+===========================================================================================
+
+olej@osboxes:~$ uname -a
+Linux osboxes 3.16.0-48-generic #64~14.04.1-Ubuntu SMP Thu Aug 20 23:03:57 UTC 2015 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@osboxes:~$ man socketcall
+...
+
+
+olej@osboxes:~$ sudo cat /proc/kallsyms | grep sys_socketcall
+[sudo] password for olej: 
+ffffffff8164b5f0 T sys_socketcall
+ffffffff816857d0 T compat_sys_socketcall
+
+-------------------------------------------------------------------------------------------
+
+
+
+
+

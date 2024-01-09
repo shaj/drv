@@ -1,0 +1,255 @@
+01.07.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table$ ./test_distr
+Linux R420 5.4.0-121-generic #137-Ubuntu SMP Wed Jun 15 13:33:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+CPU:       Topology: 2x 10-Core model: Intel Xeon E5-2470 v2 bits: 64 type: MT MCP SMP arch: Ivy Bridge rev: 4 
+           L2 cache: 50.0 MiB 
+           flags: avx lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx bogomips: 192088 
+           Speed: 1822 MHz min/max: 1200/3200 MHz Core speeds (MHz): 1: 1709 2: 1628 3: 1660 4: 1822 5: 1641 6: 1605 7: 1899 
+           8: 1660 9: 1598 10: 1780 11: 1823 12: 1586 13: 1606 14: 1920 15: 1653 16: 1882 17: 1536 18: 1439 19: 1859 20: 1693 
+           21: 1693 22: 1923 23: 1839 24: 1435 25: 1976 26: 1770 27: 1894 28: 1695 29: 1953 30: 1645 31: 1719 32: 1442 
+           33: 1799 34: 1762 35: 1544 36: 1684 37: 1777 38: 1531 39: 1622 40: 1579 
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+ffffffffbc547de0 T module_kallsyms_on_each_symbol
+ffffffffbc5482d0 T kallsyms_on_each_symbol
+ffffffffbc547d50 T module_kallsyms_lookup_name
+ffffffffbc5483a0 T kallsyms_lookup_name
+ffffffffbc548460 T kallsyms_lookup_size_offset
+ffffffffbc548530 T kallsyms_lookup
+ffffffffbd4002a0 R x32_sys_call_table
+ffffffffbd4013c0 R sys_call_table
+ffffffffbd402400 R ia32_sys_call_table
+
+=================================================================================================================================
+
+olej@raspberrypi:~/kernel/examples/sys_call_table $ ./test_distr
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+CPU:       Info: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP arch: v7l rev: 5 
+           features: Use -f option to see features bogomips: 256 
+           Speed: 1000 MHz min/max: 600/1000 MHz Core speeds (MHz): 1: 1000 2: 1000 3: 1000 4: 1000 
+cat: /boot/config-5.15.32-v7+: Нет такого файла или каталога
+CONFIG_ARM=y
+cat: /boot/config-5.15.32-v7+: Нет такого файла или каталога
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+801cdf24 T module_kallsyms_lookup_name
+801ce8ac T kallsyms_lookup_name
+801ce96c T kallsyms_lookup_size_offset
+801cea28 T kallsyms_lookup
+80100244 T sys_call_table
+0x92997ed8	_printk	vmlinux	EXPORT_SYMBOL	
+0x7e3bdecd	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0xc6be525a	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+
+=================================================================================================================================
+
+olej@orangepione:~/kernel/examples/sys_call_table$ ./test_distr
+[sudo] пароль для olej: 
+Linux orangepione 5.15.48-sunxi #22.05.3 SMP Wed Jun 22 07:35:10 UTC 2022 armv7l GNU/Linux
+CPU:       Topology: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP arch: v7l rev: 5 
+           features: Use -f option to see features bogomips: 0 
+           Speed: 1008 MHz min/max: 480/1008 MHz Core speeds (MHz): 1: 1008 2: 1008 3: 1008 4: 1008 
+CONFIG_ARM=y
+CONFIG_ARM=y
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+c0197a7c T module_kallsyms_lookup_name
+c0198148 T kallsyms_lookup_name
+c01981c8 T kallsyms_lookup_size_offset
+c0198254 T kallsyms_lookup
+c01002a4 T sys_call_table
+0x00000000	_printk	vmlinux	EXPORT_SYMBOL	
+0x00000000	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0x00000000	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+
+
+=================================================================================================================================
+
+02.07.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table$ ./test_distr
+[sudo] пароль для olej:       
+Linux R420 5.4.0-121-generic #137-Ubuntu SMP Wed Jun 15 13:33:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+System:    Host: R420 Kernel: 5.4.0-121-generic x86_64 bits: 64 compiler: gcc v: 9.4.0 Desktop: Cinnamon 5.2.7 
+           wm: muffin 5.2.1 dm: LightDM 1.30.0 Distro: Linux Mint 20.3 Una base: Ubuntu 20.04 focal 
+CPU:       Topology: 2x 10-Core model: Intel Xeon E5-2470 v2 bits: 64 type: MT MCP SMP arch: Ivy Bridge rev: 4 
+           L2 cache: 50.0 MiB 
+           flags: avx lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 vmx bogomips: 192090 
+           Speed: 1202 MHz min/max: 1200/3200 MHz Core speeds (MHz): 1: 1693 2: 1202 3: 1965 4: 1893 5: 1511 6: 1596 7: 1522 
+           8: 1705 9: 1591 10: 1670 11: 1643 12: 1205 13: 1958 14: 2435 15: 1201 16: 1747 17: 1200 18: 1596 19: 1212 20: 2350 
+           21: 1212 22: 1899 23: 1200 24: 1237 25: 1576 26: 1336 27: 2494 28: 1380 29: 2445 30: 1292 31: 2645 32: 1210 
+           33: 2405 34: 1247 35: 1570 36: 1297 37: 1757 38: 1287 39: 2374 40: 1510 
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+ffffffffb8947de0 T module_kallsyms_on_each_symbol
+ffffffffb89482d0 T kallsyms_on_each_symbol
+ffffffffb8947d50 T module_kallsyms_lookup_name
+ffffffffb89483a0 T kallsyms_lookup_name
+ffffffffb8948460 T kallsyms_lookup_size_offset
+ffffffffb8948530 T kallsyms_lookup
+ffffffffb98002a0 R x32_sys_call_table
+ffffffffb98013c0 R sys_call_table
+ffffffffb9802400 R ia32_sys_call_table
+0xae2d4d20	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0x82797823	ibdev_printk	drivers/infiniband/core/ib_core	EXPORT_SYMBOL	
+0x3ec14617	sdev_prefix_printk	vmlinux	EXPORT_SYMBOL	
+0xe007de41	kallsyms_lookup_name	vmlinux	EXPORT_SYMBOL_GPL	
+0x6d1d3389	kallsyms_on_each_symbol	vmlinux	EXPORT_SYMBOL_GPL	
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+olej@lmde32:~/kernel/sys_call_table$ ./test_distr
+Linux lmde32 5.10.0-15-686 #1 SMP Debian 5.10.120-1 (2022-06-09) i686 GNU/Linux
+System:    Host: lmde32 Kernel: 5.10.0-15-686 i686 bits: 32 compiler: gcc v: 10.2.1 Desktop: Cinnamon 5.2.7 
+           tk: GTK 3.24.24 wm: muffin 5.2.1 dm: LightDM 1.26.0 Distro: LMDE 5 Elsie base: Debian 11.2 bullseye 
+CPU:       Info: Single Core model: Intel Xeon E5-2470 v2 bits: 32 type: MCP arch: Ivy Bridge rev: 4 L2 cache: 25 MiB 
+           flags: avx sse sse2 sse3 sse4_1 sse4_2 ssse3 bogomips: 4771 
+           Speed: 2386 MHz min/max: N/A Core speed (MHz): 1: 2386 
+CONFIG_X86_32=y
+CONFIG_X86_32=y
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+c510ab80 T module_kallsyms_on_each_symbol
+c510b370 T kallsyms_on_each_symbol
+c510aaf0 T module_kallsyms_lookup_name
+c510b2d0 T kallsyms_lookup_name
+c510b430 T kallsyms_lookup_size_offset
+c510b4f0 T kallsyms_lookup
+0xae2d4d20	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0x835247b1	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+0xec6a6d91	netdev_printk	vmlinux	EXPORT_SYMBOL	
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+olej@lmde64:~/kernel/sys_call_table$ ./test_distr
+[sudo] пароль для olej:       
+Linux lmde64 5.10.0-15-amd64 #1 SMP Debian 5.10.120-1 (2022-06-09) x86_64 GNU/Linux
+System:    Host: lmde64 Kernel: 5.10.0-15-amd64 x86_64 bits: 64 compiler: gcc v: 10.2.1 Desktop: Cinnamon 5.2.7 
+           tk: GTK 3.24.24 wm: muffin 5.2.1 dm: LightDM 1.26.0 Distro: LMDE 5 Elsie base: Debian 11.2 bullseye 
+CPU:       Info: Single Core model: Intel Xeon E5-2470 v2 bits: 64 type: MCP arch: Ivy Bridge rev: 4 
+           L2 cache: 25 MiB 
+           flags: avx lm nx pae sse sse2 sse3 sse4_1 sse4_2 ssse3 bogomips: 4771 
+           Speed: 2386 MHz min/max: N/A Core speed (MHz): 1: 2386 
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+ffffffffb3b38f20 T module_kallsyms_on_each_symbol
+ffffffffb3b397d0 T kallsyms_on_each_symbol
+ffffffffb3b38e90 T module_kallsyms_lookup_name
+ffffffffb3b39720 T kallsyms_lookup_name
+ffffffffb3b39890 T kallsyms_lookup_size_offset
+ffffffffb3b39960 T kallsyms_lookup
+ffffffffb48002e0 D sys_call_table
+ffffffffb4801360 D ia32_sys_call_table
+ffffffffb4802180 D x32_sys_call_table
+0xae2d4d20	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0x94bd4dff	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+0x068f8d82	netdev_printk	vmlinux	EXPORT_SYMBOL	
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+olej@astra:~/2022/kernel/sys_call_table$ ./test_distr
+[sudo] пароль для olej: 
+Linux astra 4.19.0-1-generic #astra1 SMP Wed Mar 20 12:59:21 UTC 2019 x86_64 GNU/Linux
+System:    Host: astra Kernel: 4.19.0-1-generic x86_64 (64 bit gcc: 6.3.0) Desktop: N/A dm: N/A
+           Distro: Astra Linux (Orel 2.12.43)
+CPU:       Single core Intel Xeon E5-2470 v2 (-MCP-) cache: 25600 KB
+           flags: (lm nx sse sse2 sse3 sse4_1 sse4_2 ssse3) bmips: 4762 speed: 2381 MHz (max)
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+cat: /boot/config-4.19.0-1-generic: Нет такого файла или каталога
+cat: /boot/config-4.19.0-1-generic: Нет такого файла или каталога
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+ffffffff9d53acc0 T module_kallsyms_on_each_symbol
+ffffffff9d53b570 T kallsyms_on_each_symbol
+ffffffff9d53ac30 T module_kallsyms_lookup_name
+ffffffff9d53b640 T kallsyms_lookup_name
+ffffffff9d53b700 T kallsyms_lookup_size_offset
+ffffffff9d53b7d0 T kallsyms_lookup
+ffffffff9e2001c0 R sys_call_table
+ffffffff9e2015a0 R ia32_sys_call_table
+0x00000000	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL
+0x00000000	sdev_prefix_printk	vmlinux	EXPORT_SYMBOL
+0x00000000	netdev_printk	vmlinux	EXPORT_SYMBOL
+0x00000000	kallsyms_lookup_name	vmlinux	EXPORT_SYMBOL
+0x00000000	kallsyms_on_each_symbol	vmlinux	EXPORT_SYMBOL
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/sys_call_table $ ./test_distr
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 compiler: gcc v: 10.2.1 
+           Console: tty 5 DM: LightDM 1.26.0 Distro: Raspbian GNU/Linux 11 (bullseye) 
+CPU:       Info: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP arch: v7l 
+           rev: 5 
+           features: Use -f option to see features bogomips: 256 
+           Speed: 1000 MHz min/max: 600/1000 MHz Core speeds (MHz): 1: 1000 2: 1000 3: 1000 
+           4: 1000 
+cat: /boot/config-5.15.32-v7+: Нет такого файла или каталога
+CONFIG_ARM=y
+cat: /boot/config-5.15.32-v7+: Нет такого файла или каталога
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+801cdf24 T module_kallsyms_lookup_name
+801ce8ac T kallsyms_lookup_name
+801ce96c T kallsyms_lookup_size_offset
+801cea28 T kallsyms_lookup
+80100244 T sys_call_table
+0x92997ed8	_printk	vmlinux	EXPORT_SYMBOL	
+0x7e3bdecd	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0xc6be525a	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~/kernel/examples/sys_call_table$ ./test_distr
+[sudo] пароль для olej: 
+Linux orangepione 5.15.48-sunxi #22.05.3 SMP Wed Jun 22 07:35:10 UTC 2022 armv7l GNU/Linux
+System:    Host: orangepione Kernel: 5.15.48-sunxi armv7l bits: 32 compiler: N/A Console: tty 4 
+           dm: LightDM 1.26.0 Distro: Armbian GNU/Linux 10 (buster) 
+CPU:       Topology: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP arch: v7l 
+           rev: 5 
+           features: Use -f option to see features bogomips: 0 
+           Speed: 1008 MHz min/max: 480/1008 MHz Core speeds (MHz): 1: 1008 2: 1008 3: 1008 
+           4: 1008 
+CONFIG_ARM=y
+CONFIG_ARM=y
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+c0197a7c T module_kallsyms_lookup_name
+c0198148 T kallsyms_lookup_name
+c01981c8 T kallsyms_lookup_size_offset
+c0198254 T kallsyms_lookup
+c01002a4 T sys_call_table
+0x00000000	_printk	vmlinux	EXPORT_SYMBOL	
+0x00000000	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0x00000000	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+
+=================================================================================================================================

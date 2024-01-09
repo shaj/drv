@@ -1,0 +1,360 @@
+17.08.2022
+==========
+
+$ inxi -MCxxx
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: <superuser required> Chassis: type: 4
+    serial: <superuser required>
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: <superuser required>
+    UEFI: AMI v: L41 v01.09 date: 10/19/2016
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64
+    type: MCP smt: <unsupported> arch: Puma rev: 1 cache: L1: 128 KiB
+    L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A cores: 1: 1198 2: 1198 bogomips: 4790
+  Flags: avx ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3 svm
+olej@antix21:~/2022/kernel/pci
+
+-----------------------------------------------------------------------------------------------------
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/pci modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/pci/lab2_pci.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/pci/lab2_pci.mod.o
+  LD [M]  /home/olej/2022/kernel/pci/lab2_pci.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+$ lspci
+00:00.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Root Complex
+00:01.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Mullins [Radeon R1E/R2E Graphics] (rev 01)
+00:01.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Kabini HDMI/DP Audio
+00:02.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Host Bridge
+00:02.3 PCI bridge: Advanced Micro Devices, Inc. [AMD] Family 16h Processor Functions 5:1
+00:08.0 Encryption controller: Advanced Micro Devices, Inc. [AMD] Kabini/Mullins PSP-Platform Security Processor
+00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 11)
+00:11.0 SATA controller: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [IDE mode] (rev 40)
+00:12.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB EHCI Controller (rev 39)
+00:13.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB EHCI Controller (rev 39)
+00:14.0 SMBus: Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller (rev 42)
+00:14.2 Audio device: Advanced Micro Devices, Inc. [AMD] FCH Azalia Controller (rev 02)
+00:14.3 ISA bridge: Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge (rev 11)
+00:18.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 0
+00:18.1 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 1
+00:18.2 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 2
+00:18.3 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 3
+00:18.4 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 4
+00:18.5 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 5
+01:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 0c)
+
+
+$ dmesg | tail -n202
+[16658.443324] lab2_pci: loading out-of-tree module taints kernel.
+[16658.443547] LOADING THE PCI_DEVICE_FINDER
+[16658.443554] 
+               FOUND PCI DEVICE # j = 0, 
+[16658.443555] READING CONFIGURATION REGISTER:
+[16658.443557] Bus,Device,Function=0000:00:00.0
+[16658.443562]  PCI_VENDOR_ID=1022
+[16658.443564]  PCI_DEVICE_ID=1566
+[16658.443566]  PCI_REVISION_ID=0
+[16658.443568]  PCI_INTERRUPT_LINE=0
+[16658.443570]  PCI_LATENCY_TIMER=0
+[16658.443572]  PCI_COMMAND=4
+[16658.443574] 
+               FOUND PCI DEVICE # j = 1, 
+[16658.443575] READING CONFIGURATION REGISTER:
+[16658.443576] Bus,Device,Function=0000:00:01.0
+[16658.443578]  PCI_VENDOR_ID=1002
+[16658.443580]  PCI_DEVICE_ID=9856
+[16658.443582]  PCI_REVISION_ID=1
+[16658.443584]  PCI_INTERRUPT_LINE=-1
+[16658.443586]  PCI_LATENCY_TIMER=0
+[16658.443589]  PCI_COMMAND=1287
+[16658.443591] 
+               FOUND PCI DEVICE # j = 2, 
+[16658.443593] READING CONFIGURATION REGISTER:
+[16658.443594] Bus,Device,Function=0000:00:01.1
+[16658.443596]  PCI_VENDOR_ID=1002
+[16658.443598]  PCI_DEVICE_ID=9840
+[16658.443600]  PCI_REVISION_ID=0
+[16658.443602]  PCI_INTERRUPT_LINE=-1
+[16658.443604]  PCI_LATENCY_TIMER=0
+[16658.443606]  PCI_COMMAND=1286
+[16658.443608] 
+               FOUND PCI DEVICE # j = 3, 
+[16658.443609] READING CONFIGURATION REGISTER:
+[16658.443610] Bus,Device,Function=0000:00:02.0
+[16658.443612]  PCI_VENDOR_ID=1022
+[16658.443614]  PCI_DEVICE_ID=156b
+[16658.443615]  PCI_REVISION_ID=0
+[16658.443617]  PCI_INTERRUPT_LINE=0
+[16658.443619]  PCI_LATENCY_TIMER=0
+[16658.443621]  PCI_COMMAND=0
+[16658.443622] 
+               FOUND PCI DEVICE # j = 4, 
+[16658.443623] READING CONFIGURATION REGISTER:
+[16658.443624] Bus,Device,Function=0000:00:02.3
+[16658.443627]  PCI_VENDOR_ID=1022
+[16658.443628]  PCI_DEVICE_ID=1439
+[16658.443631]  PCI_REVISION_ID=0
+[16658.443633]  PCI_INTERRUPT_LINE=-1
+[16658.443635]  PCI_LATENCY_TIMER=0
+[16658.443637]  PCI_COMMAND=1287
+[16658.443639] 
+               FOUND PCI DEVICE # j = 5, 
+[16658.443640] READING CONFIGURATION REGISTER:
+[16658.443641] Bus,Device,Function=0000:00:08.0
+[16658.443643]  PCI_VENDOR_ID=1022
+[16658.443644]  PCI_DEVICE_ID=1537
+[16658.443646]  PCI_REVISION_ID=0
+[16658.443648]  PCI_INTERRUPT_LINE=-1
+[16658.443650]  PCI_LATENCY_TIMER=0
+[16658.443652]  PCI_COMMAND=1030
+[16658.443653] 
+               FOUND PCI DEVICE # j = 6, 
+[16658.443654] READING CONFIGURATION REGISTER:
+[16658.443655] Bus,Device,Function=0000:00:10.0
+[16658.443658]  PCI_VENDOR_ID=1022
+[16658.443660]  PCI_DEVICE_ID=7814
+[16658.443663]  PCI_REVISION_ID=17
+[16658.443665]  PCI_INTERRUPT_LINE=-1
+[16658.443668]  PCI_LATENCY_TIMER=0
+[16658.443670]  PCI_COMMAND=1286
+[16658.443672] 
+               FOUND PCI DEVICE # j = 7, 
+[16658.443673] READING CONFIGURATION REGISTER:
+[16658.443674] Bus,Device,Function=0000:00:11.0
+[16658.443676]  PCI_VENDOR_ID=1022
+[16658.443678]  PCI_DEVICE_ID=7800
+[16658.443681]  PCI_REVISION_ID=64
+[16658.443683]  PCI_INTERRUPT_LINE=-1
+[16658.443685]  PCI_LATENCY_TIMER=32
+[16658.443688]  PCI_COMMAND=263
+[16658.443689] 
+               FOUND PCI DEVICE # j = 8, 
+[16658.443690] READING CONFIGURATION REGISTER:
+[16658.443691] Bus,Device,Function=0000:00:12.0
+[16658.443693]  PCI_VENDOR_ID=1022
+[16658.443695]  PCI_DEVICE_ID=7808
+[16658.443698]  PCI_REVISION_ID=57
+[16658.443700]  PCI_INTERRUPT_LINE=-1
+[16658.443702]  PCI_LATENCY_TIMER=32
+[16658.443704]  PCI_COMMAND=279
+[16658.443706] 
+               FOUND PCI DEVICE # j = 9, 
+[16658.443707] READING CONFIGURATION REGISTER:
+[16658.443708] Bus,Device,Function=0000:00:13.0
+[16658.443710]  PCI_VENDOR_ID=1022
+[16658.443712]  PCI_DEVICE_ID=7808
+[16658.443714]  PCI_REVISION_ID=57
+[16658.443716]  PCI_INTERRUPT_LINE=-1
+[16658.443718]  PCI_LATENCY_TIMER=32
+[16658.443721]  PCI_COMMAND=279
+[16658.443722] 
+               FOUND PCI DEVICE # j = 10, 
+[16658.443724] READING CONFIGURATION REGISTER:
+[16658.443724] Bus,Device,Function=0000:00:14.0
+[16658.443727]  PCI_VENDOR_ID=1022
+[16658.443729]  PCI_DEVICE_ID=780b
+[16658.443731]  PCI_REVISION_ID=66
+[16658.443733]  PCI_INTERRUPT_LINE=0
+[16658.443735]  PCI_LATENCY_TIMER=0
+[16658.443737]  PCI_COMMAND=1283
+[16658.443739] 
+               FOUND PCI DEVICE # j = 11, 
+[16658.443740] READING CONFIGURATION REGISTER:
+[16658.443741] Bus,Device,Function=0000:00:14.2
+[16658.443743]  PCI_VENDOR_ID=1022
+[16658.443745]  PCI_DEVICE_ID=780d
+[16658.443747]  PCI_REVISION_ID=2
+[16658.443749]  PCI_INTERRUPT_LINE=-1
+[16658.443751]  PCI_LATENCY_TIMER=32
+[16658.443754]  PCI_COMMAND=6
+[16658.443755] 
+               FOUND PCI DEVICE # j = 12, 
+[16658.443756] READING CONFIGURATION REGISTER:
+[16658.443758] Bus,Device,Function=0000:00:14.3
+[16658.443760]  PCI_VENDOR_ID=1022
+[16658.443762]  PCI_DEVICE_ID=780e
+[16658.443764]  PCI_REVISION_ID=17
+[16658.443766]  PCI_INTERRUPT_LINE=0
+[16658.443768]  PCI_LATENCY_TIMER=0
+[16658.443771]  PCI_COMMAND=271
+[16658.443772] 
+               FOUND PCI DEVICE # j = 13, 
+[16658.443773] READING CONFIGURATION REGISTER:
+[16658.443774] Bus,Device,Function=0000:00:18.0
+[16658.443776]  PCI_VENDOR_ID=1022
+[16658.443777]  PCI_DEVICE_ID=1580
+[16658.443778]  PCI_REVISION_ID=0
+[16658.443780]  PCI_INTERRUPT_LINE=0
+[16658.443781]  PCI_LATENCY_TIMER=0
+[16658.443783]  PCI_COMMAND=0
+[16658.443785] 
+               FOUND PCI DEVICE # j = 14, 
+[16658.443786] READING CONFIGURATION REGISTER:
+[16658.443787] Bus,Device,Function=0000:00:18.1
+[16658.443788]  PCI_VENDOR_ID=1022
+[16658.443790]  PCI_DEVICE_ID=1581
+[16658.443791]  PCI_REVISION_ID=0
+[16658.443793]  PCI_INTERRUPT_LINE=0
+[16658.443794]  PCI_LATENCY_TIMER=0
+[16658.443796]  PCI_COMMAND=0
+[16658.443797] 
+               FOUND PCI DEVICE # j = 15, 
+[16658.443798] READING CONFIGURATION REGISTER:
+[16658.443800] Bus,Device,Function=0000:00:18.2
+[16658.443801]  PCI_VENDOR_ID=1022
+[16658.443802]  PCI_DEVICE_ID=1582
+[16658.443804]  PCI_REVISION_ID=0
+[16658.443805]  PCI_INTERRUPT_LINE=0
+[16658.443807]  PCI_LATENCY_TIMER=0
+[16658.443809]  PCI_COMMAND=0
+[16658.443810] 
+               FOUND PCI DEVICE # j = 16, 
+[16658.443811] READING CONFIGURATION REGISTER:
+[16658.443812] Bus,Device,Function=0000:00:18.3
+[16658.443814]  PCI_VENDOR_ID=1022
+[16658.443815]  PCI_DEVICE_ID=1583
+[16658.443817]  PCI_REVISION_ID=0
+[16658.443818]  PCI_INTERRUPT_LINE=0
+[16658.443820]  PCI_LATENCY_TIMER=0
+[16658.443821]  PCI_COMMAND=0
+[16658.443823] 
+               FOUND PCI DEVICE # j = 17, 
+[16658.443824] READING CONFIGURATION REGISTER:
+[16658.443825] Bus,Device,Function=0000:00:18.4
+[16658.443826]  PCI_VENDOR_ID=1022
+[16658.443827]  PCI_DEVICE_ID=1584
+[16658.443829]  PCI_REVISION_ID=0
+[16658.443830]  PCI_INTERRUPT_LINE=0
+[16658.443832]  PCI_LATENCY_TIMER=0
+[16658.443833]  PCI_COMMAND=0
+[16658.443835] 
+               FOUND PCI DEVICE # j = 18, 
+[16658.443836] READING CONFIGURATION REGISTER:
+[16658.443837] Bus,Device,Function=0000:00:18.5
+[16658.443839]  PCI_VENDOR_ID=1022
+[16658.443840]  PCI_DEVICE_ID=1585
+[16658.443842]  PCI_REVISION_ID=0
+[16658.443843]  PCI_INTERRUPT_LINE=0
+[16658.443845]  PCI_LATENCY_TIMER=0
+[16658.443846]  PCI_COMMAND=0
+[16658.443848] 
+               FOUND PCI DEVICE # j = 19, 
+[16658.443849] READING CONFIGURATION REGISTER:
+[16658.443850] Bus,Device,Function=0000:01:00.0
+[16658.443853]  PCI_VENDOR_ID=10ec
+[16658.443856]  PCI_DEVICE_ID=8168
+[16658.443859]  PCI_REVISION_ID=12
+[16658.443861]  PCI_INTERRUPT_LINE=-1
+[16658.443864]  PCI_LATENCY_TIMER=0
+[16658.443866]  PCI_COMMAND=1287
+
+
+=====================================================================================================
+
+
+$ cat /proc/interrupts 
+            CPU0       CPU1       
+   0:        144          0   IO-APIC    2-edge      timer
+   8:         29         21   IO-APIC    8-edge      rtc0
+   9:          0          0   IO-APIC    9-fasteoi   acpi
+  16:        292        299   IO-APIC   16-fasteoi   snd_hda_intel:card1
+  18:      14536      14576   IO-APIC   18-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+  19:      10268      10238   IO-APIC   19-fasteoi   ahci[0000:00:11.0]
+  25:          0          0   PCI-MSI 38912-edge      PCIe PME
+  26:          0          0   PCI-MSI 262144-edge      xhci_hcd
+  27:          0          0   PCI-MSI 262145-edge      xhci_hcd
+  28:          0          0   PCI-MSI 262146-edge      xhci_hcd
+  30:      10785      10783   PCI-MSI 524288-edge      eth0
+  31:          0          0   PCI-MSI 131072-edge      ccp-1-0
+  32:          0          0   PCI-MSI 131073-edge      ccp-1-1
+  34:         35         35   PCI-MSI 18432-edge      snd_hda_intel:card0
+  36:         47         42   PCI-MSI 16384-edge      radeon
+ NMI:          0          0   Non-maskable interrupts
+ LOC:     841640     962355   Local timer interrupts
+ SPU:          0          0   Spurious interrupts
+ PMI:          0          0   Performance monitoring interrupts
+ IWI:          0          0   IRQ work interrupts
+ RTR:          0          0   APIC ICR read retries
+ RES:    1294832    1249510   Rescheduling interrupts
+ CAL:      16591      21400   Function call interrupts
+ TLB:      15680      20754   TLB shootdowns
+ TRM:          0          0   Thermal event interrupts
+ THR:          0          0   Threshold APIC interrupts
+ DFR:          0          0   Deferred Error APIC interrupts
+ MCE:          0          0   Machine check exceptions
+ MCP:         55         55   Machine check polls
+ ERR:          1
+ MIS:          0
+ PIN:          0          0   Posted-interrupt notification event
+ PIW:          0          0   Posted-interrupt wakeup event
+
+
+$ lspci
+00:00.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Root Complex
+00:01.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Mullins [Radeon R1E/R2E Graphics] (rev 01)
+00:01.1 Audio device: Advanced Micro Devices, Inc. [AMD/ATI] Kabini HDMI/DP Audio
+00:02.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Host Bridge
+00:02.3 PCI bridge: Advanced Micro Devices, Inc. [AMD] Family 16h Processor Functions 5:1
+00:08.0 Encryption controller: Advanced Micro Devices, Inc. [AMD] Kabini/Mullins PSP-Platform Security Processor
+00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 11)
+00:11.0 SATA controller: Advanced Micro Devices, Inc. [AMD] FCH SATA Controller [IDE mode] (rev 40)
+00:12.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB EHCI Controller (rev 39)
+00:13.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB EHCI Controller (rev 39)
+00:14.0 SMBus: Advanced Micro Devices, Inc. [AMD] FCH SMBus Controller (rev 42)
+00:14.2 Audio device: Advanced Micro Devices, Inc. [AMD] FCH Azalia Controller (rev 02)
+00:14.3 ISA bridge: Advanced Micro Devices, Inc. [AMD] FCH LPC Bridge (rev 11)
+00:18.0 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 0
+00:18.1 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 1
+00:18.2 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 2
+00:18.3 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 3
+00:18.4 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 4
+00:18.5 Host bridge: Advanced Micro Devices, Inc. [AMD] Family 16h (Models 30h-3fh) Processor Function 5
+01:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 0c)
+
+
+olej@antix21:~/2022/kernel/pci
+$ lspci -s01:00.0 -v
+01:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 0c)
+    Subsystem: Hewlett-Packard Company RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller
+    Flags: bus master, fast devsel, latency 0, IRQ 30
+    I/O ports at e000 [size=256]
+    Memory at fea00000 (64-bit, non-prefetchable) [size=4K]
+    Memory at d0800000 (64-bit, prefetchable) [size=16K]
+    Capabilities: <access denied>
+    Kernel driver in use: r8169
+    Kernel modules: r8169
+
+olej@antix21:~/2022/kernel/pci
+$ lspci -s00:01.0 -v
+00:01.0 VGA compatible controller: Advanced Micro Devices, Inc. [AMD/ATI] Mullins [Radeon R1E/R2E Graphics] (rev 01) (prog-if 00 [VGA controller])
+    DeviceName:  Onboard IGD
+    Subsystem: Hewlett-Packard Company Mullins [Radeon R1E/R2E Graphics]
+    Flags: bus master, fast devsel, latency 0, IRQ 36
+    Memory at c0000000 (64-bit, prefetchable) [size=256M]
+    Memory at d0000000 (64-bit, prefetchable) [size=8M]
+    I/O ports at f000 [size=256]
+    Memory at feb00000 (32-bit, non-prefetchable) [size=256K]
+    Expansion ROM at 000c0000 [disabled] [size=128K]
+    Capabilities: <access denied>
+    Kernel driver in use: radeon
+    Kernel modules: radeon, amdgpu
+
+olej@antix21:~/2022/kernel/pci
+$ lspci -s00:14.2 -v
+00:14.2 Audio device: Advanced Micro Devices, Inc. [AMD] FCH Azalia Controller (rev 02)
+    Subsystem: Hewlett-Packard Company FCH Azalia Controller
+    Flags: bus master, slow devsel, latency 32, IRQ 16
+    Memory at feb60000 (64-bit, non-prefetchable) [size=16K]
+    Capabilities: <access denied>
+    Kernel driver in use: snd_hda_intel
+    Kernel modules: snd_hda_intel
+
+
+-----------------------------------------------------------------------------------------------------

@@ -1,0 +1,176 @@
+18.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 6464 авг 18 17:19 mod_read.ko
+-rw-rw-r-- 1 olej olej 7064 авг 18 17:19 mod_vfs.ko
+-rw-rw-r-- 1 olej olej 6720 авг 18 17:19 mod_write.ko
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat /etc/apt/sources.list
+#deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+# This system was installed using small removable media
+# (e.g. netinst, live or single CD). The matching "deb cdrom"
+# entries were disabled at the end of the installation process.
+# For information about how to configure apt package sources,
+# see the sources.list(5) manual.
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_read.ko 
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_read.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n19
+[26581.320357] +++ openning file: /etc/apt/sources.list
+[26581.320365] +++ read 80 bytes [80]:
+               #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib ma
+[26581.320366] +++ read 80 bytes [160]:
+               in
+               # This system was installed using small removable media
+               # (e.g. netinst, live
+[26581.320367] +++ read 80 bytes [240]:
+                or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[26581.320368] +++ read 80 bytes [320]:
+               he installation process.
+               # For information about how to configure apt package so
+[26581.320369] +++ read 41 bytes [361]:
+               urces,
+               # see the sources.list(5) manual.
+
+[26581.320369] +++ read EOF
+[26581.320370] +++ close file
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_write.ko log=xxxx.log
+insmod: ERROR: could not insert module mod_write.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ ls -l xxxx.log 
+-rw-r--r-- 1 root root 16 авг 18 17:33 xxxx.log
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat xxxx.log 
+...............
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n4
+[27016.083315] +++ openning file: xxxx.log
+[27016.083375] +++ file open xxxx.log
+[27016.083398] +++ write 16 bytes
+[27016.083399] +++ close file
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko 
+insmod: ERROR: could not insert module mod_vfs.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n18
+[27239.136740] +++ openning file: /etc/apt/sources.list
+[27239.136747] +++ file size = 361 bytes
+[27239.136750] +++ read 120 bytes:
+               #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+               # This system was installed using sma
+[27239.136751] +++ read 120 bytes:
+               ll removable media
+               # (e.g. netinst, live or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[27239.136752] +++ read 120 bytes:
+               he installation process.
+               # For information about how to configure apt package sources,
+               # see the sources.list(5) manual.
+[27239.136753] +++ read 1 bytes:
+               
+
+[27239.136753] +++ read EOF
+[27239.136754] +++ close file
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_read.ko file=xxx
+insmod: ERROR: could not insert module mod_read.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n8
+[27769.984601] +++ openning file: xxx
+[27769.984620] +++ read 42 bytes [42]:
+               *1 ......... 
+               *2 ......... 
+               *3 ......... 
+
+[27769.984621] +++ read EOF
+[27769.984621] +++ close file
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_read.ko file=yyy 
+insmod: ERROR: could not insert module mod_read.ko: Unknown symbol in module
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n2
+[28210.334800] +++ openning file: yyy
+[28210.334814] +++ file open failed: yyy
+
+
+--------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_write.ko log=xxxx.log
+insmod: ERROR: could not insert module mod_write.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ ls -l xxxx.log
+-rw-r--r-- 1 root root 16 авг 18 17:33 xxxx.log
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat xxxx.log
+...............
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n4
+[27016.083315] +++ openning file: xxxx.log
+[27016.083375] +++ file open xxxx.log
+[27016.083398] +++ write 16 bytes
+[27016.083399] +++ close file
+
+--------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko file=xxx
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_vfs.ko: Operation not permitted
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n9
+[30568.982201] +++ openning file: xxx
+[30568.982207] +++ file size = 42 bytes
+[30568.982225] +++ read 42 bytes:
+               *1 ......... 
+               *2 ......... 
+               *3 ......... 
+
+[30568.982226] +++ read EOF
+[30568.982227] +++ close file
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ ls -l xxx
+-rw-rw-r-- 1 olej olej 42 авг 18 18:30 xxx
+
+====================================================================================================================

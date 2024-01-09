@@ -1,0 +1,270 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/signal modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.c: In function ‘mycdrv_unlocked_ioctl’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.c:44:19: error: implicit declaration of function ‘send_sig’; did you mean ‘send_sigio’? [-Werror=implicit-function-declaration]
+   44 |          retval = send_sig( sig_tosend, sig_tsk, 0 );
+      |                   ^~~~~~~~
+      |                   send_sigio
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:12: default] Ошибка 2
+
+=======================================================================================================================================
+
+28.06.2022
+==========
+
+olej@R420:~$ uname -a
+Linux R420 5.4.0-121-generic #137-Ubuntu SMP Wed Jun 15 13:33:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep ' T ' | grep send_sig
+[sudo] пароль для olej:       
+ffffffff8b440860 T send_sigtrap
+ffffffff8b4a9f50 T send_sigqueue
+ffffffff8b4ab100 T __group_send_sig_info
+ffffffff8b4aba90 T do_send_sig_info
+ffffffff8b4abb20 T group_send_sig_info
+ffffffff8b4ac100 T send_sig_info
+ffffffff8b4ac130 T send_sig
+ffffffff8b4ac170 T send_sig_fault
+ffffffff8b4ac200 T send_sig_mceerr
+ffffffff8b4ae1f0 T __ia32_sys_pidfd_send_signal
+ffffffff8b4ae400 T __x64_sys_pidfd_send_signal
+ffffffff8b4af330 T kdb_send_sig
+ffffffff8b5be590 T bpf_send_signal
+ffffffff8b6e25c0 T send_sigio
+ffffffff8b6e2750 T send_sigurg
+ffffffff8b844070 T security_file_send_sigiotask
+ffffffff8bccd470 T sk_send_sigurg
+
+=======================================================================================================================================
+
+<include/linux/sched/signal.h>
+[337]
+extern int send_sig(int, struct task_struct *, int);
+extern int zap_other_threads(struct task_struct *p);
+extern struct sigqueue *sigqueue_alloc(void);
+extern void sigqueue_free(struct sigqueue *);
+extern int send_sigqueue(struct sigqueue *, struct pid *, enum pid_type);
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/signal modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+gcc ioctl.c -o ioctl
+ioctl.c: In function ‘main’:
+ioctl.c:16:10: warning: implicit declaration of function ‘getpid’ [-Wimplicit-function-declaration]
+   16 |    pid = getpid();
+      |          ^~~~~~
+ioctl.c:36:4: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   36 |    close( fd );
+      |    ^~~~~
+      |    pclose
+gcc sigreq.c -o sigreq
+sigreq.c: In function ‘main’:
+sigreq.c:12:34: warning: implicit declaration of function ‘getpid’ [-Wimplicit-function-declaration]
+   12 |    printf( "my own PID is %d\n", getpid() );
+      |                                  ^~~~~~
+sigreq.c:17:15: warning: implicit declaration of function ‘pause’ [-Wimplicit-function-declaration]
+   17 |    while( 1 ) pause();
+      |               ^~~~~
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ make disclean
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/signal modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/signal/ioctl_signal.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+gcc ioctl.c -o ioctl
+gcc sigreq.c -o sigreq
+
+
+=======================================================================================================================================
+
+<include/linux/sched/signal.h>
+[337]
+extern int send_sig(int, struct task_struct *, int);
+extern int zap_other_threads(struct task_struct *p);
+extern struct sigqueue *sigqueue_alloc(void);
+extern void sigqueue_free(struct sigqueue *);
+extern int send_sigqueue(struct sigqueue *, struct pid *, enum pid_type);
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ kill -l 
+ 1) SIGHUP	 2) SIGINT	 3) SIGQUIT	 4) SIGILL	 5) SIGTRAP
+ 6) SIGABRT	 7) SIGBUS	 8) SIGFPE	 9) SIGKILL	10) SIGUSR1
+11) SIGSEGV	12) SIGUSR2	13) SIGPIPE	14) SIGALRM	15) SIGTERM
+16) SIGSTKFLT	17) SIGCHLD	18) SIGCONT	19) SIGSTOP	20) SIGTSTP
+21) SIGTTIN	22) SIGTTOU	23) SIGURG	24) SIGXCPU	25) SIGXFSZ
+26) SIGVTALRM	27) SIGPROF	28) SIGWINCH	29) SIGIO	30) SIGPWR
+31) SIGSYS	34) SIGRTMIN	35) SIGRTMIN+1	36) SIGRTMIN+2	37) SIGRTMIN+3
+38) SIGRTMIN+4	39) SIGRTMIN+5	40) SIGRTMIN+6	41) SIGRTMIN+7	42) SIGRTMIN+8
+43) SIGRTMIN+9	44) SIGRTMIN+10	45) SIGRTMIN+11	46) SIGRTMIN+12	47) SIGRTMIN+13
+48) SIGRTMIN+14	49) SIGRTMIN+15	50) SIGRTMAX-14	51) SIGRTMAX-13	52) SIGRTMAX-12
+53) SIGRTMAX-11	54) SIGRTMAX-10	55) SIGRTMAX-9	56) SIGRTMAX-8	57) SIGRTMAX-7
+58) SIGRTMAX-6	59) SIGRTMAX-5	60) SIGRTMAX-4	61) SIGRTMAX-3	62) SIGRTMAX-2
+63) SIGRTMAX-1	64) SIGRTMAX	
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ ./sigreq
+my own PID is 48438
+set signal handler error
+Определяемый пользователем сигнал 1
+
+
+olej@R420:~$ kill -n SIGUSR1 48438
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ ./sigreq
+my own PID is 48533
+set signal handler error
+Определяемый пользователем сигнал 1
+
+
+olej@R420:~$ kill -n 10 48533
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ ./sigreq 10
+my own PID is 56459
+---> signal 10
+---> signal 10
+^C
+
+
+olej@R420:~$ kill -n 10 56459
+
+olej@R420:~$ kill -n SIGUSR1 56459
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ sudo insmod ioctl_signal.ko
+[sudo] пароль для olej:       
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ lsmod | head -n2 
+Module                  Size  Used by
+ioctl_signal           16384  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ dmesg | tail -n2
+[21081.470356] 
+               Succeeded in registering character device mycdrv
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ ls -l /dev | grep my
+crw-------   1 root root       10,  55 июн 28 15:08 mycdrv
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ ./ioctl 10 56795
+I opened the device node, file descriptor = -1
+rc from ioctl setting pid is = -1
+rc from ioctl setting signal is = -1
+rc from ioctl sending signal is = -1
+FINISHED, TERMINATING NORMALLY
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ sudo ./ioctl 10 56795
+I opened the device node, file descriptor = 3
+rc from ioctl setting pid is = 0
+rc from ioctl setting signal is = 0
+rc from ioctl sending signal is = 0
+FINISHED, TERMINATING NORMALLY
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ dmesg | tail -n14 
+[21081.470356] 
+               Succeeded in registering character device mycdrv
+[21271.047313]  attempting to open device: mycdrv:
+[21271.047315]  MAJOR number = 10, MINOR number = 55
+[21271.047315]  successfully open  device: mycdrv:
+
+[21271.047316] I have been opened  1 times since being loaded
+[21271.047316] ref=1
+[21271.047389] Setting pid to send signals to, sigpid = 56795
+[21271.047394] Setting signal to send as: 10 
+[21271.047398] Sending signal 10 to process ID 56795
+[21271.047414] retval = 0
+[21271.047420]  closing character device: mycdrv:
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ ./sigreq 10
+my own PID is 56795
+---> signal 10
+...
+
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ sudo rmmod ioctl_signal
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ dmesg | tail -n3
+
+[21936.464956] 
+               device unregistered
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/signal$ sudo ./ioctl 10 56795
+I opened the device node, file descriptor = -1
+rc from ioctl setting pid is = -1
+rc from ioctl setting signal is = -1
+rc from ioctl sending signal is = -1
+FINISHED, TERMINATING NORMALLY
+
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  ' kill_'
+[sudo] пароль для olej:       
+ffffffff8b4a9d70 T kill_pid_usb_asyncio
+ffffffff8b4abc00 T kill_pgrp
+ffffffff8b4abc50 T kill_pid_info
+ffffffff8b4abcb0 T kill_pid
+ffffffff8b6d02c0 T kill_anon_super
+ffffffff8b6d02f0 T kill_litter_super
+ffffffff8b6d0320 T kill_block_super
+ffffffff8b6e26c0 T kill_fasync
+ffffffff8b7146a0 T kill_bdev
+ffffffff8bace830 T kill_device
+ffffffff8baef8a0 T kill_pending_fw_fallback_reqs
+ffffffff8bb31b00 T kill_dax
+ffffffff8bb32640 T kill_dev_dax
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  ' send_sig'
+ffffffff8b440860 T send_sigtrap
+ffffffff8b4a9f50 T send_sigqueue
+ffffffff8b4ac100 T send_sig_info
+ffffffff8b4ac130 T send_sig
+ffffffff8b4ac170 T send_sig_fault
+ffffffff8b4ac200 T send_sig_mceerr
+ffffffff8b6e25c0 T send_sigio
+ffffffff8b6e2750 T send_sigurg
+
+=======================================================================================================================================
+

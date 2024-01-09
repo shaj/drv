@@ -1,0 +1,18 @@
+11.08.2022
+==========
+
+olej@orangepione:~$ inxi -Smxxx
+System:
+  Host: orangepione Kernel: 5.15.48-sunxi armv7l bits: 32 compiler: N/A Console: tty 2 
+  dm: LightDM 1.26.0 Distro: Armbian GNU/Linux 10 (buster) 
+Memory:
+  RAM: total: 491.7 MiB used: 265.7 MiB (54.0%) 
+  RAM Report: missing: Required program dmidecode not available 
+
+
+olej@orangepione:~$ grep CONFIG_PAGE_OFFSET /lib/modules/`uname -r`/build/.config
+CONFIG_PAGE_OFFSET=0xC0000000
+
+olej@orangepione:~$ grep CONFIG_PAGE_OFFSET /boot/config-`uname -r`
+CONFIG_PAGE_OFFSET=0xC0000000
+

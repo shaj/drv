@@ -1,0 +1,343 @@
+23.06.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ make
+gcc -O   -c -o error.o error.c
+error.c: В функции «err_doit»:
+error.c:46:7: предупреждение: формат не является строковой константой, и не заданы аргументы форматирования [-Wformat-security]
+gcc -O   -c -o writen.o writen.c
+gcc -O   -c -o readline.o readline.c
+gcc -O   -c -o tcpserv.o tcpserv.c
+gcc -O   -c -o strecho.o strecho.c
+gcc -O -o tcpserv tcpserv.o strecho.o error.o writen.o readline.o  
+gcc -O   -c -o tcpcli.o tcpcli.c
+gcc -O   -c -o strcli.o strcli.c
+gcc -O -o tcpcli tcpcli.o strcli.o error.o writen.o readline.o  
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ make 
+gcc -O2 -Wall -c error.c -o error.o 
+gcc -O2 -Wall -c writen.c -o writen.o 
+gcc -O2 -Wall -c readline.c -o readline.o 
+gcc -O2 -Wall tcpserv.c -o tcpserv error.o writen.o readline.o  
+gcc -O2 -Wall tcpcli.c -o tcpcli error.o writen.o readline.o  
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli
+1st message
+1st message
+get echo from server
+get echo from server
+^D
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv
+^C
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -p 1000 -v
+use: ./tcpserv [-p<TCP port>] [-v]
+server: can't bind local address: Permission denied
+Аварийный останов (core dumped)
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -z
+./tcpserv: invalid option -- 'z'
+use: ./tcpserv [-p<TCP port>] [-v]
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v -p50000
+listening on the TCP port 50000
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli 
+client: can't connect to server: Connection refused
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -z
+./tcpcli: invalid option -- 'z'
+use: ./tcpcli [-h<IP address>] [-p<TCP port>] [-v]
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000
+123
+123
+repit
+repit
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000 -hlocalhost
+client: can't connect to server: Network is unreachable
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000 -h 127.0.0.1
+echo
+echo
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000 -h 127.1.1.255
+echo
+echo
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000 -h 127.255.1.255
+echo
+echo
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000 -h 127.254.254.254
+echo
+echo
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:9a:16:31 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.107/24 brd 192.168.1.255 scope global eth3
+    inet6 fe80::a00:27ff:fe9a:1631/64 scope link 
+       valid_lft forever preferred_lft forever
+3: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:da:a8:37 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.56.101/24 brd 192.168.56.255 scope global eth2
+    inet6 fe80::a00:27ff:feda:a837/64 scope link 
+       valid_lft forever preferred_lft forever
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000 -h 192.168.1.107
+echo
+echo
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -p50000 -h 192.168.56.101
+echo
+echo
+^C
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/Рабочий стол$ lsb_release -ircd
+Distributor ID:Ubuntu
+Description:Ubuntu 12.04 LTS
+Release:12.04
+Codename:precise
+
+========================================================================================================================
+
+24.06.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 192.168.1.100
+connect to: 192.168.1.100:54594 => 192.168.1.100:60000
+sfgnsthmjmu
+sfgnsthmjmu
+^D
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+connect from: 192.168.1.100:60000 <= 192.168.1.100:54594
+connection closed
+^C
+
+========================================================================================================================
+
+05.07.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ make
+gcc -O2 -Wall -c writen.c -o writen.o 
+gcc -O2 -Wall -c readline.c -o readline.o 
+gcc -O2 -Wall -c strsock.c -o strsock.o 
+gcc -O2 -Wall tcpserv.c -o tcpserv writen.o readline.o strsock.o
+gcc -O2 -Wall tcpcli.c -o tcpcli writen.o readline.o strsock.o
+rm *.o
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ls -l | grep '\-x'
+-rwxrwxr-x 1 olej olej 12528 Июл  5 12:42 tcpcli
+-rwxrwxr-x 1 olej olej 12452 Июл  5 12:42 tcpserv
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpserv -vv -p70000
+listening on the TCP port 70000
+connect from: 127.0.0.1:4464 <= 127.0.0.1:45244
+echo 6 bytes: 12345
+connection closed
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1 -p70000
+connect to: 127.0.0.1:45244 => 127.0.0.1:4464
+12345
+12345
+^C
+
+========================================================================================================================
+
+11.07.2015
+==========
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ lsb_release -ircd
+Distributor ID:	LinuxMint
+Description:	Linux Mint 17.2 Rafaela
+Release:	17.2
+Codename:	rafaela
+
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ make
+gcc -O2 -Wall -c writen.c -o writen.o 
+In file included from common.h:1:0,
+                 from writen.c:1:
+../common.h:5:19: fatal error: stdio.h: Нет такого файла или каталога
+ #include <stdio.h>
+                   ^
+compilation terminated.
+make: *** [writen.o] Ошибка 1
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ apt-file search stdio.h
+Программа 'apt-file' на данный момент не установлена. Вы можете установить её, выполнив:
+sudo apt-get install apt-file
+
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ sudo apt-get install apt-file
+[sudo] password for olej: 
+Чтение списков пакетов… Готово
+Построение дерева зависимостей       
+Чтение информации о состоянии… Готово
+Будут установлены следующие дополнительные пакеты:
+  curl libconfig-file-perl libcurl3 libregexp-assemble-perl
+НОВЫЕ пакеты, которые будут установлены:
+  apt-file curl libconfig-file-perl libcurl3 libregexp-assemble-perl
+обновлено 0, установлено 5 новых пакетов, для удаления отмечено 0 пакетов, и 128 пакетов не обновлено.
+Необходимо скачать 415 kБ архивов.
+После данной операции, объём занятого дискового пространства возрастёт на 1.299 kB.
+Хотите продолжить? [Д/н] y
+Получено:1 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libcurl3 i386 7.35.0-1ubuntu2.5 [174 kB]
+Получено:2 http://archive.ubuntu.com/ubuntu/ trusty-updates/main curl i386 7.35.0-1ubuntu2.5 [123 kB]
+Получено:3 http://archive.ubuntu.com/ubuntu/ trusty/universe libconfig-file-perl all 1.50-2 [10,1 kB]
+Получено:4 http://archive.ubuntu.com/ubuntu/ trusty/universe libregexp-assemble-perl all 0.35-8 [81,2 kB]
+Получено:5 http://archive.ubuntu.com/ubuntu/ trusty/universe apt-file all 2.5.2ubuntu1 [27,1 kB]
+Получено 415 kБ за 1с (264 kБ/c)
+Выбор ранее не выбранного пакета libcurl3:i386.
+(Чтение базы данных … на данный момент установлено 165180 файлов и каталогов.)
+Preparing to unpack …/libcurl3_7.35.0-1ubuntu2.5_i386.deb ...
+Unpacking libcurl3:i386 (7.35.0-1ubuntu2.5) ...
+Выбор ранее не выбранного пакета curl.
+Preparing to unpack …/curl_7.35.0-1ubuntu2.5_i386.deb ...
+Unpacking curl (7.35.0-1ubuntu2.5) ...
+Выбор ранее не выбранного пакета libconfig-file-perl.
+Preparing to unpack …/libconfig-file-perl_1.50-2_all.deb ...
+Unpacking libconfig-file-perl (1.50-2) ...
+Выбор ранее не выбранного пакета libregexp-assemble-perl.
+Preparing to unpack …/libregexp-assemble-perl_0.35-8_all.deb ...
+Unpacking libregexp-assemble-perl (0.35-8) ...
+Выбор ранее не выбранного пакета apt-file.
+Preparing to unpack …/apt-file_2.5.2ubuntu1_all.deb ...
+Unpacking apt-file (2.5.2ubuntu1) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+Настраивается пакет libcurl3:i386 (7.35.0-1ubuntu2.5) …
+Настраивается пакет curl (7.35.0-1ubuntu2.5) …
+Настраивается пакет libconfig-file-perl (1.50-2) …
+Настраивается пакет libregexp-assemble-perl (0.35-8) …
+Настраивается пакет apt-file (2.5.2ubuntu1) …
+The system-wide cache is empty. You may want to run 'apt-file update'
+as root to update the cache. You can also run 'apt-file update' as
+normal user to use a cache in the user's home directory.
+Processing triggers for libc-bin (2.19-0ubuntu6.6) ...
+
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ apt-file search stdio.h
+E: The cache is empty. You need to run 'apt-file update' first.
+
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ apt-file update
+apt-file is now using the user's cache directory.
+If you want to switch back to the system-wide cache directory,
+ run 'apt-file purge'
+Downloading complete file http://packages.linuxmint.com/dists/rafaela/Contents-i386.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  242k  100  242k    0     0   132k      0  0:00:01  0:00:01 --:--:--  132k
+Downloading complete file http://extra.linuxmint.com/dists/rafaela/Contents-i386.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 17632  100 17632    0     0  27924      0 --:--:-- --:--:-- --:--:-- 27987
+Downloading complete file http://archive.ubuntu.com/ubuntu/dists/trusty/Contents-i386.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 28.0M  100 28.0M    0     0  1171k      0  0:00:24  0:00:24 --:--:-- 1209k
+Downloading complete file http://archive.ubuntu.com/ubuntu/dists/trusty-updates/Contents-i386.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 12.6M  100 12.6M    0     0  1180k      0  0:00:10  0:00:10 --:--:-- 1210k
+Downloading complete file http://security.ubuntu.com/ubuntu/dists/trusty-security/Contents-i386.gz
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 10.0M  100 10.0M    0     0  1124k      0  0:00:09  0:00:09 --:--:-- 1210k
+Ignoring source without Contents File:
+  http://archive.canonical.com/ubuntu/dists/trusty/Contents-i386.gz
+
+------------------------------------------------------------------------------------------------------------------------
+
+lej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ apt-file search /usr/include/stdio.h
+libc6-dev: /usr/include/stdio.h
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ sudo apt-get install libc6-dev
+Чтение списков пакетов… Готово
+Построение дерева зависимостей       
+Чтение информации о состоянии… Готово
+Будут установлены следующие дополнительные пакеты:
+  libc-dev-bin
+Предлагаемые пакеты:
+  glibc-doc
+НОВЫЕ пакеты, которые будут установлены:
+  libc-dev-bin libc6-dev
+обновлено 0, установлено 2 новых пакетов, для удаления отмечено 0 пакетов, и 128 пакетов не обновлено.
+Необходимо скачать 1.617 kБ архивов.
+После данной операции, объём занятого дискового пространства возрастёт на 9.215 kB.
+Хотите продолжить? [Д/н] y
+Получено:1 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libc-dev-bin i386 2.19-0ubuntu6.6 [63,4 kB]
+Получено:2 http://archive.ubuntu.com/ubuntu/ trusty-updates/main libc6-dev i386 2.19-0ubuntu6.6 [1.554 kB]
+Получено 1.617 kБ за 2с (769 kБ/c)   
+Выбор ранее не выбранного пакета libc-dev-bin.
+(Чтение базы данных … на данный момент установлено 165249 файлов и каталогов.)
+Preparing to unpack …/libc-dev-bin_2.19-0ubuntu6.6_i386.deb ...
+Unpacking libc-dev-bin (2.19-0ubuntu6.6) ...
+Выбор ранее не выбранного пакета libc6-dev:i386.
+Preparing to unpack …/libc6-dev_2.19-0ubuntu6.6_i386.deb ...
+Unpacking libc6-dev:i386 (2.19-0ubuntu6.6) ...
+Processing triggers for man-db (2.6.7.1-1ubuntu1) ...
+Настраивается пакет libc-dev-bin (2.19-0ubuntu6.6) …
+Настраивается пакет libc6-dev:i386 (2.19-0ubuntu6.6) …
+
+
+olej@mint1 ~/2015_WORK/FWall/disfw/cliserv $ make
+gcc -O2 -Wall -c writen.c -o writen.o 
+gcc -O2 -Wall -c readline.c -o readline.o 
+gcc -O2 -Wall -c strsock.c -o strsock.o 
+gcc -O2 -Wall tcpserv.c -o tcpserv writen.o readline.o strsock.o
+gcc -O2 -Wall tcpcli.c -o tcpcli writen.o readline.o strsock.o
+rm *.o
+
+
+========================================================================================================================
+
+29.09.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Netm/examles/cliserv $ make
+gcc -O2 -Wall -c writen.c -o writen.o 
+gcc -O2 -Wall -c readline.c -o readline.o 
+gcc -O2 -Wall -c strsock.c -o strsock.o 
+gcc -O2 -Wall tcpserv.c -o tcpserv writen.o readline.o strsock.o
+gcc -O2 -Wall tcpcli.c -o tcpcli writen.o readline.o strsock.o
+rm *.o
+
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+========================================================================================================================

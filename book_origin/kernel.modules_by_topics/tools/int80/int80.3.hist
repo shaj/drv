@@ -1,0 +1,97 @@
+12.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ nasm -f elf int80.s -o int80.32.o
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ld -m elf_i386 int80.32.o -o int80.32
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ nasm -f elf64 int80.s -o int80.64.o
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ld int80.64.o -o int80.64
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ls -l int80*
+-rw-r--r-- 1 olej olej 18773 фев  1  2015 int80.1.hist
+-rw-rw-r-- 1 olej olej  9810 июн 12 21:33 int80.2.hist
+-rwxrwxr-x 1 olej olej  8688 июн 12 22:00 int80.32
+-rw-rw-r-- 1 olej olej   624 июн 12 21:59 int80.32.o
+-rw-rw-r-- 1 olej olej    23 июн 12 21:34 int80.3.hist
+-rwxrwxr-x 1 olej olej  8912 июн 12 22:02 int80.64
+-rw-rw-r-- 1 olej olej   864 июн 12 22:01 int80.64.o
+-rw-rw-r-- 1 olej olej   444 июн 11 18:54 int80.s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ file int80.32
+int80.32: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), statically linked, not stripped
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ file int80.64
+int80.64: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, not stripped
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ./int80.32
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ./int80.64
+Hello, world!
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make clean
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make 
+gcc -Wall     mpsys.c   -o mpsys
+gcc -Wall     mplib.c   -o mplib
+nasm -f elf int80.s -o int80.32.o
+ld -m elf_i386 int80.32.o -o int80.32
+nasm -f elf64 int80.s -o int80.64.o
+ld int80.64.o -o int80.64
+
+========================================================================================================================
+
+13.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make clean
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make 
+gcc -Wall     mpsys.c   -o mpsys
+gcc -Wall     mplib.c   -o mplib
+nasm -f elf int80.s -o int80.32.o
+ld -m elf_i386 int80.32.o -o int80.32
+nasm -f elf64 int80.s -o int80.64.o
+ld int80.64.o -o int80.64
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ls -l | grep ^-rwx
+-rwxrwxr-x 1 olej olej  8688 июн 13 15:24 int80.32
+-rwxrwxr-x 1 olej olej  8912 июн 13 15:24 int80.64
+-rwxrwxr-x 1 olej olej  8920 июн 11 19:12 mpcall
+-rwxrwxr-x 1 olej olej 16992 июн 11 18:46 mpint
+-rwxrwxr-x 1 olej olej  8688 июн 11 18:59 mpint32
+-rwxrwxr-x 1 olej olej  8912 июн 11 19:01 mpint64
+-rwxrwxr-x 1 olej olej 17032 июн 13 15:24 mplib
+-rwxrwxr-x 1 olej olej 16888 июн 13 15:24 mpsys
+-rwxrwxr-x 1 olej olej  8920 июн 13 00:19 syscall.64
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make clean
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ls -l | grep ^-rwx
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make 
+gcc -Wall     mpsys.c   -o mpsys
+gcc -Wall     mplib.c   -o mplib
+nasm -f elf int80.s -o int80.32.o
+ld -m elf_i386 int80.32.o -o int80.32
+nasm -f elf64 int80.s -o int80.64.o
+ld int80.64.o -o int80.64
+nasm -f elf64 syscall.s -o syscall.o
+ld syscall.o -o syscall.64
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ls -l | grep ^-rwx
+-rwxrwxr-x 1 olej olej  8688 июн 13 15:29 int80.32
+-rwxrwxr-x 1 olej olej  8912 июн 13 15:29 int80.64
+-rwxrwxr-x 1 olej olej 17032 июн 13 15:29 mplib
+-rwxrwxr-x 1 olej olej 16888 июн 13 15:29 mpsys
+-rwxrwxr-x 1 olej olej  8920 июн 13 15:29 syscall.64
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make clean
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ls -l | grep ^-rwx
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ 
+
+========================================================================================================================

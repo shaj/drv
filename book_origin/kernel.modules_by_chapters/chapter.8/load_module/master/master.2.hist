@@ -1,0 +1,187 @@
+21.08.2022
+==========
+
+olej@R420:~$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+===================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c: In function ‘mod_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:46:26: warning: passing argument 3 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   46 |    n = kernel_read(f, 0, buff, len);
+      |                          ^~~~
+      |                          |
+      |                          void *
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:1:
+./include/linux/fs.h:3022:51: note: expected ‘size_t’ {aka ‘long unsigned int’} but argument is of type ‘void *’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                   ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:46:32: warning: passing argument 4 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   46 |    n = kernel_read(f, 0, buff, len);
+      |                                ^~~
+      |                                |
+      |                                long int
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:1:
+./include/linux/fs.h:3022:59: note: expected ‘loff_t *’ {aka ‘long long int *’} but argument is of type ‘long int’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                           ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:47:49: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   47 |    printk("+ считано из файла %s %d байт\n", slave_name, n);
+      |                                                ~^                          ~
+      |                                                 |                          |
+      |                                                 int                        size_t {aka long unsigned int}
+      |                                                %ld
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+===================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 10784 авг 21 13:11 master.ko
+-rw-rw-r-- 1 olej olej  6544 авг 21 13:11 slave.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ sudo insmod master.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module master.ko: Invalid parameters
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ dmesg | tail -n1
+[ 6998.087006] ! sys_init_module не найден
+
+===================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ sudo cat /proc/kallsyms | grep sys_init_module
+[sudo] пароль для olej:       
+ffffffffb25477b0 t __do_sys_init_module
+ffffffffb2547950 T __x64_sys_init_module
+ffffffffb2547970 T __ia32_sys_init_module
+ffffffffb42f0cd0 t _eil_addr___ia32_sys_init_module
+ffffffffb42f0ce0 t _eil_addr___x64_sys_init_module
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ sudo cat /proc/kallsyms | grep sys_delete_module
+ffffffffb2545020 T __ia32_sys_delete_module
+ffffffffb25452d0 T __x64_sys_delete_module
+ffffffffb42f0cf0 t _eil_addr___ia32_sys_delete_module
+ffffffffb42f0d00 t _eil_addr___x64_sys_delete_module
+
+===================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+===================================================================================================================
+
+olej@mint:~/kernel/load_module/master$ uname -a
+Linux mint 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@mint:~/kernel/load_module/master$ sudo inxi -M
+[sudo] пароль для olej:       
+Machine:   Type: Virtualbox System: innotek product: VirtualBox v: 1.2 serial: N/A 
+           Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek v: VirtualBox date: 12/01/2006 
+
+
+
+olej@mint:~/kernel/load_module/master$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/kernel/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/kernel/load_module/master/slave.o
+  CC [M]  /home/olej/kernel/load_module/master/master.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/kernel/load_module/master/master.mod.o
+  LD [M]  /home/olej/kernel/load_module/master/master.ko
+  CC [M]  /home/olej/kernel/load_module/master/slave.mod.o
+  LD [M]  /home/olej/kernel/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+olej@mint:~/kernel/load_module/master$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 10784 авг 21 14:26 master.ko
+-rw-rw-r-- 1 olej olej  6480 авг 21 14:26 slave.ko
+
+olej@mint:~/kernel/load_module/master$ sudo insmod master.ko
+insmod: ERROR: could not insert module master.ko: Cannot allocate memory
+
+olej@mint:~/kernel/load_module/master$ dmesg | tail -n4
+[22460.719703] > адрес sys_init_module = 00000000853dcf4a
+[22460.719713] > длина файла модуля = 6480 байт
+[22460.719718] > адрес буфера чтения = 0000000015ac589c
+[22460.719729] > считано из файла ./slave.ko 6480 байт
+
+-------------------------------------------------------------------------------------------------------------------
+
+[24624.472164] > адрес __x64_sys_init_module = ffffffff83347950
+[24624.472218] > длина файла модуля = 6480 байт
+[24624.472223] > адрес буфера чтения = ffffba0ac0117000
+[24624.472233] > считано из файла ./slave.ko 6480 байт
+[24624.472234] > ошибка загрузки __x64_sys_init_module
+
+-------------------------------------------------------------------------------------------------------------------
+
+olej@mint:~/kernel/load_module/master$ sudo cat /proc/kallsyms | grep sys_init_module
+[sudo] пароль для olej:       
+ffffffff833477b0 t __do_sys_init_module
+ffffffff83347950 T __x64_sys_init_module
+ffffffff83347970 T __ia32_sys_init_module
+ffffffff850f0cd0 t _eil_addr___ia32_sys_init_module
+ffffffff850f0ce0 t _eil_addr___x64_sys_init_module
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ sudo cat /proc/kallsyms | grep sys_delete_module
+[sudo] пароль для olej:       
+ffffffffb2545020 T __ia32_sys_delete_module
+ffffffffb25452d0 T __x64_sys_delete_module
+ffffffffb42f0cf0 t _eil_addr___ia32_sys_delete_module
+ffffffffb42f0d00 t _eil_addr___x64_sys_delete_module
+
+===================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/master$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 10992 авг 21 16:44 master.ko
+-rw-rw-r-- 1 olej olej  6544 авг 21 16:44 slave.ko
+
+===================================================================================================================

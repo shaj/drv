@@ -1,0 +1,194 @@
+07.07.2022
+==========
+
+https://elixir.bootlin.com/linux/v5.10/source/include/linux/kernel_read_file.h#L42
+[38]
+int kernel_read_file(struct file *file, loff_t offset,
+	     void **buf, size_t buf_size,
+	     size_t *file_size,
+	     enum kernel_read_file_id id);
+int kernel_read_file_from_path(const char *path, loff_t offset,
+	           void **buf, size_t buf_size,
+	           size_t *file_size,
+	           enum kernel_read_file_id id);
+int kernel_read_file_from_path_initns(const char *path, loff_t offset,
+		      void **buf, size_t buf_size,
+		      size_t *file_size,
+		      enum kernel_read_file_id id);
+int kernel_read_file_from_fd(int fd, loff_t offset,
+	         void **buf, size_t buf_size,
+	         size_t *file_size,
+	         enum kernel_read_file_id id);
+
+[8]
+#include <linux/file.h>
+#include <linux/types.h>
+
+/* This is a list of *what* is being read, not *how* nor *where*. */
+#define __kernel_read_file_id(id) \
+    id(UNKNOWN, unknown)		\
+    id(FIRMWARE, firmware)		\
+    id(MODULE, kernel-module)		\
+    id(KEXEC_IMAGE, kexec-image)		\
+    id(KEXEC_INITRAMFS, kexec-initramfs)	\
+    id(POLICY, security-policy)		\
+    id(X509_CERTIFICATE, x509-certificate)	\
+    id(MAX_ID, )
+
+#define __fid_enumify(ENUM, dummy) READING_ ## ENUM,
+#define __fid_stringify(dummy, str) #str,
+
+enum kernel_read_file_id {
+    __kernel_read_file_id(__fid_enumify)
+};
+
+static const char * const kernel_read_file_str[] = {
+    __kernel_read_file_id(__fid_stringify)
+};
+
+static inline const char *kernel_read_file_id_str(enum kernel_read_file_id id)
+{
+    if ((unsigned int)id >= READING_MAX_ID)
+	return kernel_read_file_str[READING_UNKNOWN];
+
+    return kernel_read_file_str[id];
+}
+
+--------------------------------------------------------------------------------------------------
+
+https://elixir.bootlin.com/linux/v5.10/source/fs/kernel_read_file.c#L145
+
+[125]
+EXPORT_SYMBOL_GPL(kernel_read_file);
+
+[145]
+EXPORT_SYMBOL_GPL(kernel_read_file_from_path);
+
+[172]
+EXPORT_SYMBOL_GPL(kernel_read_file_from_path_initns);
+
+[189]
+EXPORT_SYMBOL_GPL(kernel_read_file_from_fd);
+
+https://elixir.bootlin.com/linux/v5.10/source/security/integrity/ima/ima_fs.c#L287
+[287]
+    rc = kernel_read_file_from_path(path, 0, &data, INT_MAX, NULL,
+		    READING_POLICY);
+
+--------------------------------------------------------------------------------------------------
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/fs.h#L2990
+
+[2990]
+extern int kernel_read_file(struct file *, void **, loff_t *, loff_t,
+	        enum kernel_read_file_id);
+extern int kernel_read_file_from_path(const char *, void **, loff_t *, loff_t,
+		      enum kernel_read_file_id);
+extern int kernel_read_file_from_fd(int, void **, loff_t *, loff_t,
+		    enum kernel_read_file_id);
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+extern ssize_t kernel_write(struct file *, const void *, size_t, loff_t *);
+extern ssize_t __kernel_write(struct file *, const void *, size_t, loff_t *);
+extern struct file * open_exec(const char *);
+
+
+
+* kernel_read_file() - чтение содержимого файла в буфер ядра
+ *
+ * @file файл для чтения
+ * @offset откуда начать чтение (см. ниже).
+ * Указатель @buf на буфер "void *" для чтения (если
+ * *@buf имеет значение NULL, будет выделен буфер, и
+ * @buf_size будет проигнорирован)
+ * @buf_size размер буфера памяти, если он уже выделен. Если @buf нет
+ * выделено, это максимальный размер для выделения.
+ * @file_size, если не NULL, полный размер @file будет
+ * написано здесь.
+ * @id ID ядра_read_file_id, идентифицирующий тип
+ * содержимое файла считывается (для проверки LSM)
+ *
+ * @offset должен быть равен 0, если и @buf, и @file_size не равны NULL
+ * (т. е. вызывающий должен ожидать чтения частичного содержимого файла
+ * через уже выделенный @buf, не более чем @buf_size кусками, и
+ * сможет определить, когда весь файл был прочитан пользователем
+ * проверка @file_size). Это не рекомендуемый способ чтения
+ * файл, так как возможно, что содержимое может
+ * изменение между вызовами kernel_read_file().
+ *
+ * Возвращает количество прочитанных байтов (ни одно прочитанное не будет больше
+ *, чем INT_MAX), или отрицательный при ошибке.
+
+==================================================================================================
+
+olej@esprimop420:/lib/modules$ uname -r
+5.10.0-13-amd64
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build$ pwd
+/lib/modules/5.10.0-13-amd64/build
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build$ cat Module.symvers | grep kernel_read_file
+0xeed0cea4	kernel_read_file_from_fd	vmlinux	EXPORT_SYMBOL_GPL	
+0xa2e3b51c	security_kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0x6e3480e5	kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0xba057786	kernel_read_file_from_path_initns	vmlinux	EXPORT_SYMBOL_GPL	
+0x615d3447	kernel_read_file_from_path	vmlinux	EXPORT_SYMBOL_GPL	
+
+--------------------------------------------------------------------------------------------------
+
+olej@esprimop420:~/2022/kernel/sys_call_table/find$ cat /lib/modules/`uname -r`/build/Module.symvers | grep kernel_read_file
+0xeed0cea4	kernel_read_file_from_fd	vmlinux	EXPORT_SYMBOL_GPL	
+0xa2e3b51c	security_kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0x6e3480e5	kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0xba057786	kernel_read_file_from_path_initns	vmlinux	EXPORT_SYMBOL_GPL	
+0x615d3447	kernel_read_file_from_path	vmlinux	EXPORT_SYMBOL_GPL	
+
+olej@esprimop420:/lib/modules/5.10.0-15-amd64/build$ cat Module.symvers | grep kernel_read
+0xeed0cea4	kernel_read_file_from_fd	vmlinux	EXPORT_SYMBOL_GPL	
+0x3507b652	kernel_read	vmlinux	EXPORT_SYMBOL	
+0x2ba042ef	security_kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0x464713c3	kernel_read_file	vmlinux	EXPORT_SYMBOL_GPL	
+0xba057786	kernel_read_file_from_path_initns	vmlinux	EXPORT_SYMBOL_GPL	
+0x615d3447	kernel_read_file_from_path	vmlinux	EXPORT_SYMBOL_GPL	
+0x9417e6a4	snd_rawmidi_kernel_read	sound/core/snd-rawmidi	EXPORT_SYMBOL	
+
+
+==================================================================================================
+
+olej@esprimop420:/usr/src$ ls -l /usr/src
+итого 16
+drwxr-xr-x 4 root root 4096 мар 26 17:46 linux-headers-5.10.0-13-amd64
+drwxr-xr-x 4 root root 4096 мар 26 17:46 linux-headers-5.10.0-13-common
+drwxr-xr-x 4 root root 4096 июл  5 00:51 linux-headers-5.10.0-15-amd64
+drwxr-xr-x 4 root root 4096 июл  5 00:51 linux-headers-5.10.0-15-common
+lrwxrwxrwx 1 root root   24 мар 17 17:40 linux-kbuild-5.10 -> ../lib/linux-kbuild-5.10
+
+olej@esprimop420:~/2022$ ls -l /lib/modules/`uname -r`/build
+lrwxrwxrwx 1 root root 38 мар 17 17:40 /lib/modules/5.10.0-13-amd64/build -> /usr/src/linux-headers-5.10.0-13-amd64
+
+olej@esprimop420:/usr/src$ du -hs linux-headers-5.10.0-13-*
+14M	linux-headers-5.10.0-13-amd64
+70M	linux-headers-5.10.0-13-common
+
+==================================================================================================
+
+root@R420:/proc# ls -l /proc/kallsyms
+-r--r--r-- 1 root root 0 июл  7 10:13 /proc/kallsyms
+
+
+root@R420:/proc# uname -a
+Linux R420 5.4.0-121-generic #137-Ubuntu SMP Wed Jun 15 13:33:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+root@R420:/proc# cat /boot/config-`uname -r` | grep KALL
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@esprimop420:~/2022/kernel/sys_call_table/find$ sudo dmesg | tail -n5
+[278355.558638] + ============================
+[278355.558645] + file_size=0
+[278355.558646] + k=-22
+[278355.558647] + sys_call_table address = 0000000000000000
+[278355.558648] + sys_call_table : not found
+
+==================================================================================================

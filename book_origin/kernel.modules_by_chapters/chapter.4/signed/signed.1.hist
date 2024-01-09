@@ -1,0 +1,220 @@
+01.08.2022
+==========
+
+olej@nvme:~$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	LMDE 5 (elsie)
+Release:	5
+Codename:	elsie
+
+
+olej@nvme:~$ uname -a
+Linux nvme 5.10.0-16-amd64 #1 SMP Debian 5.10.127-2 (2022-07-23) x86_64 GNU/Linux
+
+
+olej@nvme:~$ cat /boot/config-`uname -r` | grep CONFIG_MODULE_SIG
+CONFIG_MODULE_SIG_FORMAT=y
+CONFIG_MODULE_SIG=y
+# CONFIG_MODULE_SIG_FORCE is not set
+# CONFIG_MODULE_SIG_ALL is not set
+# CONFIG_MODULE_SIG_SHA1 is not set
+# CONFIG_MODULE_SIG_SHA224 is not set
+CONFIG_MODULE_SIG_SHA256=y
+# CONFIG_MODULE_SIG_SHA384 is not set
+# CONFIG_MODULE_SIG_SHA512 is not set
+CONFIG_MODULE_SIG_HASH="sha256"
+CONFIG_MODULE_SIG_KEY=""
+
+-------------------------------------------------------------------------------------------------------------------
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples/tools/signed$ make
+make -C /lib/modules/5.10.0-16-amd64/build M=/home/olej/2022/OwnBooks/BHV.kernel/examples/tools/signed modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-16-amd64»
+  CC [M]  /home/olej/2022/OwnBooks/BHV.kernel/examples/tools/signed/hello_printk.o
+  MODPOST /home/olej/2022/OwnBooks/BHV.kernel/examples/tools/signed/Module.symvers
+  CC [M]  /home/olej/2022/OwnBooks/BHV.kernel/examples/tools/signed/hello_printk.mod.o
+  LD [M]  /home/olej/2022/OwnBooks/BHV.kernel/examples/tools/signed/hello_printk.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-16-amd64»
+
+
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples/tools/signed$ sudo insmod hello_printk.ko
+[sudo] пароль для olej:
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples/tools/signed$ dmesg | tail -n4
+[ 2911.727484] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+[ 5397.637583] hello_printk: loading out-of-tree module taints kernel.
+[ 5397.637613] hello_printk: module verification failed: signature and/or required key missing - tainting kernel
+[ 5397.637804] Hello, world!
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples/tools/signed$ lsmod | head -n2
+Module                  Size  Used by
+hello_printk           16384  0
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples/tools/signed$ modinfo hello_printk.ko
+filename:       /home/olej/2022/OwnBooks/BHV.kernel/examples/tools/signed/hello_printk.ko
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>>
+license:        GPL
+depends:        
+retpoline:      Y
+name:           hello_printk
+vermagic:       5.10.0-16-amd64 SMP mod_unload modversions 
+
+
+===================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/signed$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	Linux Mint 20.3
+Release:	20.3
+Codename:	una
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/signed$ uname -a
+Linux R420 5.4.0-122-generic #138-Ubuntu SMP Wed Jun 22 15:00:31 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/signed$ cat /boot/config-`uname -r` | grep CONFIG_MODULE_SIG
+CONFIG_MODULE_SIG_FORMAT=y
+CONFIG_MODULE_SIG=y
+# CONFIG_MODULE_SIG_FORCE is not set
+CONFIG_MODULE_SIG_ALL=y
+# CONFIG_MODULE_SIG_SHA1 is not set
+# CONFIG_MODULE_SIG_SHA224 is not set
+# CONFIG_MODULE_SIG_SHA256 is not set
+# CONFIG_MODULE_SIG_SHA384 is not set
+CONFIG_MODULE_SIG_SHA512=y
+CONFIG_MODULE_SIG_HASH="sha512"
+CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"
+
+-------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/signed$ sudo insmod hello_printk.ko
+[sudo] пароль для olej:  
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/tools/signed$ dmesg | tail -n3
+[10297.379217] perf: interrupt took too long (2518 > 2500), lowering kernel.perf_event_max_sample_rate to 79250
+[14210.696139] perf: interrupt took too long (3187 > 3147), lowering kernel.perf_event_max_sample_rate to 62750
+[14404.701088] Hello, world!
+
+-------------------------------------------------------------------------------------------------------------------
+
+root@R420:~# cat /proc/keys
+008d9a61 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0102aae9 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+010e61c0 I------     1 perm 1f030000     0     0 keyring   .dns_resolver: empty
+0133ab4a I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+016ed49e I------     1 perm 1f030000     0     0 asymmetri Canonical Ltd. Live Patch Signing: 14df34d1a87cf37625abec039ef2bf521249b969: X509.rsa 1249b969 []
+01eaac11 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0302f229 I------     1 perm 1f0b0000     0     0 keyring   .platform: empty
+04680a65 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+051b8bf8 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+054799ff I--Q---     6 perm 3f030000     0     0 keyring   _ses: 1
+05dc0680 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+0868bd36 I--Q---   334 perm 3f030000     0     0 keyring   _ses: 1
+08720231 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+08d90ea3 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+091331c6 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+094cd36c I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0974aabb I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0aeefdbe I--Q---     1 perm 3f030000     0     0 keyring   _ses: 1
+0ba8c41b I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0c68fb70 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0dfa9048 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0eb1486e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0ec58a56 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+0f122f73 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+0ff691a3 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+1131ba85 I--Q---     5 perm 3f030000     0     0 keyring   _ses: 1
+11a034fb I------     1 perm 1f030000     0     0 asymmetri Canonical Ltd. Kernel Module Signing: 88f752e560a1e0737e31163a466ad7b70a850c19: X509.rsa 0a850c19 []
+12826f47 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+135de119 I------     1 perm 1f0f0000     0     0 keyring   .ima: empty
+151db283 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+163ca0c8 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+18218267 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+19237f9a I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+19cc3a40 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+1a3ed7ef I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+1aaf076e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+1c517b91 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+1c9ec2ac I------     1 perm 1f030000     0     0 asymmetri Canonical Ltd. Secure Boot Signing: 61482aa2830d0ab2ad5af10b7250da9033ddcef0: X509.rsa 33ddcef0 []
+1d7b9c93 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+1ebbb9c1 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+1ec395cb I--Q---     1 perm 1f3f0000     0 65534 keyring   _uid_ses.0: 1
+1f2c784c I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+1fce361e I--Q---     1 perm 3f030000     0     0 keyring   _ses: 2
+202abbee I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+20341fb0 I--Q---     4 perm 3f030000     0     0 keyring   _ses: 1
+21af7e46 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+21d74602 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+220e310d I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+22a1c500 I------     1 perm 1f0b0000     0     0 keyring   .blacklist: 1
+22d14b2d I------     1 perm 1f0f0000     0     0 keyring   .secondary_trusted_keys: 1
+2356abf7 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+23e77f40 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+246011e6 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+246223a4 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+24c52154 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+26b6abed I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+2780d20c I--Q---     1 perm 0c030000     0 65534 keyring   .user_reg: 2
+28b49754 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+2927fb5b I--Q---     4 perm 3f030000     0     0 keyring   _ses: 1
+29c4013f I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+2a90b53e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+2af22247 I------     1 perm 1f030000     0     0 asymmetri Build time autogenerated kernel key: 14c1fcd338762a2eeacd3b20a829b037b9235452: X509.rsa b9235452 []
+2af6a008 I--Q---     5 perm 3f030000     0     0 keyring   _ses: 1
+2b7f4dc9 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+2b8413e2 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+2c75b4a7 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+2cae6404 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+2cc7ed30 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+2d1eaa2f I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+2de795fa I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+31079508 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+31bf353f I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+31caa97d I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+32973977 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+337f2ca6 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+33e22562 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+36bbe929 I--Q---     4 perm 1f3f0000     0 65534 keyring   _uid.0: empty
+3704dd25 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+386d1a0f I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+38903b74 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+38936804 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+38c2f5ee I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+3a76b7a9 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+3a7e839f I------     1 perm 1f0f0000     0     0 keyring   .evm: empty
+3b1528c3 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+3b52ad5d I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+3bb85844 I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+3c5f7165 I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+3c80bde2 I------     2 perm 1f0b0000     0     0 keyring   .builtin_trusted_keys: 3
+3cd4208a I--Q---     3 perm 3f030000     0     0 keyring   _ses: 1
+3e2a671e I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+3f179200 I--Q---     2 perm 3f030000     0     0 keyring   _ses: 1
+3fc745c4 I------     1 perm 082f0000     0     0 keyring   .fs-verity: empty
+3fe9d9ba I--Q---     1 perm 0b0b0000     0     0 user      invocation_id: 16
+
+
+The kernel contains a ring of public keys that can be viewed by root. They’re in a keyring called ”.system_keyring” that can be seen by:
+
+Ядро содержит кольцо открытых ключей, которые могут быть просмотрены пользователем root. Они находятся в связке ключей 
+под названием «.system_keyring», которую можно увидеть:
+
+root@R420:~# cat /proc/keys | grep ”system_keyring”
+root@R420:~#
+
+Помимо открытого ключа, созданного специально для подписи модуля, дополнительные доверенные сертификаты могут быть предоставлены 
+в файле с кодировкой PEM, на который ссылается параметр конфигурации CONFIG_SYSTEM_TRUSTED_KEYS.
+Кроме того, код архитектуры может брать открытые ключи из магазина оборудования и также добавлять их (например, из базы данных ключей UEFI).
+Наконец, можно добавить дополнительные открытые ключи, выполнив следующие действия:
+
+keyctl padd asymmetric "" [.system_keyring-ID] <[key-file]
+
+
+olej@R420:~$ cat /boot/config-`uname -r` | grep CONFIG_SYSTEM_TRUSTED_KEYS
+CONFIG_SYSTEM_TRUSTED_KEYS="debian/canonical-certs.pem"
+
+===================================================================================================================

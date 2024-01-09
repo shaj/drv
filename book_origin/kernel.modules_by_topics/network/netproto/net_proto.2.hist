@@ -1,0 +1,114 @@
+19.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/netproto$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto/net_proto.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto/net_proto.c:14:4: error: initialization of ‘struct net_device *’ from incompatible pointer type ‘int (*)(struct sk_buff *, struct net_device *, struct packet_type *, struct net_device *)’ [-Werror=incompatible-pointer-types]
+   14 |    test_pack_rcv,
+      |    ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto/net_proto.c:14:4: note: (near initialization for ‘test_proto.dev’)
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto/net_proto.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+make: *** [Makefile:17: modules] Ошибка 2
+
+=====================================================================================================================================
+
+https://elixir.bootlin.com/linux/v3.0/source/include/linux/netdevice.h#L1543
+[1543]
+struct packet_type {
+    __be16			type;	/* This is really htons(ether_type). */
+    struct net_device	*dev;	/* NULL is wildcarded here	     */
+    int			(*func) (struct sk_buff *,
+		     struct net_device *,
+		     struct packet_type *,
+		     struct net_device *);
+    struct sk_buff		*(*gso_segment)(struct sk_buff *skb,
+			u32 features);
+    int			(*gso_send_check)(struct sk_buff *skb);
+    struct sk_buff		**(*gro_receive)(struct sk_buff **head,
+		           struct sk_buff *skb);
+    int			(*gro_complete)(struct sk_buff *skb);
+    void			*af_packet_priv;
+    struct list_head	list;
+};
+
+https://elixir.bootlin.com/linux/v4.0/source/include/linux/netdevice.h#L1969
+[1969]
+struct packet_type {
+    __be16			type;	/* This is really htons(ether_type). */
+    struct net_device	*dev;	/* NULL is wildcarded here	     */
+    int			(*func) (struct sk_buff *,
+		     struct net_device *,
+		     struct packet_type *,
+		     struct net_device *);
+    bool			(*id_match)(struct packet_type *ptype,
+		        struct sock *sk);
+    void			*af_packet_priv;
+    struct list_head	list;
+};
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/netdevice.h#L2348
+struct packet_type {
+    __be16			type;	/* This is really htons(ether_type). */
+    bool			ignore_outgoing;
+    struct net_device	*dev;	/* NULL is wildcarded here	     */
+    int			(*func) (struct sk_buff *,
+		     struct net_device *,
+		     struct packet_type *,
+		     struct net_device *);
+    void			(*list_func) (struct list_head *,
+		          struct packet_type *,
+		          struct net_device *);
+    bool			(*id_match)(struct packet_type *ptype,
+		        struct sock *sk);
+    void			*af_packet_priv;
+    struct list_head	list;
+};
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/netproto$ uname -r
+5.4.0-120-generic
+
+=====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/netproto$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto/net_proto.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto/net_proto.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/netproto/net_proto.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/netproto$ host localhost
+localhost has address 127.0.0.1
+localhost has IPv6 address ::1
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto modules 
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto/virt.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto/virt.c:123:4: error: initialization of ‘struct net_device *’ from incompatible pointer type ‘int (*)(struct sk_buff *, struct net_device *, struct packet_type *, struct net_device *)’ [-Werror=incompatible-pointer-types]
+  123 |    arp_pack_rcv,  // фильтр пртокола ETH_P_ARP
+      |    ^~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto/virt.c:123:4: note: (near initialization for ‘arp_proto.dev’)
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto/virt.c:151:4: error: initialization of ‘struct net_device *’ from incompatible pointer type ‘int (*)(struct sk_buff *, struct net_device *, struct packet_type *, struct net_device *)’ [-Werror=incompatible-pointer-types]
+  151 |    ip4_pack_rcv,    // фильтр пртокола ETH_P_IP
+      |    ^~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto/virt.c:151:4: note: (near initialization for ‘ip4_proto.dev’)
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto/virt.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-proto] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+make: *** [Makefile:12: default] Ошибка 2
+
+
+=====================================================================================================================================

@@ -1,0 +1,359 @@
+03.07.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo insmod fwnet.ko debug=1 port=10000
+[sudo] password for olej: 
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v -p10000
+listening on the TCP port 10000
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n11
+[   75.400936] chrome[2128]: segfault at 0 ip b1015c09 sp bffc0810 error 6 in libGL.so.1.2[b0fda000+52000]
+[ 1400.523999] ! denied IP: no
+[ 1400.524147] ! denied TCP port: 10000
+[ 1400.529131] ! sys_call_table address = c15b4000
+[ 1400.534561] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[ 1400.539510] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[ 1400.544468] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[ 1400.549548] ! CR0 = 8005003b
+[ 1400.549571] ! CR0 = 8004003b
+[ 1400.549577] ! CR0 = 8005003b
+[ 1400.549581] ! install new sys_socketcall handler: e1a1d0d0
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n5
+[ 1400.549548] ! CR0 = 8005003b
+[ 1400.549571] ! CR0 = 8004003b
+[ 1400.549577] ! CR0 = 8005003b
+[ 1400.549581] ! install new sys_socketcall handler: e1a1d0d0
+[ 1498.431313] ! accept before: port = 10000
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo rmmod fwnet.ko
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n5
+[ 1400.549577] ! CR0 = 8005003b
+[ 1400.549581] ! install new sys_socketcall handler: e1a1d0d0
+[ 1498.431313] ! accept before: port = 10000
+[ 1539.871225] ! sys_socketcall handler before unload: e1a1d0d0
+[ 1539.871245] ! restore old sys_socketcall handler: c149acd0
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo insmod fwnet.ko debug=1 port=15000
+[sudo] password for olej: 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v -p15000
+listening on the TCP port 15000
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+connect: Permission denied
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n15
+[ 7351.062263] ! accept before: port = 15000
+[ 7351.062273] ! accept from denied port 15000
+[ 7351.162905] ! accept before: port = 15000
+[ 7351.162913] ! accept from denied port 15000
+[ 7351.263611] ! accept before: port = 15000
+[ 7351.263712] ! accept from denied port 15000
+[ 7351.364329] ! accept before: port = 15000
+[ 7351.364377] ! accept from denied port 15000
+[ 7351.464823] ! accept before: port = 15000
+[ 7351.464830] ! accept from denied port 15000
+[ 7351.565385] ! accept before: port = 15000
+[ 7351.565391] ! accept from denied port 15000
+[ 7351.668424] ! accept before: port = 15000
+[ 7351.668433] ! accept from denied port 15000
+[ 7374.188182] ! connect to 127.0.0.1:53
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo rmmod fwnet.ko
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ make
+gcc -O2 -Wall -c error.c -o error.o 
+gcc -O2 -Wall -c writen.c -o writen.o 
+gcc -O2 -Wall -c readline.c -o readline.o 
+gcc -O2 -Wall -c strsock.c -o strsock.o 
+gcc -O2 -Wall tcpserv.c -o tcpserv error.o writen.o readline.o strsock.o
+gcc -O2 -Wall tcpcli.c -o tcpcli error.o writen.o readline.o strsock.o
+rm *.o
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo insmod fwnet.ko debug=1 port=10000
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v -p10000
+listening on the TCP port 10000
+denied TCP port: Input/output error
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n5
+[11210.433027] ! CR0 = 80040033
+[11210.433178] ! CR0 = 80050033
+[11210.433310] ! install new sys_socketcall handler: e1a1e0d0
+[11213.888556] ! accept before: port = 10000
+[11213.888562] ! accept from denied port 10000
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo rmmod fwnet
+
+===========================================================================================================
+
+05.07.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ make
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/disfw/fwnet.ver1 modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/disfw/fwnet.ver1/fwnet.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK_2015/FWall/disfw/fwnet.ver1/fwnet.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/disfw/fwnet.ver1/fwnet.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ modinfo fwnet.ko 
+filename:       fwnet.ko
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>
+license:        GPL
+srcversion:     F2D90C7E4A333F7C9AAFD2C
+depends:        
+vermagic:       3.2.0-25-generic-pae SMP mod_unload modversions 686 
+parm:           debug:bool
+parm:           deny:charp
+parm:           port:int
+
+===========================================================================================================
+
+10.07.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ make
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/disfw/fwnet.ver1 modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/disfw/fwnet.ver1/fwnet.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK_2015/FWall/disfw/fwnet.ver1/fwnet.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/disfw/fwnet.ver1/fwnet.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 8737 Июл 10 08:27 fwnet.ko
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ modinfo fwnet.ko
+filename:       fwnet.ko
+version:        2.3
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>
+license:        GPL
+srcversion:     A20D860F6B72C4D69AB052F
+depends:        
+vermagic:       3.2.0-25-generic-pae SMP mod_unload modversions 686 
+parm:           debug:bool
+parm:           deny:charp
+parm:           port:int
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:9a:16:31 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.100/24 brd 192.168.1.255 scope global eth3
+    inet6 fe80::a00:27ff:fe9a:1631/64 scope link 
+       valid_lft forever preferred_lft forever
+3: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:da:a8:37 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.56.101/24 brd 192.168.56.255 scope global eth2
+    inet6 fe80::a00:27ff:feda:a837/64 scope link 
+       valid_lft forever preferred_lft forever
+
+lej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ sudo insmod fwnet.ko deny=192.168.56.101 port=35000 debug=1
+[sudo] password for olej: 
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ lsmod | head -n3
+Module                  Size  Used by
+fwnet                  13116  0 
+vboxvideo              12511  1 
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | tail -n11
+[  783.428438] [UFW BLOCK] IN=eth3 OUT= MAC=01:00:5e:00:00:fb:f4:6d:04:60:78:6f:08:00 SRC=192.168.1.101 DST=224.0.0.251 LEN=32 TOS=0x00 PREC=0xC0 TTL=1 ID=0 DF PROTO=2 
+[  786.609568] ! denied IP: 192.168.56.101
+[  786.609572] ! denied TCP port: 35000
+[  786.613047] ! sys_call_table address = c15b4000
+[  786.636336] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[  786.656437] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[  786.661444] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[  786.663994] ! CR0 = 8005003b
+[  786.664090] ! CR0 = 8004003b
+[  786.664096] ! CR0 = 8005003b
+[  786.664100] ! install new sys_socketcall handler: e1ad50d0
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpserv -vv -p35000
+listening on the TCP port 35000
+denied TCP port: Input/output error
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | tail -n17 | grep accept
+[ 1032.962068] ! accept from denied port 35000
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpserv -vv -p45000
+listening on the TCP port 45000
+connect from: 127.0.0.1:45000 <= 127.0.0.1:42283
+echo 6 bytes: 12345
+connection closed
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpcli -v -h 127.0.0.1 -p 45000
+connect to: 127.0.0.1:42283 => 127.0.0.1:45000
+12345
+12345
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | tail -n3
+[ 1274.221454] ! connect to 127.0.0.1:53
+[ 1274.262773] ! connect to 91.189.92.57:0
+[ 1274.262791] ! connect to 91.189.92.55:0
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/disfw $ ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether f4:6d:04:60:78:6f brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.101/24 brd 192.168.1.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::f66d:4ff:fe60:786f/64 scope link 
+       valid_lft forever preferred_lft forever
+3: vboxnet0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN group default qlen 1000
+    link/ether 0a:00:27:00:00:00 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.56.1/24 brd 192.168.56.255 scope global vboxnet0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::800:27ff:fe00:0/64 scope link 
+       valid_lft forever preferred_lft forever
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/disfw/cliserv $ ./tcpserv -vv -p35000
+listening on the TCP port 35000
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpcli -v -h 192.168.1.101 -p 35000
+can't connect to server: Permission denied
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | tail -n2
+[ 1711.427013] ! connect to 192.168.1.101:35000
+[ 1711.427019] ! connect to 192.168.1.101:35000 denied
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/disfw/cliserv $ ./tcpserv -vv -p45000
+listening on the TCP port 45000
+connect from: 192.168.1.101:45000 <= 192.168.1.100:49816
+echo 6 bytes: 12345
+connection closed
+connect from: 192.168.56.1:45000 <= 192.168.56.101:58376
+echo 5 bytes: 1111
+connection closed
+^C
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpcli -v -h 192.168.1.101 -p 45000
+connect to: 192.168.1.100:49816 => 192.168.1.101:45000
+12345
+12345
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | tail -n1
+[ 2236.289543] ! connect to 192.168.1.101:45000
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpcli -v -h 192.168.1.101 -p 35000
+can't connect to server: Permission denied
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | grep \! | tail -n2
+[ 2271.778193] ! connect to 192.168.1.101:35000
+[ 2271.778200] ! connect to 192.168.1.101:35000 denied
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpcli -v -h 192.168.56.1 -p 45000
+connect to: 192.168.56.101:58376 => 192.168.56.1:45000
+1111
+1111
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/cliserv$ ./tcpcli -v -h 192.168.56.101 -p 45000
+can't connect to server: Permission denied
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | grep \! | tail -n3
+[ 2349.462437] ! connect to 192.168.56.1:45000
+[ 2604.218377] ! connect to 192.168.56.101:45000
+[ 2604.218384] ! connect to 192.168.56.101:45000 denied
+
+-----------------------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ sudo rmmod fwnet
+[sudo] password for olej: 
+
+olej@ubuntu:~/WORK_2015/FWall/disfw/fwnet.ver1$ dmesg | grep \! | tail -n3
+[ 2604.218384] ! connect to 192.168.56.101:45000 denied
+[ 2890.602419] ! sys_socketcall handler before unload: e1ad50d0
+[ 2890.602439] ! restore old sys_socketcall handler: c149acd0
+
+===========================================================================================================
+
+12.07.2015
+==========
+
+olej@mint1 ~/2015_WORK/FWall/disfw/fwnet.ver1 $ make
+make -C /lib/modules/3.16.0-38-generic/build M=/home/olej/2015_WORK/FWall/disfw/fwnet.ver1 modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.16.0-38-generic'
+  CC [M]  /home/olej/2015_WORK/FWall/disfw/fwnet.ver1/fwnet.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/FWall/disfw/fwnet.ver1/fwnet.mod.o
+  LD [M]  /home/olej/2015_WORK/FWall/disfw/fwnet.ver1/fwnet.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.16.0-38-generic'
+
+olej@mint1 ~/2015_WORK/FWall/disfw/fwnet.ver1 $ modinfo fwnet.ko
+filename:       /home/olej/2015_WORK/FWall/disfw/fwnet.ver1/fwnet.ko
+version:        1.4
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>
+license:        GPL
+srcversion:     F483D2E6B192D664414EBFE
+depends:        
+vermagic:       3.16.0-38-generic SMP mod_unload modversions 686 
+parm:           debug:bool
+parm:           deny:charp
+parm:           port:int
+
+===========================================================================================================

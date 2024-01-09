@@ -1,0 +1,64 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory$ make
+=============== making all in list =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/list»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/list modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/list/mod_list.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/list/mod_list.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/list/mod_list.ko
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/list»
+=============== making all in mtest =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c: In function ‘init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:22:7: error: implicit declaration of function ‘rdtscll’; did you mean ‘rdtsc’? [-Werror=implicit-function-declaration]
+   22 |       rdtscll( t1 );
+      |       ^~~~~~~
+      |       rdtsc
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:22:7: warning: ‘t1’ is used uninitialized in this function [-Wuninitialized]
+   22 |       rdtscll( t1 );
+      |       ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:23:7: warning: ‘t2’ is used uninitialized in this function [-Wuninitialized]
+   23 |       rdtscll( t2 );
+      |       ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.c:36:10: warning: ‘t1’ is used uninitialized in this function [-Wuninitialized]
+   36 |          rdtscll( t1 );
+      |          ^~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest/memtim.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:13: default] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/mtest»
+=============== making all in slab =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.ko
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory$ ls -lR */*.ko
+-rw-rw-r-- 1 olej olej  5760 июн 15 10:58 list/mod_list.ko
+-rw-rw-r-- 1 olej olej 10848 июн 15 10:58 slab/pool.ko
+-rw-rw-r-- 1 olej olej  8184 июн 15 10:58 slab/slab.ko
+
+===================================================================================================================================================
+

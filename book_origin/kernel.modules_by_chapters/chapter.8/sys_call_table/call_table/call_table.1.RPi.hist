@@ -1,0 +1,37 @@
+30.06.2022
+==========
+
+olej@raspberrypi:~/kernel/examples/sys_call_table/call_table $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_koes.o
+  MODPOST /home/olej/kernel/examples/sys_call_table/call_table/Module.symvers
+ERROR: modpost: "kallsyms_on_each_symbol" [/home/olej/kernel/examples/sys_call_table/call_table/mod_koes.ko] undefined!
+ERROR: modpost: "kallsyms_lookup_name" [/home/olej/kernel/examples/sys_call_table/call_table/mod_kct.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:134: /home/olej/kernel/examples/sys_call_table/call_table/Module.symvers] Ошибка 1
+make[2]: *** Удаляется файл «/home/olej/kernel/examples/sys_call_table/call_table/Module.symvers»
+make[1]: *** [Makefile:1783: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+make: *** [Makefile:13: all] Ошибка 2
+
+olej@raspberrypi:~/kernel/examples/sys_call_table/call_table $ ls *.ko
+mod_rct.ko
+
+====================================================================================
+
+01.07.2022
+==========
+
+olej@raspberrypi:~ $ uname -a
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+
+olej@raspberrypi:~ $ cat /lib/modules/`uname -r`/build/.config | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+
+
+====================================================================================

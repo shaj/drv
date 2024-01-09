@@ -1,0 +1,55 @@
+14.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:18:8: error: type defaults to ‘int’ in declaration of ‘DECLARE_MUTEX’ [-Werror=implicit-int]
+   18 | static DECLARE_MUTEX(sema);
+      |        ^~~~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:18:1: warning: parameter names (without types) in function declaration
+   18 | static DECLARE_MUTEX(sema);
+      | ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c: In function ‘loop_func’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:23:27: error: ‘sema’ undeclared (first use in this function); did you mean ‘sem’?
+   23 |    if(lvl == sync){ down(&sema); locked++; }
+      |                           ^~~~
+      |                           sem
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:23:27: note: each undeclared identifier is reported only once for each function it appears in
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c: At top level:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.c:18:8: warning: ‘DECLARE_MUTEX’ declared ‘static’ but never defined [-Wunused-function]
+   18 | static DECLARE_MUTEX(sema);
+      |        ^~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:10: all] Ошибка 2
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+============================================================================================================================
+

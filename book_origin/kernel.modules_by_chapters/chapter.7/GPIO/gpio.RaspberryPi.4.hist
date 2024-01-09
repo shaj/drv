@@ -1,0 +1,181 @@
+25.08.2022
+==========
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ make
+gcc -Wall -O2 -Wall info.c -o info
+gcc -Wall -O2 -Wall allops.c -o allops
+
+================================================================================================================
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ ls -l /dev/gpio*
+crw-rw---- 1 root gpio 254, 0 авг 25 14:14 /dev/gpiochip0
+crw-rw---- 1 root gpio 245, 0 авг 25 14:14 /dev/gpiomem
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./info /dev/gpiomem
+Unable to get chip info from ioctl: Inappropriate ioctl for device
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./info /dev/gpiochip0
+Chip name: gpiochip0
+Chip label: pinctrl-bcm2835
+Number of lines: 54
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./info -v /dev/gpiochip0
+Chip name: gpiochip0
+Chip label: pinctrl-bcm2835
+Number of lines: 54
+offset: 0, name: ID_SDA, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 1, name: ID_SCL, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 2, name: SDA1, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 3, name: SCL1, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 4, name: GPIO_GCLK, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 5, name: GPIO5, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 6, name: GPIO6, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 7, name: SPI_CE1_N, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 8, name: SPI_CE0_N, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 9, name: SPI_MISO, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 10, name: SPI_MOSI, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 11, name: SPI_SCLK, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 12, name: GPIO12, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 13, name: GPIO13, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 14, name: TXD0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 15, name: RXD0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 16, name: GPIO16, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 17, name: GPIO17, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 18, name: GPIO18, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 19, name: GPIO19, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 20, name: GPIO20, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 21, name: GPIO21, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 22, name: GPIO22, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 23, name: GPIO23, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 24, name: GPIO24, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 25, name: GPIO25, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 26, name: GPIO26, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 27, name: GPIO27, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 28, name: SDA0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 29, name: SCL0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 30, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 31, name: LAN_RUN, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 32, name: CAM_GPIO1, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 33, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 34, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 35, name: PWR_LOW_N, consumer: led1. Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 36, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 37, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 38, name: USB_LIMIT, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 39, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 40, name: PWM0_OUT, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 41, name: CAM_GPIO0, consumer: cam1_regulator. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 42, name: SMPS_SCL, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 43, name: SMPS_SDA, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 44, name: ETH_CLK, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 45, name: PWM1_OUT, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 46, name: HDMI_HPD_N, consumer: hpd. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 47, name: STATUS_LED, consumer: led0. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 48, name: SD_CLK_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 49, name: SD_CMD_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 50, name: SD_DATA0_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 51, name: SD_DATA1_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 52, name: SD_DATA2_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 53, name: SD_DATA3_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+
+================================================================================================================
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ make
+gcc -Wall -O2 -Wall allops.c -o allops
+
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ ./allops 
+Usage: ./allops options dev_name.
+Options:
+     -l: print gpio chip info
+     -r <offset>: Read GPIO value at offset (INPUT mode)
+     -w <offset>: Write GPIO value at offset (OUTPUT mode). Option -v should be set
+     -v <0|1>: value that should be written to the GPIO, used only with option -w
+     -p <offset>: Polling raising event on the GPIO at offset
+
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ ls -l /dev/gpio*
+crw-rw---- 1 root gpio 254, 0 авг 25 14:14 /dev/gpiochip0
+crw-rw---- 1 root gpio 245, 0 авг 25 14:14 /dev/gpiomem
+
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -l /dev/gpiochip0
+Chip name: gpiochip0
+Chip label: pinctrl-bcm2835
+Number of lines: 54
+offset: 0, name: ID_SDA, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 1, name: ID_SCL, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 2, name: SDA1, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 3, name: SCL1, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 4, name: GPIO_GCLK, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 5, name: GPIO5, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 6, name: GPIO6, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 7, name: SPI_CE1_N, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 8, name: SPI_CE0_N, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 9, name: SPI_MISO, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 10, name: SPI_MOSI, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 11, name: SPI_SCLK, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 12, name: GPIO12, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 13, name: GPIO13, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 14, name: TXD0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 15, name: RXD0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 16, name: GPIO16, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 17, name: GPIO17, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 18, name: GPIO18, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 19, name: GPIO19, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 20, name: GPIO20, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 21, name: GPIO21, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 22, name: GPIO22, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 23, name: GPIO23, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 24, name: GPIO24, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 25, name: GPIO25, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 26, name: GPIO26, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 27, name: GPIO27, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 28, name: SDA0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 29, name: SCL0, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 30, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 31, name: LAN_RUN, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 32, name: CAM_GPIO1, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 33, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 34, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 35, name: PWR_LOW_N, consumer: led1. Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 36, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 37, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 38, name: USB_LIMIT, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 39, name: NC, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 40, name: PWM0_OUT, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 41, name: CAM_GPIO0, consumer: cam1_regulator. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 42, name: SMPS_SCL, consumer: . Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 43, name: SMPS_SDA, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 44, name: ETH_CLK, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 45, name: PWM1_OUT, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 46, name: HDMI_HPD_N, consumer: hpd. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 47, name: STATUS_LED, consumer: led0. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 48, name: SD_CLK_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 49, name: SD_CMD_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 50, name: SD_DATA0_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 51, name: SD_DATA1_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 52, name: SD_DATA2_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 53, name: SD_DATA3_R, consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -r16 /dev/gpiochip0
+Value of GPIO at offset 16 (INPUT mode) on chip /dev/gpiochip0: 0
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -w16 -v1 /dev/gpiochip0
+Write value 1 to GPIO at offset 16 (OUTPUT mode) on chip /dev/gpiochip0
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -r16 /dev/gpiochip0
+Value of GPIO at offset 16 (INPUT mode) on chip /dev/gpiochip0: 0
+
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -r17 /dev/gpiochip0
+Value of GPIO at offset 17 (INPUT mode) on chip /dev/gpiochip0: 0
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -w17 -v1 /dev/gpiochip0
+Write value 1 to GPIO at offset 17 (OUTPUT mode) on chip /dev/gpiochip0
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -r17 /dev/gpiochip0
+Value of GPIO at offset 17 (INPUT mode) on chip /dev/gpiochip0: 0
+
+================================================================================================================

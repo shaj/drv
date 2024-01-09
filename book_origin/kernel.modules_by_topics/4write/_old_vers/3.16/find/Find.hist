@@ -1,0 +1,166 @@
+17.09.2015
+==========
+
+olej@nvidia ~/2015_WORK/in.WORK/SchoolCPP/digrev $ cat /proc/kallsyms | wc -l
+108960
+
+$ cat /lib/modules/`uname -r`/build/Module.symvers | wc -l
+17533
+
+olej@nvidia ~/2015_WORK/in.WORK/SchoolCPP/digrev $ uname -r
+3.13.0-37-generic
+
+-----------------------------------------------------------------------------------------------------
+
+
+olej@nvidia ~/2015_WORK/in.WORK/SchoolCPP/digrev $ sudo cat /proc/kallsyms | grep ' T ' | grep sys_open 
+c1178a50 T do_sys_open
+c1178cb0 T sys_open
+c1178ce0 T sys_openat
+c11c6490 T sys_open_by_handle_at
+
+
+-----------------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/in.WORK/SchoolCPP/digrev $ cat /lib/modules/`uname -r`/build/Module.symvers | grep sys_
+0xdeb8b14f	subsys_dev_iter_init	vmlinux	EXPORT_SYMBOL_GPL
+0x28d8117e	subsys_dev_iter_exit	vmlinux	EXPORT_SYMBOL_GPL
+0xa5307353	acpi_subsys_suspend_late	vmlinux	EXPORT_SYMBOL_GPL
+0x045f6e1a	acpi_subsys_runtime_suspend	vmlinux	EXPORT_SYMBOL_GPL
+0x63e30116	acpi_subsys_runtime_resume	vmlinux	EXPORT_SYMBOL_GPL
+0x0ea08d04	subsys_find_device_by_id	vmlinux	EXPORT_SYMBOL_GPL
+0x00000000	sys_close	vmlinux	EXPORT_SYMBOL
+0xfc367f89	sys_copyarea	drivers/video/syscopyarea	EXPORT_SYMBOL
+0x106089c1	acpi_subsys_resume_early	vmlinux	EXPORT_SYMBOL_GPL
+0xb1ffc039	fb_sys_write	drivers/video/fb_sys_fops	EXPORT_SYMBOL_GPL
+0xb9e2b0e8	nfnetlink_subsys_register	net/netfilter/nfnetlink	EXPORT_SYMBOL_GPL
+0xcdfa8940	sys_imageblit	drivers/video/sysimgblt	EXPORT_SYMBOL
+0x1c5fc3b3	subsys_interface_register	vmlinux	EXPORT_SYMBOL_GPL
+0xae43b38c	sys_fillrect	drivers/video/sysfillrect	EXPORT_SYMBOL
+0x8f9ed508	dev_pm_put_subsys_data	vmlinux	EXPORT_SYMBOL_GPL
+0xd0f7613d	dev_pm_get_subsys_data	vmlinux	EXPORT_SYMBOL_GPL
+0xa8c3b6a3	subsys_virtual_register	vmlinux	EXPORT_SYMBOL_GPL
+0x38ba5264	subsys_system_register	vmlinux	EXPORT_SYMBOL_GPL
+0x052f0ef0	subsys_dev_iter_next	vmlinux	EXPORT_SYMBOL_GPL
+0x07bdba61	nfnetlink_subsys_unregister	net/netfilter/nfnetlink	EXPORT_SYMBOL_GPL
+0xfe5d4bb2	sys_tz	vmlinux	EXPORT_SYMBOL
+0xcc0a6a54	fb_sys_read	drivers/video/fb_sys_fops	EXPORT_SYMBOL_GPL
+0xeef1c5d4	acpi_subsys_prepare	vmlinux	EXPORT_SYMBOL_GPL
+0x23dbde3a	subsys_interface_unregister	vmlinux	EXPORT_SYMBOL_GPL
+
+
+=====================================================================================================
+
+18.09.2015
+==========
+
+olej@nvidia /usr/include/i386-linux-gnu/asm $ head -n 12 /usr/include/i386-linux-gnu/asm/unistd_32.h 
+#ifndef _ASM_X86_UNISTD_32_H
+#define _ASM_X86_UNISTD_32_H 1
+
+#define __NR_restart_syscall 0
+#define __NR_exit 1
+#define __NR_fork 2
+#define __NR_read 3
+#define __NR_write 4
+#define __NR_open 5
+#define __NR_close 6
+#define __NR_waitpid 7
+#define __NR_creat 8
+
+-----------------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo insmod mod_kct.ko 
+insmod: ERROR: could not insert module mod_kct.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ dmesg | tail -n 2
+[39473.496040] + sys_call_table address = c1666140
+[39473.496045] + sys_call_table : c1067840 c1059280 c1055eb0 c1179ee0 c1179f70 c1178cb0 c1176ff0 c1059570 c1178d10 c1188860  ...
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo cat /proc/kallsyms | grep c1067840 
+c1067840 T sys_restart_syscall
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo cat /proc/kallsyms | grep c1059280 
+c1059280 T SyS_exit
+c1059280 T sys_exit
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo cat /proc/kallsyms | grep c1055eb0 
+c1055eb0 T sys_fork
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo cat /proc/kallsyms | grep c1179ee0 
+c1179ee0 T SyS_read
+c1179ee0 T sys_read
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo cat /proc/kallsyms | grep c1179f70 
+c1179f70 T SyS_write
+c1179f70 T sys_write
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo cat /proc/kallsyms | grep c1178cb0 
+c1178cb0 T SyS_open
+c1178cb0 T sys_open
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo cat /proc/kallsyms | grep c1176ff0 
+c1176ff0 T SyS_close
+c1176ff0 T sys_close
+
+-----------------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.o
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.ko
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_koes.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_koes.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo insmod mod_koes.ko 
+insmod: ERROR: could not insert module mod_koes.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ dmesg | tail -n2
+[42451.186648] + sys_call_table address = c1666140
+[42451.186654] + sys_call_table : c1067840 c1059280 c1055eb0 c1179ee0 c1179f70 c1178cb0 c1176ff0 c1059570 c1178d10 c1188860  ...
+
+=====================================================================================================
+
+19.09.2015
+==========
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ make
+make -C /lib/modules/3.13.0-37-generic/build M=/home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.13.0-37-generic'
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_wrc.o
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.o
+  CC [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_kct.ko
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_koes.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_koes.ko
+  CC      /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_wrc.mod.o
+  LD [M]  /home/olej/2015_WORK/own.BOOK/SysCalls/Find/examles/mod_wrc.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.13.0-37-generic'
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ ls *.ko
+mod_kct.ko  mod_koes.ko  mod_wrc.ko
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ sudo insmod mod_wrc.ko
+Hello from kernel!
+insmod: ERROR: could not insert module mod_wrc.ko: Operation not permitted
+
+olej@nvidia ~/2015_WORK/own.BOOK/SysCalls/Find/examles $ dmesg | tail -n3
+[23942.974587] + sys_write address = c1179f70
+[23942.974591] + [19]: Hello from kernel!
+[23942.974612] + printf() return : 19
+
+
+-----------------------------------------------------------------------------------------------------

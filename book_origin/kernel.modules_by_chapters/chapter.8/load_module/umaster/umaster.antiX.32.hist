@@ -1,0 +1,151 @@
+20.08.2022
+==========
+
+$ make disclean
+olej@antix21:~/2022/kernel/load_module/umaster
+
+$ ls
+common.h  inst1.c  inst2.c  Makefile  rem1.c  rem2.c  slave.c  umaster.1.hist  umaster.2.hist
+
+=================================================================================================
+
+$ make
+gcc     inst1.c   -o inst1
+inst1.c:1:10: fatal error: sys/stat.h: Нет такого файла или каталога
+    1 | #include <sys/stat.h>
+      |          ^~~~~~~~~~~~
+compilation terminated.
+make: *** [<встроенное>: inst1] Ошибка 1
+
+
+=================================================================================================
+
+$ aptitude search libc6 | grep ' libc6 '
+i  libc6 - библиотека GNU C: динамически подключаемые библиотеки
+
+$ sudo apt install libc6-dev
+[sudo] пароль для olej: 
+Чтение списков пакетов… Готово
+Построение дерева зависимостей… Готово
+Чтение информации о состоянии… Готово         
+Будут установлены следующие дополнительные пакеты:
+  libc-dev-bin libcrypt-dev libnsl-dev libtirpc-dev linux-libc-dev
+Предлагаемые пакеты:
+  glibc-doc manpages-dev
+Рекомендуемые пакеты:
+  manpages-dev libc-devtools
+Следующие НОВЫЕ пакеты будут установлены:
+  libc-dev-bin libc6-dev libcrypt-dev libnsl-dev libtirpc-dev linux-libc-dev
+Обновлено 0 пакетов, установлено 6 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.
+Необходимо скачать 5 960 kB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 28,0 MB.
+Хотите продолжить? [Д/н] y
+Пол:1 http://ftp.de.debian.org/debian bullseye/main i386 libc-dev-bin i386 2.31-13+deb11u3 [279 kB]
+Пол:2 http://ftp.de.debian.org/debian bullseye/main i386 linux-libc-dev i386 5.10.127-1 [1 517 kB]
+Пол:3 http://ftp.de.debian.org/debian bullseye/main i386 libcrypt-dev i386 1:4.4.18-4 [116 kB]
+Пол:4 http://ftp.de.debian.org/debian bullseye/main i386 libtirpc-dev i386 1.3.1-1 [201 kB]
+Пол:5 http://ftp.de.debian.org/debian bullseye/main i386 libnsl-dev i386 1.3.0-2 [70,6 kB]
+Пол:6 http://ftp.de.debian.org/debian bullseye/main i386 libc6-dev i386 2.31-13+deb11u3 [3 777 kB]
+Получено 5 960 kB за 2с (2 561 kB/s)       
+Выбор ранее не выбранного пакета libc-dev-bin.
+(Чтение базы данных … на данный момент установлено 112818 файлов и каталогов.)
+Подготовка к распаковке …/0-libc-dev-bin_2.31-13+deb11u3_i386.deb …
+Распаковывается libc-dev-bin (2.31-13+deb11u3) …
+Выбор ранее не выбранного пакета linux-libc-dev:i386.
+Подготовка к распаковке …/1-linux-libc-dev_5.10.127-1_i386.deb …
+Распаковывается linux-libc-dev:i386 (5.10.127-1) …
+Выбор ранее не выбранного пакета libcrypt-dev:i386.
+Подготовка к распаковке …/2-libcrypt-dev_1%3a4.4.18-4_i386.deb …
+Распаковывается libcrypt-dev:i386 (1:4.4.18-4) …
+Выбор ранее не выбранного пакета libtirpc-dev:i386.
+Подготовка к распаковке …/3-libtirpc-dev_1.3.1-1_i386.deb …
+Распаковывается libtirpc-dev:i386 (1.3.1-1) …
+Выбор ранее не выбранного пакета libnsl-dev:i386.
+Подготовка к распаковке …/4-libnsl-dev_1.3.0-2_i386.deb …
+Распаковывается libnsl-dev:i386 (1.3.0-2) …
+Выбор ранее не выбранного пакета libc6-dev:i386.
+Подготовка к распаковке …/5-libc6-dev_2.31-13+deb11u3_i386.deb …
+Распаковывается libc6-dev:i386 (2.31-13+deb11u3) …
+Настраивается пакет linux-libc-dev:i386 (5.10.127-1) …
+Настраивается пакет libtirpc-dev:i386 (1.3.1-1) …
+Настраивается пакет libnsl-dev:i386 (1.3.0-2) …
+Настраивается пакет libcrypt-dev:i386 (1:4.4.18-4) …
+Настраивается пакет libc-dev-bin (2.31-13+deb11u3) …
+Настраивается пакет libc6-dev:i386 (2.31-13+deb11u3) …
+Обрабатываются триггеры для man-db (2.10.1-1~bpo11+1) …
+
+
+$ pwd
+/usr/include
+olej@antix21:/usr/include
+$ find ./ -name stat.h
+./i386-linux-gnu/sys/stat.h
+./i386-linux-gnu/bits/stat.h
+./i386-linux-gnu/asm/stat.h
+./linux/stat.h
+./asm-generic/stat.h
+
+=================================================================================================
+
+$ make
+gcc     inst1.c   -o inst1
+gcc     inst2.c   -o inst2
+inst2.c: In function ‘main’:
+inst2.c:53:10: warning: implicit declaration of function ‘init_module’; did you mean ‘SYS_init_module’? [-Wimplicit-function-declaration]
+   53 |    res = init_module(buff, fsize, parms); // вызов sys_init_module()
+      |          ^~~~~~~~~~~
+      |          SYS_init_module
+gcc     rem1.c   -o rem1
+gcc     rem2.c   -o rem2
+rem2.c: In function ‘main’:
+rem2.c:14:10: warning: implicit declaration of function ‘delete_module’; did you mean ‘SYS_delete_module’? [-Wimplicit-function-declaration]
+   14 |    res = delete_module(slave_mod, O_TRUNC);  // flags: O_TRUNC, O_NONBLOCK
+      |          ^~~~~~~~~~~~~
+      |          SYS_delete_module
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+=================================================================================================
+
+$ make disclean
+
+$ make
+gcc     inst1.c   -o inst1
+gcc     inst2.c   -o inst2
+gcc     rem1.c   -o rem1
+gcc     rem2.c   -o rem2
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ sudo ./inst2 slave.ko parm1='строка1' parm2='строка2'
+[sudo] пароль для olej: 
+загрузка модуля: slave.ko parm1=строка1 parm2=строка2 
+размер файла модуля slave.ko = 4180 байт
+модуль slave.ko успешно загружен!
+
+$ dmesg | tail -n1
+[226075.679561] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+
+
+$ sudo ./rem2
+выгружается модуль slave
+модуль slave успешно загружен!
+
+$ dmesg | tail -n2
+[226075.679561] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+[226111.703835] + модуль slave.ko выгружен
+
+=================================================================================================

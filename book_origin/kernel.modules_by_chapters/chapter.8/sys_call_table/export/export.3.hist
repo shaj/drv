@@ -1,0 +1,194 @@
+19.08.2022
+==========
+
+olej@R420:~$ sudo inxi -M
+Machine:   Type: Server System: Dell product: PowerEdge R420 v: N/A serial: 9DDFKY1 
+           Mobo: Dell model: 0CN7CM v: A06 serial: ..CN1374035400RO. BIOS: Dell v: 2.9.0 date: 01/09/2020 
+
+olej@R420:~$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep ' T ' | grep  __x64_sys_close
+ffffffff968c7e50 T __x64_sys_close
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep ' T ' | grep  __x64_sys_open
+ffffffff968c9da0 T __x64_sys_open
+ffffffff968c9e00 T __x64_sys_openat
+ffffffff968f4c60 T __x64_sys_open_tree
+ffffffff96952010 T __x64_sys_open_by_handle_at
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep ' T ' | grep  __x64_sys_open$
+ffffffff968c9da0 T __x64_sys_open
+
+
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep sys_call_table
+ffffffff976002a0 R x32_sys_call_table
+ffffffff976013c0 R sys_call_table
+ffffffff97602400 R ia32_sys_call_table
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep ' sys_call_table'$
+ffffffff976013c0 R sys_call_table
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep ' T ' | grep ' printk'$
+ffffffff97088c3c T printk
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ grep CONFIG_X86= /boot/config-`uname -r`
+CONFIG_X86=y
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ grep CONFIG_64BIT= /boot/config-`uname -r`
+CONFIG_64BIT=y
+
+------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_64p.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_64p.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_64p.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export$ ls *.ko
+md_64p.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export$ sudo insmod md_64p.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module md_64p.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export$ dmesg | tail -n1
+[56280.689516] printk address: ffffffff97088c3c
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export$ sudo grep ' printk'$ /proc/kallsyms 
+ffffffff97088c3c T printk
+
+============================================================================================================
+
+olej@orangepione:~$ sudo inxi -M
+[sudo] пароль для olej: 
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family 
+           rev: N/A serial: 02c000815fd5e717 
+
+olej@orangepione:~$ uname -a
+Linux orangepione 5.15.48-sunxi #22.05.3 SMP Wed Jun 22 07:35:10 UTC 2022 armv7l GNU/Linux
+
+
+
+olej@orangepione:~$ sudo cat /proc/kallsyms | grep ' T ' | grep  ' sys_close'$
+c0292914 T sys_close
+
+olej@orangepione:~$ sudo cat /proc/kallsyms | grep ' T ' | grep  ' sys_open'$
+c0292834 T sys_open
+
+olej@orangepione:~$ sudo cat /proc/kallsyms | grep ' sys_call_table'$
+c01002a4 T sys_call_table
+
+
+olej@orangepione:~/2022/kernel/examples/sys_call_table/export$ make
+make -C /lib/modules/5.15.48-sunxi/build M=/home/olej/2022/kernel/examples/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.48-sunxi»
+  CC [M]  /home/olej/2022/kernel/examples/sys_call_table/export/md_0c.o
+  CC [M]  /home/olej/2022/kernel/examples/sys_call_table/export/md_0o.o
+  MODPOST /home/olej/2022/kernel/examples/sys_call_table/export/Module.symvers
+ERROR: modpost: "sys_open" [/home/olej/2022/kernel/examples/sys_call_table/export/md_0o.ko] undefined!
+ERROR: modpost: "sys_close" [/home/olej/2022/kernel/examples/sys_call_table/export/md_0c.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:134: /home/olej/2022/kernel/examples/sys_call_table/export/Module.symvers] Error 1
+make[2]: *** Deleting file '/home/olej/2022/kernel/examples/sys_call_table/export/Module.symvers'
+make[1]: *** [Makefile:1785: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.48-sunxi»
+make: *** [Makefile:11: all] Ошибка 2
+
+
+olej@orangepione:~$ grep CONFIG_ARM= /boot/config-`uname -r`
+CONFIG_ARM=y
+
+olej@orangepione:~$ grep CONFIG_CPU_32 /boot/config-`uname -r` 
+CONFIG_CPU_32v6K=y
+CONFIG_CPU_32v7=y
+
+============================================================================================================
+
+olej@raspberrypi:~ $ sudo inxi -M
+Machine:   Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 rev: a21041 
+           serial: 00000000f57e2ca8 
+
+olej@raspberrypi:~ $ uname -a
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+
+
+olej@raspberrypi:~ $ sudo cat /proc/kallsyms | grep ' T ' | grep  ' sys_close'$
+80349184 T sys_close
+
+olej@raspberrypi:~ $ sudo cat /proc/kallsyms | grep ' T ' | grep  ' sys_open'$
+8034903c T sys_open
+
+olej@raspberrypi:~ $ sudo cat /proc/kallsyms | grep ' sys_call_table'$
+80100244 T sys_call_table
+
+
+olej@raspberrypi:~/kernel/examples/sys_call_table/export $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/sys_call_table/export/md_0c.o
+  CC [M]  /home/olej/kernel/examples/sys_call_table/export/md_0o.o
+  MODPOST /home/olej/kernel/examples/sys_call_table/export/Module.symvers
+ERROR: modpost: missing MODULE_LICENSE() in /home/olej/kernel/examples/sys_call_table/export/md_0c.o
+ERROR: modpost: missing MODULE_LICENSE() in /home/olej/kernel/examples/sys_call_table/export/md_0o.o
+ERROR: modpost: "sys_open" [/home/olej/kernel/examples/sys_call_table/export/md_0o.ko] undefined!
+ERROR: modpost: "sys_close" [/home/olej/kernel/examples/sys_call_table/export/md_0c.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:134: /home/olej/kernel/examples/sys_call_table/export/Module.symvers] Ошибка 1
+make[2]: *** Удаляется файл «/home/olej/kernel/examples/sys_call_table/export/Module.symvers»
+make[1]: *** [Makefile:1783: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+make: *** [Makefile:11: all] Ошибка 2
+
+------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/sys_call_table/export $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/sys_call_table/export/md_0c.o
+  CC [M]  /home/olej/kernel/examples/sys_call_table/export/md_0o.o
+  MODPOST /home/olej/kernel/examples/sys_call_table/export/Module.symvers
+ERROR: modpost: "sys_open" [/home/olej/kernel/examples/sys_call_table/export/md_0o.ko] undefined!
+ERROR: modpost: "sys_close" [/home/olej/kernel/examples/sys_call_table/export/md_0c.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:134: /home/olej/kernel/examples/sys_call_table/export/Module.symvers] Ошибка 1
+make[2]: *** Удаляется файл «/home/olej/kernel/examples/sys_call_table/export/Module.symvers»
+make[1]: *** [Makefile:1783: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+make: *** [Makefile:11: all] Ошибка 2
+
+
+olej@raspberrypi:~/kernel/examples $ grep CONFIG_ARM= /lib/modules/`uname -r`/build/.config
+CONFIG_ARM=y
+
+olej@raspberrypi:~/kernel/examples $ grep CONFIG_CPU_32 /lib/modules/`uname -r`/build/.config
+CONFIG_CPU_32v6K=y
+CONFIG_CPU_32v7=y
+
+
+olej@raspberrypi:~/kernel/examples $ grep CONFIG_ /lib/modules/`uname -r`/build/.config | grep -v ^# | grep 64
+CONFIG_ARM_ERRATA_643719=y
+CONFIG_IP6_NF_MATCH_EUI64=m
+CONFIG_KEYBOARD_TCA6416=m
+CONFIG_USB_ZR364XX=m
+CONFIG_RADIO_TEA5764=m
+CONFIG_VIDEO_OV5647=m
+CONFIG_VIDEO_OV7640=m
+CONFIG_DVB_L64781=m
+CONFIG_DVB_ISL6405=m
+CONFIG_DVB_ISL6421=m
+CONFIG_DVB_ISL6423=m
+CONFIG_SND_HDA_PREALLOC_SIZE=64
+CONFIG_FB_TFT_AGM1264K_FL=m
+CONFIG_NLS_CODEPAGE_864=m
+CONFIG_XZ_DEC_IA64=y
+
+============================================================================================================

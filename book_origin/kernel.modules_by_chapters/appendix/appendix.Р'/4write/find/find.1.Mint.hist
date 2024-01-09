@@ -1,0 +1,119 @@
+30.06.2022
+==========
+
+olej@mint:~/kernel/sys_call_table/find$ uname -a
+Linux mint 5.4.0-121-generic #137-Ubuntu SMP Wed Jun 15 13:33:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@mint:~/kernel/sys_call_table/find$ ls *.ko
+mod_kct.ko  mod_koes.ko  mod_wrc.ko
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_kct.ko
+insmod: ERROR: could not insert module mod_kct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n5
+[   20.612802] ISO 9660 Extensions: RRIP_1991A
+[  322.337181] + CONFIG_KALLSYMS определено
+[  322.337183] + CONFIG_KALLSYMS_ALL определено
+[  322.337185] + sys_call_table address = ffffffff8ce013c0
+[  322.337188] + + sys_call_table : ffffffff8c0cdf00 ffffffff8c0ce020 ffffffff8c0c9bd0 ffffffff8c0c7c80 ffffffff8c0d2fe0 ffffffff8c0d3200 ffffffff8c0d30a0 ffffffff8c0e6ed0 ffffffff8c0cb820 ffffffff8be36820  ...
+
+==================================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_koes.ko
+insmod: ERROR: could not insert module mod_koes.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n4
+[  564.000441] + CONFIG_KALLSYMS определено
+[  564.000442] + CONFIG_KALLSYMS_ALL определено
+[  564.000443] + sys_call_table address = ffffffff8ce013c0
+[  564.000446] + + sys_call_table : ffffffff8c0cdf00 ffffffff8c0ce020 ffffffff8c0c9bd0 ffffffff8c0c7c80 ffffffff8c0d2fe0 ffffffff8c0d3200 ffffffff8c0d30a0 ffffffff8c0e6ed0 ffffffff8c0cb820 ffffffff8be36820  ...
+
+==================================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep -E 'ffffffff8c0cdf00|ffffffff8c0ce020|ffffffff8c0c9bd0|ffffffff8c0c7c80|ffffffff8c0d2fe0|ffffffff8c0d3200|ffffffff8c0d30a0|ffffffff8c0e6ed0|ffffffff8c0cb820|ffffffff8be36820' /proc/kallsyms 
+ffffffff8be36820 T __x64_sys_mmap
+ffffffff8c0c7c80 T __x64_sys_close
+ffffffff8c0c9bd0 T __x64_sys_open
+ffffffff8c0cb820 T __x64_sys_lseek
+ffffffff8c0cdf00 T __x64_sys_read
+ffffffff8c0ce020 T __x64_sys_write
+ffffffff8c0d2fe0 T __x64_sys_newstat
+ffffffff8c0d30a0 T __x64_sys_newlstat
+ffffffff8c0d3200 T __x64_sys_newfstat
+ffffffff8c0e6ed0 T __x64_sys_poll
+
+
+
+olej@mint:~/kernel/sys_call_table/find$ head -n13 /usr/include/x86_64-linux-gnu/asm/unistd_32.h
+#ifndef _ASM_X86_UNISTD_32_H
+#define _ASM_X86_UNISTD_32_H 1
+
+#define __NR_restart_syscall 0
+#define __NR_exit 1
+#define __NR_fork 2
+#define __NR_read 3
+#define __NR_write 4
+#define __NR_open 5
+#define __NR_close 6
+#define __NR_waitpid 7
+#define __NR_creat 8
+#define __NR_link 9
+
+==================================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_wrc.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_kct.ko
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_koes.ko
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_wrc.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_wrc.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_wrc.ko
+[sudo] пароль для olej:       
+Убито
+
+
+[ 3722.309367] + sys_write address = 00000000ae425520
+[ 3722.309369] + [19]: Hello from kernel!
+[ 3722.309376] BUG: kernel NULL pointer dereference, address: 0000000000000061
+[ 3722.309380] #PF: supervisor read access in kernel mode
+[ 3722.309381] #PF: error_code(0x0000) - not-present page
+
+
+olej@mint:~/kernel/sys_call_table/find$ lsmod | head -n3
+Module                  Size  Used by
+mod_wrc                16384  1
+isofs                  49152  1
+
+==================================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_wrc.ko 
+Убито
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n55
+[  510.442695] + sys_write address = ffffffffa9ace020
+[  510.442698] + [19]: Hello from kernel!
+[  510.442705] BUG: kernel NULL pointer dereference, address: 0000000000000061
+[  510.442709] #PF: supervisor read access in kernel mode
+[  510.442710] #PF: error_code(0x0000) - not-present page
+[  510.442711] PGD 0 P4D 0 
+[  510.442714] Oops: 0000 [#1] SMP PTI
+...
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep __x64_sys_write$ /proc/kallsyms
+ffffffffa9ace020 T __x64_sys_write
+ffffffffab6f19d0 t _eil_addr___x64_sys_write
+
+
+==================================================================================================================

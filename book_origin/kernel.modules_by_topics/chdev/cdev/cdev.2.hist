@@ -1,0 +1,608 @@
+14.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.o
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.c:1:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/../dev.h: In function ‘dev_read’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/../dev.h:21:8: error: implicit declaration of function ‘copy_to_user’; did you mean ‘raw_copy_to_user’? [-Werror=implicit-function-declaration]
+   21 |    if( copy_to_user( buf, hello_str, len ) ) return -EINVAL;
+      |        ^~~~~~~~~~~~
+      |        raw_copy_to_user
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:14: default] Ошибка 2
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel$ sudo cat /proc/kallsyms | grep copy_to_user
+[sudo] пароль для olej:
+ffffffff874caf90 t sched_attr_copy_to_user
+ffffffff875ceb70 T bpf_prog_array_copy_to_user
+ffffffff87913dc0 t kfifo_copy_to_user
+ffffffff87916350 T _copy_to_user
+ffffffff87e7b740 T csum_partial_copy_to_user
+ffffffff888846ec r __ksymtab__copy_to_user
+ffffffff88886a98 r __ksymtab_csum_partial_copy_to_user
+ffffffff888c16f5 r __kstrtab__copy_to_user
+ffffffff888e4635 r __kstrtab_csum_partial_copy_to_user
+ffffffffc0ed0054 r __ksymtab_copy_to_user_fromio        [snd]
+ffffffffc0ed1beb r __kstrtab_copy_to_user_fromio        [snd]
+ffffffffc0ec7df0 T copy_to_user_fromio  [snd]
+
+====================================================================================================================================
+
+</asm-generic/uaccess.h>
+[395]
+#define raw_copy_to_user(to, from, n)					\
+({									\
+    unsigned long __actu_ret;					\
+    uaccess_enable_not_uao();					\
+    __actu_ret = __arch_copy_to_user(__uaccess_mask_ptr(to),	\
+		    (from), (n));			\
+    uaccess_disable_not_uao();					\
+    __actu_ret;							\
+})
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/dyndev.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/dyndev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/dyndev.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel$ ls -l /dev | grep ^c
+crw-r--r--   1 root root       10, 235 июн 14 10:45 autofs
+crw-rw----   1 root disk       10, 234 июн 14 10:45 btrfs-control
+crw--w----   1 root tty         5,   1 июн 14 10:45 console
+crw-------   1 root root       10,  59 июн 14 10:45 cpu_dma_latency
+crw-------   1 root root       10, 203 июн 14 10:45 cuse
+crw-------   1 root root       10,  62 июн 14 10:45 ecryptfs
+crw-rw----   1 root video      29,   0 июн 14 10:45 fb0
+crw-rw-rw-   1 root root        1,   7 июн 14 10:45 full
+crw-rw-rw-   1 root root       10, 229 июн 14 10:45 fuse
+crw-------   1 root root      240,   0 июн 14 10:45 hidraw0
+crw-------   1 root root      240,   1 июн 14 10:45 hidraw1
+crw-------   1 root root      240,   2 июн 14 10:45 hidraw2
+crw-------   1 root root      240,   3 июн 14 10:45 hidraw3
+crw-------   1 root root      240,   4 июн 14 10:45 hidraw4
+crw-------   1 root root      240,   5 июн 14 10:45 hidraw5
+crw-------   1 root root       10, 228 июн 14 10:45 hpet
+crw-------   1 root root       10, 183 июн 14 10:45 hwrng
+crw-rw----   1 root i2c        89,   0 июн 14 10:45 i2c-0
+crw-------   1 root root      238,   0 июн 14 10:45 ipmi0
+crw-r--r--   1 root root        1,  11 июн 14 10:45 kmsg
+crw-rw----+  1 root kvm        10, 232 июн 14 10:45 kvm
+crw-rw----   1 root disk       10, 237 июн 14 10:45 loop-control
+crw-------   1 root root       10, 227 июн 14 10:45 mcelog
+c---------   1 root root      242,   0 июн 14 10:45 megaraid_sas_ioctl_node
+crw-r-----   1 root kmem        1,   1 июн 14 10:45 mem
+crw-rw-rw-   1 root root        1,   3 июн 14 10:45 null
+crw-------   1 root root      241,   0 июн 14 10:45 nvme0
+crw-------   1 root root       10, 144 июн 14 10:45 nvram
+crw-r-----   1 root kmem        1,   4 июн 14 10:45 port
+crw-------   1 root root      108,   0 июн 14 10:45 ppp
+crw-------   1 root root       10,   1 июн 14 10:45 psaux
+crw-rw-rw-   1 root tty         5,   2 июн 14 19:21 ptmx
+crw-------   1 root root      246,   0 июн 14 10:45 ptp0
+crw-------   1 root root      246,   1 июн 14 10:45 ptp1
+crw-rw-rw-   1 root root        1,   8 июн 14 10:45 random
+crw-rw-r--+  1 root netdev     10, 242 июн 14 10:45 rfkill
+crw-------   1 root root      249,   0 июн 14 10:45 rtc0
+crw-rw----   1 root disk       21,   0 июн 14 10:45 sg0
+crw-rw----   1 root disk       21,   1 июн 14 10:45 sg1
+crw-rw----   1 root disk       21,   2 июн 14 10:45 sg2
+crw-rw----   1 root disk       21,   3 июн 14 10:45 sg3
+crw-------   1 root root       10, 231 июн 14 10:45 snapshot
+crw-rw-rw-   1 root tty         5,   0 июн 14 19:05 tty
+crw--w----   1 root tty         4,   0 июн 14 10:45 tty0
+crw--w----   1 root tty         4,   1 июн 14 10:45 tty1
+crw--w----   1 root tty         4,  10 июн 14 10:45 tty10
+crw--w----   1 root tty         4,  11 июн 14 10:45 tty11
+crw--w----   1 root tty         4,  12 июн 14 10:45 tty12
+crw--w----   1 root tty         4,  13 июн 14 10:45 tty13
+crw--w----   1 root tty         4,  14 июн 14 10:45 tty14
+crw--w----   1 root tty         4,  15 июн 14 10:45 tty15
+crw--w----   1 root tty         4,  16 июн 14 10:45 tty16
+crw--w----   1 root tty         4,  17 июн 14 10:45 tty17
+crw--w----   1 root tty         4,  18 июн 14 10:45 tty18
+crw--w----   1 root tty         4,  19 июн 14 10:45 tty19
+crw--w----   1 root tty         4,   2 июн 14 10:45 tty2
+crw--w----   1 root tty         4,  20 июн 14 10:45 tty20
+crw--w----   1 root tty         4,  21 июн 14 10:45 tty21
+crw--w----   1 root tty         4,  22 июн 14 10:45 tty22
+crw--w----   1 root tty         4,  23 июн 14 10:45 tty23
+crw--w----   1 root tty         4,  24 июн 14 10:45 tty24
+crw--w----   1 root tty         4,  25 июн 14 10:45 tty25
+crw--w----   1 root tty         4,  26 июн 14 10:45 tty26
+crw--w----   1 root tty         4,  27 июн 14 10:45 tty27
+crw--w----   1 root tty         4,  28 июн 14 10:45 tty28
+crw--w----   1 root tty         4,  29 июн 14 10:45 tty29
+crw--w----   1 root tty         4,   3 июн 14 10:45 tty3
+crw--w----   1 root tty         4,  30 июн 14 10:45 tty30
+crw--w----   1 root tty         4,  31 июн 14 10:45 tty31
+crw--w----   1 root tty         4,  32 июн 14 10:45 tty32
+crw--w----   1 root tty         4,  33 июн 14 10:45 tty33
+crw--w----   1 root tty         4,  34 июн 14 10:45 tty34
+crw--w----   1 root tty         4,  35 июн 14 10:45 tty35
+crw--w----   1 root tty         4,  36 июн 14 10:45 tty36
+crw--w----   1 root tty         4,  37 июн 14 10:45 tty37
+crw--w----   1 root tty         4,  38 июн 14 10:45 tty38
+crw--w----   1 root tty         4,  39 июн 14 10:45 tty39
+crw--w----   1 root tty         4,   4 июн 14 10:45 tty4
+crw--w----   1 root tty         4,  40 июн 14 10:45 tty40
+crw--w----   1 root tty         4,  41 июн 14 10:45 tty41
+crw--w----   1 root tty         4,  42 июн 14 10:45 tty42
+crw--w----   1 root tty         4,  43 июн 14 10:45 tty43
+crw--w----   1 root tty         4,  44 июн 14 10:45 tty44
+crw--w----   1 root tty         4,  45 июн 14 10:45 tty45
+crw--w----   1 root tty         4,  46 июн 14 10:45 tty46
+crw--w----   1 root tty         4,  47 июн 14 10:45 tty47
+crw--w----   1 root tty         4,  48 июн 14 10:45 tty48
+crw--w----   1 root tty         4,  49 июн 14 10:45 tty49
+crw--w----   1 root tty         4,   5 июн 14 10:45 tty5
+crw--w----   1 root tty         4,  50 июн 14 10:45 tty50
+crw--w----   1 root tty         4,  51 июн 14 10:45 tty51
+crw--w----   1 root tty         4,  52 июн 14 10:45 tty52
+crw--w----   1 root tty         4,  53 июн 14 10:45 tty53
+crw--w----   1 root tty         4,  54 июн 14 10:45 tty54
+crw--w----   1 root tty         4,  55 июн 14 10:45 tty55
+crw--w----   1 root tty         4,  56 июн 14 10:45 tty56
+crw--w----   1 root tty         4,  57 июн 14 10:45 tty57
+crw--w----   1 root tty         4,  58 июн 14 10:45 tty58
+crw--w----   1 root tty         4,  59 июн 14 10:45 tty59
+crw--w----   1 root tty         4,   6 июн 14 10:45 tty6
+crw--w----   1 root tty         4,  60 июн 14 10:45 tty60
+crw--w----   1 root tty         4,  61 июн 14 10:45 tty61
+crw--w----   1 root tty         4,  62 июн 14 10:45 tty62
+crw--w----   1 root tty         4,  63 июн 14 10:45 tty63
+crw--w----   1 root tty         4,   7 июн 14 10:45 tty7
+crw--w----   1 root tty         4,   8 июн 14 10:45 tty8
+crw--w----   1 root tty         4,   9 июн 14 10:45 tty9
+crw-------   1 root root        5,   3 июн 14 10:45 ttyprintk
+crw-rw----   1 root dialout     4,  64 июн 14 10:45 ttyS0
+crw-rw----   1 root dialout     4,  65 июн 14 10:45 ttyS1
+crw-rw----   1 root dialout     4,  74 июн 14 10:45 ttyS10
+crw-rw----   1 root dialout     4,  75 июн 14 10:45 ttyS11
+crw-rw----   1 root dialout     4,  76 июн 14 10:45 ttyS12
+crw-rw----   1 root dialout     4,  77 июн 14 10:45 ttyS13
+crw-rw----   1 root dialout     4,  78 июн 14 10:45 ttyS14
+crw-rw----   1 root dialout     4,  79 июн 14 10:45 ttyS15
+crw-rw----   1 root dialout     4,  80 июн 14 10:45 ttyS16
+crw-rw----   1 root dialout     4,  81 июн 14 10:45 ttyS17
+crw-rw----   1 root dialout     4,  82 июн 14 10:45 ttyS18
+crw-rw----   1 root dialout     4,  83 июн 14 10:45 ttyS19
+crw-rw----   1 root dialout     4,  66 июн 14 10:45 ttyS2
+crw-rw----   1 root dialout     4,  84 июн 14 10:45 ttyS20
+crw-rw----   1 root dialout     4,  85 июн 14 10:45 ttyS21
+crw-rw----   1 root dialout     4,  86 июн 14 10:45 ttyS22
+crw-rw----   1 root dialout     4,  87 июн 14 10:45 ttyS23
+crw-rw----   1 root dialout     4,  88 июн 14 10:45 ttyS24
+crw-rw----   1 root dialout     4,  89 июн 14 10:45 ttyS25
+crw-rw----   1 root dialout     4,  90 июн 14 10:45 ttyS26
+crw-rw----   1 root dialout     4,  91 июн 14 10:45 ttyS27
+crw-rw----   1 root dialout     4,  92 июн 14 10:45 ttyS28
+crw-rw----   1 root dialout     4,  93 июн 14 10:45 ttyS29
+crw-rw----   1 root dialout     4,  67 июн 14 10:45 ttyS3
+crw-rw----   1 root dialout     4,  94 июн 14 10:45 ttyS30
+crw-rw----   1 root dialout     4,  95 июн 14 10:45 ttyS31
+crw-rw----   1 root dialout     4,  68 июн 14 10:45 ttyS4
+crw-rw----   1 root dialout     4,  69 июн 14 10:45 ttyS5
+crw-rw----   1 root dialout     4,  70 июн 14 10:45 ttyS6
+crw-rw----   1 root dialout     4,  71 июн 14 10:45 ttyS7
+crw-rw----   1 root dialout     4,  72 июн 14 10:45 ttyS8
+crw-rw----   1 root dialout     4,  73 июн 14 10:45 ttyS9
+crw-rw----   1 root kvm        10,  60 июн 14 10:45 udmabuf
+crw-------   1 root root       10, 239 июн 14 10:45 uhid
+crw-------   1 root root       10, 223 июн 14 10:45 uinput
+crw-rw-rw-   1 root root        1,   9 июн 14 10:45 urandom
+crw-------   1 root root       10, 240 июн 14 10:45 userio
+crw-------   1 root root       10,  58 июн 14 10:46 vboxdrv
+crw-rw-rw-   1 root root       10,  57 июн 14 10:46 vboxdrvu
+crw-------   1 root root       10,  56 июн 14 10:46 vboxnetctl
+crw-rw----   1 root tty         7,   0 июн 14 10:45 vcs
+crw-rw----   1 root tty         7,   1 июн 14 10:45 vcs1
+crw-rw----   1 root tty         7,   2 июн 14 10:45 vcs2
+crw-rw----   1 root tty         7,   3 июн 14 10:45 vcs3
+crw-rw----   1 root tty         7,   4 июн 14 10:45 vcs4
+crw-rw----   1 root tty         7,   5 июн 14 10:45 vcs5
+crw-rw----   1 root tty         7,   6 июн 14 10:45 vcs6
+crw-rw----   1 root tty         7,   7 июн 14 10:45 vcs7
+crw-rw----   1 root tty         7, 128 июн 14 10:45 vcsa
+crw-rw----   1 root tty         7, 129 июн 14 10:45 vcsa1
+crw-rw----   1 root tty         7, 130 июн 14 10:45 vcsa2
+crw-rw----   1 root tty         7, 131 июн 14 10:45 vcsa3
+crw-rw----   1 root tty         7, 132 июн 14 10:45 vcsa4
+crw-rw----   1 root tty         7, 133 июн 14 10:45 vcsa5
+crw-rw----   1 root tty         7, 134 июн 14 10:45 vcsa6
+crw-rw----   1 root tty         7, 135 июн 14 10:45 vcsa7
+crw-rw----   1 root tty         7,  64 июн 14 10:45 vcsu
+crw-rw----   1 root tty         7,  65 июн 14 10:45 vcsu1
+crw-rw----   1 root tty         7,  66 июн 14 10:45 vcsu2
+crw-rw----   1 root tty         7,  67 июн 14 10:45 vcsu3
+crw-rw----   1 root tty         7,  68 июн 14 10:45 vcsu4
+crw-rw----   1 root tty         7,  69 июн 14 10:45 vcsu5
+crw-rw----   1 root tty         7,  70 июн 14 10:45 vcsu6
+crw-rw----   1 root tty         7,  71 июн 14 10:45 vcsu7
+crw-------   1 root root       10,  63 июн 14 10:45 vga_arbiter
+crw-------   1 root root       10, 137 июн 14 10:45 vhci
+crw-------   1 root root       10, 238 июн 14 10:45 vhost-net
+crw-------   1 root root       10, 241 июн 14 10:45 vhost-vsock
+crw-rw-rw-   1 root root        1,   5 июн 14 10:45 zero
+crw-------   1 root root       10, 249 июн 14 10:45 zfs
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel$ ls -l /dev | grep ^c | head -n15
+crw-r--r--   1 root root       10, 235 июн 14 10:45 autofs
+crw-rw----   1 root disk       10, 234 июн 14 10:45 btrfs-control
+crw--w----   1 root tty         5,   1 июн 14 10:45 console
+crw-------   1 root root       10,  59 июн 14 10:45 cpu_dma_latency
+crw-------   1 root root       10, 203 июн 14 10:45 cuse
+crw-------   1 root root       10,  62 июн 14 10:45 ecryptfs
+crw-rw----   1 root video      29,   0 июн 14 10:45 fb0
+crw-rw-rw-   1 root root        1,   7 июн 14 10:45 full
+crw-rw-rw-   1 root root       10, 229 июн 14 10:45 fuse
+crw-------   1 root root      240,   0 июн 14 10:45 hidraw0
+crw-------   1 root root      240,   1 июн 14 10:45 hidraw1
+crw-------   1 root root      240,   2 июн 14 10:45 hidraw2
+crw-------   1 root root      240,   3 июн 14 10:45 hidraw3
+crw-------   1 root root      240,   4 июн 14 10:45 hidraw4
+crw-------   1 root root      240,   5 июн 14 10:45 hidraw5
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod fixdev.ko major=240
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module fixdev.ko: Device or resource busy
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ dmesg | tail -n1
+[31044.639034] === Can not register char device region
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod fixdev.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ dmesg | tail -n1
+[31255.113928] =========== module installed 235:0 ==============
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ lsmod | grep fix
+fixdev                 16384  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /proc/devices | grep my_
+235 my_cdev_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /proc/devices | grep my_
+235 my_cdev_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc c 235 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /dev/abc
+crw-rw-rw- 1 root root 235, 0 июн 14 19:30 /dev/abc
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /dev/abc 
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rm /dev/abc
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rmmod fixdev 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ lsmod | grep fix
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ 
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod fixdev.ko major=233
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ dmesg | tail -n1
+[31781.749037] =========== module installed 233:0 ==============
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /proc/devices | grep my_
+233 my_cdev_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 ./z0 c 233 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l | grep ^c
+crw-rw-rw- 1 root root 233, 0 июн 14 19:40 z0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat ./z0
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rmmod fixdev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rm z0
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/dyndev.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/dyndev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/dyndev.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev/fixdev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod fixdev.ko
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ dmesg | tail -n1
+[35171.409549] =========== module installed 235:0 ==============
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc c 235 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /dev/abc
+crw-rw-rw- 1 root root 235, 0 июн 14 20:32 /dev/abc
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /dev/abc 
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ dmesg | tail -n5
+[35171.409549] =========== module installed 235:0 ==============
+[35277.402110] === read : 131072
+[35277.402117] === read return : 14
+[35277.402137] === read : 131072
+[35277.402138] === read return : 0
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc2 c 255 2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc3 c 255 3
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /dev/abc*
+crw-rw-rw- 1 root root 235, 0 июн 14 20:32 /dev/abc
+crw-rw-rw- 1 root root 255, 2 июн 14 20:41 /dev/abc2
+crw-rw-rw- 1 root root 255, 3 июн 14 20:41 /dev/abc3
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /dev/abc2
+cat: /dev/abc2: Нет такого устройства или адреса
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /dev/abc
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /dev/abc3
+cat: /dev/abc3: Нет такого устройства или адреса
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc1 c 255 1
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /dev/abc1
+cat: /dev/abc1: Нет такого устройства или адреса
+
+====================================================================================================================================
+
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod fixdev.ko
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ dmesg | tail -n1
+[ 7425.221782] =========== module installed 235:0 ==============
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc0 c 235 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc1 c 235 1
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc2 c 235 2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 /dev/abc3 c 235 3
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /dev/abc*
+Hello, world!
+Hello, world!
+Hello, world!
+cat: /dev/abc3: Нет такого устройства или адреса
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys$ ls -l /dev/{null,zero}
+crw-rw-rw- 1 root root 1, 3 июн 15 09:59 /dev/null
+crw-rw-rw- 1 root root 1, 5 июн 15 09:59 /dev/zero
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys$ ls -l /dev/random
+crw-rw-rw- 1 root root 1, 8 июн 15 09:59 /dev/random
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rm /dev/abc0
+[sudo] пароль для olej:       
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rm /dev/abc1
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rm /dev/abc2
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rm /dev/abc3
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls /dev/abc*
+ls: невозможно получить доступ к '/dev/abc*': Нет такого файла или каталога
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/cdev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /proc/devices | grep my_
+235 my_cdev_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo mknod -m0666 ./z2 c 235 2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l | grep ^c
+crw-rw-rw- 1 root root 235, 2 июн 15 12:54 z2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat ./z2
+Hello, world!
+
+====================================================================================================================================
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys$ cat /proc/devices | grep my_cdev_dev
+235 my_cdev_dev
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys$ ls -l /sys/module/fixdev
+итого 0
+-r--r--r-- 1 root root 4096 июн 15 13:31 coresize
+drwxr-xr-x 2 root root    0 июн 15 13:31 holders
+-r--r--r-- 1 root root 4096 июн 15 13:31 initsize
+-r--r--r-- 1 root root 4096 июн 15 13:31 initstate
+drwxr-xr-x 2 root root    0 июн 15 13:31 notes
+drwxr-xr-x 2 root root    0 июн 15 13:31 parameters
+-r--r--r-- 1 root root 4096 июн 15 13:31 refcnt
+drwxr-xr-x 2 root root    0 июн 15 13:31 sections
+-r--r--r-- 1 root root 4096 июн 15 13:31 srcversion
+-r--r--r-- 1 root root 4096 июн 15 13:31 taint
+--w------- 1 root root 4096 июн 15 12:02 uevent
+-r--r--r-- 1 root root 4096 июн 15 13:31 version
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod fixdev.ko 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rmmod fixdev
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/Kexamples-223.ex/dev$ udevadm monitor --property 
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
+
+KERNEL[13886.300015] add      /module/fixdev (module)
+ACTION=add
+DEVPATH=/module/fixdev
+SUBSYSTEM=module
+SEQNUM=10311
+
+UDEV  [13886.303232] add      /module/fixdev (module)
+ACTION=add
+DEVPATH=/module/fixdev
+SUBSYSTEM=module
+SEQNUM=10311
+USEC_INITIALIZED=13886303097
+
+KERNEL[13899.353422] remove   /module/fixdev (module)
+ACTION=remove
+DEVPATH=/module/fixdev
+SUBSYSTEM=module
+SEQNUM=10312
+
+UDEV  [13899.357567] remove   /module/fixdev (module)
+ACTION=remove
+DEVPATH=/module/fixdev
+SUBSYSTEM=module
+SEQNUM=10312
+USEC_INITIALIZED=13899353504
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod fixdev.ko 
+[sudo] пароль для olej:          
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ udevadm info --path=/module/fixdev --export
+P: /module/fixdev
+L: 0
+E: DEVPATH=/module/fixdev
+E: SUBSYSTEM=module
+
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo insmod dyndev.ko
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ lsmod | head -n2
+Module                  Size  Used by
+dyndev                 16384  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ dmesg | tail -n1
+[18699.439749] ======== module installed 234:[0-2] ===========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /dev/dyn*
+crw------- 1 root root 234, 0 июн 15 15:10 /dev/dyn_0
+crw------- 1 root root 234, 1 июн 15 15:10 /dev/dyn_1
+crw------- 1 root root 234, 2 июн 15 15:10 /dev/dyn_2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo cat /dev/dyn_2
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls /sys/class/dyn*
+dyn_0  dyn_1  dyn_2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -ld /sys/class/d*
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/dax
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/devcoredump
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/devfreq
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/devfreq-event
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/dma
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/dmi
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/drm
+drwxr-xr-x 2 root root 0 июн 15 09:59 /sys/class/drm_dp_aux_dev
+drwxr-xr-x 2 root root 0 июн 15 15:10 /sys/class/dyn_class
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /sys/class/dyn*
+итого 0
+lrwxrwxrwx 1 root root 0 июн 15 15:13 dyn_0 -> ../../devices/virtual/dyn_class/dyn_0
+lrwxrwxrwx 1 root root 0 июн 15 15:13 dyn_1 -> ../../devices/virtual/dyn_class/dyn_1
+lrwxrwxrwx 1 root root 0 июн 15 15:13 dyn_2 -> ../../devices/virtual/dyn_class/dyn_2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ tree /sys/class/dyn_class/dyn_0
+/sys/class/dyn_class/dyn_0
+├── dev
+├── power
+│   ├── async
+│   ├── autosuspend_delay_ms
+│   ├── control
+│   ├── runtime_active_kids
+│   ├── runtime_active_time
+│   ├── runtime_enabled
+│   ├── runtime_status
+│   ├── runtime_suspended_time
+│   └── runtime_usage
+├── subsystem -> ../../../../class/dyn_class
+└── uevent
+
+2 directories, 11 files
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo cat /proc/modules | grep dyn
+dyndev 16384 0 - Live 0xffffffffc0dc6000 (OE)
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ cat /proc/devices | grep dyn
+234 my_dyndev_mod
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /dev/dyn*
+crw------- 1 root root 234, 0 июн 15 15:10 /dev/dyn_0
+crw------- 1 root root 234, 1 июн 15 15:10 /dev/dyn_1
+crw------- 1 root root 234, 2 июн 15 15:10 /dev/dyn_2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ sudo rmmod dyndev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /dev/dyn*
+ls: невозможно получить доступ к '/dev/dyn*': Нет такого файла или каталога
+
+
+====================================================================================================================================
+
+

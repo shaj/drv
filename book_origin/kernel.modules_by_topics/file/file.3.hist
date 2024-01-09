@@ -1,0 +1,313 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.c: In function ‘kread_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.c:24:28: warning: passing argument 3 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   24 |     n = kernel_read( f, 0, buff, BUF_LEN );
+      |                            ^~~~
+      |                            |
+      |                            char *
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.c:2:
+./include/linux/fs.h:3022:51: note: expected ‘size_t’ {aka ‘long unsigned int’} but argument is of type ‘char *’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                   ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.c:8:17: warning: passing argument 4 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+    8 | #define BUF_LEN 255
+      |                 ^~~
+      |                 |
+      |                 int
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.c:24:34: note: in expansion of macro ‘BUF_LEN’
+   24 |     n = kernel_read( f, 0, buff, BUF_LEN );
+      |                                  ^~~~~~~
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.c:2:
+./include/linux/fs.h:3022:59: note: expected ‘loff_t *’ {aka ‘long long int *’} but argument is of type ‘int’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                           ^~~~~~~~
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.c: In function ‘kread_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.c:20:13: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+   20 |     set_fs( get_ds() );
+      |             ^~~~~~
+      |             get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.c:20:13: error: incompatible type for argument 1 of ‘set_fs’
+   20 |     set_fs( get_ds() );
+      |             ^~~~~~~~
+      |             |
+      |             int
+In file included from ./include/linux/uaccess.h:11,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.c:4:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/file] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:14: default] Ошибка 2
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_file.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_file.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n 7
+[25139.286729] *** openning file: /etc/apt/sources.list
+[25139.286737] *** read first 255 bytes:
+[25139.286738] #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+               # This system was installed using small removable media
+               # (e.g. netinst, live or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of the installation
+[25139.286739] *** close file
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat /etc/apt/sources.list
+#deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+# This system was installed using small removable media
+# (e.g. netinst, live or single CD). The matching "deb cdrom"
+# entries were disabled at the end of the installation process.
+# For information about how to configure apt package sources,
+# see the sources.list(5) manual.
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ 
+cp mod_file.c mod_file.1.c 
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_file.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_file.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n 8
+[28135.800282] *** openning file: /etc/apt/sources.list
+[28135.800291] *** read 80 bytes [80]]: #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib ma
+[28135.800293] *** read 80 bytes [160]]: in
+               # This system was installed using small removable media
+               # (e.g. netinst, live
+[28135.800294] *** read 80 bytes [240]]:  or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[28135.800294] *** close file
+
+
+lej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat /etc/apt/sources.list
+#deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+# This system was installed using small removable media
+# (e.g. netinst, live or single CD). The matching "deb cdrom"
+# entries were disabled at the end of the installation process.
+# For information about how to configure apt package sources,
+# see the sources.list(5) manual.
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make 
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_file.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_file.ko
+insmod: ERROR: could not insert module mod_file.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n 14
+[28580.154599] *** openning file: /etc/apt/sources.list
+[28580.154608] *** read 80 bytes [80]: #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib ma
+[28580.154610] *** read 80 bytes [160]: in
+               # This system was installed using small removable media
+               # (e.g. netinst, live
+[28580.154611] *** read 80 bytes [240]:  or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[28580.154612] *** read 80 bytes [320]: he installation process.
+               # For information about how to configure apt package so
+[28580.154613] *** read 41 bytes [361]: urces,
+               # see the sources.list(5) manual.
+
+[28580.154613] *** read EOF
+[28580.154614] *** close file
+
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ make 
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_file.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_file.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_file.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ sudo insmod mod_file.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_file.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ dmesg | tail -n 19
+[32050.317596] *** openning file: /etc/apt/sources.list
+[32050.317605] *** read 80 bytes:
+               #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib ma
+[32050.317606] *** read 80 bytes:
+               in
+               # This system was installed using small removable media
+               # (e.g. netinst, live
+[32050.317607] *** read 80 bytes:
+                or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[32050.317608] *** read 80 bytes:
+               he installation process.
+               # For information about how to configure apt package so
+[32050.317609] *** read 41 bytes:
+               urces,
+               # see the sources.list(5) manual.
+
+[32050.317609] *** read EOF
+[32050.317610] *** close file
+
+
+=======================================================================================================================================
+
+
+<linux/fs.h>
+[2996]
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+extern ssize_t kernel_write(struct file *, const void *, size_t, loff_t *);
+extern ssize_t __kernel_write(struct file *, const void *, size_t, loff_t *);
+extern struct file * open_exec(const char *);
+
+
+https://stackoverflow.com/questions/1184274/read-write-files-within-a-linux-kernel-module
+
+Since version 4.14 of Linux kernel, vfs_read and vfs_write functions are no longer exported for use in modules. Instead, functions exclusively for kernel's file access are provided:
+
+# Read the file from the kernel space.
+ssize_t kernel_read(struct file *file, void *buf, size_t count, loff_t *pos);
+
+# Write the file from the kernel space.
+ssize_t kernel_write(struct file *file, const void *buf, size_t count,
+            loff_t *pos);
+
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ make 
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ sudo insmod mod_write.ko file=xxx1
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_write.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ dmesg | tail -n 5
+[33734.256673] mod_write: unknown parameter 'file' ignored
+[33734.256720] *** openning file: ./module.log
+[33734.256788] *** file open ./module.log
+[33734.256813] *** write 16 bytes
+[33734.256813] *** close file
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ modinfo mod_write.ko 
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.ko
+license:        GPL
+version:        2.1
+author:         Oleg Tsiliuric
+srcversion:     B7D0B34CD486CEBE48C2660
+depends:        
+retpoline:      Y
+name:           mod_write
+vermagic:       5.4.0-121-generic SMP mod_unload modversions 
+parm:           log:charp
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ ls -l module.log 
+-rw------- 1 olej olej 16 июн 24 19:36 module.log
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ cat module.log 
+...............
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ sudo insmod mod_write.ko log=xxx1
+insmod: ERROR: could not insert module mod_write.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ ls -l xxx1
+-rw------- 1 root root 16 июн 24 19:39 xxx1
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ cat xxx1
+cat: xxx1: Отказано в доступе
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ sudo cat xxx1
+...............
+
+
+=======================================================================================================================================
+
+<uapi/linux/stat.h>
+[29]
+
+#define S_IRWXU 00700
+#define S_IRUSR 00400
+#define S_IWUSR 00200
+#define S_IXUSR 00100
+
+#define S_IRWXG 00070
+#define S_IRGRP 00040
+#define S_IWGRP 00020
+#define S_IXGRP 00010
+
+#define S_IRWXO 00007
+#define S_IROTH 00004
+#define S_IWOTH 00002
+#define S_IXOTH 00001
+
+=======================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ make 
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_read.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ sudo insmod mod_write.ko log=xxx3
+insmod: ERROR: could not insert module mod_write.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ ls -l xxx*
+-rw----r-- 1 root root 16 июн 24 19:48 xxx2
+-rw-r--r-- 1 root root 16 июн 24 19:49 xxx3
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ sudo cat xxx*
+...............
+...............
+
+
+=======================================================================================================================================

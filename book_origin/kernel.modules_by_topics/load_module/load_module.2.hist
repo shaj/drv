@@ -1,0 +1,172 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module$ make
+=============== making all in master =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/slave.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c: In function ‘mod_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:46:27: warning: passing argument 3 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   46 |    n = kernel_read( f, 0, buff, len );
+      |                           ^~~~
+      |                           |
+      |                           void *
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:1:
+./include/linux/fs.h:3022:51: note: expected ‘size_t’ {aka ‘long unsigned int’} but argument is of type ‘void *’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                   ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:46:33: warning: passing argument 4 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   46 |    n = kernel_read( f, 0, buff, len );
+      |                                 ^~~
+      |                                 |
+      |                                 long int
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:1:
+./include/linux/fs.h:3022:59: note: expected ‘loff_t *’ {aka ‘long long int *’} but argument is of type ‘long int’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                           ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:47:50: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   47 |    printk( "+ считано из файла %s %d байт\n", slave_name, n );
+      |                                                 ~^                          ~
+      |                                                  |                          |
+      |                                                  int                        size_t {aka long unsigned int}
+      |                                                 %ld
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:54:14: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+   54 |      set_fs( get_ds() );
+      |              ^~~~~~
+      |              get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:54:14: error: incompatible type for argument 1 of ‘set_fs’
+   54 |      set_fs( get_ds() );
+      |              ^~~~~~~~
+      |              |
+      |              int
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/mm.h:99,
+                 from ./include/linux/kallsyms.h:12,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/../find.c:1,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:4:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c: In function ‘mod_exit’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:85:14: error: incompatible type for argument 1 of ‘set_fs’
+   85 |      set_fs( get_ds() );
+      |              ^~~~~~~~
+      |              |
+      |              int
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/mm.h:99,
+                 from ./include/linux/kallsyms.h:12,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/../find.c:1,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.c:4:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master/master.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:12: module] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/master»
+=============== making all in plugin =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c: In function ‘load_slave’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:41:27: warning: passing argument 3 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   41 |    n = kernel_read( f, 0, buff, len );
+      |                           ^~~~
+      |                           |
+      |                           void *
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:1:
+./include/linux/fs.h:3022:51: note: expected ‘size_t’ {aka ‘long unsigned int’} but argument is of type ‘void *’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                   ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:41:33: warning: passing argument 4 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   41 |    n = kernel_read( f, 0, buff, len );
+      |                                 ^~~
+      |                                 |
+      |                                 long int
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:1:
+./include/linux/fs.h:3022:59: note: expected ‘loff_t *’ {aka ‘long long int *’} but argument is of type ‘long int’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                           ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:42:50: warning: format ‘%d’ expects argument of type ‘int’, but argument 3 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   42 |    printk( "+ считано из файла %s %d байт\n", fname, n );
+      |                                                 ~^                     ~
+      |                                                  |                     |
+      |                                                  int                   size_t {aka long unsigned int}
+      |                                                 %ld
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:51:14: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+   51 |      set_fs( get_ds() );
+      |              ^~~~~~
+      |              get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:51:14: error: incompatible type for argument 1 of ‘set_fs’
+   51 |      set_fs( get_ds() );
+      |              ^~~~~~~~
+      |              |
+      |              int
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/mm.h:99,
+                 from ./include/linux/kallsyms.h:12,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/../find.c:1,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:5:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c: In function ‘unload_slave’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:64:12: error: incompatible type for argument 1 of ‘set_fs’
+   64 |    set_fs( get_ds() );
+      |            ^~~~~~~~
+      |            |
+      |            int
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/mm.h:99,
+                 from ./include/linux/kallsyms.h:12,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/../find.c:1,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:5:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c: In function ‘sys_str_translate’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:83:4: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+   83 |    long (*loaded_str_translate)( const char *buf );
+      |    ^~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.c:84:48: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   84 |    printk( "+ системный запрос %d байт: %s\n", count, buf_msg );
+      |                                               ~^                  ~~~~~
+      |                                                |                  |
+      |                                                int                size_t {aka long unsigned int}
+      |                                               %ld
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:15: module] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin»
+=============== making all in umaster =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.ko
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster»
+
+============================================================================================================================================================
+
+

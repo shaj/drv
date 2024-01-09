@@ -1,0 +1,130 @@
+28.06.2022
+==========
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep ' T ' | grep ' vfs_'
+ffffffff8b61bfb0 T vfs_fadvise
+ffffffff8b6c7670 T vfs_fallocate
+ffffffff8b6c8310 T vfs_truncate
+ffffffff8b6c9770 T vfs_open
+ffffffff8b6c9d80 T vfs_setpos
+ffffffff8b6c9df0 T vfs_llseek
+ffffffff8b6c9e30 T vfs_readf
+ffffffff8b6c9e70 T vfs_writef
+ffffffff8b6ca410 T vfs_dedupe_file_range_one
+ffffffff8b6ca560 T vfs_dedupe_file_range
+ffffffff8b6cb010 T vfs_clone_file_range
+ffffffff8b6cb960 T vfs_write
+ffffffff8b6cbcf0 T vfs_iter_read
+ffffffff8b6cc2f0 T vfs_iter_write
+ffffffff8b6cd500 T vfs_copy_file_range
+ffffffff8b6cdc70 T vfs_read
+ffffffff8b6ce460 T vfs_readv
+ffffffff8b6cf380 T vfs_get_tree
+ffffffff8b6d15c0 T vfs_get_super
+ffffffff8b6d2790 T vfs_getattr_nosec
+ffffffff8b6d2840 T vfs_getattr
+ffffffff8b6d2890 T vfs_statx_fd
+ffffffff8b6d2920 T vfs_statx
+ffffffff8b6d8ad0 T vfs_get_link
+ffffffff8b6dbe20 T vfs_rmdir
+ffffffff8b6dbfd0 T vfs_unlink
+ffffffff8b6dc210 T vfs_tmpfile
+ffffffff8b6dc320 T vfs_rename
+ffffffff8b6dcdb0 T vfs_whiteout
+ffffffff8b6dceb0 T vfs_mknod
+ffffffff8b6dd0e0 T vfs_create
+ffffffff8b6dd270 T vfs_symlink
+ffffffff8b6dd400 T vfs_mkobj
+ffffffff8b6dd5a0 T vfs_mkdir
+ffffffff8b6dd760 T vfs_link
+ffffffff8b6dfe80 T vfs_path_lookup
+ffffffff8b6e13b0 T vfs_readlink
+ffffffff8b6e2b40 T vfs_ioctl
+ffffffff8b6ec1f0 T vfs_ioc_fssetxattr_check
+ffffffff8b6ec790 T vfs_ioc_setflags_prepare
+ffffffff8b6f2420 T vfs_create_mount
+ffffffff8b6f2600 T vfs_kern_mount
+ffffffff8b6f2620 T vfs_submount
+ffffffff8b6f9780 T vfs_getxattr_alloc
+ffffffff8b6f98a0 T vfs_getxattr
+ffffffff8b6f99e0 T vfs_listxattr
+ffffffff8b6fa640 T vfs_removexattr
+ffffffff8b6face0 T vfs_setxattr
+ffffffff8b708c20 T vfs_fsync_range
+ffffffff8b708ca0 T vfs_fsync
+ffffffff8b70b630 T vfs_get_fsid
+ffffffff8b70b8f0 T vfs_statfs
+ffffffff8b70d090 T vfs_dup_fs_context
+ffffffff8b70d220 T vfs_parse_fs_param
+ffffffff8b70d3e0 T vfs_parse_fs_string
+ffffffff8b70d7f0 T vfs_clean_context
+ffffffff8b741020 T vfs_cancel_lock
+ffffffff8b743470 T vfs_test_lock
+ffffffff8b743b70 T vfs_setlease
+ffffffff8b744d70 T vfs_lock_file
+ffffffff8d0eb69f T vfs_caches_init_early
+ffffffff8d0eb71d T vfs_caches_init
+
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep ' T ' | grep ' vfs_' | wc -l
+62
+
+=========================================================================================================================
+
+#define get_fs()	(current->thread.addr_limit)
+static inline void set_fs(mm_segment_t fs)
+{
+    current->thread.addr_limit = fs;
+    /* On user-mode return, check fs is correct */
+    set_thread_flag(TIF_FSCHECK);
+}
+
+=========================================================================================================================
+
+29.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_read.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_read.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n19
+[  435.743930] +++ openning file: /etc/apt/sources.list
+[  435.743940] +++ read 80 bytes [80]:
+               #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib ma
+[  435.743941] +++ read 80 bytes [160]:
+               in
+               # This system was installed using small removable media
+               # (e.g. netinst, live
+[  435.743942] +++ read 80 bytes [240]:
+                or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[  435.743943] +++ read 80 bytes [320]:
+               he installation process.
+               # For information about how to configure apt package so
+[  435.743944] +++ read 41 bytes [361]:
+               urces,
+               # see the sources.list(5) manual.
+
+[  435.743945] +++ read EOF
+[  435.743945] +++ close file
+
+-------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat module.log
+...............
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_read.ko file=module.log
+insmod: ERROR: could not insert module mod_read.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n6
+[  594.934735] +++ openning file: module.log
+[  594.934745] +++ read 16 bytes [16]:
+               ...............
+
+[  594.934746] +++ read EOF
+[  594.934746] +++ close file
+
+=========================================================================================================================

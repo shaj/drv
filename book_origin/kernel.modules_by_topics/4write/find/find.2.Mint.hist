@@ -1,0 +1,292 @@
+02.07.2022
+==========
+
+olej@mint:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_kct.ko
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_koes.ko
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@mint:~/kernel/sys_call_table/find$ ls *.ko
+mod_kct.ko  mod_koes.ko  mod_rct.ko  mod_wrc.ko
+
+======================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_kct.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_kct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n2
+[19079.738421] + sys_call_table address = ffffffff916013c0
+[19079.738426] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+------------------------------------------------------------------------------------------------------
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_kct.ko
+insmod: ERROR: could not insert module mod_kct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n2
+[19684.926740] + sys_call_table address = ffffffff916013c0
+[19684.926746] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_koes.ko
+insmod: ERROR: could not insert module mod_koes.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n2
+[19696.213673] + sys_call_table address = ffffffff916013c0
+[19696.213675] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep sys_call_table /proc//kallsyms 
+ffffffff916002a0 R x32_sys_call_table
+ffffffff916013c0 R sys_call_table
+ffffffff91602400 R ia32_sys_call_table
+
+------------------------------------------------------------------------------------------------------
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_koes.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_koes.ko: Operation not permitted
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n2
+[29172.899123] + sys_call_table address = ffffffff916013c0
+[29172.899142] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+------------------------------------------------------------------------------------------------------
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n7
+[29675.279635] + openning file: /proc/kallsyms
+[29675.279638] + op. table => 0000000000000000
+[29675.775904] + ffffffff916013c0 R sys_call_table
+[29675.775912] + ffffffff916013c0
+[29675.775914] + sys_call_table address = ffffffff916013c0
+[29675.775921] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+[29675.775923] + close file: /proc/kallsyms
+
+======================================================================================================
+
+03.07.2022
+==========
+
+olej@mint:~/kernel/sys_call_table/find$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.o
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_kct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_kct.ko
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_koes.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_koes.ko
+  CC [M]  /home/olej/kernel/sys_call_table/find/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/find/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n7
+[46934.229061] + op. table => 0000000000000000
+[46934.877977] + ffffffff916013c0 R sys_call_table
+[46934.877981] + ffffffff916013c0
+[46934.877982] + ffffffff916013c0
+[46934.877983] + close file: /proc/kallsyms
+[46934.877986] + sys_call_table address = ffffffff916013c0
+[46934.877986] + error=0
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep sys_call_table /proc/kallsyms
+ffffffff916002a0 R x32_sys_call_table
+ffffffff916013c0 R sys_call_table
+ffffffff91602400 R ia32_sys_call_table
+
+======================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n9
+[51090.021242] + openning file: /proc/kallsyms
+[51090.021246] + op. table => 0000000000000000
+[51090.651840] + ffffffff916013c0 R sys_call_table
+[51090.651845] + ffffffff916013c0
+[51090.651846] + ffffffff916013c0
+[51090.651847] + ffffffff916013c0
+[51090.651848] + close file: /proc/kallsyms
+[51090.651851] + sys_call_table address = ffffffff916013c0
+[51090.651851] + error=0
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ' sys_call_table$' /proc/kallsyms
+ffffffff916013c0 R sys_call_table
+
+======================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko debug=1
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n7
+[52464.838777] + sys_call_table address = ffffffff916013c0
+[52464.838778] + error=0
+[52704.286761] + openning file: /proc/kallsyms
+[52704.810012] + ffffffff916013c0 R sys_call_table
+[52704.810023] + ffffffff916013c0
+[52704.810026] + close file: /proc/kallsyms
+[52704.810046] + sys_call_table address = ffffffff916013c0
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n3
+[52719.073320] + openning file: /proc/kallsyms
+[52719.738983] + close file: /proc/kallsyms
+[52719.738996] + sys_call_table address = ffffffff916013c0
+
+======================================================================================================
+
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n4
+[54106.815192] + openning file: /proc/kallsyms
+[54107.198828] + close file: /proc/kallsyms
+[54107.198832] + sys_call_table address = ffffffff916013c0
+[54107.198845] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_rct.ko debug=1
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n6
+[54130.308941] + openning file: /proc/kallsyms
+[54130.853638] + ffffffff916013c0 R sys_call_table
+[54130.853646] + ffffffff916013c0
+[54130.853647] + close file: /proc/kallsyms
+[54130.853650] + sys_call_table address = ffffffff916013c0
+[54130.853653] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+------------------------------------------------------------------------------------------------------
+
+olej@mint:~/kernel/sys_call_table/find$ uname -a
+Linux mint 5.4.0-121-generic #137-Ubuntu SMP Wed Jun 15 13:33:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@mint:~/kernel/sys_call_table/find$ head -n13 /usr/include/x86_64-linux-gnu/asm/unistd_64.h
+#ifndef _ASM_X86_UNISTD_64_H
+#define _ASM_X86_UNISTD_64_H 1
+
+#define __NR_read 0
+#define __NR_write 1
+#define __NR_open 2
+#define __NR_close 3
+#define __NR_stat 4
+#define __NR_fstat 5
+#define __NR_lstat 6
+#define __NR_poll 7
+#define __NR_lseek 8
+#define __NR_mmap 9
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n6
+[54130.308941] + openning file: /proc/kallsyms
+[54130.853638] + ffffffff916013c0 R sys_call_table
+[54130.853646] + ffffffff916013c0
+[54130.853647] + close file: /proc/kallsyms
+[54130.853650] + sys_call_table address = ffffffff916013c0
+[54130.853653] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908cdf00 /proc/kallsyms 
+ffffffff908cdf00 T __x64_sys_read
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908ce020 /proc/kallsyms 
+ffffffff908ce020 T __x64_sys_write
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908c9bd0 /proc/kallsyms 
+ffffffff908c9bd0 T __x64_sys_open
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908c7c80 /proc/kallsyms 
+ffffffff908c7c80 T __x64_sys_close
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908d2fe0 /proc/kallsyms 
+ffffffff908d2fe0 T __x64_sys_newstat
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908d3200 /proc/kallsyms 
+ffffffff908d3200 T __x64_sys_newfstat
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908d30a0 /proc/kallsyms 
+ffffffff908d30a0 T __x64_sys_newlstat
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908e6ed0 /proc/kallsyms 
+ffffffff908e6ed0 T __x64_sys_poll
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff908cb820 /proc/kallsyms 
+ffffffff908cb820 T __x64_sys_lseek
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ffffffff90636820 /proc/kallsyms 
+ffffffff90636820 T __x64_sys_mmap
+
+
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep ' T ' /proc/kallsyms | grep 'ffffffff908cdf00\|ffffffff908ce020\|ffffffff908c9bd0\|ffffffff908c7c80\|ffffffff908d2fe0\|ffffffff908d3200\|ffffffff908d30a0\|ffffffff908e6ed0\|ffffffff908cb820\|ffffffff90636820'
+ffffffff90636820 T __x64_sys_mmap
+ffffffff908c7c80 T __x64_sys_close
+ffffffff908c9bd0 T __x64_sys_open
+ffffffff908cb820 T __x64_sys_lseek
+ffffffff908cdf00 T __x64_sys_read
+ffffffff908ce020 T __x64_sys_write
+ffffffff908d2fe0 T __x64_sys_newstat
+ffffffff908d30a0 T __x64_sys_newlstat
+ffffffff908d3200 T __x64_sys_newfstat
+ffffffff908e6ed0 T __x64_sys_poll
+
+olej@mint:~/kernel/sys_call_table/find$ sudo grep -E 'ffffffff908cdf00|ffffffff908ce020|ffffffff908c9bd0|ffffffff908c7c80|ffffffff908d2fe0|ffffffff908d3200|ffffffff908d30a0|ffffffff908e6ed0|ffffffff908cb820|ffffffff90636820' /proc/kallsyms
+ffffffff90636820 T __x64_sys_mmap
+ffffffff908c7c80 T __x64_sys_close
+ffffffff908c9bd0 T __x64_sys_open
+ffffffff908cb820 T __x64_sys_lseek
+ffffffff908cdf00 T __x64_sys_read
+ffffffff908ce020 T __x64_sys_write
+ffffffff908d2fe0 T __x64_sys_newstat
+ffffffff908d30a0 T __x64_sys_newlstat
+ffffffff908d3200 T __x64_sys_newfstat
+ffffffff908e6ed0 T __x64_sys_poll
+
+
+======================================================================================================
+
+olej@mint:~/kernel/sys_call_table/find$ cat /boot/config-`uname -r` | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_kct.ko
+insmod: ERROR: could not insert module mod_kct.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n2
+[55124.355884] + sys_call_table address = ffffffff916013c0
+[55124.355890] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+
+olej@mint:~/kernel/sys_call_table/find$ sudo insmod mod_koes.ko
+insmod: ERROR: could not insert module mod_koes.ko: Operation not permitted
+
+olej@mint:~/kernel/sys_call_table/find$ dmesg | tail -n2
+[55145.514394] + sys_call_table address = ffffffff916013c0
+[55145.514400] + sys_call_table : ffffffff908cdf00 ffffffff908ce020 ffffffff908c9bd0 ffffffff908c7c80 ffffffff908d2fe0 ffffffff908d3200 ffffffff908d30a0 ffffffff908e6ed0 ffffffff908cb820 ffffffff90636820  ...
+
+
+======================================================================================================

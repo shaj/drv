@@ -1,0 +1,256 @@
+30.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.o
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.c:8:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/rw_pte.c: In function ‘mem_setrw’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/rw_pte.c:8:4: error: implicit declaration of function ‘__flush_tlb_one’; did you mean ‘__flush_tlb_all’? [-Werror=implicit-function-declaration]
+    8 |    __flush_tlb_one( (unsigned long)table );
+      |    ^~~~~~~~~~~~~~~
+      |    __flush_tlb_all
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+==========================================================================================================================
+
+https://elixir.bootlin.com/linux/v5.4/source/arch/um/include/asm/tlbflush.h#L29
+[11]
+/*
+ * TLB flushing:
+ *
+ *  - flush_tlb() flushes the current mm struct TLBs
+ *  - flush_tlb_all() flushes all processes TLBs
+ *  - flush_tlb_mm(mm) flushes the specified mm context TLB's
+ *  - flush_tlb_page(vma, vmaddr) flushes one page
+ *  - flush_tlb_kernel_vm() flushes the kernel vm area
+ *  - flush_tlb_range(vma, start, end) flushes a range of pages
+ */
+
+extern void flush_tlb_all(void);
+extern void flush_tlb_mm(struct mm_struct *mm);
+extern void flush_tlb_range(struct vm_area_struct *vma, unsigned long start, 
+	        unsigned long end);
+extern void flush_tlb_page(struct vm_area_struct *vma, unsigned long address);
+extern void flush_tlb_kernel_vm(void);
+extern void flush_tlb_kernel_range(unsigned long start, unsigned long end);
+extern void __flush_tlb_one(unsigned long addr);
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ sudo grep -E " flush_tlb"\|" __flush_tlb" /proc/kallsyms 
+000000000002f740 A flush_tlb_info
+ffffffff8da7bcc0 t __flush_tlb_all
+ffffffff8da81f40 t flush_tlb_func_common.constprop.0
+ffffffff8da82160 t flush_tlb_func_remote
+ffffffff8da82470 T flush_tlb_mm_range
+ffffffff8da82550 T flush_tlb_all
+ffffffff8da82570 T flush_tlb_kernel_range
+ffffffff8dc64710 T flush_tlb_batched_pending
+ffffffff8e48547e t __flush_tlb_all
+
+https://elixir.bootlin.com/linux/v5.4/source/arch/um/kernel/tlb.c#L544
+[544]
+void __flush_tlb_one(unsigned long addr)
+{
+    flush_tlb_kernel_range_common(addr, addr + PAGE_SIZE);
+}
+
+[534]
+void flush_tlb_kernel_range(unsigned long start, unsigned long end)
+{
+    flush_tlb_kernel_range_common(start, end);
+}
+
+==========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+ERROR: "flush_tlb_kernel_range" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:94: __modpost] Ошибка 1
+make[1]: *** [Makefile:1675: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+==========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write/srw.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+[43379.935498] ! detected 64-bit platform
+[43379.941320] ! sys_call_table address = 00000000b8e3397c
+[43379.941323] ------------[ cut here ]------------
+[43379.941323] CR0 WP bit went missing!?
+[43379.941331] WARNING: CPU: 14 PID: 80978 at arch/x86/kernel/cpu/common.c:389 native_write_cr0+0x38/0x50
+
+[43379.941511] CR2: ffffffff8ea014b8
+
+
+==========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ cat /usr/include/x86_64-linux-gnu/asm/unistd_32.h | grep __NR_rw_test
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ cat /usr/include/x86_64-linux-gnu/asm/unistd_64.h | grep __NR_rw_test
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ cat /usr/include/x86_64-linux-gnu/asm/unistd_64.h | grep comp
+#define __NR_seccomp 317
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/4write$ cat /usr/include/x86_64-linux-gnu/asm/unistd_32.h | grep comp
+#define __NR_seccomp 354
+
+
+</usr/include/x86_64-linux-gnu/asm/unistd.h>
+
+# ifdef __i386__
+#  include <asm/unistd_32.h>
+# elif defined(__ILP32__)
+#  include <asm/unistd_x32.h>
+# else
+#  include <asm/unistd_64.h>
+# endif
+
+
+</usr/include/x86_64-linux-gnu/asm/unistd_32.h>
+#define __NR_oldolduname 59
+
+</usr/include/x86_64-linux-gnu/asm/unistd_64.h>
+#define __NR_epoll_ctl_old 214
+
+
+olej@R420:/usr/include/x86_64-linux-gnu/asm$ sudo grep old /proc/kallsyms
+...
+ffffffff8dce41c0 T __x64_sys_old_readdir
+ffffffff8dce4290 T __x32_compat_sys_old_readdir
+ffffffff8dce4360 T __ia32_compat_sys_old_readdir
+ffffffff8dce4430 T __ia32_sys_old_readdir
+
+
+olej@R420:/usr/include/x86_64-linux-gnu/asm$ sudo grep old /proc/kallsyms | grep ' T ' | grep "__x64\|__ia32"
+ffffffff8dab15e0 T __ia32_sys_olduname
+ffffffff8dab19a0 T __x64_sys_old_getrlimit
+ffffffff8dab1cb0 T __ia32_sys_old_getrlimit
+ffffffff8dab1db0 T __ia32_compat_sys_old_getrlimit
+ffffffff8dab2ac0 T __x64_sys_olduname
+ffffffff8dce41c0 T __x64_sys_old_readdir
+ffffffff8dce4360 T __ia32_compat_sys_old_readdir
+ffffffff8dce4430 T __ia32_sys_old_readdir
+ffffffff8dce6640 T __ia32_compat_sys_old_select
+ffffffff8dcf4290 T __x64_sys_oldumount
+ffffffff8dcf42b0 T __ia32_sys_oldumount
+ffffffff8de25e20 T __ia32_compat_sys_old_msgctl
+ffffffff8de2a0e0 T __ia32_compat_sys_old_semctl
+ffffffff8de2cae0 T __ia32_compat_sys_old_shmctl
+
+olej@R420:/usr/include/x86_64-linux-gnu/asm$ cat /usr/include/x86_64-linux-gnu/asm/unistd_32.h | grep __NR_old
+#define __NR_oldstat 18
+#define __NR_oldfstat 28
+#define __NR_oldolduname 59
+#define __NR_oldlstat 84
+#define __NR_olduname 109
+
+olej@R420:/usr/include/x86_64-linux-gnu/asm$ cat /usr/include/x86_64-linux-gnu/asm/unistd_64.h | grep old
+#define __NR_epoll_ctl_old 214
+#define __NR_epoll_wait_old 215
+
+
+==========================================================================================================================
+
+11.08.2022
+==========
+
+olej@R420:~$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/4write modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/4write/srw.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/4write/srw.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/4write/srw.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ sudo insmod srw.ko mode=0
+[sudo] пароль для olej:          
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ dmesg | tail -n6
+[ 8268.065963] ! sys_call_table address = ffffffffa56013c0
+[ 8268.065964] ! original sys_call_table address = ffffffffa4603390
+[ 8268.065965] ! writing address ffffffffa5601a70
+[ 8268.065966] ! modified sys_call_table[214] = 0000000000012345
+[ 8268.065967] ! writing address ffffffffa5601a70
+[ 8268.065968] ! restored sys_call_table[214] = ffffffffa4603390
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ sudo insmod srw.ko mode=2
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ dmesg | tail -n6
+[ 8321.258243] ! sys_call_table address = ffffffffa56013c0
+[ 8321.258244] ! original sys_call_table address = ffffffffa4603390
+[ 8321.258245] ! writing address ffffffffa5601a70
+[ 8321.258247] ! modified sys_call_table[214] = 0000000000012345
+[ 8321.258248] ! writing address ffffffffa5601a70
+[ 8321.258248] ! restored sys_call_table[214] = ffffffffa4603390
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ sudo insmod srw.ko mode=3
+insmod: ERROR: could not insert module srw.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ dmesg | tail -n6
+[ 8378.531808] ! sys_call_table address = ffffffffa56013c0
+[ 8378.531809] ! original sys_call_table address = ffffffffa4603390
+[ 8378.531815] ! writing address ffffbf788648fa70
+[ 8378.531817] ! modified sys_call_table[214] = 0000000000012345
+[ 8378.531819] ! writing address ffffbf7886586a70
+[ 8378.531820] ! restored sys_call_table[214] = ffffffffa4603390
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ sudo insmod srw.ko mode=4
+Убито
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/4write$ dmesg | tail -n60
+...
+[ 8390.108413] ! detected 64-bit platform
+[ 8390.115708] ! sys_call_table address = ffffffffa56013c0
+[ 8390.115709] ! original sys_call_table address = ffffffffa4603390
+[ 8390.115711] ------------[ cut here ]------------
+[ 8390.115712] CR0 WP bit went missing!?
+[ 8390.115723] WARNING: CPU: 24 PID: 13049 at arch/x86/kernel/cpu/common.c:389 native_write_cr0+0x38/0x50
+...
+[ 8390.115757] CPU: 24 PID: 13049 Comm: insmod Tainted: G           OE     5.4.0-124-generic #140-Ubuntu
+[ 8390.115758] Hardware name: Dell Inc. PowerEdge R420/0CN7CM, BIOS 2.9.0 01/09/2020
+[ 8390.115760] RIP: 0010:native_write_cr0+0x38/0x50
+[ 8390.115762] Code: 01 00 74 2a 48 85 c0 75 01 c3 80 3d c0 a8 bc 01 00 75 f6 55 48 c7 c7 4a f5 94 a5 c6 05 af a8 bc 01 01 48 89 e5 e8 d8 f6 a3 00 <0f> 0b 5d c3 48 81 cf 00 00 01 00 b8 00 00 01 00 eb b8 66 0f 1f 44
+...
+[ 8390.115821] ---[ end trace 74e6c7e59226242b ]---
+[ 8390.115821] ! writing address ffffffffa5601a70
+[ 8390.115827] BUG: unable to handle page fault for address: ffffffffa5601a70
+[ 8390.115831] #PF: supervisor write access in kernel mode
+[ 8390.115832] #PF: error_code(0x0003) - permissions violation
+[ 8390.115833] PGD 140ec0e067 P4D 140ec0e067 PUD 140ec0f063 PMD 800000140e2000e1 
+[ 8390.115837] Oops: 0003 [#1] SMP PTI
+...
+
+
+
+==========================================================================================================================

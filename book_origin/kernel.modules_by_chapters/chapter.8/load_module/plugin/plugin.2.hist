@@ -1,0 +1,63 @@
+21.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/dec.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/oct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/hex.o
+  Building modules, stage 2.
+  MODPOST 4 modules
+WARNING: /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/oct: 'str_translate' exported twice. Previous export was in /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/dec.ko
+WARNING: /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/hex: 'str_translate' exported twice. Previous export was in /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/dec.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/dec.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/dec.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/hex.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/hex.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/master.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/oct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin/oct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin$ ls -l
+итого 124
+-rw-r--r-- 1 olej olej  1455 июл 28  2012 CR0.32.c
+-rw-r--r-- 1 olej olej  2164 авг 19 22:15 CR0.c
+-rw-r--r-- 1 olej olej   625 авг 21 17:05 dec.c
+-rw-rw-r-- 1 olej olej  6712 авг 21 17:24 dec.ko
+-rw-r--r-- 1 olej olej   826 авг 21 17:01 hex.c
+-rw-rw-r-- 1 olej olej  6872 авг 21 17:24 hex.ko
+-rw-r--r-- 1 olej olej   542 авг 21 17:24 Makefile
+-rw-r--r-- 1 olej olej  6255 авг 21 17:21 master.c
+-rw-rw-r-- 1 olej olej 14880 авг 21 17:24 master.ko
+-rw-r--r-- 1 olej olej   622 авг 21 17:03 oct.c
+-rw-rw-r-- 1 olej olej  6712 авг 21 17:24 oct.ko
+-rw-r--r-- 1 olej olej 13933 июл 28  2012 plugin.1.hist
+-rw-rw-r-- 1 olej olej  2458 авг 21 17:22 plugin.2.hist
+-rw-r--r-- 1 olej olej   124 авг 21 17:04 slave.c
+-rwxrwxr-x 1 olej olej 16872 авг 21 17:15 syscall
+-rw-r--r-- 1 olej olej   486 авг 21 17:04 syscall.c
+-rw-r--r-- 1 olej olej   393 июл 28  2012 syscall.h
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/plugin$ ls -l *.ko
+-rw-rw-r-- 1 olej olej  6712 авг 21 17:24 dec.ko
+-rw-rw-r-- 1 olej olej  6872 авг 21 17:24 hex.ko
+-rw-rw-r-- 1 olej olej 14880 авг 21 17:24 master.ko
+-rw-rw-r-- 1 olej olej  6712 авг 21 17:24 oct.ko
+
+========================================================================================================================
+
+
+

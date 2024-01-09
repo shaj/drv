@@ -1,0 +1,30 @@
+11.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+  Building modules, stage 2.
+  MODPOST 6 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/receive.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/transmit_simple.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+===========================================================================================================================
+

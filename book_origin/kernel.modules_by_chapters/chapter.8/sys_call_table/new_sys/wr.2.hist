@@ -1,0 +1,107 @@
+19.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c: In function ‘do_write’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:26:12: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+   26 |    set_fs( get_ds() );
+      |            ^~~~~~
+      |            get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:26:12: error: incompatible type for argument 1 of ‘set_fs’
+   26 |    set_fs( get_ds() );
+      |            ^~~~~~~~
+      |            |
+      |            int
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/mm.h:99,
+                 from ./include/linux/kallsyms.h:12,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:2:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+====================================================================================================================================
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ sudo insmod mod_wrc.ko
+[sudo] пароль для olej:       
+Ошибка сегментирования
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ lsmod | head -n3
+Module                  Size  Used by
+mod_wrc                16384  1
+vboxnetadp             28672  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ dmesg | tail -n60
+...
+[32626.851555] detected buffer overflow in strlen
+[32626.851579] ------------[ cut here ]------------
+[32626.851580] kernel BUG at lib/string.c:1120!
+[32626.851587] invalid opcode: 0000 [#1] SMP PTI
+...
+
+====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrchg.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrchg.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrchg.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ modinfo mod_wrchg.ko 
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrchg.ko
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>
+license:        GPL
+version:        3.4
+srcversion:     6DFA980E7311A20A763044D
+depends:        
+retpoline:      Y
+name:           mod_wrchg
+vermagic:       5.4.0-124-generic SMP mod_unload modversions 
+
+
+====================================================================================================================================

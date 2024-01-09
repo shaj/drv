@@ -1,0 +1,458 @@
+28.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ make
+make -C /lib/modules/5.4.0-125-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-125-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.o
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:2:
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/fops_rw.c: In function ‘node_write’:
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/fops_rw.c:34:10: error: implicit declaration of function ‘copy_from_user’; did you mean ‘raw_copy_from_user’? [-Werror=implicit-function-declaration]
+   34 |    res = copy_from_user( buf_msg, (void*)buf, len );
+      |          ^~~~~~~~~~~~~~
+      |          raw_copy_from_user
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c: At top level:
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:4:21: error: variable ‘node_fops’ has initializer but incomplete type
+    4 | static const struct proc_ops node_fops = {
+      |                     ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:6:5: error: ‘const struct proc_ops’ has no member named ‘proc_write’
+    6 |    .proc_write  = node_write
+      |     ^~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:6:19: warning: excess elements in struct initializer
+    6 |    .proc_write  = node_write
+      |                   ^~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:6:19: note: (near initialization for ‘node_fops’)
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c: In function ‘proc_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:15:79: error: passing argument 4 of ‘proc_create’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+   15 |    own_proc_node = proc_create( NAME_NODE, S_IFREG | S_IRUGO | S_IWUGO, NULL, &node_fops );
+      |                                                                               ^~~~~~~~~~
+      |                                                                               |
+      |                                                                               const struct proc_ops *
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.h:5,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:1:
+./include/linux/proc_fs.h:50:24: note: expected ‘const struct file_operations *’ but argument is of type ‘const struct proc_ops *’
+   50 | struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct file_operations *proc_fops);
+      |                        ^~~~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c: At top level:
+/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.c:4:30: error: storage size of ‘node_fops’ isn’t known
+    4 | static const struct proc_ops node_fops = {
+      |                              ^~~~~~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-125-generic»
+make: *** [Makefile:21: default] Ошибка 2
+
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ make
+make -C /lib/modules/5.4.0-125-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-125-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-125-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ sudo insmod mod_proc.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ lsmod | head -n3
+Module                  Size  Used by
+mod_proc               16384  0
+vboxnetadp             28672  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ ls -ld /proc/mod_param
+dr-xr-xr-x 3 root root 0 авг 28 21:53 /proc/mod_param
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ ls -l /proc/mod_param/*
+-rw-rw-rw- 1 root root 0 авг 28 21:53 /proc/mod_param/period
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ cat /proc/mod_param/period
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ echo 123 > /proc/mod_param/period
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ cat /proc/mod_param/period
+123
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ sudo rmmod mod_proc
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ make
+make -C /lib/modules/5.4.0-125-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-125-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich/mod_proc.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-125-generic»
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ sudo insmod mod_proc.ko 
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ dmesg | tail -n 3
+[40143.545902] perf: interrupt took too long (6345 > 6327), lowering kernel.perf_event_max_sample_rate to 31500
+[41225.577229] /proc/mod_param directory created
+[41225.577231] /proc/mod_param/period created
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ lsmod | head -n3
+Module                  Size  Used by
+mod_proc               16384  0
+vboxnetadp             28672  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ cat /proc/mod_param/period
+[41225.577229] /proc/mod_param directory created
+[41225.577231] /proc/mod_param/period created
+[41297.876548] return 2 bytes: <5
+               >
+[41297.876550] ------------[ cut here ]------------
+[41297.876551] Buffer overflow detected (161 < 131072)!
+...
+[41297.876712] ---[ end trace f535e51229432c80 ]---
+[41297.876740] return EOF
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ echo 123 > /proc/mod_param/period
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PaiMeiPetrovich$ dmesg | tail -n 10
+...
+[41300.661576] return EOF
+[41413.779369] write: 18446649716504771075 bytes - 123
+
+==============================================================================================================================
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-amd64-smp #1 SMP PREEMPT Sun Aug 8 15:04:18 EEST 2021 x86_64 GNU/Linux
+
+$ sudo insmod mod_loop.ko
+[sudo] пароль для olej: 
+
+$ dmesg | tail -n3
+[33181.501670] mod_loop: loading out-of-tree module taints kernel.
+[33181.501925] ! /proc/mod_param directory created
+[33181.501929] ! /proc/mod_param/period created
+
+$ cat /proc/mod_param/period
+5olej@antix21:~/2022/PaiMeiPetrovich
+
+$ dmesg | tail -n6
+[   12.189621] elogind-daemon[1584]: New session 1 of user olej.
+[33181.501670] mod_loop: loading out-of-tree module taints kernel.
+[33181.501925] ! /proc/mod_param directory created
+[33181.501929] ! /proc/mod_param/period created
+[33214.253892] ! return 1 bytes: <5>
+[33214.253957] return EOF
+
+$ echo 123 > /proc/mod_param/period
+
+$ dmesg | tail -n6
+[33181.501925] ! /proc/mod_param directory created
+[33181.501929] ! /proc/mod_param/period created
+[33214.253892] ! return 1 bytes: <5>
+[33214.253957] return EOF
+[33264.747856] buf ffffffffa005b7a0 ... buf+ ffffffffa005b7a3
+[33264.747860] ! write: 3 bytes - 123
+
+$ cat /proc/mod_param/period
+123olej@antix21:~/2022/PaiMeiPetrovich
+
+$ sudo rmmod mod_loop
+
+==============================================================================================================================
+
+$ sudo insmod mod_loop.ko
+[sudo] пароль для olej: 
+
+$ dmesg | tail -n10
+[33284.106430] ! return 3 bytes: <123>
+[33284.106450] return EOF
+[33320.512628] ! /proc/mod_param/period removed
+[38405.748546] ! /proc/mod_loop directory created
+[38405.748551] ! /proc/mod_loop/period created
+[38405.748652] !! thread 22694l is running
+[38405.748654] !! [4333075124] Hello fron module!
+[38411.199934] !! [4333080576] Hello fron module!
+[38416.319648] !! [4333085696] Hello fron module!
+[38421.439372] !! [4333090816] Hello fron module!
+
+$ cat /proc/mod_loop/period
+5
+
+$ dmesg | tail -n10
+[38426.559097] !! [4333095936] Hello fron module!
+[38431.678836] !! [4333101056] Hello fron module!
+[38436.798557] !! [4333106176] Hello fron module!
+[38441.918273] !! [4333111296] Hello fron module!
+[38447.037990] !! [4333116416] Hello fron module!
+[38452.157713] !! [4333121536] Hello fron module!
+[38457.277440] !! [4333126656] Hello fron module!
+[38458.239467] ! return 1 bytes: <5>
+[38458.239496] return EOF
+[38462.397157] !! [4333131776] Hello fron module!
+
+$ dmesg | grep \!\!
+[38405.748652] !! thread 22694l is running
+[38405.748654] !! [4333075124] Hello fron module!
+[38411.199934] !! [4333080576] Hello fron module!
+[38416.319648] !! [4333085696] Hello fron module!
+[38421.439372] !! [4333090816] Hello fron module!
+[38426.559097] !! [4333095936] Hello fron module!
+[38431.678836] !! [4333101056] Hello fron module!
+[38436.798557] !! [4333106176] Hello fron module!
+[38441.918273] !! [4333111296] Hello fron module!
+[38447.037990] !! [4333116416] Hello fron module!
+[38452.157713] !! [4333121536] Hello fron module!
+[38457.277440] !! [4333126656] Hello fron module!
+[38462.397157] !! [4333131776] Hello fron module!
+[38467.516893] !! [4333136896] Hello fron module!
+[38472.636616] !! [4333142016] Hello fron module!
+[38477.756315] !! [4333147136] Hello fron module!
+[38482.876065] !! [4333152256] Hello fron module!
+[38487.995772] !! [4333157376] Hello fron module!
+[38493.115507] !! [4333162496] Hello fron module!
+[38498.235216] !! [4333167616] Hello fron module!
+[38503.354940] !! [4333172736] Hello fron module!
+[38508.474675] !! [4333177856] Hello fron module!
+[38513.594386] !! [4333182976] Hello fron module!
+[38518.714117] !! [4333188096] Hello fron module!
+[38523.833846] !! [4333193216] Hello fron module!
+[38528.954546] !! [4333198337] Hello fron module!
+[38534.073289] !! [4333203456] Hello fron module!
+[38539.193018] !! [4333208576] Hello fron module!
+[38544.312724] !! [4333213696] Hello fron module!
+[38549.432446] !! [4333218816] Hello fron module!
+
+$ dmesg | grep \!\! | wc -l
+31
+
+$ echo 3 > /proc/mod_loop/period
+
+$ dmesg | tail -n5
+[38590.390230] !! [4333259776] Hello fron module!
+[38595.509955] !! [4333264896] Hello fron module!
+[38596.631313] buf ffffffffa005b8e0 ... buf+ ffffffffa005b8e1
+[38596.631316] ! write: 1 bytes - 3
+[38600.629688] !! [4333270016] Hello fron module!
+
+$ dmesg | tail -n10
+[38575.031062] !! [4333244416] Hello fron module!
+[38580.150789] !! [4333249536] Hello fron module!
+[38585.270517] !! [4333254656] Hello fron module!
+[38590.390230] !! [4333259776] Hello fron module!
+[38595.509955] !! [4333264896] Hello fron module!
+[38596.631313] buf ffffffffa005b8e0 ... buf+ ffffffffa005b8e1
+[38596.631316] ! write: 1 bytes - 3
+[38600.629688] !! [4333270016] Hello fron module!
+[38605.749405] !! [4333275136] Hello fron module!
+[38610.869125] !! [4333280256] Hello fron module!
+
+$ cat /proc/mod_loop/period
+3
+
+$ sudo rmmod mod_loop
+
+$ dmesg | tail -n10
+[38646.707168] !! [4333316096] Hello fron module!
+[38651.826910] !! [4333321216] Hello fron module!
+[38656.946634] !! [4333326336] Hello fron module!
+[38662.066348] !! [4333331456] Hello fron module!
+[38667.186085] !! [4333336576] Hello fron module!
+[38672.305789] !! [4333341696] Hello fron module!
+[38677.425531] !! [4333346816] Hello fron module!
+[38682.481244] !! [4333351872] thread 22694l finished
+[38682.481275] ! [4333351872] child thread finished
+[38682.481285] ! /proc/mod_loop/period removed
+
+
+==============================================================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/PaiMeiPetrovich modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/PaiMeiPetrovich/mod_loop.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/PaiMeiPetrovich/mod_loop.mod.o
+  LD [M]  /home/olej/2022/PaiMeiPetrovich/mod_loop.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+$ sudo insmod mod_loop.ko period=10
+
+$ dmesg | tail -n3
+[39158.755205] !! thread 24970l is running
+[39158.755207] !! [4333828171] Hello fron module!
+[39168.918905] !! [4333838336] Hello fron module!
+
+$ dmesg | tail -n5
+[39158.754994] ! /proc/mod_loop directory created
+[39158.754999] ! /proc/mod_loop/period created
+[39158.755205] !! thread 24970l is running
+[39158.755207] !! [4333828171] Hello fron module!
+[39168.918905] !! [4333838336] Hello fron module!
+
+$ cat /proc/mod_loop/period
+10
+
+$ dmesg | tail -n5
+[39189.397797] !! [4333858816] Hello fron module!
+[39199.637254] !! [4333869056] Hello fron module!
+[39201.654607] ! return 2 bytes: <10>
+[39201.654637] ! return EOF
+[39209.876697] !! [4333879296] Hello fron module!
+
+
+$ echo 20 > /proc/mod_loop/period
+
+$ cat /proc/mod_loop/period
+20
+
+$ dmesg | tail -n7
+[39220.116143] !! [4333889536] Hello fron module!
+[39230.355580] !! [4333899776] Hello fron module!
+[39240.595021] !! [4333910016] Hello fron module!
+[39250.076798] ! write: 2 bytes - 20
+[39250.834469] !! [4333920256] Hello fron module!
+[39252.998477] ! return 2 bytes: <20>
+[39252.998511] ! return EOF
+
+
+
+$ ls -l /proc/mod_loop/
+итого 0
+-rw-rw-rw- 1 root root 0 авг 29 01:08 period
+
+
+$ tree /proc/mod_loop/
+/proc/mod_loop/
+└── period
+
+0 directories, 1 file
+
+
+
+$ ls -l /proc/mod_loop/period 
+-rw-rw-rw- 1 root root 0 авг 29 01:08 /proc/mod_loop/period
+
+
+$ dmesg | tail -n7
+[39424.905064] !! [4334094336] Hello fron module!
+[39435.144495] !! [4334104576] Hello fron module!
+[39445.383949] !! [4334114816] Hello fron module!
+[39455.623385] !! [4334125056] Hello fron module!
+[39465.862843] !! [4334135296] Hello fron module!
+[39476.102286] !! [4334145536] Hello fron module!
+[39486.341721] !! [4334155776] Hello fron module!
+olej@antix21:~/2022/PaiMeiPetrovich
+
+$ sudo rmmod mod_loop
+
+$ dmesg | tail -n7
+[39455.623385] !! [4334125056] Hello fron module!
+[39465.862843] !! [4334135296] Hello fron module!
+[39476.102286] !! [4334145536] Hello fron module!
+[39486.341721] !! [4334155776] Hello fron module!
+[39496.389188] !! [4334165824] thread 24970l finished
+[39496.389220] ! [4334165824] child thread finished
+[39496.389231] ! /proc/mod_loop/period removed
+
+==============================================================================================================================
+
+$ sudo insmod mod_loop.ko period=10
+
+$ dmesg | tail -n7
+[39496.389188] !! [4334165824] thread 24970l finished
+[39496.389220] ! [4334165824] child thread finished
+[39496.389231] ! /proc/mod_loop/period removed
+[39765.110729] ! /proc/mod_loop directory created
+[39765.110734] ! /proc/mod_loop/period created
+[39765.111051] !! thread 26911l is running
+[39765.111053] !! [4334434560] Hello fron module!
+
+$ cat /proc/mod_loop/period
+10
+
+$ dmesg | tail -n7
+[39765.110734] ! /proc/mod_loop/period created
+[39765.111051] !! thread 26911l is running
+[39765.111053] !! [4334434560] Hello fron module!
+[39775.606061] !! [4334445056] Hello fron module!
+[39783.855500] ! return 2 bytes: <10>
+[39783.855533] ! return EOF
+[39785.845508] !! [4334455296] Hello fron module!
+
+$ dmesg | tail -n7
+[39765.111053] !! [4334434560] Hello fron module!
+[39775.606061] !! [4334445056] Hello fron module!
+[39783.855500] ! return 2 bytes: <10>
+[39783.855533] ! return EOF
+[39785.845508] !! [4334455296] Hello fron module!
+[39796.084959] !! [4334465536] Hello fron module!
+[39806.324395] !! [4334475776] Hello fron module!
+
+$ echo 20 > /proc/mod_loop/period
+
+$ cat /proc/mod_loop/period
+20
+
+$ dmesg | tail -n7
+[39806.324395] !! [4334475776] Hello fron module!
+[39816.563848] !! [4334486016] Hello fron module!
+[39826.803296] !! [4334496256] Hello fron module!
+[39828.006697] ! write: 2 bytes - 20
+[39831.319768] ! return 2 bytes: <20>
+[39831.319798] ! return EOF
+[39837.042731] !! [4334506496] Hello fron module!
+
+$ dmesg | tail -n7
+[39826.803296] !! [4334496256] Hello fron module!
+[39828.006697] ! write: 2 bytes - 20
+[39831.319768] ! return 2 bytes: <20>
+[39831.319798] ! return EOF
+[39837.042731] !! [4334506496] Hello fron module!
+[39857.521630] !! [4334526976] Hello fron module!
+[39878.000528] !! [4334547456] Hello fron module!
+
+$ sudo rmmod mod_loop.ko0
+
+$ dmesg | tail -n7
+[39857.521630] !! [4334526976] Hello fron module!
+[39878.000528] !! [4334547456] Hello fron module!
+[39898.479410] !! [4334567936] Hello fron module!
+[39918.958315] !! [4334588416] Hello fron module!
+[39939.437194] !! [4334608896] thread 26911l finished
+[39939.437225] ! [4334608896] child thread finished
+[39939.437236] ! /proc/mod_loop/period removed
+
+==============================================================================================================================
+
+29.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/loop$ make
+make -C /lib/modules/5.4.0-125-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/loop modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-125-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/loop/mod_loop.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/loop/mod_loop.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/loop/mod_loop.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-125-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/loop$ sudo insmod mod_loop.ko period=10
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/loop$ lsmod | head -n3
+Module                  Size  Used by
+mod_loop               16384  0
+vboxnetadp             28672  0
+

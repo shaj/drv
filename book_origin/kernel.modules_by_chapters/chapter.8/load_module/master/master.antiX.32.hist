@@ -1,0 +1,182 @@
+21.08.2022
+==========
+
+$ inxi -S
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+olej@antix21:~/2022/kernel/load_module/master
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-486-smp #1 SMP Sun Aug 8 20:59:37 EEST 2021 i686 GNU/Linux
+olej@antix21:~/2022/kernel/load_module/master
+
+============================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/load_module/master/slave.o
+  CC [M]  /home/olej/2022/kernel/load_module/master/master.o
+/home/olej/2022/kernel/load_module/master/master.c: In function ‘mod_init’:
+/home/olej/2022/kernel/load_module/master/master.c:68:50: warning: format ‘%lu’ expects argument of type ‘long unsigned int’, but argument 3 has type ‘size_t’ {aka ‘unsigned int’} [-Wformat=]
+   68 |    printk("+ считано из файла %s %lu байт\n", slave_name, n);
+      |                                  ~~^                      ~
+      |                                    |                      |
+      |                                    long unsigned int      size_t {aka unsigned int}
+      |                                  %u
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/load_module/master/master.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/master/master.ko
+  CC      /home/olej/2022/kernel/load_module/master/slave.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+============================================================================================
+
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/load_module/master/slave.o
+  CC [M]  /home/olej/2022/kernel/load_module/master/master.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/load_module/master/master.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/master/master.ko
+  CC      /home/olej/2022/kernel/load_module/master/slave.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ sudo insmod master.ko
+[sudo] пароль для olej: 
+
+$ lsmod | head -n4
+Module                  Size  Used by
+slave                  16384  0
+master                 16384  0
+nls_utf8               16384  1
+
+$ dmesg | tail -n6
+[234670.968289] + адрес sys_init_module = c90d2ee0
+[234670.968296] + длина файла модуля = 4180 байт
+[234670.968380] + адрес буфера чтения = f806e000
+[234670.968384] + считано из файла ./slave.ko 4180 байт
+[234670.968887] + модуль slave.ko загружен: parm1=, parm2=
+[234670.969272] + модуль master.ko загружен: file=./slave.ko
+
+
+$ sudo rmmod master
+
+$ dmesg | tail -n4
+[234909.447726] + выгружается модуль slave
+[234909.448299] + адрес sys_delete_module = c90d0240
+[234909.448301] + модуль slave.ko выгружен
+[234909.453832] + модуль master.ko выгружен
+
+$ lsmod | head -n2
+Module                  Size  Used by
+nls_utf8               16384  1
+
+============================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/load_module/master/slave.o
+  CC [M]  /home/olej/2022/kernel/load_module/master/master.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/load_module/master/master.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/master/master.ko
+  CC      /home/olej/2022/kernel/load_module/master/slave.mod.o
+  LD [M]  /home/olej/2022/kernel/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ sudo insmod master.ko
+
+$ dmesg | tail -n6
+[235276.783814] > адрес sys_init_module = c90d2ee0
+[235276.783820] > длина файла модуля = 4180 байт
+[235276.783916] > адрес буфера чтения = f8079000
+[235276.783921] > считано из файла ./slave.ko 4180 байт
+[235276.784361] + модуль slave.ko загружен: parm1=, parm2=
+[235276.784447] > модуль master.ko загружен: file=./slave.ko
+
+$ lsmod | head -n4
+Module                  Size  Used by
+slave                  16384  0
+master                 16384  0
+nls_utf8               16384  1
+
+
+
+$ sudo rmmod master
+
+$ dmesg | tail -n4
+[235349.218783] > выгружается модуль slave
+[235349.219468] > адрес sys_delete_module = c90d0240
+[235349.219470] + модуль slave.ko выгружен
+[235349.221235] > модуль master.ko выгружен
+
+$ lsmod | head -n2
+Module                  Size  Used by
+nls_utf8               16384  1
+
+============================================================================================
+
+$ ls -l *.ko
+-rw-r--r-- 1 olej olej 7096 авг 21 16:10 master.ko
+-rw-r--r-- 1 olej olej 4180 авг 21 16:10 slave.ko
+
+
+$ sudo insmod master.ko
+[sudo] пароль для olej: 
+
+$ dmesg | tail -n6
+[242902.333158] > адрес sys_init_module = c90d2ee0
+[242902.333164] > длина файла модуля = 4180 байт
+[242902.333246] > адрес буфера чтения = f8079000
+[242902.333250] > считано из файла ./slave.ko 4180 байт
+[242902.333944] + модуль slave.ko загружен: parm1=, parm2=
+[242902.334116] > модуль master.ko загружен: file=./slave.ko
+
+$ lsmod | head -n4
+Module                  Size  Used by
+slave                  16384  0
+master                 16384  0
+nls_utf8               16384  1
+
+
+
+$ sudo rmmod master
+
+$ dmesg | tail -n4
+[242965.479623] > выгружается модуль slave
+[242965.480158] > адрес sys_delete_module = c90d0240
+[242965.480160] + модуль slave.ko выгружен
+[242965.484380] > модуль master.ko выгружен
+
+$ lsmod | head -n2
+Module                  Size  Used by
+nls_utf8               16384  1
+
+
+
+
+$ dmesg | tail -n10
+[242902.333158] > адрес sys_init_module = c90d2ee0
+[242902.333164] > длина файла модуля = 4180 байт
+[242902.333246] > адрес буфера чтения = f8079000
+[242902.333250] > считано из файла ./slave.ko 4180 байт
+[242902.333944] + модуль slave.ko загружен: parm1=, parm2=
+[242902.334116] > модуль master.ko загружен: file=./slave.ko
+[242965.479623] > выгружается модуль slave
+[242965.480158] > адрес sys_delete_module = c90d0240
+[242965.480160] + модуль slave.ko выгружен
+[242965.484380] > модуль master.ko выгружен
+
+============================================================================================
+

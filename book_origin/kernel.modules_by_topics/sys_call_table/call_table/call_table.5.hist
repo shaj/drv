@@ -1,0 +1,330 @@
+01.07.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ cat /lib/modules/`uname -r`/build/.config | grep "CONFIG_X86_64=\|CONFIG_64BIT=\|CONFIG_X86_32=\|CONFIG_64BIT="
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/ex_ready/sys_call_table/call_table$ sudo grep ' T ' /proc/kallsyms | grep kallsyms_on_each_symbol
+ffffffffbc547de0 T module_kallsyms_on_each_symbol
+ffffffffbc5482d0 T kallsyms_on_each_symbol
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/ex_ready/sys_call_table/call_table$ sudo grep 'sys_call_table' /proc/kallsyms 
+ffffffffbd4002a0 R x32_sys_call_table
+ffffffffbd4013c0 R sys_call_table
+ffffffffbd402400 R ia32_sys_call_table
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/ex_ready$ cat /lib/modules/`uname -r`/build/Module.symvers | grep kallsyms_on_each_symbol
+0x6d1d3389	kallsyms_on_each_symbol	vmlinux	EXPORT_SYMBOL_GPL	
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/ex_ready$ sudo cat /proc/kallsyms | grep kallsyms_on_each_symbol | head -n3
+ffffffffbc547de0 T module_kallsyms_on_each_symbol
+ffffffffbc5482d0 T kallsyms_on_each_symbol
+ffffffffbd89bb6c r __ksymtab_kallsyms_on_each_symbol
+
+--------------------------------------------------------------------------------------------------------------------
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ cat /boot/config-`uname -r` | grep CONFIG_ARM=
+CONFIG_ARM=y
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ inxi -Cxxx
+CPU:       Topology: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP arch: v7l rev: 5 
+           features: Use -f option to see features bogomips: 0 
+           Speed: 1008 MHz min/max: 480/1008 MHz Core speeds (MHz): 1: 1008 2: 1008 3: 1008 4: 1008 
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ 
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ cat /boot/config-`uname -r` | grep CONFIG_ARM=
+CONFIG_ARM=y
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ cat /lib/modules/`uname -r`/build/.config | grep CONFIG_ARM=
+CONFIG_ARM=y
+
+
+olej@orangepione:~/kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep ' T ' | grep kallsyms_on_each_symbol
+
+olej@orangepione:~/kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep ' T ' | grep kallsyms_lookup
+c0197a7c T module_kallsyms_lookup_name
+c0198148 T kallsyms_lookup_name
+c01981c8 T kallsyms_lookup_size_offset
+c0198254 T kallsyms_lookup
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ grep \.hist < <(ls -l)
+-rw-r--r-- 1 olej olej  8225 июн 28 16:50 call_table.1.hist
+-rw-rw-r-- 1 olej olej   881 июн 29 17:23 call_table.1.mint.edge.hist
+-rw-rw-r-- 1 olej olej  6857 июн 29 23:17 call_table.1.Mint.hist
+-rw-r--r-- 1 olej olej  2188 июл  1 19:08 call_table.1.OPi.hist
+-rw-r--r-- 1 olej olej  1777 июл  1 20:27 call_table.1.RPi.hist
+-rw-r--r-- 1 olej olej  2900 июн 28 16:50 call_table.2.hist
+-rw-rw-r-- 1 olej olej 45339 июн 28 21:39 call_table.3.hist
+-rw-rw-r-- 1 olej olej 13639 июн 30 08:46 call_table.4.hist
+-rw-r--r-- 1 olej olej  7419 июн 30 00:40 call_table.4.lmde32.hist
+-rw-rw-r-- 1 olej olej  2035 июл  1 21:19 call_table.5.hist
+
+--------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ ls -l > >(grep \.hist)
+-rw-r--r-- 1 olej olej  8225 июн 28 16:50 call_table.1.hist
+-rw-rw-r-- 1 olej olej   881 июн 29 17:23 call_table.1.mint.edge.hist
+-rw-rw-r-- 1 olej olej  6857 июн 29 23:17 call_table.1.Mint.hist
+-rw-r--r-- 1 olej olej  2188 июл  1 19:08 call_table.1.OPi.hist
+-rw-r--r-- 1 olej olej  1777 июл  1 20:27 call_table.1.RPi.hist
+-rw-r--r-- 1 olej olej  2900 июн 28 16:50 call_table.2.hist
+-rw-rw-r-- 1 olej olej 45339 июн 28 21:39 call_table.3.hist
+-rw-rw-r-- 1 olej olej 13639 июн 30 08:46 call_table.4.hist
+-rw-r--r-- 1 olej olej  7419 июн 30 00:40 call_table.4.lmde32.hist
+-rw-rw-r-- 1 olej olej  2035 июл  1 21:19 call_table.5.hist
+
+====================================================================================================================
+
+19.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+====================================================================================================================
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/fs.h#L2996
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+
+https://elixir.bootlin.com/linux/v4.19/source/include/linux/fs.h
+[2875]
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ time sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+real	0m0,538s
+user	0m0,004s
+sys	0m0,503s
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n7
+[13604.789747] + openning file: /proc/kallsyms
+[13604.789749] + op. table => 0000000000000000
+[13605.279758] + ffffffff996013c0 R sys_call_table
+[13605.279759] + ffffffff996013c0
+[13605.279760] + sys_call_table address = ffffffff996013c0
+[13605.279765] + sys_call_table : ffffffff988ce0d0 ffffffff988ce1f0 ffffffff988c9da0 ffffffff988c7e50 ffffffff988d31b0 ffffffff988d33d0 ffffffff988d3270 ffffffff988e70a0 ffffffff988cb9f0 ffffffff98636820  ...
+[13605.279766] + close file: /proc/kallsyms
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep "ffffffff988ce0d0\|ffffffff988ce1f0\|ffffffff988c9da0\|ffffffff988c7e50\|ffffffff988d31b0\|ffffffff988d33d0\|ffffffff988d3270\|ffffffff988e70a0\|ffffffff988cb9f0\|ffffffff98636820" /proc/kallsyms 
+ffffffff98636820 T __x64_sys_mmap
+ffffffff988c7e50 T __x64_sys_close
+ffffffff988c9da0 T __x64_sys_open
+ffffffff988cb9f0 T __x64_sys_lseek
+ffffffff988ce0d0 T __x64_sys_read
+ffffffff988ce1f0 T __x64_sys_write
+ffffffff988d31b0 T __x64_sys_newstat
+ffffffff988d3270 T __x64_sys_newlstat
+ffffffff988d33d0 T __x64_sys_newfstat
+ffffffff988e70a0 T __x64_sys_poll
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988ce0d0 /proc/kallsyms 
+ffffffff988ce0d0 T __x64_sys_read
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988ce1f0 /proc/kallsyms 
+ffffffff988ce1f0 T __x64_sys_write
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ 
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988c9da0 /proc/kallsyms 
+ffffffff988c9da0 T __x64_sys_open
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988c7e50 /proc/kallsyms 
+ffffffff988c7e50 T __x64_sys_close
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988d31b0 /proc/kallsyms 
+ffffffff988d31b0 T __x64_sys_newstat
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988d33d0 /proc/kallsyms 
+ffffffff988d33d0 T __x64_sys_newfstat
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988d3270 /proc/kallsyms 
+ffffffff988d3270 T __x64_sys_newlstat
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988e70a0 /proc/kallsyms 
+ffffffff988e70a0 T __x64_sys_poll
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff988cb9f0 /proc/kallsyms 
+ffffffff988cb9f0 T __x64_sys_lseek
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ffffffff98636820 /proc/kallsyms 
+ffffffff98636820 T __x64_sys_mmap
+
+
+
+olej@R420:~$ ls -l /usr/include/asm/unistd_*
+-rw-r--r-- 1 root root 11475 авг  4 04:48 /usr/include/asm/unistd_32.h
+-rw-r--r-- 1 root root  9286 авг  4 04:48 /usr/include/asm/unistd_64.h
+-rw-r--r-- 1 root root 16367 авг  4 04:48 /usr/include/asm/unistd_x32.h
+
+
+olej@R420:~$ head -n13 /usr/include/asm/unistd_64.h
+#ifndef _ASM_X86_UNISTD_64_H
+#define _ASM_X86_UNISTD_64_H 1
+
+#define __NR_read 0
+#define __NR_write 1
+#define __NR_open 2
+#define __NR_close 3
+#define __NR_stat 4
+#define __NR_fstat 5
+#define __NR_lstat 6
+#define __NR_poll 7
+#define __NR_lseek 8
+#define __NR_mmap 9
+
+--------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~$ uname -r
+5.4.0-124-generic
+
+olej@R420:~$ inxi -C
+CPU:       Topology: 2x 10-Core model: Intel Xeon E5-2470 v2 bits: 64 type: MT MCP SMP L2 cache: 50.0 MiB 
+           Speed: 1200 MHz min/max: 1200/3200 MHz Core speeds (MHz): 1: 1295 2: 1345 3: 1284 4: 1456 5: 1285 6: 1913 7: 1444 
+           8: 2040 9: 1296 10: 1888 11: 1400 12: 1336 13: 1234 14: 1270 15: 1263 16: 1286 17: 1307 18: 1292 19: 1938 20: 1233 
+           21: 2023 22: 1234 23: 1309 24: 1707 25: 1756 26: 1951 27: 1357 28: 1388 29: 1310 30: 2758 31: 1510 32: 2326 
+           33: 1375 34: 2468 35: 1395 36: 1792 37: 2389 38: 1611 39: 1526 40: 1646 
+
+olej@R420:~$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+
+====================================================================================================================
+
+olej@R420:~$ sudo grep ' kallsyms_lookup_name' /proc/kallsyms
+ffffffff987484d0 T kallsyms_lookup_name
+
+
+olej@R420:~$ cat /lib/modules/`uname -r`/build/.config | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ time sudo insmod mod_kct.ko 
+insmod: ERROR: could not insert module mod_kct.ko: Operation not permitted
+
+real	0m0,077s
+user	0m0,010s
+sys	0m0,018s
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n2
+[17826.826422] + sys_call_table address = ffffffff996013c0
+[17826.826426] + sys_call_table : ffffffff988ce0d0 ffffffff988ce1f0 ffffffff988c9da0 ffffffff988c7e50 ffffffff988d31b0 ffffffff988d33d0 ffffffff988d3270 ffffffff988e70a0 ffffffff988cb9f0 ffffffff98636820  ...
+
+====================================================================================================================
+
+https://elixir.bootlin.com/linux/v5.10/source/include/linux/kallsyms.h#L106
+/* Lookup the address for a symbol. Returns 0 if not found. */
+[106]
+static inline unsigned long kallsyms_lookup_name(const char *name)
+{
+    return 0;
+}
+
+static inline int kallsyms_on_each_symbol(int (*fn)(void *, const char *,
+			    struct module *,
+			    unsigned long),
+		      void *data)
+{
+    return 0;
+}
+
+https://elixir.bootlin.com/linux/v5.18.18/source/include/linux/kallsyms.h
+[68] !!!
+int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+		      unsigned long),
+	        void *data);
+[72]
+#ifdef CONFIG_KALLSYMS
+/* Lookup the address for a symbol. Returns 0 if not found. */
+unsigned long kallsyms_lookup_name(const char *name);
+
+
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ grep kallsyms_lookup_name /lib/modules/`uname -r`/build/Module.symvers
+0xe007de41	kallsyms_lookup_name	vmlinux	EXPORT_SYMBOL_GPL	
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ grep kallsyms_on_each_symbol /lib/modules/`uname -r`/build/Module.symvers
+0xbfc844b7	kallsyms_on_each_symbol	vmlinux	EXPORT_SYMBOL_GPL	
+
+====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ sudo grep ' kallsyms_on_each_symbol' /proc/kallsyms
+ffffffff98748400 T kallsyms_on_each_symbol
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ time sudo insmod mod_koes.ko 
+insmod: ERROR: could not insert module mod_koes.ko: Operation not permitted
+
+real	0m0,076s
+user	0m0,007s
+sys	0m0,016s
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ dmesg | tail -n3
+[19573.359810] + sys_call_table address = ffffffff996013c0
+[19573.359811] + find in position 51962
+[19573.359815] + sys_call_table : ffffffff988ce0d0 ffffffff988ce1f0 ffffffff988c9da0 ffffffff988c7e50 ffffffff988d31b0 ffffffff988d33d0 ffffffff988d3270 ffffffff988e70a0 ffffffff988cb9f0 ffffffff98636820  ...
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table$ cat /proc/kallsyms | wc -l
+144140
+
+====================================================================================================================

@@ -1,0 +1,5 @@
+all:
+default:
+clean:
+disclean:
+

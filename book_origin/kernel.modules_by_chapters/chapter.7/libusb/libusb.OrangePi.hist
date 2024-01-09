@@ -1,0 +1,454 @@
+27.08.2022
+==========
+
+olej@orangepione:~$ lsusb
+Bus 004 Device 002: ID 0557:0204 ATEN International Co., Ltd 
+Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+
+olej@orangepione:~$ lsusb -d 0557:0204 -v
+
+Bus 004 Device 002: ID 0557:0204 ATEN International Co., Ltd 
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0         8
+  idVendor           0x0557 ATEN International Co., Ltd
+  idProduct          0x0204 
+  bcdDevice            1.05
+  iManufacturer           0 
+  iProduct                2 
+  iSerial                 0 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x003b
+    bNumInterfaces          2
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      1 Boot Interface Subclass
+      bInterfaceProtocol      1 Keyboard
+      iInterface              0 
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.00
+          bCountryCode           33 US
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      65
+         Report Descriptors: 
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval              10
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      1 Boot Interface Subclass
+      bInterfaceProtocol      2 Mouse
+      iInterface              0 
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.00
+          bCountryCode           33 US
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      52
+         Report Descriptors: 
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval              10
+
+
+
+olej@orangepione:~$ lsusb -d 0557:0204 -v | grep bInterfaceNumber
+Couldn't open device, some information will be missing
+      bInterfaceNumber        0
+      bInterfaceNumber        1
+
+olej@orangepione:~$ lsusb -d 0557:0204 -v | grep bEndpointAddress
+Couldn't open device, some information will be missing
+        bEndpointAddress     0x81  EP 1 IN
+        bEndpointAddress     0x82  EP 2 IN
+
+olej@orangepione:~$ lsusb -d 0557:0204 -v | grep iInterface
+Couldn't open device, some information will be missing
+      iInterface              0 
+      iInterface              0 
+
+================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  utest.c `pkg-config libusb-1.0 --libs` -o utest
+/bin/sh: 1: pkg-config: not found
+/bin/sh: 1: pkg-config: not found
+utest.c:2:10: fatal error: libusb.h: Нет такого файла или каталога
+ #include <libusb.h>
+          ^~~~~~~~~~
+compilation terminated.
+make: *** [Makefile:10: utest] Ошибка 1
+
+================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/libusb$ pkg-config --list-all | grep usb
+bash: pkg-config: команда не найдена
+
+olej@orangepione:~/2022/kernel/examples/libusb$ aptitude search pkg-config 
+v   librust-pkg-config+default-dev                            -                                                                    
+v   librust-pkg-config-0+default-dev                          -                                                                    
+v   librust-pkg-config-0-dev                                  -                                                                    
+v   librust-pkg-config-0.3+default-dev                        -                                                                    
+v   librust-pkg-config-0.3-dev                                -                                                                    
+v   librust-pkg-config-0.3.14+default-dev                     -                                                                    
+v   librust-pkg-config-0.3.14-dev                             -                                                                    
+p   librust-pkg-config-dev                                    - Run pkg-config at build time Cargo build scripts - Rust source code
+p   pkg-config                                                - manage compile and link flags for libraries                        
+v   pkg-config-mingw-w64-i686                                 -                                                                    
+v   pkg-config-mingw-w64-x86-64                               -                                                                    
+p   ruby-pkg-config                                           - pkg-config implementation for Ruby                                 
+
+
+olej@orangepione:~/2022/kernel/examples/libusb$ sudo apt install pkg-config 
+[sudo] пароль для olej: 
+Чтение списков пакетов… Готово
+Построение дерева зависимостей       
+Чтение информации о состоянии… Готово
+Следующие НОВЫЕ пакеты будут установлены:
+  pkg-config
+Обновлено 0 пакетов, установлено 1 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.
+Необходимо скачать 60,7 kB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 165 kB.
+Пол:1 http://deb.debian.org/debian buster/main armhf pkg-config armhf 0.29-6 [60,7 kB]
+Получено 60,7 kB за 0с (280 kB/s)   
+Выбор ранее не выбранного пакета pkg-config.
+(Чтение базы данных … на данный момент установлен 173761 файл и каталог.)
+Подготовка к распаковке …/pkg-config_0.29-6_armhf.deb …
+Распаковывается pkg-config (0.29-6) …
+Настраивается пакет pkg-config (0.29-6) …
+Обрабатываются триггеры для man-db (2.8.5-2) …
+
+
+olej@orangepione:~/2022/kernel/examples/libusb$ pkg-config --list-all | grep usb
+olej@orangepione:~/2022/kernel/examples/libusb$
+
+olej@orangepione:~$ pkg-config --list-all
+geany              Geany - A fast and lightweight IDE using GTK+
+systemd            systemd - systemd System and Service Manager
+gnome-icon-theme   gnome-icon-theme - A collection of icons used as the basis for GNOME themes
+xkbcomp            xkbcomp - XKB keymap compiler
+gtk-engines-2      gtk-engines-2 - GTK+ Theme Engines
+openssl            OpenSSL - Secure Sockets Layer and cryptography libraries and tools
+libnl-genl-3.0     libnl-genl - Generic Netlink Library
+xkeyboard-config   XKeyboardConfig - X Keyboard configuration data
+fontutil           FontUtil - Font utilities dirs
+xbitmaps           X bitmaps - Bitmaps that are shared between X applications
+adwaita-icon-theme gnome-icon-theme - A collection of icons used as the basis for GNOME themes
+libcrypto          OpenSSL-libcrypto - OpenSSL cryptography library
+udev               udev - udev
+xfce4-session-2.0  xfce4-session - Xfce 4 session manager
+bash-completion    bash-completion - programmable completion for the bash shell
+poppler-data       poppler-data - Encoding files for use with poppler
+libnl-3.0          libnl - Convenience library for netlink sockets
+iso-codes          iso-codes - ISO country, language, script and currency codes and translations
+libssl             OpenSSL-libssl - Secure Sockets Layer and cryptography libraries
+shared-mime-info   shared-mime-info - Freedesktop common MIME database
+
+================================================================================================================
+
+olej@orangepione:~$ aptitude search libusb-
+p   libusb-0.1-4                                                 - userspace USB programming library                                      
+i A libusb-1.0-0                                                 - userspace USB programming library                                      
+p   libusb-1.0-0-dev                                             - userspace USB programming library development files                    
+p   libusb-1.0-doc                                               - documentation for userspace USB programming                            
+p   libusb-dev                                                   - userspace USB programming library development files                    
+p   libusb-ocaml                                                 - OCaml bindings to libusb-1.0 (runtime)                                 
+p   libusb-ocaml-dev                                             - OCaml bindings to libusb-1.0                                           
+v   libusb-ocaml-dev-iib39                                       -                                                                        
+v   libusb-ocaml-iib39                                           -                                                                        
+
+olej@orangepione:~$ sudo apt install libusb-1.0-0-dev
+[sudo] пароль для olej: 
+Чтение списков пакетов… Готово
+Построение дерева зависимостей       
+Чтение информации о состоянии… Готово
+Рекомендуемые пакеты:
+  libusb-1.0-doc
+Следующие НОВЫЕ пакеты будут установлены:
+  libusb-1.0-0-dev
+Обновлено 0 пакетов, установлено 1 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.
+Необходимо скачать 70,7 kB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 220 kB.
+Пол:1 http://deb.debian.org/debian buster/main armhf libusb-1.0-0-dev armhf 2:1.0.22-2 [70,7 kB]
+Получено 70,7 kB за 0с (257 kB/s)     
+Выбор ранее не выбранного пакета libusb-1.0-0-dev:armhf.
+(Чтение базы данных … на данный момент установлено 173778 файлов и каталогов.)
+Подготовка к распаковке …/libusb-1.0-0-dev_2%3a1.0.22-2_armhf.deb …
+Распаковывается libusb-1.0-0-dev:armhf (2:1.0.22-2) …
+Настраивается пакет libusb-1.0-0-dev:armhf (2:1.0.22-2) …
+
+
+
+olej@orangepione:~$ aptitude search libusb | grep ^i
+i A libusb-1.0-0 - userspace USB programming library
+i  libusb-1.0-0-dev - userspace USB programming library development files
+
+
+olej@orangepione:~$ aptitude show libusb-1.0-0 
+Пакет: libusb-1.0-0                              
+Версия: 2:1.0.22-2
+Состояние: установлен
+Установлен автоматически: да
+Мультиархитектура: такая же
+Приоритет: необязательный
+Раздел: libs
+Сопровождающий: Aurelien Jarno <aurel32@debian.org>
+Архитектура: armhf
+Размер в распакованном виде: 102 k
+Зависит: libc6 (>= 2.17), libudev1 (>= 183)
+Описание: userspace USB programming library
+ 
+Домашняя страница: http://www.libusb.info
+Метки: role::shared-lib
+
+
+
+olej@orangepione:~/2022/kernel/examples/libusb$ pkg-config --list-all | grep usb
+libusb-1.0         libusb-1.0 - C API for USB device access from Linux, Mac OS X, Windows, OpenBSD/NetBSD and Solaris userspace
+
+
+olej@orangepione:~$ pkg-config libusb-1.0 --cflags
+-I/usr/include/libusb-1.0
+
+olej@orangepione:~$ pkg-config libusb-1.0 --libs
+-lusb-1.0
+
+================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  utest.c `pkg-config libusb-1.0 --libs` -o utest
+
+
+olej@orangepione:~/2022/kernel/examples/libusb$ sudo ./utest 
+[sudo] пароль для olej: 
+init = 0
+[timestamp] [threadID] facility level [function call] <message>
+--------------------------------------------------------------------------------
+[ 0.020584] [00002f76] libusb: debug [libusb_get_device_list] 
+[ 0.020724] [00002f76] libusb: debug [libusb_get_device_descriptor] 
+[ 0.020752] [00002f76] libusb: debug [libusb_open] open 4.2
+[ 0.020888] [00002f76] libusb: debug [usbi_add_pollfd] add fd 9 events 4
+[ 0.020936] [00002f76] libusb: debug [libusb_kernel_driver_active] interface 1
+[ 0.020975] [00002f76] libusb: debug [libusb_detach_kernel_driver] interface 1
+[ 0.036051] [00002f76] libusb: debug [libusb_claim_interface] interface 1
+[ 0.036213] [00002f76] libusb: debug [libusb_alloc_transfer] transfer 0xcef3c8
+[ 0.036260] [00002f76] libusb: debug [libusb_submit_transfer] transfer 0xcef3c8
+[ 0.036296] [00002f76] libusb: debug [add_to_flying_list] arm timerfd for timeout in 5000ms (first in line)
+[ 0.036335] [00002f76] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 0.036427] [00002f76] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 0.036480] [00002f76] libusb: debug [handle_events] poll fds modified, reallocating
+[ 0.036536] [00002f76] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 1.024749] [00002f76] libusb: debug [handle_events] poll() returned 1
+[ 1.024855] [00002f76] libusb: debug [reap_for_handle] urb type=1 status=0 transferred=4
+[ 1.024885] [00002f76] libusb: debug [handle_bulk_completion] handling completion status 0 of bulk urb 1/1
+[ 1.024915] [00002f76] libusb: debug [handle_bulk_completion] last URB in transfer --> complete!
+[ 1.024938] [00002f76] libusb: debug [disarm_timerfd] 
+[ 1.024975] [00002f76] libusb: debug [usbi_handle_transfer_completion] transfer 0xcef3c8 has callback 0xb6f8dd95
+[ 1.024996] [00002f76] libusb: debug [sync_transfer_cb] actual_length=4
+[ 1.025056] [00002f76] libusb: debug [libusb_free_transfer] transfer 0xcef3c8
+read = 4buf[0] = 0
+buf[1] = 6
+buf[2] = 0
+buf[3] = 0
+[ 1.025153] [00002f76] libusb: debug [libusb_release_interface] interface 1
+[ 1.025263] [00002f76] libusb: debug [libusb_attach_kernel_driver] interface 1
+[ 1.032928] [00002f76] libusb: debug [libusb_close] 
+[ 1.033030] [00002f76] libusb: debug [usbi_remove_pollfd] remove fd 9
+[ 1.033102] [00002f76] libusb: debug [libusb_exit] 
+[ 1.033128] [00002f76] libusb: debug [libusb_exit] destroying default context
+
+
+
+================================================================================================================
+
+
+olej@orangepione:~/2022/kernel/examples/libusb$ sudo ./utest 25
+read = 4 байт: 1 0 0 0 
+read = 4 байт: 0 0 0 0 
+read = 4 байт: 2 0 0 0 
+read = 4 байт: 0 0 0 0 
+read = 4 байт: 0 1 0 0 
+read = 4 байт: 0 2 1 0 
+read = 4 байт: 0 3 2 0 
+read = 4 байт: 0 2 2 0 
+read = 4 байт: 0 2 1 0 
+read = 4 байт: 0 4 3 0 
+read = 4 байт: 0 5 4 0 
+read = 4 байт: 0 6 2 0 
+read = 4 байт: 0 8 3 0 
+read = 4 байт: 0 6 2 0 
+read = 4 байт: 0 6 3 0 
+read = 4 байт: 0 4 2 0 
+read = 4 байт: 0 2 0 0 
+read = 4 байт: 0 1 1 0 
+read = 4 байт: 0 254 0 0 
+read = 4 байт: 0 251 0 0 
+read = 4 байт: 0 248 0 0 
+read = 4 байт: 0 247 255 0 
+read = 4 байт: 0 245 254 0 
+read = 4 байт: 0 245 254 0 
+read = 4 байт: 0 248 254 0 
+
+
+olej@orangepione:~/2022/kernel/examples/libusb$ sudo ./utest -v
+[timestamp] [threadID] facility level [function call] <message>
+--------------------------------------------------------------------------------
+[ 0.026655] [00003195] libusb: debug [libusb_get_device_list] 
+[ 0.026808] [00003195] libusb: debug [libusb_get_device_descriptor] 
+[ 0.026832] [00003195] libusb: debug [libusb_open] open 4.2
+[ 0.026953] [00003195] libusb: debug [usbi_add_pollfd] add fd 9 events 4
+[ 0.026998] [00003195] libusb: debug [libusb_kernel_driver_active] interface 1
+[ 0.027037] [00003195] libusb: debug [libusb_detach_kernel_driver] interface 1
+[ 0.045896] [00003195] libusb: debug [libusb_claim_interface] interface 1
+[ 0.046091] [00003195] libusb: debug [libusb_alloc_transfer] transfer 0x21dd438
+[ 0.046157] [00003195] libusb: debug [libusb_submit_transfer] transfer 0x21dd438
+[ 0.046231] [00003195] libusb: debug [add_to_flying_list] arm timerfd for timeout in 5000ms (first in line)
+[ 0.046307] [00003195] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 0.046418] [00003195] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 0.046466] [00003195] libusb: debug [handle_events] poll fds modified, reallocating
+[ 0.046540] [00003195] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 1.996556] [00003195] libusb: debug [handle_events] poll() returned 1
+[ 1.996669] [00003195] libusb: debug [reap_for_handle] urb type=1 status=0 transferred=4
+[ 1.996700] [00003195] libusb: debug [handle_bulk_completion] handling completion status 0 of bulk urb 1/1
+[ 1.996729] [00003195] libusb: debug [handle_bulk_completion] last URB in transfer --> complete!
+[ 1.996755] [00003195] libusb: debug [disarm_timerfd] 
+[ 1.996797] [00003195] libusb: debug [usbi_handle_transfer_completion] transfer 0x21dd438 has callback 0xb6f4ad95
+[ 1.996825] [00003195] libusb: debug [sync_transfer_cb] actual_length=4
+[ 1.996885] [00003195] libusb: debug [libusb_free_transfer] transfer 0x21dd438
+read = 4 байт: 0 1 0 0 
+[ 1.997142] [00003195] libusb: debug [libusb_alloc_transfer] transfer 0x21ed3c8
+[ 1.997173] [00003195] libusb: debug [libusb_submit_transfer] transfer 0x21ed3c8
+[ 1.997193] [00003195] libusb: debug [add_to_flying_list] arm timerfd for timeout in 5000ms (first in line)
+[ 1.997224] [00003195] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 1.997304] [00003195] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 1.997331] [00003195] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 2.012569] [00003195] libusb: debug [handle_events] poll() returned 1
+[ 2.012653] [00003195] libusb: debug [reap_for_handle] urb type=1 status=0 transferred=4
+[ 2.012685] [00003195] libusb: debug [handle_bulk_completion] handling completion status 0 of bulk urb 1/1
+[ 2.012711] [00003195] libusb: debug [handle_bulk_completion] last URB in transfer --> complete!
+[ 2.012735] [00003195] libusb: debug [disarm_timerfd] 
+[ 2.012764] [00003195] libusb: debug [usbi_handle_transfer_completion] transfer 0x21ed3c8 has callback 0xb6f4ad95
+[ 2.012789] [00003195] libusb: debug [sync_transfer_cb] actual_length=4
+[ 2.012814] [00003195] libusb: debug [libusb_free_transfer] transfer 0x21ed3c8
+read = 4 байт: 0 2 0 0 
+[ 2.012864] [00003195] libusb: debug [libusb_alloc_transfer] transfer 0x21ecf88
+[ 2.012884] [00003195] libusb: debug [libusb_submit_transfer] transfer 0x21ecf88
+[ 2.012903] [00003195] libusb: debug [add_to_flying_list] arm timerfd for timeout in 5000ms (first in line)
+[ 2.012961] [00003195] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 2.013029] [00003195] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 2.013059] [00003195] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 2.028555] [00003195] libusb: debug [handle_events] poll() returned 1
+[ 2.028636] [00003195] libusb: debug [reap_for_handle] urb type=1 status=0 transferred=4
+[ 2.028667] [00003195] libusb: debug [handle_bulk_completion] handling completion status 0 of bulk urb 1/1
+[ 2.028691] [00003195] libusb: debug [handle_bulk_completion] last URB in transfer --> complete!
+[ 2.028713] [00003195] libusb: debug [disarm_timerfd] 
+[ 2.028742] [00003195] libusb: debug [usbi_handle_transfer_completion] transfer 0x21ecf88 has callback 0xb6f4ad95
+[ 2.028775] [00003195] libusb: debug [sync_transfer_cb] actual_length=4
+[ 2.028802] [00003195] libusb: debug [libusb_free_transfer] transfer 0x21ecf88
+read = 4 байт: 0 2 3 0 
+[ 2.028854] [00003195] libusb: debug [libusb_alloc_transfer] transfer 0x21f10c0
+[ 2.028876] [00003195] libusb: debug [libusb_submit_transfer] transfer 0x21f10c0
+[ 2.028896] [00003195] libusb: debug [add_to_flying_list] arm timerfd for timeout in 5000ms (first in line)
+[ 2.028922] [00003195] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 2.029025] [00003195] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 2.029056] [00003195] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 2.036587] [00003195] libusb: debug [handle_events] poll() returned 1
+[ 2.036728] [00003195] libusb: debug [reap_for_handle] urb type=1 status=0 transferred=4
+[ 2.036779] [00003195] libusb: debug [handle_bulk_completion] handling completion status 0 of bulk urb 1/1
+[ 2.036819] [00003195] libusb: debug [handle_bulk_completion] last URB in transfer --> complete!
+[ 2.036861] [00003195] libusb: debug [disarm_timerfd] 
+[ 2.036914] [00003195] libusb: debug [usbi_handle_transfer_completion] transfer 0x21f10c0 has callback 0xb6f4ad95
+[ 2.036987] [00003195] libusb: debug [sync_transfer_cb] actual_length=4
+[ 2.037049] [00003195] libusb: debug [libusb_free_transfer] transfer 0x21f10c0
+read = 4 байт: 0 2 3 0 
+[ 2.037137] [00003195] libusb: debug [libusb_alloc_transfer] transfer 0x21f0ef0
+[ 2.037167] [00003195] libusb: debug [libusb_submit_transfer] transfer 0x21f0ef0
+[ 2.037201] [00003195] libusb: debug [add_to_flying_list] arm timerfd for timeout in 5000ms (first in line)
+[ 2.037240] [00003195] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 2.037341] [00003195] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 2.037377] [00003195] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 2.052595] [00003195] libusb: debug [handle_events] poll() returned 1
+[ 2.052718] [00003195] libusb: debug [reap_for_handle] urb type=1 status=0 transferred=4
+[ 2.052757] [00003195] libusb: debug [handle_bulk_completion] handling completion status 0 of bulk urb 1/1
+[ 2.052794] [00003195] libusb: debug [handle_bulk_completion] last URB in transfer --> complete!
+[ 2.052830] [00003195] libusb: debug [disarm_timerfd] 
+[ 2.052863] [00003195] libusb: debug [usbi_handle_transfer_completion] transfer 0x21f0ef0 has callback 0xb6f4ad95
+[ 2.052886] [00003195] libusb: debug [sync_transfer_cb] actual_length=4
+[ 2.052916] [00003195] libusb: debug [libusb_free_transfer] transfer 0x21f0ef0
+read = 4 байт: 0 2 5 0 
+[ 2.053034] [00003195] libusb: debug [libusb_release_interface] interface 1
+[ 2.053156] [00003195] libusb: debug [libusb_attach_kernel_driver] interface 1
+[ 2.060124] [00003195] libusb: debug [libusb_close] 
+[ 2.060231] [00003195] libusb: debug [usbi_remove_pollfd] remove fd 9
+[ 2.060294] [00003195] libusb: debug [libusb_exit] 
+[ 2.060320] [00003195] libusb: debug [libusb_exit] destroying default context
+
+================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  utest.c `pkg-config libusb-1.0 --libs` -o utest
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  ulist.c `pkg-config libusb-1.0 --libs` -o ulist
+
+olej@orangepione:~/2022/kernel/examples/libusb$ sudo ./ulist
+[sudo] пароль для olej: 
+0557:0204 (bus 4, device 2) path: 1
+1d6b:0001 (bus 4, device 1)
+1d6b:0002 (bus 3, device 1)
+1d6b:0001 (bus 2, device 1)
+1d6b:0002 (bus 1, device 1)
+1d6b:0002 (bus 5, device 1)
+
+
+================================================================================================================
+

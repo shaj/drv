@@ -1,0 +1,385 @@
+17.06.2022
+==========
+
+[olej@xenix ~]$ uname -a
+Linux xenix.localdomain 5.17.13-200.fc35.x86_64 #1 SMP PREEMPT Mon Jun 6 14:38:57 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+==========================================================================================================================
+
+<netdevice.h>
+[1022]
+[1113]
+ * void (*ndo_get_stats64)(struct net_device *dev,
+ *                         struct rtnl_link_stats64 *storage);
+ * struct net_device_stats* (*ndo_get_stats)(struct net_device *dev);
+ *   Called when a user wants to get the network device usage
+ *   statistics. Drivers must do one of the following:
+ *   1. Define @ndo_get_stats64 to fill in a zero-initialised
+ *      rtnl_link_stats64 structure passed by the caller.
+ *   2. Define @ndo_get_stats to update a net_device_stats structure
+ *      (which should normally be dev->stats) and return a pointer to
+ *      it. The structure may be changed asynchronously only if each
+ *      field is written atomically.
+ *   3. Update dev->stats asynchronously and atomically, and define
+ *      neither operation.
+
+[1340]
+struct net_device_ops {
+     int            (*ndo_init)(struct net_device *dev);
+     void           (*ndo_uninit)(struct net_device *dev);
+     int            (*ndo_open)(struct net_device *dev);
+     int            (*ndo_stop)(struct net_device *dev);
+     netdev_tx_t         (*ndo_start_xmit)(struct sk_buff *skb,
+                                struct net_device *dev);
+...
+
+[1691]
+ *   struct net_device - The DEVICE structure.
+ *   @addr_len:          Hardware address length
+ *   @uc:           unicast mac addresses
+ *   @mc:           multicast mac addresses
+...
+ *   @ip_ptr:  IPv4 specific data
+...
+ *   @ip6_ptr: IPv6 specific data
+...
+ *   @dev_addr:     Hw address (before bcast,
+ *             because most packets are unicast)
+...
+ *   @dev_addr_shadow:   Copy of @dev_addr to catch direct writes.
+
+[1956]
+struct net_device {
+     char           name[IFNAMSIZ];
+...
+     struct net_device_stats  stats; /* not used by modern drivers */
+...
+     unsigned char       addr_len;
+...
+     struct netdev_hw_addr_list    uc;
+     struct netdev_hw_addr_list    mc;
+...
+     struct in_device __rcu   *ip_ptr;
+...
+     struct inet6_dev __rcu   *ip6_ptr;
+...
+     /* Interface address info used in eth_type_trans() */
+     const unsigned char *dev_addr;
+...
+     u8 dev_addr_shadow[MAX_ADDR_LEN];
+
+
+
+==========================================================================================================================
+
+[olej@xenix net]$ sudo insmod devices.ko 
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+[olej@xenix net]$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+
+
+[olej@xenix net]$ dmesg | tail -n 60
+...
+[17575.994973] Hello: module loaded at 0xffffffffc08fa000
+[17575.994977] Hello: dev_base address=0xffff917201353000
+[17575.994978] name=    lo irq=   0
+[17575.994980] &net_device_ops=ffffffff8f327300
+[17575.994981] 00:00:00:00:00:00
+[17575.994982] MAC = 
+[17575.994983] \x00
+[17575.994984] \x00
+[17575.994984] \x00
+[17575.994985] \x00
+[17575.994985] \x00
+[17575.994986] \x00
+
+[17575.994987] name=enp3s0 irq=   0
+[17575.994988] &net_device_ops=ffffffffc03ab920
+[17575.994989] 90:1b:0e:2b:e1:9c
+[17575.994990] MAC = 
+[17575.994990] \x90
+[17575.994991] \x1b
+[17575.994992] \x0e
+[17575.994992] +
+[17575.994993] \xe1
+[17575.994993] \x9c
+
+[17575.994994] name=virbr0 irq=   0
+[17575.994995] &net_device_ops=ffffffffc1c1b180
+[17575.994996] 00:00:00:00:00:00
+[17575.994997] MAC = 
+[17575.994997] R
+[17575.994998] T
+[17575.994998] \x00
+[17575.994999] s
+[17575.994999] &
+[17575.995000] 
+...
+
+==========================================================================================================================
+
+[olej@xenix net]$ make
+make -C /lib/modules/5.17.13-200.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  MODPOST /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/Module.symvers
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+
+
+[olej@xenix net]$ sudo insmod devices.ko 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+[olej@xenix net]$ dmesg | tail -n 20
+[22283.213239] nvidia-modeset: WARNING: GPU:0: Unable to read EDID for display device Acer S231HL (VGA-0)
+[22293.446742] nvidia-modeset: WARNING: GPU:0: Unable to read EDID for display device Acer S231HL (VGA-0)
+[22303.696961] nvidia-modeset: WARNING: GPU:0: Unable to read EDID for display device Acer S231HL (VGA-0)
+[22313.931202] nvidia-modeset: WARNING: GPU:0: Unable to read EDID for display device Acer S231HL (VGA-0)
+[22324.163464] nvidia-modeset: WARNING: GPU:0: Unable to read EDID for display device Acer S231HL (VGA-0)
+[22333.834591] Hello: module loaded at 0xffffffffc028f000
+[22333.834595] Hello: dev_base address=0xffff917201353000
+[22333.834596] name=    lo irq=  0 
+[22333.834597] &net_device_ops=ffffffff8f327300
+[22333.834598] MAC=00:00:00:00:00:00 6
+[22333.834600] 00:00:00:00:00:00
+[22333.834601] name=enp3s0 irq=  0 
+[22333.834602] &net_device_ops=ffffffffc03ab920
+[22333.834603] MAC=90:1b:0e:2b:e1:9c 6
+[22333.834604] 90:1b:0e:2b:e1:9c
+[22333.834605] name=virbr0 irq=  0 
+[22333.834606] &net_device_ops=ffffffffc1c1b180
+[22333.834607] MAC=00:00:00:00:00:00 6
+[22333.834608] 52:54:00:73:26:0d
+[22334.413983] nvidia-modeset: WARNING: GPU:0: Unable to read EDID for display device Acer S231HL (VGA-0)
+
+
+[olej@xenix net]$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 90:1b:0e:2b:e1:9c brd ff:ff:ff:ff:ff:ff
+3: virbr0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:73:26:0d brd ff:ff:ff:ff:ff:ff
+
+==========================================================================================================================
+
+[olej@xenix net]$ make
+make -C /lib/modules/5.17.13-200.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  MODPOST /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/Module.symvers
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+
+[olej@xenix net]$ sudo insmod devices.ko 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+[olej@xenix net]$ dmesg | tail -n 15
+[22682.585862] nvidia-modeset: WARNING: GPU:0: Unable to read EDID for display device Acer S231HL (VGA-0)
+[22688.765817] Hello: module loaded at 0xffffffffc028f000
+[22688.765821] Hello: dev_base address=0xffff917201353000
+[22688.765822] name=    lo irq=  0 
+[22688.765823] &net_device_ops=ffffffff8f327300
+[22688.765824] MAC=00:00:00:00:00:00 6
+[22688.765825] 00:00:00:00:00:00
+[22688.765826] name=enp3s0 irq=  0 
+[22688.765827] &net_device_ops=ffffffffc03ab920
+[22688.765828] MAC=90:1b:0e:2b:e1:9c 6
+[22688.765829] 90:1b:0e:2b:e1:9c
+[22688.765830] name=virbr0 irq=  0 
+[22688.765842] &net_device_ops=ffffffffc1c1b180
+[22688.765844] MAC=00:00:00:00:00:00 6
+[22688.765846] 52:54:00:73:26:0d
+
+==========================================================================================================================
+
+[olej@xenix net]$ make
+make -C /lib/modules/5.17.13-200.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  MODPOST /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/Module.symvers
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+
+
+[olej@xenix net]$ sudo insmod devices.ko 
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+[olej@xenix net]$ dmesg | grep -v audit | grep -v nvidia | tail -n5
+[ 5134.179333] Hello: module loaded at 0xffffffffc0d22000
+[ 5134.179336] Hello: dev_base address=0xffff89ca01355000
+[ 5134.179338] name=lo     irq=0   MAC=00:00:00:00:00:00 rx_bytes=1777     tx_bytes=1777     
+[ 5134.179362] name=enp3s0 irq=0   MAC=90:1b:0e:2b:e1:9c rx_bytes=968423   tx_bytes=346814   
+[ 5134.179366] name=virbr0 irq=0   MAC=52:54:00:73:26:0d rx_bytes=0        tx_bytes=0        
+
+
+[olej@xenix net]$ ifconfig
+enp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.20  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::921b:eff:fe2b:e19c  prefixlen 64  scopeid 0x20<link>
+        ether 90:1b:0e:2b:e1:9c  txqueuelen 1000  (Ethernet)
+        RX packets 6791  bytes 972667 (949.8 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 2889  bytes 353246 (344.9 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 13  bytes 1777 (1.7 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 13  bytes 1777 (1.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+virbr0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 192.168.122.1  netmask 255.255.255.0  broadcast 192.168.122.255
+        ether 52:54:00:73:26:0d  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+==========================================================================================================================
+
+[olej@xenix net]$ make
+make -C /lib/modules/5.17.13-200.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  MODPOST /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/Module.symvers
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/kernels/5.17.13-200.fc35.x86_64»
+
+[olej@xenix net]$ sudo insmod devices.ko 
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+[olej@xenix net]$ ifconfig
+enp3s0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.20  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::921b:eff:fe2b:e19c  prefixlen 64  scopeid 0x20<link>
+        ether 90:1b:0e:2b:e1:9c  txqueuelen 1000  (Ethernet)
+        RX packets 7820  bytes 1094515 (1.0 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 3324  bytes 401604 (392.1 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 13  bytes 1777 (1.7 KiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 13  bytes 1777 (1.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+virbr0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        inet 192.168.122.1  netmask 255.255.255.0  broadcast 192.168.122.255
+        ether 52:54:00:73:26:0d  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+[olej@xenix net]$ dmesg | grep -v audit | grep -v nvidia | tail -n6
+[ 5134.179366] name=virbr0 irq=0   MAC=52:54:00:73:26:0d rx_bytes=0        tx_bytes=0        
+[ 5849.975680] Hello: module loaded at 0xffffffffc0d22000
+[ 5849.975682] Hello: dev_base address=0xffff89ca01355000
+[ 5849.975684] name=lo     irq=0   MAC=00:00:00:00:00:00 rx_bytes=1777     tx_bytes=1777     
+[ 5849.975709] name=enp3s0 irq=0   MAC=90:1b:0e:2b:e1:9c rx_bytes=1092883  tx_bytes=400020   
+[ 5849.975712] name=virbr0 irq=0   MAC=52:54:00:73:26:0d rx_bytes=0        tx_bytes=0        
+
+--------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/mulnet.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/net/network.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo insmod devices.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module devices.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ ifconfig
+eno1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.14  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 90:b1:1c:54:3a:46  txqueuelen 1000  (Ethernet)
+        RX packets 23832  bytes 13408098 (13.4 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 12879  bytes 3525804 (3.5 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 16  
+
+eno2: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.1.13  netmask 255.255.255.0  broadcast 192.168.1.255
+        ether 90:b1:1c:54:3a:47  txqueuelen 1000  (Ethernet)
+        RX packets 10629  bytes 2933143 (2.9 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1347  bytes 190302 (190.3 KB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 17  
+
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10<host>
+        loop  txqueuelen 1000  (Локальная петля (Loopback))
+        RX packets 16230  bytes 9034614 (9.0 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 16230  bytes 9034614 (9.0 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+team1: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+        ether 2a:04:36:f7:ac:a9  txqueuelen 1000  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ dmesg | tail -n6
+[ 6724.832136] Hello: module loaded at 0xffffffffc0e8d000
+[ 6724.832138] Hello: dev_base address=0xffff8bc50b195000
+[ 6724.832143] name=lo     irq=0   MAC=00:00:00:00:00:00 rx_bytes=9016309  tx_bytes=9016309  
+[ 6724.832147] name=eno1   irq=16  MAC=90:b1:1c:54:3a:46 rx_bytes=13378487 tx_bytes=3522750  
+[ 6724.832149] name=eno2   irq=17  MAC=90:b1:1c:54:3a:47 rx_bytes=2926452  tx_bytes=190302   
+[ 6724.832160] name=team1  irq=0   MAC=2a:04:36:f7:ac:a9 rx_bytes=0        tx_bytes=0        
+
+==========================================================================================================================

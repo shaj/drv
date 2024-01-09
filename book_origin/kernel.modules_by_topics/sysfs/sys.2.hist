@@ -1,0 +1,159 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c:54:17: error: expected ‘)’ before ‘(’ token
+   54 | CLASS_ATTR( xxx, ( S_IWUSR | S_IRUGO ), &x_show, &x_store );
+      |                 ^~
+      |                 )
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c: In function ‘x_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c:62:39: error: ‘class_attr_xxx’ undeclared (first use in this function); did you mean ‘class_attribute’?
+   62 |    res = class_create_file( x_class, &class_attr_xxx );
+      |                                       ^~~~~~~~~~~~~~
+      |                                       class_attribute
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c:62:39: note: each undeclared identifier is reported only once for each function it appears in
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c: In function ‘x_cleanup’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c:72:33: error: ‘class_attr_xxx’ undeclared (first use in this function); did you mean ‘class_attribute’?
+   72 |    class_remove_file( x_class, &class_attr_xxx );
+      |                                 ^~~~~~~~~~~~~~
+      |                                 class_attribute
+At top level:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c:41:16: warning: ‘x_store’ defined but not used [-Wunused-function]
+   41 | static ssize_t x_store( struct class *class, struct class_attribute *attr, const char *buf, size_t count ) {
+      |                ^~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.c:30:16: warning: ‘x_show’ defined but not used [-Wunused-function]
+   30 | static ssize_t x_show( struct class *class, struct class_attribute *attr, char *buf ) {
+      |                ^~~~~~
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys/xxx.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:15: default] Ошибка 2
+
+======================================================================================================================================================
+
+16.06.2022
+==========
+
+/lib/modules/5.4.0-120-generic/build/include/linux/kobject.h
+[65]
+struct kobject {
+        const char              *name;
+        struct list_head        entry;
+        struct kobject          *parent;
+        struct kset             *kset;
+        struct kobj_type        *ktype;
+        struct kernfs_node      *sd; /* sysfs directory entry */
+        struct kref             kref;
+#ifdef CONFIG_DEBUG_KOBJECT_RELEASE
+        struct delayed_work     release;
+#endif
+        unsigned int state_initialized:1;
+        unsigned int state_in_sysfs:1;
+        unsigned int state_add_uevent_sent:1;
+        unsigned int state_remove_uevent_sent:1;
+        unsigned int uevent_suppress:1;
+};
+
+[139]
+struct kobj_type {
+        void (*release)(struct kobject *kobj);
+        const struct sysfs_ops *sysfs_ops;
+        struct attribute **default_attrs;       /* use default_groups instead */
+        const struct attribute_group **default_groups;
+        const struct kobj_ns_type_operations *(*child_ns_type)(struct kobject *kobj);
+        const void *(*namespace)(struct kobject *kobj);
+        void (*get_ownership)(struct kobject *kobj, kuid_t *uid, kgid_t *gid);
+};
+
+
+/lib/modules/5.4.0-120-generic/build/include/linux/sysfs.h
+[30]
+struct attribute {
+        const char              *name;
+        umode_t                 mode;
+#ifdef CONFIG_DEBUG_LOCK_ALLOC
+        bool                    ignore_lockdep:1;
+        struct lock_class_key   *key;
+        struct lock_class_key   skey;
+#endif
+};
+
+
+/lib/modules/5.4.0-120-generic/build/include/linux/types.h
+[19]
+typedef unsigned short          umode_t;
+
+======================================================================================================================================================
+
+/lib/modules/5.4.0-120-generic/build/include/linux/device.h
+
+
+#define CLASS_ATTR_STRING(_name, _mode, _str) \
+        struct class_attribute_string class_attr_##_name = \
+                _CLASS_ATTR_STRING(_name, _mode, _str)
+
+
+[831]
+#define DEVICE_ATTR(_name, _mode, _show, _store) \
+        struct device_attribute dev_attr_##_name = __ATTR(_name, _mode, _show, _store)
+#define DEVICE_ATTR_PREALLOC(_name, _mode, _show, _store) \
+        struct device_attribute dev_attr_##_name = \
+                __ATTR_PREALLOC(_name, _mode, _show, _store)
+#define DEVICE_ATTR_RW(_name) \
+        struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
+#define DEVICE_ATTR_RO(_name) \
+        struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+#define DEVICE_ATTR_WO(_name) \
+        struct device_attribute dev_attr_##_name = __ATTR_WO(_name)
+
+[804]
+/* interface for exporting device attributes */
+struct device_attribute {
+        struct attribute        attr;
+        ssize_t (*show)(struct device *dev, struct device_attribute *attr,
+                        char *buf);
+        ssize_t (*store)(struct device *dev, struct device_attribute *attr,
+                         const char *buf, size_t count);
+};
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sysfs$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.c: In function ‘x_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.c:79:37: error: passing argument 2 of ‘class_create_file’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+   79 |    res = class_create_file(x_class, &dev_attr_xxx);
+      |                                     ^~~~~~~~~~~~~
+      |                                     |
+      |                                     struct device_attribute *
+In file included from ./include/linux/cdev.h:8,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.c:3:
+./include/linux/device.h:733:36: note: expected ‘const struct class_attribute *’ but argument is of type ‘struct device_attribute *’
+  733 |      const struct class_attribute *attr)
+      |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.c: In function ‘x_cleanup’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.c:90:31: error: passing argument 2 of ‘class_remove_file’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+   90 |    class_remove_file(x_class, &dev_attr_xxx);
+      |                               ^~~~~~~~~~~~~
+      |                               |
+      |                               struct device_attribute *
+In file included from ./include/linux/cdev.h:8,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.c:3:
+./include/linux/device.h:739:40: note: expected ‘const struct class_attribute *’ but argument is of type ‘struct device_attribute *’
+  739 |          const struct class_attribute *attr)
+      |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs/xxx.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sysfs] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:15: default] Ошибка 2
+
+
+
+======================================================================================================================================================

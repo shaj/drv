@@ -1,0 +1,63 @@
+02.07.2022
+==========
+
+olej@astra:~/2022/kernel/sys_call_table/find$ make
+make -C /lib/modules/4.19.0-1-generic/build M=/home/olej/2022/kernel/sys_call_table/find modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.19.0-1-generic»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/find/mod_wrc.o
+/home/olej/2022/kernel/sys_call_table/find/mod_wrc.c: In function ‘wr_init’:
+/home/olej/2022/kernel/sys_call_table/find/mod_wrc.c:37:7: warning: ‘n’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+       printk("+ printf() return : %d\n", n);
+       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  CC [M]  /home/olej/2022/kernel/sys_call_table/find/mod_kct.o
+  CC [M]  /home/olej/2022/kernel/sys_call_table/find/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC      /home/olej/2022/kernel/sys_call_table/find/mod_kct.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/find/mod_kct.ko
+  CC      /home/olej/2022/kernel/sys_call_table/find/mod_koes.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/find/mod_koes.ko
+  CC      /home/olej/2022/kernel/sys_call_table/find/mod_wrc.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/find/mod_wrc.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.19.0-1-generic»
+
+
+olej@astra:~/2022/kernel/sys_call_table$ ./test_distr
+[sudo] пароль для olej: 
+Linux astra 4.19.0-1-generic #astra1 SMP Wed Mar 20 12:59:21 UTC 2019 x86_64 GNU/Linux
+System:    Host: astra Kernel: 4.19.0-1-generic x86_64 (64 bit gcc: 6.3.0) Desktop: N/A dm: N/A
+           Distro: Astra Linux (Orel 2.12.43)
+CPU:       Single core Intel Xeon E5-2470 v2 (-MCP-) cache: 25600 KB
+           flags: (lm nx sse sse2 sse3 sse4_1 sse4_2 ssse3) bmips: 4762 speed: 2381 MHz (max)
+
+
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+cat: /boot/config-4.19.0-1-generic: Нет такого файла или каталога
+cat: /boot/config-4.19.0-1-generic: Нет такого файла или каталога
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_ABSOLUTE_PERCPU=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+ffffffff9d53acc0 T module_kallsyms_on_each_symbol
+ffffffff9d53b570 T kallsyms_on_each_symbol
+ffffffff9d53ac30 T module_kallsyms_lookup_name
+ffffffff9d53b640 T kallsyms_lookup_name
+ffffffff9d53b700 T kallsyms_lookup_size_offset
+ffffffff9d53b7d0 T kallsyms_lookup
+ffffffff9e2001c0 R sys_call_table
+ffffffff9e2015a0 R ia32_sys_call_table
+0x00000000	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL
+0x00000000	sdev_prefix_printk	vmlinux	EXPORT_SYMBOL
+0x00000000	netdev_printk	vmlinux	EXPORT_SYMBOL
+0x00000000	kallsyms_lookup_name	vmlinux	EXPORT_SYMBOL
+0x00000000	kallsyms_on_each_symbol	vmlinux	EXPORT_SYMBOL
+
+===========================================================================================================
+
+olej@astra:~/2022/kernel/sys_call_table/find$ ls -l *.ko
+-rw-r--r-- 1 olej olej 5448 Июл  2 12:41 mod_kct.ko
+-rw-r--r-- 1 olej olej 5848 Июл  2 12:41 mod_koes.ko
+-rw-r--r-- 1 olej olej 5632 Июл  2 12:41 mod_wrc.ko
+
+===========================================================================================================

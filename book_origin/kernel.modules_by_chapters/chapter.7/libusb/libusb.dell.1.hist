@@ -1,0 +1,419 @@
+27.08.2022
+==========
+
+olej@R420:~$ aptitude search libusb | grep ^i
+i A libhidapi-libusb0 - Multi-Platform library for communication with HID devices (libusb backend)
+i  libusb-1.0-0 - библиотека для работы с USB
+i  libusb-1.0-0-dev - userspace USB programming library development files
+i A libusb-1.0-doc - documentation for userspace USB programming
+i  libusbmuxd6 - USB multiplexor daemon for iPhone and iPod Touch devices - library
+
+-------------------------------------------------------------------------------------------------------------
+
+olej@R420:/usr/include$ ls /usr/include/libusb-1.0/libusb.h 
+/usr/include/libusb-1.0/libusb.h
+
+
+olej@R420:~$ pkg-config --list-all | grep usb
+hidapi-libusb                  hidapi-libusb - C Library for USB HID device access from Linux, Mac OS X, FreeBSD, and Windows. This is the libusb implementation.
+libusb-1.0                     libusb-1.0 - C API for USB device access from Linux, Mac OS X, Windows, OpenBSD/NetBSD and Solaris userspace
+
+olej@R420:~$ pkg-config libusb-1.0 --cflags --libs
+-I/usr/include/libusb-1.0 -lusb-1.0
+
+=============================================================================================================
+
+olej@R420:~$ lsusb | grep -i Mouse
+Bus 001 Device 004: ID 0624:0249 Avocent Corp. Virtual Keyboard/Mouse
+
+
+olej@R420:~$ lsusb -d 0624:0249 -v
+
+Bus 001 Device 004: ID 0624:0249 Avocent Corp. Virtual Keyboard/Mouse
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x0624 Avocent Corp.
+  idProduct          0x0249 Virtual Keyboard/Mouse
+  bcdDevice            0.00
+  iManufacturer           4 
+  iProduct                5 
+  iSerial                 6 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0054
+    bNumInterfaces          3
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0xe0
+      Self Powered
+      Remote Wakeup
+    MaxPower                0mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      1 Boot Interface Subclass
+      bInterfaceProtocol      1 Keyboard
+      iInterface              1 
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.00
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      65
+         Report Descriptors: 
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               8
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      1 Boot Interface Subclass
+      bInterfaceProtocol      2 Mouse
+      iInterface              2 
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.00
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      63
+         Report Descriptors: 
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               8
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      1 Boot Interface Subclass
+      bInterfaceProtocol      2 Mouse
+      iInterface              3 
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.00
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      52
+         Report Descriptors: 
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               8
+
+
+olej@R420:~$ sudo lsusb -d 0624:0249 -v | grep bInterfaceNumber
+[sudo] пароль для olej:       
+      bInterfaceNumber        0
+      bInterfaceNumber        1
+      bInterfaceNumber        2
+can't get debug descriptor: Resource temporarily unavailable
+
+
+olej@R420:~$ sudo lsusb -d 0624:0249 -v | grep bEndpointAddress
+[sudo] пароль для olej:       
+        bEndpointAddress     0x81  EP 1 IN
+        bEndpointAddress     0x82  EP 2 IN
+        bEndpointAddress     0x83  EP 3 IN
+can't get debug descriptor: Resource temporarily unavailable
+
+=============================================================================================================
+
+/usr/include/libusb-1.0/libusb.h :
+
+* Sessions are created by libusb_init() and destroyed through libusb_exit().
+
+/** \ingroup libusb_lib
+ *  Log message levels.
+ *  - LIBUSB_LOG_LEVEL_NONE (0)    : no messages ever printed by the library (default)
+ *  - LIBUSB_LOG_LEVEL_ERROR (1)   : error messages are printed to stderr
+ *  - LIBUSB_LOG_LEVEL_WARNING (2) : warning and error messages are printed to stderr
+ *  - LIBUSB_LOG_LEVEL_INFO (3)    : informational messages are printed to stderr
+ *  - LIBUSB_LOG_LEVEL_DEBUG (4)   : debug and informational messages are printed to stderr
+ */
+enum libusb_log_level {
+        LIBUSB_LOG_LEVEL_NONE = 0,
+        LIBUSB_LOG_LEVEL_ERROR = 1,
+        LIBUSB_LOG_LEVEL_WARNING = 2,
+        LIBUSB_LOG_LEVEL_INFO = 3,
+        LIBUSB_LOG_LEVEL_DEBUG = 4,
+};
+
+
+int LIBUSB_CALL libusb_init(libusb_context **ctx);
+void LIBUSB_CALL libusb_exit(libusb_context *ctx);
+LIBUSB_DEPRECATED_FOR(libusb_set_option)
+void LIBUSB_CALL libusb_set_debug(libusb_context *ctx, int level);
+void LIBUSB_CALL libusb_set_log_cb(libusb_context *ctx, libusb_log_cb cb, int mode);
+const struct libusb_version * LIBUSB_CALL libusb_get_version(void);
+int LIBUSB_CALL libusb_has_capability(uint32_t capability);
+const char * LIBUSB_CALL libusb_error_name(int errcode);
+int LIBUSB_CALL libusb_setlocale(const char *locale);
+const char * LIBUSB_CALL libusb_strerror(enum libusb_error errcode);
+
+int LIBUSB_CALL libusb_claim_interface(libusb_device_handle *dev_handle,
+        int interface_number);
+int LIBUSB_CALL libusb_release_interface(libusb_device_handle *dev_handle,
+        int interface_number);
+libusb_device_handle * LIBUSB_CALL libusb_open_device_with_vid_pid(
+        libusb_context *ctx, uint16_t vendor_id, uint16_t product_id);
+
+
+=============================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  utest.c `pkg-config libusb-1.0 --libs` -o utest
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ ls -l utest*
+-rwxrwxr-x 1 olej olej 16920 авг 27 01:41 utest
+-rw-rw-r-- 1 olej olej   485 авг 27 01:40 utest.c
+
+=============================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  utest.c `pkg-config libusb-1.0 --libs` -o utest
+utest.c: In function ‘main’:
+utest.c:11:1: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+   11 | printf("init = %d", ret);
+      | ^~~~~~
+utest.c:11:1: warning: incompatible implicit declaration of built-in function ‘printf’
+utest.c:2:1: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+    1 | #include <libusb.h>
+  +++ |+#include <stdio.h>
+    2 | // usb_dev_handle* find_device ();
+utest.c:12:4: warning: ‘libusb_set_debug’ is deprecated: Use libusb_set_option instead [-Wdeprecated-declarations]
+   12 |    libusb_set_debug(NULL, USB_DEBUG_LEVEL);  // уровень вывода отладочных сообщений
+      |    ^~~~~~~~~~~~~~~~
+In file included from utest.c:1:
+/usr/include/libusb-1.0/libusb.h:1325:18: note: declared here
+ 1325 | void LIBUSB_CALL libusb_set_debug(libusb_context *ctx, int level);
+      |                  ^~~~~~~~~~~~~~~~
+utest.c:12:27: error: ‘USB_DEBUG_LEVEL’ undeclared (first use in this function)
+   12 |    libusb_set_debug(NULL, USB_DEBUG_LEVEL);  // уровень вывода отладочных сообщений
+      |                           ^~~~~~~~~~~~~~~
+utest.c:12:27: note: each undeclared identifier is reported only once for each function it appears in
+utest.c:14:8: error: ‘handle’ undeclared (first use in this function)
+   14 |    if (handle == NULL) {
+      |        ^~~~~~
+utest.c:21:41: error: ‘DEV_INTF1’ undeclared (first use in this function); did you mean ‘DEV_INTF’?
+   21 |       libusb_detach_kernel_driver(devh, DEV_INTF1);
+      |                                         ^~~~~~~~~
+      |                                         DEV_INTF
+make: *** [Makefile:10: utest] Ошибка 1
+
+-------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  utest.c `pkg-config libusb-1.0 --libs` -o utest
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ ./utest 
+init = 0
+[timestamp] [threadID] facility level [function call] <message>
+--------------------------------------------------------------------------------
+[ 0.007456] [00008df0] libusb: debug [libusb_get_device_list] 
+[ 0.007486] [00008df0] libusb: debug [libusb_get_device_descriptor] 
+[ 0.007498] [00008df0] libusb: debug [libusb_get_device_descriptor] 
+[ 0.007510] [00008df0] libusb: debug [libusb_get_device_descriptor] 
+[ 0.007521] [00008df0] libusb: debug [libusb_get_device_descriptor] 
+[ 0.007532] [00008df0] libusb: debug [libusb_get_device_descriptor] 
+[ 0.007544] [00008df0] libusb: debug [libusb_open] open 1.4
+[ 0.007579] [00008df0] libusb: error [_get_usbfs_fd] libusb couldn't open USB device /dev/bus/usb/001/004: Permission denied
+[ 0.007593] [00008df0] libusb: error [_get_usbfs_fd] libusb requires write access to USB device nodes.
+[ 0.007604] [00008df0] libusb: debug [libusb_open] open 1.4 returns -3
+такое устройство не подключено
+[ 0.007630] [00008df0] libusb: debug [libusb_exit] 
+[ 0.007642] [00008df0] libusb: debug [libusb_exit] destroying default context
+[ 0.007665] [00008df0] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 0.007683] [00008df0] libusb: debug [handle_events] poll fds modified, reallocating
+[ 0.007700] [00008df0] libusb: debug [handle_events] poll() 2 fds with timeout in 0ms
+[ 0.007715] [00008df0] libusb: debug [handle_events] poll() returned 0
+[ 0.007732] [00008df0] libusb: debug [libusb_unref_device] destroy device 2.4
+[ 0.007745] [00008df0] libusb: debug [libusb_unref_device] destroy device 2.3
+[ 0.007758] [00008df0] libusb: debug [libusb_unref_device] destroy device 2.2
+[ 0.007771] [00008df0] libusb: debug [libusb_unref_device] destroy device 2.1
+[ 0.007783] [00008df0] libusb: debug [libusb_unref_device] destroy device 1.4
+[ 0.007794] [00008df0] libusb: debug [libusb_unref_device] destroy device 1.3
+[ 0.007806] [00008df0] libusb: debug [libusb_unref_device] destroy device 1.2
+[ 0.007819] [00008df0] libusb: debug [libusb_unref_device] destroy device 1.1
+[ 0.007874] [00008df0] libusb: debug [usbi_remove_pollfd] remove fd 8
+[ 0.007903] [00008df0] libusb: debug [usbi_remove_pollfd] remove fd 11
+[ 0.007980] [00008df1] libusb: debug [linux_udev_event_thread_main] udev event thread exiting
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ lsusb
+Bus 002 Device 004: ID 046d:0a45 Logitech, Inc. 960 Headset
+Bus 002 Device 003: ID 2101:020f ActionStar 
+Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 004: ID 0624:0249 Avocent Corp. Virtual Keyboard/Mouse
+Bus 001 Device 003: ID 0624:0248 Avocent Corp. Virtual Hub
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+-------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ sudo ./utest 
+[sudo] пароль для olej:       
+init = 0
+[timestamp] [threadID] facility level [function call] <message>
+--------------------------------------------------------------------------------
+[ 0.008226] [00008e03] libusb: debug [libusb_get_device_list] 
+[ 0.008254] [00008e03] libusb: debug [libusb_get_device_descriptor] 
+[ 0.008264] [00008e03] libusb: debug [libusb_get_device_descriptor] 
+[ 0.008269] [00008e03] libusb: debug [libusb_get_device_descriptor] 
+[ 0.008278] [00008e03] libusb: debug [libusb_get_device_descriptor] 
+[ 0.008286] [00008e03] libusb: debug [libusb_get_device_descriptor] 
+[ 0.008292] [00008e03] libusb: debug [libusb_open] open 1.4
+[ 0.008330] [00008e03] libusb: debug [usbi_add_pollfd] add fd 9 events 4
+[ 0.008346] [00008e03] libusb: debug [libusb_kernel_driver_active] interface 2
+[ 0.008361] [00008e03] libusb: debug [libusb_detach_kernel_driver] interface 2
+[ 0.082094] [00008e03] libusb: debug [libusb_claim_interface] interface 2
+[ 0.082166] [00008e03] libusb: debug [libusb_alloc_transfer] transfer 0x562a94c5bc40
+[ 0.082178] [00008e03] libusb: debug [libusb_submit_transfer] transfer 0x562a94c5bc40
+[ 0.082231] [00008e03] libusb: debug [add_to_flying_list] arm timerfd for timeout in 1000ms (first in line)
+[ 0.082247] [00008e03] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 0.082270] [00008e03] libusb: error [submit_bulk_transfer] submiturb failed error -1 errno=16
+[ 0.082281] [00008e03] libusb: debug [submit_bulk_transfer] first URB failed, easy peasy
+[ 0.082306] [00008e03] libusb: debug [disarm_timerfd] 
+[ 0.082318] [00008e03] libusb: debug [libusb_free_transfer] transfer 0x562a94c5bc40
+[ 0.082332] [00008e03] libusb: debug [libusb_release_interface] interface 2
+[ 0.082359] [00008e03] libusb: debug [libusb_close] 
+[ 0.082371] [00008e03] libusb: debug [usbi_remove_pollfd] remove fd 9
+[ 0.082395] [00008e03] libusb: debug [libusb_exit] 
+[ 0.082406] [00008e03] libusb: debug [libusb_exit] destroying default context
+[ 0.082434] [00008e03] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 0.082451] [00008e03] libusb: debug [handle_events] poll fds modified, reallocating
+[ 0.082468] [00008e03] libusb: debug [handle_events] poll() 2 fds with timeout in 0ms
+[ 0.082478] [00008e03] libusb: debug [handle_events] poll() returned 0
+[ 0.082491] [00008e03] libusb: debug [libusb_unref_device] destroy device 2.4
+[ 0.082500] [00008e03] libusb: debug [libusb_unref_device] destroy device 2.3
+[ 0.082511] [00008e03] libusb: debug [libusb_unref_device] destroy device 2.2
+[ 0.082522] [00008e03] libusb: debug [libusb_unref_device] destroy device 2.1
+[ 0.082533] [00008e03] libusb: debug [libusb_unref_device] destroy device 1.4
+[ 0.082541] [00008e03] libusb: debug [libusb_unref_device] destroy device 1.3
+[ 0.082551] [00008e03] libusb: debug [libusb_unref_device] destroy device 1.2
+[ 0.082562] [00008e03] libusb: debug [libusb_unref_device] destroy device 1.1
+[ 0.082641] [00008e03] libusb: debug [usbi_remove_pollfd] remove fd 6
+[ 0.082668] [00008e03] libusb: debug [usbi_remove_pollfd] remove fd 8
+[ 0.082748] [00008e04] libusb: debug [linux_udev_event_thread_main] udev event thread exiting
+
+=============================================================================================================
+
+olej@R420:~$ sudo lsusb -d 0624:0249 -v | grep iInterface 
+[sudo] пароль для olej:       
+      iInterface              1 Keyboard
+      iInterface              2 Mouse
+      iInterface              3 Mouse REL
+can't get debug descriptor: Resource temporarily unavailable
+
+=============================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ make
+gcc -O2 -Wall `pkg-config libusb-1.0 --cflags`  utest.c `pkg-config libusb-1.0 --libs` -o utest
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/libusb$ sudo ./utest 
+init = 0
+[timestamp] [threadID] facility level [function call] <message>
+--------------------------------------------------------------------------------
+[ 0.005783] [00009070] libusb: debug [libusb_get_device_list] 
+[ 0.005818] [00009070] libusb: debug [libusb_get_device_descriptor] 
+[ 0.005823] [00009070] libusb: debug [libusb_get_device_descriptor] 
+[ 0.005827] [00009070] libusb: debug [libusb_get_device_descriptor] 
+[ 0.005831] [00009070] libusb: debug [libusb_get_device_descriptor] 
+[ 0.005835] [00009070] libusb: debug [libusb_get_device_descriptor] 
+[ 0.005839] [00009070] libusb: debug [libusb_open] open 1.4
+[ 0.005867] [00009070] libusb: debug [usbi_add_pollfd] add fd 9 events 4
+[ 0.005877] [00009070] libusb: debug [libusb_kernel_driver_active] interface 1
+[ 0.005886] [00009070] libusb: debug [libusb_detach_kernel_driver] interface 1
+[ 0.066617] [00009070] libusb: debug [libusb_claim_interface] interface 1
+[ 0.066722] [00009070] libusb: debug [libusb_alloc_transfer] transfer 0x55a8d1204c40
+[ 0.066745] [00009070] libusb: debug [libusb_submit_transfer] transfer 0x55a8d1204c40
+[ 0.066753] [00009070] libusb: debug [add_to_flying_list] arm timerfd for timeout in 5000ms (first in line)
+[ 0.066769] [00009070] libusb: debug [submit_bulk_transfer] need 1 urbs for new transfer with length 8
+[ 0.066809] [00009070] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 0.066823] [00009070] libusb: debug [handle_events] poll fds modified, reallocating
+[ 0.066837] [00009070] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 5.066813] [00009070] libusb: debug [handle_events] poll() returned 1
+[ 5.066859] [00009070] libusb: debug [handle_events] timerfd triggered
+[ 5.066870] [00009070] libusb: debug [libusb_cancel_transfer] transfer 0x55a8d1204c40
+[ 5.069073] [00009070] libusb: debug [disarm_timerfd] 
+[ 5.069122] [00009070] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 5.069136] [00009070] libusb: debug [handle_events] poll() 3 fds with timeout in 60000ms
+[ 5.069157] [00009070] libusb: debug [handle_events] poll() returned 1
+[ 5.069175] [00009070] libusb: debug [reap_for_handle] urb type=1 status=-2 transferred=0
+[ 5.069187] [00009070] libusb: debug [handle_bulk_completion] handling completion status -2 of bulk urb 1/1
+[ 5.069212] [00009070] libusb: debug [handle_bulk_completion] abnormal reap: urb status -2
+[ 5.069221] [00009070] libusb: debug [handle_bulk_completion] abnormal reap: last URB handled, reporting
+[ 5.069231] [00009070] libusb: debug [usbi_handle_transfer_cancellation] detected timeout cancellation
+[ 5.069245] [00009070] libusb: debug [disarm_timerfd] 
+[ 5.069256] [00009070] libusb: debug [usbi_handle_transfer_completion] transfer 0x55a8d1204c40 has callback 0x7f32bb4b2fc0
+[ 5.069266] [00009070] libusb: debug [sync_transfer_cb] actual_length=0
+[ 5.069283] [00009070] libusb: debug [libusb_free_transfer] transfer 0x55a8d1204c40
+[ 5.069298] [00009070] libusb: debug [libusb_release_interface] interface 1
+[ 5.069337] [00009070] libusb: debug [libusb_attach_kernel_driver] interface 1
+[ 5.071034] [00009070] libusb: debug [libusb_close] 
+[ 5.071065] [00009070] libusb: debug [usbi_remove_pollfd] remove fd 9
+[ 5.071086] [00009070] libusb: debug [libusb_exit] 
+[ 5.071095] [00009070] libusb: debug [libusb_exit] destroying default context
+[ 5.071106] [00009070] libusb: debug [libusb_handle_events_timeout_completed] doing our own event handling
+[ 5.071115] [00009070] libusb: debug [handle_events] poll fds modified, reallocating
+[ 5.071131] [00009070] libusb: debug [handle_events] poll() 2 fds with timeout in 0ms
+[ 5.071141] [00009070] libusb: debug [handle_events] poll() returned 0
+[ 5.071152] [00009070] libusb: debug [libusb_unref_device] destroy device 2.4
+[ 5.071162] [00009070] libusb: debug [libusb_unref_device] destroy device 2.3
+[ 5.071173] [00009070] libusb: debug [libusb_unref_device] destroy device 2.2
+[ 5.071182] [00009070] libusb: debug [libusb_unref_device] destroy device 2.1
+[ 5.071190] [00009070] libusb: debug [libusb_unref_device] destroy device 1.4
+[ 5.071196] [00009070] libusb: debug [libusb_unref_device] destroy device 1.3
+[ 5.071202] [00009070] libusb: debug [libusb_unref_device] destroy device 1.2
+[ 5.071208] [00009070] libusb: debug [libusb_unref_device] destroy device 1.1
+[ 5.071278] [00009070] libusb: debug [usbi_remove_pollfd] remove fd 6
+[ 5.071294] [00009070] libusb: debug [usbi_remove_pollfd] remove fd 8
+[ 5.071329] [00009071] libusb: debug [linux_udev_event_thread_main] udev event thread exiting
+
+=============================================================================================================

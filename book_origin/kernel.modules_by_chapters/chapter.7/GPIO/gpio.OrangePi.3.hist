@@ -1,0 +1,295 @@
+25.08.2022
+==========
+
+olej@R420:~$ ssh olej@192.168.1.153
+olej@192.168.1.153's password: 
+  ___  ____  _    ___             
+ / _ \|  _ \(_)  / _ \ _ __   ___ 
+| | | | |_) | | | | | | '_ \ / _ \
+| |_| |  __/| | | |_| | | | |  __/
+ \___/|_|   |_|  \___/|_| |_|\___|
+                                  
+Welcome to Armbian 22.05.3 Buster with Linux 5.15.48-sunxi
+
+System load:   2%           	Up time:       13 days 3:53	
+Memory usage:  33% of 491M   	Zram usage:    7% of 2.24G  	IP:	       192.168.1.153
+CPU temp:      64°C           	Usage of /:    46% of 14G    	
+
+Last login: Thu Aug 25 01:15:29 2022 from 192.168.1.13
+
+
+olej@orangepione:~$ uptime
+ 13:57:53 up 13 days,  3:53,  2 users,  load average: 0,08, 0,02, 0,01
+
+========================================================================================================
+
+olej@orangepione:~$ lsmod | grep gpio
+gpio_keys              20480  0
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ls -l /dev/gpio*
+crw------- 1 root root 254, 0 июл 22 17:17 /dev/gpiochip0
+crw------- 1 root root 254, 1 июл 22 17:17 /dev/gpiochip1
+olej@orangepione:~/2022/kernel/examples/GPIO$ make
+gcc -Wall -O2 -Wall info.c -o info
+gcc -Wall -O2 -Wall allops.c -o allops
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./info /dev/gpiochip1
+[sudo] пароль для olej: 
+Chip name: gpiochip1
+Chip label: 1f02c00.pinctrl
+Number of lines: 32
+offset: 0, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 1, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 2, name: , consumer: usb0-vbus. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 3, name: , consumer: sw4. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 4, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 5, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 6, name: , consumer: vdd-cpux. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 7, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 8, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 9, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 10, name: , consumer: orangepi:green:pwr. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 11, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 12, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 13, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 14, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 15, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 16, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 17, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 18, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 19, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 20, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 21, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 22, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 23, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 24, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 25, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 26, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 27, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 28, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 29, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 30, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 31, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ls -l /sys/class/gpio/gpiochip*
+lrwxrwxrwx 1 root root 0 авг 25 01:10 /sys/class/gpio/gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root 0 авг 25 01:10 /sys/class/gpio/gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ cat /sys/class/gpio/gpiochip0/ngpio
+224
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ cat /sys/class/gpio/gpiochip352/ngpio
+32
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ls -d /sys/class/gpio/gpiochip*
+/sys/class/gpio/gpiochip0  /sys/class/gpio/gpiochip352
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ls /sys/class/gpio/gpiochip*
+/sys/class/gpio/gpiochip0:
+base  device  label  ngpio  power  subsystem  uevent
+/sys/class/gpio/gpiochip352:
+base  device  label  ngpio  power  subsystem  uevent
+
+--------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ inxi -M
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family rev: N/A 
+           serial: 02c000815fd5e717 
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ make
+gcc -Wall -O2 -Wall info.c -o info
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo sudo ./info /dev/gpiochip0
+[sudo] пароль для olej: 
+Chip name: gpiochip0
+Chip label: 1c20800.pinctrl
+Number of lines: 224
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo sudo ./info /dev/gpiochip1
+Chip name: gpiochip1
+Chip label: 1f02c00.pinctrl
+Number of lines: 32
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo sudo ./info -v /dev/gpiochip1
+Chip name: gpiochip1
+Chip label: 1f02c00.pinctrl
+Number of lines: 32
+offset: 0, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 1, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 2, name: , consumer: usb0-vbus. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 3, name: , consumer: sw4. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 4, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 5, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 6, name: , consumer: vdd-cpux. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 7, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 8, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 9, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 10, name: , consumer: orangepi:green:pwr. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 11, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 12, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 13, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 14, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 15, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 16, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 17, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 18, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 19, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 20, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 21, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 22, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 23, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 24, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 25, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 26, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 27, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 28, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 29, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 30, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 31, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+
+========================================================================================================
+
+root@orangepione:/# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 01:42 export
+lrwxrwxrwx 1 root root    0 авг 25 01:23 gpio16 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio16
+lrwxrwxrwx 1 root root    0 авг 25 01:31 gpio17 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio17
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 01:50 unexport
+
+root@orangepione:/# echo 16 > /sys/class/gpio/unexport 
+
+root@orangepione:/# echo 17 > /sys/class/gpio/unexport 
+
+root@orangepione:/# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 01:42 export
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 16:52 unexport
+
+--------------------------------------------------------------------------------------------------------
+
+root@orangepione:/# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 17:03 export
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 17:04 unexport
+
+root@orangepione:/# echo 18 > /sys/class/gpio/unexport 
+bash: echo: ошибка записи: Недопустимый аргумент
+
+root@orangepione:/# echo 18 > /sys/class/gpio/export 
+
+root@orangepione:/# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 17:04 export
+lrwxrwxrwx 1 root root    0 авг 25 17:04 gpio18 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio18
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 17:04 unexport
+
+root@orangepione:/# ls -lL /sys/class/gpio/gpio18
+итого 0
+-rw-r--r-- 1 root root 4096 авг 25 17:04 active_low
+drwxr-xr-x 4 root root    0 авг 25 01:23 device
+-rw-r--r-- 1 root root 4096 авг 25 17:04 direction
+-rw-r--r-- 1 root root 4096 авг 25 17:04 edge
+drwxr-xr-x 2 root root    0 авг 25 17:04 power
+drwxr-xr-x 2 root root    0 авг 25 01:10 subsystem
+-rw-r--r-- 1 root root 4096 авг 25 17:04 uevent
+-rw-r--r-- 1 root root 4096 авг 25 17:04 value
+
+root@orangepione:/# cat /sys/class/gpio/gpio18/direction 
+in
+
+root@orangepione:/# echo out > /sys/class/gpio/gpio18/direction
+
+root@orangepione:/# cat /sys/class/gpio/gpio18/direction 
+out
+
+root@orangepione:/# cat /sys/class/gpio/gpio18/value 
+0
+
+root@orangepione:/# echo 1 > /sys/class/gpio/gpio18/value 
+
+root@orangepione:/# cat /sys/class/gpio/gpio18/value 
+1
+
+root@orangepione:/# echo 0 > /sys/class/gpio/gpio18/value 
+
+root@orangepione:/# cat /sys/class/gpio/gpio18/value 
+0
+
+
+root@orangepione:/# echo 18 > /sys/class/gpio/unexport
+
+root@orangepione:/# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 17:04 export
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 17:19 unexport
+
+--------------------------------------------------------------------------------------------------------
+
+root@orangepione:/# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 17:04 export
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 17:19 unexport
+root@orangepione:/# 
+root@orangepione:/# 
+
+root@orangepione:/# cat /sys/class/gpio/gpiochip*/ngpio
+224
+32
+
+root@orangepione:/# echo 0 > /sys/class/gpio/export
+
+root@orangepione:/# echo 23 > /sys/class/gpio/export
+bash: echo: ошибка записи: Устройство или ресурс занято
+
+root@orangepione:/# echo 23 > /sys/class/gpio/unexport
+bash: echo: ошибка записи: Недопустимый аргумент
+
+root@orangepione:/# echo 21 > /sys/class/gpio/export
+
+root@orangepione:/# echo 22 > /sys/class/gpio/export
+bash: echo: ошибка записи: Устройство или ресурс занято
+
+root@orangepione:/# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 17:27 export
+lrwxrwxrwx 1 root root    0 авг 25 17:27 gpio0 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio0
+lrwxrwxrwx 1 root root    0 авг 25 17:27 gpio21 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio21
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 17:25 unexport
+
+root@orangepione:/# tree /sys/class/gpio/gpio0
+/sys/class/gpio/gpio0
+├── active_low
+├── device -> ../../../gpiochip0
+├── direction
+├── edge
+├── power
+│   ├── autosuspend_delay_ms
+│   ├── control
+│   ├── runtime_active_time
+│   ├── runtime_status
+│   └── runtime_suspended_time
+├── subsystem -> ../../../../../../../class/gpio
+├── uevent
+└── value
+
+3 directories, 10 files
+
+========================================================================================================
+

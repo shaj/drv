@@ -1,0 +1,174 @@
+19.06.2022
+==========
+
+olej@orangepione:~/2022/kernel/examples/network/net$ inxi -Sxxx
+System:    Host: orangepione Kernel: 5.15.25-sunxi armv7l bits: 32 compiler: N/A Console: tty 3 dm: LightDM 1.26.0 
+           Distro: Armbian GNU/Linux 10 (buster) 
+
+
+olej@orangepione:~/2022/kernel/examples/network/net$ make
+make -C /lib/modules/5.15.25-sunxi/build M=/home/olej/2022/kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.25-sunxi»
+  CC [M]  /home/olej/2022/kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit_simple.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/receive.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/mulnet.o
+  MODPOST /home/olej/2022/kernel/examples/network/net/Module.symvers
+  CC [M]  /home/olej/2022/kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/mulnet.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/receive.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/receive.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/transmit.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit_simple.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/transmit_simple.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.25-sunxi»
+
+
+olej@orangepione:~/2022/kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 02:81:5f:d5:e7:17 brd ff:ff:ff:ff:ff:ff
+
+olej@orangepione:~/2022/kernel/examples/network/net$ sudo insmod network.ko 
+[sudo] пароль для olej: 
+
+olej@orangepione:~/2022/kernel/examples/network/net$ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode DEFAULT group default qlen 1000
+    link/ether 02:81:5f:d5:e7:17 brd ff:ff:ff:ff:ff:ff
+3: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+olej@orangepione:~/2022/kernel/examples/network/net$ dmesg | tail -n5
+[93305.987668] network: loading out-of-tree module taints kernel.
+[93305.987835] network: module verification failed: signature and/or required key missing - tainting kernel
+[93305.988257] ! Loading stub network module:....
+[93305.989088] ! Succeeded in loading fict0!
+[93306.226538] ! Hit: my_open(fict0)
+
+
+olej@orangepione:~/2022/kernel/examples/network/net$ /sbin/modinfo network.ko
+filename:       /home/olej/2022/kernel/examples/network/net/network.ko
+license:        GPL v2
+description:    LDD:1.0 s_24/lab1_network.c
+author:         Oleg Tsiliuric
+author:         Tatsuo Kawasaki
+author:         Jerry Cooperstein
+author:         Bill Shubert
+depends:        
+name:           network
+vermagic:       5.15.25-sunxi SMP mod_unload ARMv7 thumb2 p2v8
+
+
+olej@orangepione:~/2022/kernel/examples/network/net$ sudo insmod devices.ko
+!!! система умерла !!!
+
+====================================================================================================================
+
+olej@raspberrypi:~ $ inxi -Sxxx
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 compiler: gcc v: 10.2.1 Console: tty 0 DM: LightDM 1.26.0 
+           Distro: Raspbian GNU/Linux 11 (bullseye) 
+
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/2022/kernel/examples/network/net modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/2022/kernel/examples/network/net/devices.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/network.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit_simple.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/receive.o
+  CC [M]  /home/olej/2022/kernel/examples/network/net/mulnet.o
+  MODPOST /home/olej/2022/kernel/examples/network/net/Module.symvers
+  CC [M]  /home/olej/2022/kernel/examples/network/net/devices.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/devices.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/mulnet.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/mulnet.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/network.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/network.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/receive.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/receive.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/transmit.ko
+  CC [M]  /home/olej/2022/kernel/examples/network/net/transmit_simple.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/network/net/transmit_simple.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ ls -l *.ko
+-rw-r--r-- 1 olej olej 4676 июн 19 14:52 devices.ko
+-rw-r--r-- 1 olej olej 8736 июн 19 14:53 mulnet.ko
+-rw-r--r-- 1 olej olej 6476 июн 19 14:53 network.ko
+-rw-r--r-- 1 olej olej 7848 июн 19 14:53 receive.ko
+-rw-r--r-- 1 olej olej 8156 июн 19 14:53 transmit.ko
+-rw-r--r-- 1 olej olej 8020 июн 19 14:53 transmit_simple.ko
+
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ sudo insmod mulnet.ko
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether b8:27:eb:7e:2c:a8 brd ff:ff:ff:ff:ff:ff
+3: fict0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ sudo rmmod mulnet
+
+--------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ modinfo mulnet.ko
+filename:       /home/olej/2022/kernel/examples/network/net/mulnet.ko
+license:        GPL v2
+description:    LDD:1.0 s_24/lab1_network.c
+author:         Oleg Tsiliuric
+author:         Tatsuo Kawasaki
+author:         Jerry Cooperstein
+author:         Bill Shubert
+srcversion:     80160630547B3EB682B2D50
+depends:        
+name:           mulnet
+vermagic:       5.15.32-v7+ SMP mod_unload modversions ARMv7 p2v8 
+parm:           num:int
+parm:           title:charp
+parm:           digit:int
+parm:           mode:int
+
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ sudo insmod mulnet.ko num=4 title=zx
+olej@raspberrypi:~/2022/kernel/examples/network/net $ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether b8:27:eb:7e:2c:a8 brd ff:ff:ff:ff:ff:ff
+4: zx0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 00:01:02:03:04:05 brd ff:ff:ff:ff:ff:ff
+5: zx1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 01:02:03:04:05:06 brd ff:ff:ff:ff:ff:ff
+6: zx2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 02:03:04:05:06:07 brd ff:ff:ff:ff:ff:ff
+7: zx3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN mode DEFAULT group default qlen 1000
+    link/ether 03:04:05:06:07:08 brd ff:ff:ff:ff:ff:ff
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ sudo rmmod mulnet
+
+olej@raspberrypi:~/2022/kernel/examples/network/net $ ip l
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP mode DEFAULT group default qlen 1000
+    link/ether b8:27:eb:7e:2c:a8 brd ff:ff:ff:ff:ff:ff
+
+--------------------------------------------------------------------------------------------------------------------
+
+
+====================================================================================================================

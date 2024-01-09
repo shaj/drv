@@ -1,0 +1,316 @@
+13.08.2022
+==========
+
+$ inxi -SC
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64 Console: pty pts/3
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64 type: MCP cache:
+    L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A cores: 1: 1198 2: 1198
+
+
+$ inxi -C
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64 type: MCP cache:
+    L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A cores: 1: 1198 2: 1198
+olej@antix21:~/2022/kernel/time
+$ ./clock 
+0000031FE09C9A7E
+0000031FE09FF266
+0000031FE0A02631
+1197723673
+
+---------------------------------------------------------------------------------------------------------------------
+
+[olej@xenix time]$ inxi -C
+CPU:
+  Info: quad core model: Intel Core i7-4870HQ bits: 64 type: MT MCP cache:
+    L2: 1024 KiB
+  Speed (MHz): avg: 1438 min/max: 800/3700 cores: 1: 2487 2: 2171 3: 1796
+    4: 1718 5: 937 6: 799 7: 799 8: 799
+
+[olej@xenix time]$ ./clock 
+0000079C6EA6200E
+0000079C6EABA149
+0000079C6EABE5BE
+2494282644
+
+---------------------------------------------------------------------------------------------------------------------
+
+olej@esprimop420:~/2022/kernel/time$ inxi -C
+CPU:       Info: Quad Core model: Intel Xeon E3-1240 v3 bits: 64 type: MT MCP L2 cache: 8 MiB 
+           Speed: 3392 MHz min/max: 800/3800 MHz Core speeds (MHz): 1: 3392 2: 3392 3: 3392 
+           4: 3392 5: 3392 6: 3395 7: 3393 8: 3393 
+
+olej@esprimop420:~/2022/kernel/time$ ./clock 
+000C5BDDB70AA8C4
+000C5BDDB70D5558
+000C5BDDB70D6520
+3392082385
+
+=====================================================================================================================
+
+$ sudo insmod tick.ko ; dmesg | tail -n3
+[sudo] password for olej: 
+insmod: ERROR: could not insert module tick.ko: Operation not permitted
+[ 5136.704493] jiffies = 10049CE8A
+[ 5136.704495] HZ value = 1000
+[ 5136.704497] jiffies 64-bit = 000000010049CE8A
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo insmod tick.ko ; dmesg | tail -n3
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module tick.ko: Operation not permitted
+[ 4962.521382] jiffies = 10011C839
+[ 4962.521384] HZ value = 250
+[ 4962.521385] jiffies 64-bit = 000000010011C839
+
+olej@orangepione:~/2022/kernel/examples/time$ sudo insmod tick.ko ; dmesg | tail -n3
+insmod: ERROR: could not insert module tick.ko: Operation not permitted
+[94761.440017] jiffies = 1685470
+[94761.440046] HZ value = 250
+[94761.440054] jiffies 64-bit = 0000000101685470
+
+olej@raspberrypi:~/kernel/examples/time $ sudo insmod tick.ko ; dmesg | tail -n3
+insmod: ERROR: could not insert module tick.ko: Operation not permitted
+[94751.391193] jiffies = 901F2A
+[94751.391227] HZ value = 100
+[94751.391239] jiffies 64-bit = 0000000100901F2A
+
+=====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ uname -r
+5.4.0-124-generic
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo nice -n-19 ./pdelay -n 1000
+[sudo] пароль для olej:       
+1000 cycles passive delay [millisec. == tick !] :
+processor speed: 2399970429 hz
+set 0.010 => was 0.063
+set 0.100 => was 0.153
+set 0.200 => was 0.253
+set 0.300 => was 0.361
+set 0.500 => was 0.562
+set 1.000 => was 1.063
+set 1.500 => was 1.563
+set 2.000 => was 2.063
+set 5.000 => was 5.067
+
+=====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo insmod htick.ko
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo rmmod htick.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ lsmod | head -n3
+Module                  Size  Used by
+vboxnetadp             28672  0
+vboxnetflt             28672  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ dmesg | tail -n5
+[10497.093195] timer start at jiffies=4297516322
+[10498.093203] timer run #3 at jiffies=4297516572
+[10499.093191] timer run #2 at jiffies=4297516822
+[10500.093182] timer run #1 at jiffies=4297517072
+[10501.093174] timer run #0 at jiffies=4297517322
+
+
+
+[olej@xenix time]$ Aug 13 12:00:01 R420 kernel: [ 3459.931921] EXT4-fs (sdc1): mounted filesystem with ordered data mode. Opts: (null)
+[olej@xenix time]$ Aug 13 12:25:04 R420 kernel: [ 4962.521382] jiffies = 10011C839
+                                                                                  Aug 13 12:25:04 R420 kernel: [ 4962.521384] HZ value = 250
+                                                  Aug 13 12:25:04 R420 kernel: [ 4962.521385] jiffies 64-bit = 000000010011C839
+                                     Aug 13 13:54:08 R420 kernel: [10306.743058] perf: interrupt took too long (7846 > 7826), lowering kernel.perf_event_max_sample_rate to 25250
+                                                                                       Aug 13 13:57:19 R420 kernel: [10497.093195] timer start at jiffies=4297516322
+                                                                          Aug 13 13:57:20 R420 kernel: [10498.093203] timer run #3 at jiffies=4297516572
+                                                              Aug 13 13:57:21 R420 kernel: [10499.093191] timer run #2 at jiffies=4297516822
+                                                  Aug 13 13:57:22 R420 kernel: [10500.093182] timer run #1 at jiffies=4297517072
+                                      Aug 13 13:57:23 R420 kernel: [10501.093174] timer run #0 at jiffies=4297517322
+
+[olej@xenix time]$ tty
+/dev/pts/3
+
+
+
+
+=====================================================================================================================
+
+olej@orangepione:~$ ls -l /dev/rtc*
+lrwxrwxrwx 1 root root      4 июл 22 17:17 /dev/rtc -> rtc0
+crw------- 1 root root 253, 0 июл 22 17:17 /dev/rtc0
+olej@orangepione:~$ inxi -M
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family rev: N/A 
+           serial: 02c000815fd5e717 
+
+---------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~ $ ls -l /dev/rtc*
+ls: невозможно получить доступ к '/dev/rtc*': Нет такого файла или каталога
+olej@raspberrypi:~ $ inxi -M
+Machine:   Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 
+           rev: a21041 serial: 00000000f57e2ca8 
+
+=====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ ./rtcr
+error: Permission denied
+error: Bad file descriptor
+current time: 00:00:00
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtcr
+[sudo] пароль для olej:       
+current time: 11:29:27
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ date
+Сб 13 авг 2022 14:29:41 EEST
+
+---------------------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/time$ inxi -M
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family rev: N/A 
+           serial: 02c000815fd5e717 
+
+olej@orangepione:~/2022/kernel/examples/time$ make rtcr
+gcc     rtcr.c   -o rtcr
+
+olej@orangepione:~/2022/kernel/examples/time$ ./rtcr
+error: Permission denied
+error: Bad file descriptor
+current time: 00:00:00
+
+olej@orangepione:~/2022/kernel/examples/time$ sudo ./rtcr
+[sudo] пароль для olej: 
+current time: 11:33:58
+
+olej@orangepione:~/2022/kernel/examples/time$ date
+Суб авг 13 14:33:27 EEST 2022
+
+=====================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ ./rtprd -h
+./rtprd: invalid option -- 'h'
+usage: ./rtprd [-f 2**n] [-r #] [-n]
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ ./rtprd
+interrupt period set 122.07 us
+worst latency was 13.14 us (on cycle 617)
+mean latency was 0.47 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd
+[sudo] пароль для olej:       
+interrupt period set 122.07 us
+worst latency was 134.95 us (on cycle 35)
+mean latency was 122.05 us
+
+---------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ make rtprd
+gcc rtprd.c -Bstatic -L./ -ldiag -o rtprd
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ ./rtprd 
+interrupt period set 122.07 us
+RTC device error! Permission denied
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd 
+interrupt period set 122.07 us
+worst latency was 134.66 us (on cycle 753)
+mean latency was 122.04 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f4096 -r3000
+interrupt period set 244.14 us
+worst latency was 311.93 us (on cycle 1813)
+mean latency was 244.11 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -n
+interrupt period set 122.07 us
+worst latency was 134.62 us (on cycle 688)
+mean latency was 122.05 us
+
+---------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f1024
+interrupt period set 976.56 us
+worst latency was 1044.79 us (on cycle 86)
+mean latency was 976.54 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f2048
+interrupt period set 488.28 us
+worst latency was 563.51 us (on cycle 845)
+mean latency was 488.24 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f4096
+interrupt period set 244.14 us
+worst latency was 265.33 us (on cycle 1)
+mean latency was 244.12 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f8192
+interrupt period set 122.07 us
+worst latency was 135.03 us (on cycle 188)
+mean latency was 122.05 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f8192 -r 10000
+interrupt period set 122.07 us
+worst latency was 201.21 us (on cycle 7848)
+mean latency was 122.04 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f16384 -r 10000
+interrupt period set 61.04 us
+worst latency was 141.00 us (on cycle 182)
+mean latency was 122.04 us
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f512
+interrupt period set 1953.12 us
+worst latency was 2022.97 us (on cycle 299)
+mean latency was 1953.08 us
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo ./rtprd -f256
+interrupt period set 3906.25 us
+worst latency was 3978.80 us (on cycle 299)
+mean latency was 3906.20 us
+
+=====================================================================================================================
+
+$ sudo inxi -M
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC v: N/A
+    serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI v: L41 v01.09
+    date: 10/19/2016
+
+
+$ sudo inxi -MC
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC v: N/A
+    serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI v: L41 v01.09
+    date: 10/19/2016
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64 type: MCP cache:
+    L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A cores: 1: 1198 2: 1198
+
+
+
+olej@antix21:~/2022/kernel/time
+$ sudo ./rtprd -f8192
+interrupt period set 122.07 us
+worst latency was 139.04 us (on cycle 1)
+mean latency was 121.98 us
+
+olej@antix21:~/2022/kernel/time
+$ sudo ./rtprd -f16384
+interrupt period set 61.04 us
+worst latency was 1016.68 us (on cycle 1)
+mean latency was 976.48 us
+
+
+=====================================================================================================================

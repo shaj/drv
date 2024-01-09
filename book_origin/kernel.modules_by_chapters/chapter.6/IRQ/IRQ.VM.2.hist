@@ -1,0 +1,265 @@
+16.08.2022
+==========
+
+$ inxi -S
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+
+
+$ sudo inxi -MS
+[sudo] пароль для olej: 
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+Machine:
+  Type: Virtualbox System: innotek GmbH product: VirtualBox v: 1.2
+    serial: N/A
+  Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek GmbH
+    v: VirtualBox date: 12/01/2006
+
+
+-------------------------------------------------------------------------------------
+
+$ pwd
+/home/olej/2022/kernel/IRQ
+olej@antix21:~/2022/kernel/IRQ
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/IRQ modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/IRQ/lab1_interrupt.o
+  CC [M]  /home/olej/2022/kernel/IRQ/mod_tasklet.o
+  CC [M]  /home/olej/2022/kernel/IRQ/mod_workqueue.o
+  CC [M]  /home/olej/2022/kernel/IRQ/mod_ser.o
+  Building modules, stage 2.
+  MODPOST 4 modules
+  CC      /home/olej/2022/kernel/IRQ/lab1_interrupt.mod.o
+  LD [M]  /home/olej/2022/kernel/IRQ/lab1_interrupt.ko
+  CC      /home/olej/2022/kernel/IRQ/mod_ser.mod.o
+  LD [M]  /home/olej/2022/kernel/IRQ/mod_ser.ko
+  CC      /home/olej/2022/kernel/IRQ/mod_tasklet.mod.o
+  LD [M]  /home/olej/2022/kernel/IRQ/mod_tasklet.ko
+  CC      /home/olej/2022/kernel/IRQ/mod_workqueue.mod.o
+  LD [M]  /home/olej/2022/kernel/IRQ/mod_workqueue.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+=====================================================================================
+
+$ cat /proc/interrupts
+           CPU0       CPU1       
+  0:        135          1   IO-APIC   2-edge      timer
+  1:          1      13940   IO-APIC   1-edge      i8042
+  8:          0          1   IO-APIC   8-edge      rtc0
+  9:          0          2   IO-APIC   9-fasteoi   acpi
+ 12:          0       2756   IO-APIC  12-edge      i8042
+ 14:          0      34682   IO-APIC  14-edge      ata_piix
+ 15:          0      64242   IO-APIC  15-edge      ata_piix
+ 18:          0          0   IO-APIC  18-fasteoi   vmwgfx
+ 19:          0     126158   IO-APIC  19-fasteoi   ehci_hcd:usb1, eth0
+ 20:          0      86509   IO-APIC  20-fasteoi   vboxguest
+ 22:          0        107   IO-APIC  22-fasteoi   ohci_hcd:usb2
+NMI:          0          0   Non-maskable interrupts
+LOC:    4383685    4887133   Local timer interrupts
+SPU:          0          0   Spurious interrupts
+PMI:          0          0   Performance monitoring interrupts
+IWI:          0          0   IRQ work interrupts
+RTR:          0          0   APIC ICR read retries
+RES:    1962944    1935084   Rescheduling interrupts
+CAL:     112261      90905   Function call interrupts
+TLB:      79937      90686   TLB shootdowns
+TRM:          0          0   Thermal event interrupts
+THR:          0          0   Threshold APIC interrupts
+DFR:          0          0   Deferred Error APIC interrupts
+MCE:          0          0   Machine check exceptions
+MCP:        251        251   Machine check polls
+ERR:          0
+MIS:          0
+PIN:          0          0   Posted-interrupt notification event
+PIW:          0          0   Posted-interrupt wakeup event
+
+$ cat /proc/interrupts | grep 'hci_'
+ 19:          0     126308   IO-APIC  19-fasteoi   ehci_hcd:usb1, eth0
+ 22:          0        107   IO-APIC  22-fasteoi   ohci_hcd:usb2
+
+
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ohci-pci/12p, 12M
+    |__ Port 1: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/12p, 480M
+
+-------------------------------------------------------------------------------------
+
+$ lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 004: ID 80ee:0021 VirtualBox USB Tablet
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+
+$ lsusb -d 80ee:0021 -v
+
+Bus 002 Device 004: ID 80ee:0021 VirtualBox USB Tablet
+Couldn't open device, some information will be missing
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.10
+  bDeviceClass            0 
+  bDeviceSubClass         0 
+  bDeviceProtocol         0 
+  bMaxPacketSize0         8
+  idVendor           0x80ee VirtualBox
+  idProduct          0x0021 USB Tablet
+  bcdDevice            1.00
+  iManufacturer           1 VirtualBox
+  iProduct                3 USB Tablet
+  iSerial                 0 
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0022
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              100mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         3 Human Interface Device
+      bInterfaceSubClass      0 
+      bInterfaceProtocol      0 
+      iInterface              0 
+        HID Device Descriptor:
+          bLength                 9
+          bDescriptorType        33
+          bcdHID               1.10
+          bCountryCode            0 Not supported
+          bNumDescriptors         1
+          bDescriptorType        34 Report
+          wDescriptorLength      85
+         Report Descriptors: 
+           ** UNAVAILABLE **
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval              10
+
+
+$ pwd
+/sys/class/input/mouse1/device
+
+$ cat name
+VirtualBox USB Tablet
+
+
+$ cat /sys/class/input/mouse1/device/name
+VirtualBox USB Tablet
+
+
+$ cat uevent 
+PRODUCT=3/80ee/21/110
+NAME="VirtualBox USB Tablet"
+PHYS="usb-0000:00:06.0-1/input0"
+UNIQ=""
+PROP=0
+EV=1f
+KEY=1f0000 0 0 0 0 0 0 0 0
+REL=140
+ABS=3
+MSC=10
+MODALIAS=input:b0003v80EEp0021e0110-e0,1,2,3,4,k110,111,112,113,114,r6,8,a0,1,m4,lsfw
+
+
+=====================================================================================
+
+$ sudo insmod mod_ser.ko irq=19 num=3
+
+$ dmesg | grep 'irq=19' | tail -n6
+[84826.311677] 207922962484689 : irq=19 - handler #1
+[84826.311680] 207922962506121 : irq=19 - handler #2
+[84826.311682] 207922962510817 : irq=19 - handler #3
+[84828.301346] 207927839160265 : irq=19 - handler #1
+[84828.301350] 207927839223105 : irq=19 - handler #2
+[84828.301352] 207927839229161 : irq=19 - handler #3
+
+$ dmesg | grep 'irq=19' | wc -l
+1095
+
+$ dmesg | grep 'irq=19' | wc -l
+1098
+
+$ dmesg | grep 'irq=19' | wc -l
+1107
+
+$ dmesg | grep 'irq=19' | tail -n6
+[84845.378343] 207969695233593 : irq=19 - handler #1
+[84845.378346] 207969695251417 : irq=19 - handler #2
+[84845.378348] 207969695256297 : irq=19 - handler #3
+[84846.223968] 207971767873465 : irq=19 - handler #1
+[84846.223971] 207971767892609 : irq=19 - handler #2
+[84846.223972] 207971767897353 : irq=19 - handler #3
+
+
+$ lsmod | head -n3
+Module                  Size  Used by
+mod_ser                16384  0
+nls_utf8               16384  1
+
+$ sudo rmmod mod_ser
+
+=====================================================================================
+
+$ cat /proc/interrupts | grep hci
+ 19:          0     163166   IO-APIC  19-fasteoi   ehci_hcd:usb1, eth0
+ 22:          0        107   IO-APIC  22-fasteoi   ohci_hcd:usb2
+
+$ lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 004: ID 80ee:0021 VirtualBox USB Tablet
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ohci-pci/12p, 12M
+    |__ Port 1: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/12p, 480M
+
+
+$ sudo insmod mod_ser.ko irq=19
+
+$ dmesg | grep 'irq=19' | tail -n6
+[105715.542283] 259122846589477 : irq=19 - handler #1
+[105715.542286] 259122846619329 : irq=19 - handler #2
+[105716.264454] 259124616609721 : irq=19 - handler #1
+[105716.264458] 259124616675683 : irq=19 - handler #2
+[105718.269738] 259129531642027 : irq=19 - handler #1
+[105718.269741] 259129531660762 : irq=19 - handler #2
+
+$ dmesg | grep 'irq=19' | wc -l
+1970
+
+$ dmesg | grep 'irq=19' | wc -l
+1982
+
+$ dmesg | grep 'irq=19' | wc -l
+2004
+
+$ dmesg | grep 'irq=19' | wc -l
+2094
+
+$ sudo rmmod mod_ser
+
+=====================================================================================

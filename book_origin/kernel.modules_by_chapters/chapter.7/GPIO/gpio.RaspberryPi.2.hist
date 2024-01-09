@@ -1,0 +1,609 @@
+24.08.2022
+==========
+
+olej@raspberrypi:~ $ sudo inxi -M
+
+Machine:   Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 rev: a21041 
+           serial: 00000000f57e2ca8 
+
+
+olej@raspberrypi:~ $ aptitude search gpio 
+p   gpiod                                     - Tools for interacting with Linux GPIO character devi
+p   libgpiod-dev                              - C library for interacting with Linux GPIO device - s
+p   libgpiod-doc                              - C library for interacting with Linux GPIO device - l
+p   libgpiod2                                 - C library for interacting with Linux GPIO device - s
+i A libpigpio-dev                             - Client tools for Raspberry Pi GPIO control          
+i A libpigpio1                                - Library for Raspberry Pi GPIO control               
+i A libpigpiod-if-dev                         - Development headers for client libraries for Raspber
+i A libpigpiod-if1                            - Client library for Raspberry Pi GPIO control (deprec
+i A libpigpiod-if2-1                          - Client library for Raspberry Pi GPIO control        
+i   pigpio                                    - Raspberry Pi GPIO control transitional package.     
+i A pigpio-tools                              - Client tools for Raspberry Pi GPIO control          
+i A pigpiod                                   - Client tools for Raspberry Pi GPIO control          
+p   python-gpiozero                           - Simple API for controlling devices attached to a Pi'
+p   python-gpiozero-doc                       - Simple API for controlling devices attached to a Pi'
+p   python-pigpio                             - Python module which talks to the pigpio daemon (Pyth
+i   python3-gpiozero                          - Simple API for controlling devices attached to a Pi'
+p   python3-libgpiod                          - Python bindings for libgpiod (Python 3)             
+i   python3-pigpio                            - Python module which talks to the pigpio daemon (Pyth
+i   python3-rpi.gpio                          - Module to control Raspberry Pi GPIO channels (Python
+i   raspi-gpio                                - Dump the state of the BCM270x GPIOs                 
+p   raspi-gpio-dbgsym                         - debug symbols for raspi-gpio                        
+i A rpi.gpio-common                           - Module to control Raspberry Pi GPIO channels (common
+p   svxlink-gpio                              - GPIO control scripts SvxLink amateur radio server   
+
+
+olej@raspberrypi:~ $ ls -l /dev/gpio*
+crw-rw---- 1 root gpio 254, 0 июл 22 20:17 /dev/gpiochip0
+crw-rw---- 1 root gpio 245, 0 июл 22 20:17 /dev/gpiomem
+
+---------------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~ $ ls /bin/*gpio*
+/bin/pigpiod  /bin/raspi-gpio
+
+olej@raspberrypi:~ $ ls -l /usr/include/linux/gpio.h
+-rw-r--r-- 1 root root 19768 апр  1 09:57 /usr/include/linux/gpio.h
+
+
+olej@raspberrypi:~ $ /bin/raspi-gpio help
+
+WARNING! raspi-gpio set writes directly to the GPIO control registers
+ignoring whatever else may be using them (such as Linux drivers) -
+it is designed as a debug tool, only use it if you know what you
+are doing and at your own risk!
+
+The raspi-gpio tool is designed to help hack / debug BCM283x GPIO.
+Running raspi-gpio with the help argument prints this help.
+raspi-gpio can get and print the state of a GPIO (or all GPIOs)
+and can be used to set the function, pulls and value of a GPIO.
+raspi-gpio must be run as root.
+Use:
+  raspi-gpio get [GPIO]
+OR
+  raspi-gpio set <GPIO> [options]
+OR
+  raspi-gpio funcs [GPIO]
+OR
+  raspi-gpio raw
+
+GPIO is a comma-separated list of pin numbers or ranges (without spaces),
+e.g. 4 or 18-21 or 7,9-11
+Note that omitting [GPIO] from raspi-gpio get prints all GPIOs.
+raspi-gpio funcs will dump all the possible GPIO alt funcions in CSV format
+or if [GPIO] is specified the alternate funcs just for that specific GPIO.
+Valid [options] for raspi-gpio set are:
+  ip      set GPIO as input
+  op      set GPIO as output
+  a0-a5   set GPIO to alternate function alt0-alt5
+  pu      set GPIO in-pad pull up
+  pd      set GPIO pin-pad pull down
+  pn      set GPIO pull none (no pull)
+  dh      set GPIO to drive to high (1) level (only valid if set to be an output)
+  dl      set GPIO to drive low (0) level (only valid if set to be an output)
+Examples:
+  raspi-gpio get              Prints state of all GPIOs one per line
+  raspi-gpio get 20           Prints state of GPIO20
+  raspi-gpio get 20,21        Prints state of GPIO20 and GPIO21
+  raspi-gpio set 20 a5        Set GPIO20 to ALT5 function (GPCLK0)
+  raspi-gpio set 20 pu        Enable GPIO20 ~50k in-pad pull up
+  raspi-gpio set 20 pd        Enable GPIO20 ~50k in-pad pull down
+  raspi-gpio set 20 op        Set GPIO20 to be an output
+  raspi-gpio set 20 dl        Set GPIO20 to output low/zero (must already be set as an output)
+  raspi-gpio set 20 ip pd     Set GPIO20 to input with pull down
+  raspi-gpio set 35 a0 pu     Set GPIO35 to ALT0 function (SPI_CE1_N) with pull up
+  raspi-gpio set 20 op pn dh  Set GPIO20 to ouput with no pull and driving high
+
+---------------------------------------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~ $ /bin/pigpiod -h
+/bin/pigpiod: invalid option -- 'h'
+
+pigpio V79
+Usage: sudo pigpiod [OPTION] ...
+   -a value,   DMA mode, 0=AUTO, 1=PMAP, 2=MBOX,  default AUTO
+   -b value,   sample buffer size in ms,          default 120
+   -c value,   library internal settings,         default 0
+   -d value,   primary DMA channel, 0-14,         default 14
+   -e value,   secondary DMA channel, 0-14,       default 6
+   -f,         disable fifo interface,            default enabled
+   -g,         run in foreground (do not fork),   default disabled
+   -k,         disable socket interface,          default enabled
+   -l,         localhost socket only              default local+remote
+   -m,         disable alerts                     default enabled
+   -n IP addr, allow address, name or dotted,     default allow all
+   -p value,   socket port, 1024-32000,           default 8888
+   -s value,   sample rate, 1, 2, 4, 5, 8, or 10, default 5
+   -t value,   clock peripheral, 0=PWM 1=PCM,     default PCM
+   -v, -V,     display pigpio version and exit
+   -x mask,    GPIO which may be updated,         default board GPIO
+EXAMPLE
+sudo pigpiod -s 2 -b 200 -f
+  Set a sample rate of 2 microseconds with a 200 millisecond
+  buffer.  Disable the fifo interface.
+
+olej@raspberrypi:~ $ /bin/pigpiod -V
+79
+
+===========================================================================================================================
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ make
+gcc -Wall -O2 -Wall info.c -o info
+gcc -Wall -O2 -Wall allops.c -o allops
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ ls -l /dev/gpio*
+crw-rw---- 1 root gpio 254, 0 июл 22 20:17 /dev/gpiochip0
+crw-rw---- 1 root gpio 245, 0 июл 22 20:17 /dev/gpiomem
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./info | grep -v "consumer: \."
+Chip name: gpiochip0
+Chip label: pinctrl-bcm2835
+Number of lines: 54
+offset: 35, name: PWR_LOW_N, consumer: led1. Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 41, name: CAM_GPIO0, consumer: cam1_regulator. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 46, name: HDMI_HPD_N, consumer: hpd. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 47, name: STATUS_LED, consumer: led0. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ ./allops -r 47 /dev/gpiochip0
+Unable to get line handle from ioctl : Device or resource busy
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ ./allops -r 48 /dev/gpiochip0
+Value of GPIO at offset 48 (INPUT mode) on chip /dev/gpiochip0: 1
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ ./allops -w 48 -v0 /dev/gpiochip0
+bash: ./allops: Ошибка ввода/вывода
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ./allops -w 48 -v0 /dev/gpiochip0
+bash: sudo: command not found
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ sudo ls
+bash: sudo: command not found
+
+===========================================================================================================================
+
+25.08.2022
+==========
+
+olej@R420:~$ ssh olej@192.168.1.142
+olej@192.168.1.142's password: 
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Thu Aug 25 14:14:54 2022
+
+
+
+olej@raspberrypi:~ $ inxi -Cxxx
+CPU:       Info: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP arch: v7l rev: 5 
+           features: Use -f option to see features bogomips: 256 
+           Speed: 1000 MHz min/max: 600/1000 MHz Core speeds (MHz): 1: 1000 2: 1000 3: 1000 4: 1000 
+
+
+olej@raspberrypi:~ $ sensors
+cpu_thermal-virtual-0
+Adapter: Virtual device
+temp1:        +49.8°C  
+
+rpi_volt-isa-0000
+Adapter: ISA adapter
+in0:              N/A                                    ALARM (LCRIT)
+
+
+===========================================================================================================================
+
+olej@raspberrypi:~ $ ls -l /dev/gpio*
+crw-rw---- 1 root gpio 254, 0 авг 25 14:14 /dev/gpiochip0
+crw-rw---- 1 root gpio 245, 0 авг 25 14:14 /dev/gpiomem
+
+===========================================================================================================================
+
+root@R420:~# ls /bin/*gpio*
+ls: невозможно получить доступ к '/bin/*gpio*': Нет такого файла или каталога
+
+root@R420:~# ls /usr/bin/*gpio*
+ls: невозможно получить доступ к '/usr/bin/*gpio*': Нет такого файла или каталога
+
+root@R420:~# ls /usr/local/bin/*gpio*
+ls: невозможно получить доступ к '/usr/local/bin/*gpio*': Нет такого файла или каталога
+
+root@R420:~# ls /usr/local/sbin/*gpio*
+ls: невозможно получить доступ к '/usr/local/sbin/*gpio*': Нет такого файла или каталога
+
+
+
+olej@raspberrypi:~/2022/kernel/examples/GPIO $ aptitude search gpio
+p   gpiod                                                                       - Tools for interacting with Linux GPIO character device - binary                       
+p   libgpiod-dev                                                                - C library for interacting with Linux GPIO device - static libraries and headers       
+p   libgpiod-doc                                                                - C library for interacting with Linux GPIO device - library documentation              
+p   libgpiod2                                                                   - C library for interacting with Linux GPIO device - shared libraries                   
+i A libpigpio-dev                                                               - Client tools for Raspberry Pi GPIO control                                            
+i A libpigpio1                                                                  - Library for Raspberry Pi GPIO control                                                 
+i A libpigpiod-if-dev                                                           - Development headers for client libraries for Raspberry Pi GPIO control                
+i A libpigpiod-if1                                                              - Client library for Raspberry Pi GPIO control (deprecated)                             
+i A libpigpiod-if2-1                                                            - Client library for Raspberry Pi GPIO control                                          
+i   pigpio                                                                      - Raspberry Pi GPIO control transitional package.                                       
+i A pigpio-tools                                                                - Client tools for Raspberry Pi GPIO control                                            
+i A pigpiod                                                                     - Client tools for Raspberry Pi GPIO control                                            
+p   python-gpiozero                                                             - Simple API for controlling devices attached to a Pi's GPIO pins.                      
+p   python-gpiozero-doc                                                         - Simple API for controlling devices attached to a Pi's GPIO pins.                      
+p   python-pigpio                                                               - Python module which talks to the pigpio daemon (Python 2)                             
+i   python3-gpiozero                                                            - Simple API for controlling devices attached to a Pi's GPIO pins.                      
+p   python3-libgpiod                                                            - Python bindings for libgpiod (Python 3)                                               
+i   python3-pigpio                                                              - Python module which talks to the pigpio daemon (Python 3)                             
+i   python3-rpi.gpio                                                            - Module to control Raspberry Pi GPIO channels (Python 3)                               
+i   raspi-gpio                                                                  - Dump the state of the BCM270x GPIOs                                                   
+p   raspi-gpio-dbgsym                                                           - debug symbols for raspi-gpio                                                          
+i A rpi.gpio-common                                                             - Module to control Raspberry Pi GPIO channels (common files)                           
+p   svxlink-gpio                                                                - GPIO control scripts SvxLink amateur radio server                                     
+
+
+root@raspberrypi:~# apt show gpiod
+Package: gpiod
+Version: 1.6.2-1+rpi1
+Priority: optional
+Section: misc
+Source: libgpiod
+Maintainer: SZ Lin (林上智) <szlin@debian.org>
+Installed-Size: 100 kB
+Depends: libc6 (>= 2.16), libgpiod2 (>= 1.5.1)
+Homepage: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git
+Download-Size: 22,7 kB
+APT-Sources: http://raspbian.raspberrypi.org/raspbian bullseye/main armhf Packages
+Description: Tools for interacting with Linux GPIO character device - binary
+ libgpiod encapsulates the ioctl calls and data structures
+ behind a straightforward API. This new character device
+ interface guarantees all allocated resources are freed after
+ closing the device file descriptor and adds several new
+ features that are not present in the obsolete sysfs interface
+ (like event polling, setting/reading multiple values at once or
+ open-source and open-drain GPIOs).
+ .
+ This package contains the gpiod binary tools.
+
+
+
+
+
+
+===========================================================================================================================
+
+root@raspberrypi:~# apt show pigpio-tools pigpiod
+Package: pigpio-tools
+Version: 1.79-1+rpt1
+Priority: optional
+Section: utils
+Source: pigpio
+Maintainer: Peter Michael Green <plugwash@debian.org>
+Installed-Size: 77,8 kB
+Depends: libc6 (>= 2.7)
+Conflicts: pigpio (<< 1.68-1)
+Homepage: http://abyz.co.uk/rpi/pigpio/
+Download-Size: 42,9 kB
+APT-Manual-Installed: no
+APT-Sources: http://archive.raspberrypi.org/debian bullseye/main armhf Packages
+Description: Client tools for Raspberry Pi GPIO control
+ Pigpio is a set of software which allows control of the General Purpose Input
+ Outputs (GPIO) locally or remotely.
+ .
+ This package provides the pigs and pig2vcd tools.
+
+
+Package: pigpiod
+Version: 1.79-1+rpt1
+Priority: optional
+Section: utils
+Source: pigpio
+Maintainer: Peter Michael Green <plugwash@debian.org>
+Installed-Size: 35,8 kB
+Depends: libc6 (>= 2.28), libpigpio1
+Conflicts: pigpio (<< 1.68-1)
+Homepage: http://abyz.co.uk/rpi/pigpio/
+Download-Size: 9.900 B
+APT-Manual-Installed: no
+APT-Sources: http://archive.raspberrypi.org/debian bullseye/main armhf Packages
+Description: Client tools for Raspberry Pi GPIO control
+ Pigpio is a set of software which allows control of the General Purpose Input
+ Outputs (GPIO) locally or remotely.
+ .
+ This package provides the pigpiod daemon which offers a socket and pipe
+ interface to the underlying library.
+
+N: Есть 2 дополнительные записи. Используйте «-a» для их просмотра.
+
+
+
+
+root@raspberrypi:~# which pigs
+/usr/bin/pigs
+
+root@raspberrypi:~# which pig2vcd
+/usr/bin/pig2vcd
+
+root@raspberrypi:~# which pigpiod
+/usr/bin/pigpiod
+
+root@raspberrypi:~# ls /usr/bin/*gpio*
+/usr/bin/pigpiod  /usr/bin/raspi-gpio
+
+root@raspberrypi:~# ls /bin/*gpio*
+/bin/pigpiod  /bin/raspi-gpio
+
+---------------------------------------------------------------------------------------------------------------------------
+
+root@raspberrypi:~# raspi-gpio
+No arguments given - try "raspi-gpio help"
+
+
+root@raspberrypi:~# raspi-gpio help
+
+WARNING! raspi-gpio set writes directly to the GPIO control registers
+ignoring whatever else may be using them (such as Linux drivers) -
+it is designed as a debug tool, only use it if you know what you
+are doing and at your own risk!
+
+The raspi-gpio tool is designed to help hack / debug BCM283x GPIO.
+Running raspi-gpio with the help argument prints this help.
+raspi-gpio can get and print the state of a GPIO (or all GPIOs)
+and can be used to set the function, pulls and value of a GPIO.
+raspi-gpio must be run as root.
+Use:
+  raspi-gpio get [GPIO]
+OR
+  raspi-gpio set <GPIO> [options]
+OR
+  raspi-gpio funcs [GPIO]
+OR
+  raspi-gpio raw
+
+GPIO is a comma-separated list of pin numbers or ranges (without spaces),
+e.g. 4 or 18-21 or 7,9-11
+Note that omitting [GPIO] from raspi-gpio get prints all GPIOs.
+raspi-gpio funcs will dump all the possible GPIO alt funcions in CSV format
+or if [GPIO] is specified the alternate funcs just for that specific GPIO.
+Valid [options] for raspi-gpio set are:
+  ip      set GPIO as input
+  op      set GPIO as output
+  a0-a5   set GPIO to alternate function alt0-alt5
+  pu      set GPIO in-pad pull up
+  pd      set GPIO pin-pad pull down
+  pn      set GPIO pull none (no pull)
+  dh      set GPIO to drive to high (1) level (only valid if set to be an output)
+  dl      set GPIO to drive low (0) level (only valid if set to be an output)
+Examples:
+  raspi-gpio get              Prints state of all GPIOs one per line
+  raspi-gpio get 20           Prints state of GPIO20
+  raspi-gpio get 20,21        Prints state of GPIO20 and GPIO21
+  raspi-gpio set 20 a5        Set GPIO20 to ALT5 function (GPCLK0)
+  raspi-gpio set 20 pu        Enable GPIO20 ~50k in-pad pull up
+  raspi-gpio set 20 pd        Enable GPIO20 ~50k in-pad pull down
+  raspi-gpio set 20 op        Set GPIO20 to be an output
+  raspi-gpio set 20 dl        Set GPIO20 to output low/zero (must already be set as an output)
+  raspi-gpio set 20 ip pd     Set GPIO20 to input with pull down
+  raspi-gpio set 35 a0 pu     Set GPIO35 to ALT0 function (SPI_CE1_N) with pull up
+  raspi-gpio set 20 op pn dh  Set GPIO20 to ouput with no pull and driving high
+
+
+
+
+
+root@raspberrypi:~# raspi-gpio get
+BANK0 (GPIO 0 to 27):
+GPIO 0: level=1 fsel=0 func=INPUT
+GPIO 1: level=1 fsel=0 func=INPUT
+GPIO 2: level=1 fsel=0 func=INPUT
+GPIO 3: level=1 fsel=0 func=INPUT
+GPIO 4: level=1 fsel=0 func=INPUT
+GPIO 5: level=1 fsel=0 func=INPUT
+GPIO 6: level=1 fsel=0 func=INPUT
+GPIO 7: level=1 fsel=0 func=INPUT
+GPIO 8: level=1 fsel=0 func=INPUT
+GPIO 9: level=0 fsel=0 func=INPUT
+GPIO 10: level=0 fsel=0 func=INPUT
+GPIO 11: level=0 fsel=0 func=INPUT
+GPIO 12: level=0 fsel=0 func=INPUT
+GPIO 13: level=0 fsel=0 func=INPUT
+GPIO 14: level=1 fsel=4 alt=0 func=TXD0
+GPIO 15: level=1 fsel=4 alt=0 func=RXD0
+GPIO 16: level=0 fsel=0 func=INPUT
+GPIO 17: level=0 fsel=0 func=INPUT
+GPIO 18: level=0 fsel=0 func=INPUT
+GPIO 19: level=0 fsel=0 func=INPUT
+GPIO 20: level=0 fsel=0 func=INPUT
+GPIO 21: level=0 fsel=0 func=INPUT
+GPIO 22: level=0 fsel=0 func=INPUT
+GPIO 23: level=0 fsel=0 func=INPUT
+GPIO 24: level=0 fsel=0 func=INPUT
+GPIO 25: level=0 fsel=0 func=INPUT
+GPIO 26: level=0 fsel=0 func=INPUT
+GPIO 27: level=0 fsel=0 func=INPUT
+BANK1 (GPIO 28 to 45):
+GPIO 28: level=1 fsel=0 func=INPUT
+GPIO 29: level=1 fsel=0 func=INPUT
+GPIO 30: level=0 fsel=0 func=INPUT
+GPIO 31: level=1 fsel=1 func=OUTPUT
+GPIO 32: level=1 fsel=1 func=OUTPUT
+GPIO 33: level=0 fsel=0 func=INPUT
+GPIO 34: level=1 fsel=0 func=INPUT
+GPIO 35: level=0 fsel=0 func=INPUT
+GPIO 36: level=1 fsel=0 func=INPUT
+GPIO 37: level=0 fsel=0 func=INPUT
+GPIO 38: level=1 fsel=1 func=OUTPUT
+GPIO 39: level=0 fsel=0 func=INPUT
+GPIO 40: level=1 fsel=4 alt=0 func=PWM0
+GPIO 41: level=0 fsel=1 func=OUTPUT
+GPIO 42: level=1 fsel=1 func=OUTPUT
+GPIO 43: level=1 fsel=0 func=INPUT
+GPIO 44: level=0 fsel=4 alt=0 func=GPCLK1
+GPIO 45: level=1 fsel=4 alt=0 func=PWM1
+BANK2 (GPIO 46 to 53):
+GPIO 46: level=0 fsel=0 func=INPUT
+GPIO 47: level=1 fsel=1 func=OUTPUT
+GPIO 48: level=1 fsel=4 alt=0 func=SD0_CLK
+GPIO 49: level=1 fsel=4 alt=0 func=SD0_CMD
+GPIO 50: level=0 fsel=4 alt=0 func=SD0_DAT0
+GPIO 51: level=0 fsel=4 alt=0 func=SD0_DAT1
+GPIO 52: level=0 fsel=4 alt=0 func=SD0_DAT2
+GPIO 53: level=0 fsel=4 alt=0 func=SD0_DAT3
+
+
+
+---------------------------------------------------------------------------------------------------------------------------
+
+root@raspberrypi:~# pigs help
+
+BC1 bits         Clear GPIO in bank 1
+BC2 bits         Clear GPIO in bank 2
+BI2CC sda        Close bit bang I2C
+BI2CO sda scl baud | Open bit bang I2C
+BI2CZ sda ...    I2C bit bang multiple transactions
+
+BSPIC cs        Close bit bang SPI
+BSPIO cs miso mosi sclk baud flag | Open bit bang SPI
+BSPIX cs ...    SPI bit bang transfer
+
+BR1              Read bank 1 GPIO
+BR2              Read bank 2 GPIO
+
+BS1 bits         Set GPIO in bank 1
+BS2 bits         Set GPIO in bank 2
+
+BSCX bctl bvs    BSC I2C/SPI transfer
+
+CF1 ...          Custom function 1
+CF2 ...          Custom function 2
+
+CGI              Configuration get internals
+CSI v            Configuration set internals
+
+EVM h bits       Set events to monitor
+EVT n            Trigger event
+
+FC h             Close file handle
+FG g steady      Set glitch filter on GPIO
+FL pat n         List files which match pattern
+FN g steady active | Set noise filter on GPIO
+FO file mode     Open a file in mode
+FR h n           Read bytes from file handle
+FS h n from      Seek to file handle position
+FW h ...         Write bytes to file handle
+
+GDC g            Get PWM dutycycle for GPIO
+GPW g            Get servo pulsewidth for GPIO
+
+H/HELP           Display command help
+HC g f           Set hardware clock frequency
+HP g f dc        Set hardware PWM frequency and dutycycle
+HWVER            Get hardware version
+
+I2CC h           Close I2C handle
+I2CO bus device flags | Open I2C bus and device with flags
+I2CPC h r word   SMBus Process Call: exchange register with word
+I2CPK h r ...    SMBus Block Process Call: exchange data bytes with register
+I2CRB h r        SMBus Read Byte Data: read byte from register
+I2CRD h n        I2C Read bytes
+I2CRI h r n      SMBus Read I2C Block Data: read bytes from register
+I2CRK h r        SMBus Read Block Data: read data from register
+I2CRS h          SMBus Read Byte: read byte
+I2CRW h r        SMBus Read Word Data: read word from register
+I2CWB h r byte   SMBus Write Byte Data: write byte to register
+I2CWD h ...      I2C Write data
+I2CWI h r ...    SMBus Write I2C Block Data
+I2CWK h r ...    SMBus Write Block Data: write data to register
+I2CWQ h b        SMBus Write Quick: write bit
+I2CWS h b        SMBus Write Byte: write byte
+I2CWW h r word   SMBus Write Word Data: write word to register
+I2CZ  h ...      I2C multiple transactions
+
+M/MODES g mode   Set GPIO mode
+MG/MODEG g       Get GPIO mode
+MICS n           Delay for microseconds
+MILS n           Delay for milliseconds
+
+NB h bits        Start notification
+NC h             Close notification
+NO               Request a notification
+NP h             Pause notification
+
+P/PWM g v        Set GPIO PWM value
+PADG pad         Get pad drive strength
+PADS pad v       Set pad drive strength
+PARSE text       Validate script
+PFG g            Get GPIO PWM frequency
+PFS g v          Set GPIO PWM frequency
+PIGPV            Get pigpio library version
+PRG g            Get GPIO PWM range
+PROC text        Store script
+PROCD sid        Delete script
+PROCP sid        Get script status and parameters
+PROCR sid ...    Run script
+PROCS sid        Stop script
+PROCU sid ...    Set script parameters
+PRRG g           Get GPIO PWM real range
+PRS g v          Set GPIO PWM range
+PUD g pud        Set GPIO pull up/down
+
+R/READ g         Read GPIO level
+
+S/SERVO g v      Set GPIO servo pulsewidth
+SERC h           Close serial handle
+SERDA h          Check for serial data ready to read
+SERO text baud flags | Open serial device at baud with flags
+SERR h n         Read bytes from serial handle
+SERRB h          Read byte from serial handle
+SERW h ...       Write bytes to serial handle
+SERWB h byte     Write byte to serial handle
+SHELL name str   Execute a shell command
+SLR g v          Read bit bang serial data from GPIO
+SLRC g           Close GPIO for bit bang serial data
+SLRO g baud bitlen | Open GPIO for bit bang serial data
+SLRI g invert    Invert serial logic (1 invert, 0 normal)
+SPIC h           SPI close handle
+SPIO channel baud flags | SPI open channel at baud with flags
+SPIR h v         SPI read bytes from handle
+SPIW h ...       SPI write bytes to handle
+SPIX h ...       SPI transfer bytes to handle
+
+T/TICK           Get current tick
+TRIG g micros l  Trigger level for micros on GPIO
+
+W/WRITE g l      Write level to GPIO
+WDOG g millis    Set millisecond watchdog on GPIO
+WVAG triplets    Wave add generic pulses
+WVAS g baud bitlen stopbits offset ... | Wave add serial data
+WVBSY            Check if wave busy
+WVCHA            Transmit a chain of waves
+WVCLR            Wave clear
+WVCRE            Create wave from added pulses
+WVDEL wid        Delete waves w and higher
+WVGO             Wave transmit (DEPRECATED)
+WVGOR            Wave transmit repeatedly (DEPRECATED)
+WVHLT            Wave stop
+WVNEW            Start a new empty wave
+WVSC 0,1,2       Wave get DMA control block stats
+WVSM 0,1,2       Wave get micros stats
+WVSP 0,1,2       Wave get pulses stats
+WVTAT            Returns the current transmitting wave
+WVTX wid         Transmit wave as one-shot
+WVTXM wid wmde   Transmit wave using mode
+WVTXR wid        Transmit wave repeatedly
+
+Numbers may be entered as hex (prefix 0x), octal (prefix 0),
+otherwise they are assumed to be decimal.
+
+Examples
+
+pigs w 4 1         # set GPIO 4 high
+pigs r 5           # read GPIO 5
+pigs t             # get current tick
+pigs i2co 1 0x20 0 # get handle to device 0x20 on I2C bus 1
+
+man pigs for full details.
+
+===========================================================================================================================
+
+

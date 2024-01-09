@@ -1,0 +1,492 @@
+22.08.2022
+==========
+
+$ sudo inxi -Mxxx
+[sudo] пароль для olej: 
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF Chassis: type: 4 serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Debian
+Description:	Debian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+$ sudo inxi -Sxxx
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.8 dm: slimski v: 1.5.0
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-amd64-smp #1 SMP PREEMPT Sun Aug 8 15:04:18 EEST 2021 x86_64 GNU/Linux
+
+------------------------------------------------------------------------------------------------------
+
+$ cat /proc/meminfo | grep MemTotal
+MemTotal:        7075628 kB
+
+======================================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memtim.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memmax.ko
+  CC      /home/olej/2022/kernel/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memtim.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+======================================================================================================
+
+$ sudo insmod memmax.ko mode=0
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n60
+...
+[ 1639.624517] memmax: loading out-of-tree module taints kernel.
+[ 1639.624740] order= 0, pages=     1, size=     4096 - kmalloc OK
+[ 1639.624744] order= 1, pages=     2, size=     8192 - kmalloc OK
+[ 1639.624750] order= 2, pages=     4, size=    16384 - kmalloc OK
+[ 1639.624756] order= 3, pages=     8, size=    32768 - kmalloc OK
+[ 1639.624760] order= 4, pages=    16, size=    65536 - kmalloc OK
+[ 1639.624765] order= 5, pages=    32, size=   131072 - kmalloc OK
+[ 1639.624770] order= 6, pages=    64, size=   262144 - kmalloc OK
+[ 1639.624776] order= 7, pages=   128, size=   524288 - kmalloc OK
+[ 1639.624789] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[ 1639.624803] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[ 1639.624829] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[ 1639.624843] ------------[ cut here ]------------
+[ 1639.624854] WARNING: CPU: 1 PID: 6492 at mm/page_alloc.c:3549 __alloc_pages_nodemask+0xc96/0xd60
+...
+[ 1639.625089] ---[ end trace 2ebdd95be8e62603 ]---
+[ 1639.625091] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+
+olej@antix21:~/2022/kernel/memory/mtest
+$ dmesg | tail -n50 | grep order
+[ 1639.624740] order= 0, pages=     1, size=     4096 - kmalloc OK
+[ 1639.624744] order= 1, pages=     2, size=     8192 - kmalloc OK
+[ 1639.624750] order= 2, pages=     4, size=    16384 - kmalloc OK
+[ 1639.624756] order= 3, pages=     8, size=    32768 - kmalloc OK
+[ 1639.624760] order= 4, pages=    16, size=    65536 - kmalloc OK
+[ 1639.624765] order= 5, pages=    32, size=   131072 - kmalloc OK
+[ 1639.624770] order= 6, pages=    64, size=   262144 - kmalloc OK
+[ 1639.624776] order= 7, pages=   128, size=   524288 - kmalloc OK
+[ 1639.624789] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[ 1639.624803] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[ 1639.624829] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[ 1639.625005]  [<ffffffff81145c03>] kmalloc_order+0x13/0x40
+[ 1639.625091] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+======================================================================================================
+
+$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+
+olej@antix21:~/2022/kernel/memory/mtest
+$ dmesg | tail -n12 | grep order
+[ 1902.338565] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[ 1902.338573] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[ 1902.338579] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[ 1902.338583] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[ 1902.338587] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[ 1902.338591] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[ 1902.338596] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[ 1902.338601] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[ 1902.338610] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[ 1902.338622] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[ 1902.338641] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[ 1902.338656] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+======================================================================================================
+
+$ sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n80 | grep vmalloc | grep order
+[ 2017.064916] order= 0, pages=     1, size=     4096 - vmalloc OK
+[ 2017.064925] order= 1, pages=     2, size=     8192 - vmalloc OK
+[ 2017.064959] order= 2, pages=     4, size=    16384 - vmalloc OK
+[ 2017.065011] order= 3, pages=     8, size=    32768 - vmalloc OK
+[ 2017.065020] order= 4, pages=    16, size=    65536 - vmalloc OK
+[ 2017.065034] order= 5, pages=    32, size=   131072 - vmalloc OK
+[ 2017.065057] order= 6, pages=    64, size=   262144 - vmalloc OK
+[ 2017.065098] order= 7, pages=   128, size=   524288 - vmalloc OK
+[ 2017.065170] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[ 2017.065333] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[ 2017.065670] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[ 2017.066327] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[ 2017.067675] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[ 2017.070444] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[ 2017.076204] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[ 2017.087387] order=15, pages= 32768, size=134217728 - vmalloc OK
+[ 2017.112907] order=16, pages= 65536, size=268435456 - vmalloc OK
+[ 2017.157882] order=17, pages=131072, size=536870912 - vmalloc OK
+[ 2017.248085] order=18, pages=262144, size=1073741824 - vmalloc OK
+[ 2017.427753] order=19, pages=524288, size=2147483648 - vmalloc OK
+[ 2017.788180] order=20, pages=1048576, size=4294967296 - vmalloc OK
+[ 2017.978405] order=21, pages=2097152, size=8589934592 - vmalloc failed
+
+======================================================================================================
+
+23.08.2022
+==========
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memtim.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memmax.ko
+  CC      /home/olej/2022/kernel/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memtim.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+$ sudo insmod ./memtim.ko
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module ./memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[  344.694525] size = 1000 order = 1(4096)
+[  344.695499] proc. cycles for allocate kmalloc : 69
+[  344.696564] proc. cycles for allocate __get_free_pages : 372
+[  344.699393] proc. cycles for allocate vmalloc : 1708
+
+
+$ sudo insmod ./memtim.ko size=4096
+insmod: ERROR: could not insert module ./memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[  384.210798] size = 4096 order = 1(4096)
+[  384.211786] proc. cycles for allocate kmalloc : 69
+[  384.212929] proc. cycles for allocate __get_free_pages : 390
+[  384.215721] proc. cycles for allocate vmalloc : 1653
+
+
+$ sudo insmod ./memtim.ko size=65536
+insmod: ERROR: could not insert module ./memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[  413.159651] size = 65536 order = 5(65536)
+[  413.161592] proc. cycles for allocate kmalloc : 663
+[  413.163152] proc. cycles for allocate __get_free_pages : 624
+[  413.170166] proc. cycles for allocate vmalloc : 4721
+
+
+======================================================================================================
+
+$ sudo inxi -MSCmxxx
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.8 dm: slimski v: 1.5.0
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF Chassis: type: 4 serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+Memory:
+  RAM: total: 6.75 GiB used: 535.2 MiB (7.7%)
+  Array-1: capacity: 8 GiB slots: 1 EC: None max-module-size: 8 GiB
+    note: est.
+  Device-1: Top type: DDR3 detail: synchronous unbuffered (unregistered)
+    size: 8 GiB speed: 1333 MT/s volts: curr: 1.5 min: 1.35 max: 1.5
+    width (bits): data: 64 total: 64 manufacturer: Samsung
+    part-no: M471B1G73EB0-YK0 serial: 146F35D0
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64
+    type: MCP smt: <unsupported> arch: Puma rev: 1 cache: L1: 128 KiB
+    L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A volts: 0.9 V ext-clock: 100 MHz
+    cores: 1: 1198 2: 1198 bogomips: 4790
+  Flags: avx ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3 svm
+
+
+$ cat /proc/meminfo | grep MemTotal
+MemTotal:        7075628 kB
+
+$ free
+               total        used        free      shared  buff/cache   available
+Mem:         7075628      277084     6393892        5964      404652     6556848
+Swap:         393212           0      393212
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-amd64-smp #1 SMP PREEMPT Sun Aug 8 15:04:18 EEST 2021 x86_64 GNU/Linux
+
+$ getconf PAGESIZE
+4096
+
+
+======================================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/kernel/memory/mtest/page.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memmax.ko
+  CC      /home/olej/2022/kernel/memory/mtest/page.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/page.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+olej@antix21:~/2022/kernel/memory/mtest
+$ ls -l memmax.ko 
+-rw-r--r-- 1 olej olej 6656 авг 23 20:48 memmax.ko
+
+
+olej@antix21:~/2022/kernel/memory/mtest
+$ modinfo memmax.ko 
+filename:       /home/olej/2022/kernel/memory/mtest/memmax.ko
+license:        GPL v2
+description:    memory allocation size test
+author:         Oleg Tsiliuric
+srcversion:     2EA6E989DA2AA52B7C71F59
+depends:        
+retpoline:      Y
+vermagic:       4.9.0-279-antix.1-amd64-smp SMP preempt mod_unload modversions 
+parm:           mode:int
+
+======================================================================================================
+
+$ sudo insmod memmax.ko mode=0
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[29432.858105] order= 0, pages=     1, size=     4096 - kmalloc OK
+[29432.858111] order= 1, pages=     2, size=     8192 - kmalloc OK
+[29432.858117] order= 2, pages=     4, size=    16384 - kmalloc OK
+[29432.858123] order= 3, pages=     8, size=    32768 - kmalloc OK
+[29432.858128] order= 4, pages=    16, size=    65536 - kmalloc OK
+[29432.858132] order= 5, pages=    32, size=   131072 - kmalloc OK
+[29432.858137] order= 6, pages=    64, size=   262144 - kmalloc OK
+[29432.858144] order= 7, pages=   128, size=   524288 - kmalloc OK
+[29432.858154] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[29432.858167] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[29432.858200] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[29432.858213] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+======================================================================================================
+
+$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[29464.590823]  [<ffffffff81162476>] ? vunmap_page_range+0x226/0x3b0
+[29464.590828]  [<ffffffff8100038e>] do_one_initcall+0x3e/0x100
+[29464.590834]  [<ffffffff810d4998>] do_init_module+0x58/0x200
+[29464.590838]  [<ffffffff810d698e>] load_module+0x1e0e/0x2450
+[29464.590842]  [<ffffffff810d3b30>] ? symbol_put_addr+0x50/0x50
+[29464.590848]  [<ffffffff811ae20b>] ? kernel_read_file.part.0+0x15b/0x1a0
+[29464.590852]  [<ffffffff810d71ca>] SYSC_finit_module+0xaa/0xc0
+[29464.590856]  [<ffffffff810d71f9>] SyS_finit_module+0x9/0x10
+[29464.590860]  [<ffffffff81001534>] do_syscall_64+0x74/0xe0
+[29464.590864]  [<ffffffff817f0ece>] entry_SYSCALL_64_after_swapgs+0x58/0xc6
+[29464.590867] ---[ end trace 13b0669e9e2e3a12 ]---
+[29464.590869] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+$ dmesg | tail order | tail -n12
+tail: невозможно открыть 'order' для чтения: Нет такого файла или каталога
+
+$ dmesg | grep order | tail -n12
+[29464.590550] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[29464.590558] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[29464.590564] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[29464.590568] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[29464.590572] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[29464.590576] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[29464.590581] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[29464.590586] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[29464.590595] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[29464.590606] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[29464.590629] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[29464.590869] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+------------------------------------------------------------------------------------------------------
+
+$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[29659.592424] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[29659.592432] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[29659.592438] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[29659.592442] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[29659.592445] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[29659.592449] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[29659.592454] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[29659.592460] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[29659.592468] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[29659.592479] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[29659.592503] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[29659.592517] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+======================================================================================================
+
+$ sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n75
+...
+[29765.017161] order= 0, pages=     1, size=     4096 - vmalloc OK
+[29765.017168] order= 1, pages=     2, size=     8192 - vmalloc OK
+[29765.017202] order= 2, pages=     4, size=    16384 - vmalloc OK
+[29765.017467] order= 3, pages=     8, size=    32768 - vmalloc OK
+[29765.017477] order= 4, pages=    16, size=    65536 - vmalloc OK
+[29765.017494] order= 5, pages=    32, size=   131072 - vmalloc OK
+[29765.017516] order= 6, pages=    64, size=   262144 - vmalloc OK
+[29765.017556] order= 7, pages=   128, size=   524288 - vmalloc OK
+[29765.017627] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[29765.017804] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[29765.018629] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[29765.019289] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[29765.020615] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[29765.023870] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[29765.029267] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[29765.040385] order=15, pages= 32768, size=134217728 - vmalloc OK
+[29765.063024] order=16, pages= 65536, size=268435456 - vmalloc OK
+[29765.108266] order=17, pages=131072, size=536870912 - vmalloc OK
+[29765.198108] order=18, pages=262144, size=1073741824 - vmalloc OK
+[29765.377598] order=19, pages=524288, size=2147483648 - vmalloc OK
+[29765.741111] order=20, pages=1048576, size=4294967296 - vmalloc OK
+[29765.930753] insmod: vmalloc: allocation failure: 8589934592 bytes, mode:0x24000c2(GFP_KERNEL|__GFP_HIGHMEM)
+[29765.930770] CPU: 1 PID: 5223 Comm: insmod Tainted: G        W  O    4.9.0-279-antix.1-amd64-smp #1
+[29765.930772] Hardware name: Hewlett-Packard HP t520 Flexible Series TC/21EF, BIOS L41 v01.09 10/19/2016
+...
+[29765.931037] order=21, pages=2097152, size=8589934592 - vmalloc failed
+
+
+$ dmesg | grep order | tail -n22
+[29765.017161] order= 0, pages=     1, size=     4096 - vmalloc OK
+[29765.017168] order= 1, pages=     2, size=     8192 - vmalloc OK
+[29765.017202] order= 2, pages=     4, size=    16384 - vmalloc OK
+[29765.017467] order= 3, pages=     8, size=    32768 - vmalloc OK
+[29765.017477] order= 4, pages=    16, size=    65536 - vmalloc OK
+[29765.017494] order= 5, pages=    32, size=   131072 - vmalloc OK
+[29765.017516] order= 6, pages=    64, size=   262144 - vmalloc OK
+[29765.017556] order= 7, pages=   128, size=   524288 - vmalloc OK
+[29765.017627] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[29765.017804] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[29765.018629] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[29765.019289] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[29765.020615] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[29765.023870] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[29765.029267] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[29765.040385] order=15, pages= 32768, size=134217728 - vmalloc OK
+[29765.063024] order=16, pages= 65536, size=268435456 - vmalloc OK
+[29765.108266] order=17, pages=131072, size=536870912 - vmalloc OK
+[29765.198108] order=18, pages=262144, size=1073741824 - vmalloc OK
+[29765.377598] order=19, pages=524288, size=2147483648 - vmalloc OK
+[29765.741111] order=20, pages=1048576, size=4294967296 - vmalloc OK
+[29765.931037] order=21, pages=2097152, size=8589934592 - vmalloc failed
+
+======================================================================================================
+
+$ sudo inxi -M
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+
+
+$ sudo insmod memtim.ko size=5
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34296.253657] size = 5 order = 1(4096)
+[34296.254609] proc. cycles for allocate kmalloc : 67
+[34296.255699] proc. cycles for allocate __get_free_pages : 391
+[34296.258486] proc. cycles for allocate vmalloc : 1703
+
+
+$ sudo insmod memtim.ko size=1000
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34325.154064] size = 1000 order = 1(4096)
+[34325.155003] proc. cycles for allocate kmalloc : 70
+[34325.156074] proc. cycles for allocate __get_free_pages : 389
+[34325.158651] proc. cycles for allocate vmalloc : 1467
+
+
+$ sudo insmod memtim.ko size=4096
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34350.536784] size = 4096 order = 1(4096)
+[34350.537734] proc. cycles for allocate kmalloc : 69
+[34350.538839] proc. cycles for allocate __get_free_pages : 383
+[34350.541707] proc. cycles for allocate vmalloc : 1743
+
+
+$ sudo insmod memtim.ko size=32768
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34442.371340] size = 32768 order = 4(32768)
+[34442.373066] proc. cycles for allocate kmalloc : 540
+[34442.374383] proc. cycles for allocate __get_free_pages : 478
+[34442.379637] proc. cycles for allocate vmalloc : 3263
+
+
+$ sudo insmod memtim.ko size=65535
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34460.816123] size = 65535 order = 5(65536)
+[34460.818068] proc. cycles for allocate kmalloc : 672
+[34460.819638] proc. cycles for allocate __get_free_pages : 608
+[34460.826817] proc. cycles for allocate vmalloc : 4816
+
+
+$ sudo insmod memtim.ko size=262144
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34486.646728] size = 262144 order = 7(262144)
+[34486.649490] proc. cycles for allocate kmalloc : 1158
+[34486.652320] proc. cycles for allocate __get_free_pages : 1278
+[34486.672277] proc. cycles for allocate vmalloc : 14984
+
+
+$ sudo insmod memtim.ko size=4096000
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34518.148307] size = 4096000 order = 11(4194304)
+[34518.175789] proc. cycles for allocate kmalloc : 19623
+[34518.175794] proc. cycles for allocate __get_free_pages : failed
+[34518.567515] proc. cycles for allocate vmalloc : 265116
+
+
+$ sudo insmod memtim.ko size=40960000
+insmod: ERROR: could not insert module memtim.ko: Operation not permitted
+
+$ dmesg | tail -n4
+[34533.542741] size = 40960000 order = 15(67108864)
+[34533.543166] proc. cycles for allocate kmalloc : failed
+[34533.543169] proc. cycles for allocate __get_free_pages : failed
+[34537.717573] proc. cycles for allocate vmalloc : 2751904
+
+======================================================================================================

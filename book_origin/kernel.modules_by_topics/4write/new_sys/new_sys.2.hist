@@ -1,0 +1,95 @@
+30.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c: In function ‘do_write’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:26:12: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+   26 |    set_fs( get_ds() );
+      |            ^~~~~~
+      |            get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:26:12: error: incompatible type for argument 1 of ‘set_fs’
+   26 |    set_fs( get_ds() );
+      |            ^~~~~~~~
+      |            |
+      |            int
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/mm.h:99,
+                 from ./include/linux/kallsyms.h:12,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:2:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+=====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrchg.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrchg.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrchg.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ sudo insmod mod_wrc.ko 
+[sudo] пароль для olej:       
+Ошибка сегментирования
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ lsmod | head -n3
+Module                  Size  Used by
+mod_wrc                16384  1
+vboxnetadp             28672  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ dmesg | tail -n55
+[   39.433574] VBoxNetAdp: Successfully started.
+[  395.797378] EXT4-fs (sdc1): mounted filesystem with ordered data mode. Opts: (null)
+[ 1818.392228] kauditd_printk_skb: 21 callbacks suppressed
+[ 1818.392229] audit: type=1400 audit(1656566624.502:32): apparmor="ALLOWED" operation="connect" profile="libreoffice-oopslash" name="/run/nscd/socket" pid=5287 comm="oosplash" requested_mask="wr" denied_mask="wr" fsuid=1000 ouid=0
+[ 4643.687134] detected buffer overflow in strlen
+[ 4643.687164] ------------[ cut here ]------------
+[ 4643.687165] kernel BUG at lib/string.c:1120!
+[ 4643.687173] invalid opcode: 0000 [#1] SMP PTI
+...
+
+=====================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table$ sudo cat /proc/kallsyms | grep sys_close
+[sudo] пароль для olej:       
+ffffffff8dcc74e0 T __ia32_sys_close
+ffffffff8dcc7c80 T __x64_sys_close
+ffffffff8f8f1400 t _eil_addr___ia32_sys_close
+ffffffff8f8f1410 t _eil_addr___x64_sys_close
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table$ sudo cat /proc/kallsyms | grep sys_write | head -n5
+ffffffff8dccc530 T __x64_sys_writev
+ffffffff8dccc550 T __ia32_sys_writev
+ffffffff8dccc8e0 T __ia32_compat_sys_writev
+ffffffff8dccc900 T __x32_compat_sys_writev
+ffffffff8dccdf40 T ksys_write
+
+=====================================================================================================================================
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/syscalls.h#L464
+
+[464]
+asmlinkage long sys_write(unsigned int fd, const char __user *buf,
+	      size_t count);
+
+=====================================================================================================================================

@@ -1,0 +1,66 @@
+30.06.2022
+==========
+
+olej@R420:~$ sudo inxi -M
+[sudo] пароль для olej:       
+Machine:   Type: Server System: Dell product: PowerEdge R420 v: N/A serial: 9DDFKY1 
+           Mobo: Dell model: 0CN7CM v: A06 serial: ..CN1374035400RO. BIOS: Dell v: 2.9.0 date: 01/09/2020 
+
+olej@R420:~$ sudo inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+-------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ head -n5  /usr/include/asm/unistd_32.h 
+#ifndef _ASM_X86_UNISTD_32_H
+#define _ASM_X86_UNISTD_32_H 1
+
+#define __NR_restart_syscall 0
+#define __NR_exit 1
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ head -n15  /usr/include/asm/unistd_32.h | tail -n12
+#define __NR_restart_syscall 0
+#define __NR_exit 1
+#define __NR_fork 2
+#define __NR_read 3
+#define __NR_write 4
+#define __NR_open 5
+#define __NR_close 6
+#define __NR_waitpid 7
+#define __NR_creat 8
+#define __NR_link 9
+#define __NR_unlink 10
+#define __NR_execve 11
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ cat /usr/include/asm/unistd_32.h | wc -l
+430
+
+-------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ head -n5  /usr/include/asm/unistd_64.h 
+#ifndef _ASM_X86_UNISTD_64_H
+#define _ASM_X86_UNISTD_64_H 1
+
+#define __NR_read 0
+#define __NR_write 1
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ head -n15  /usr/include/asm/unistd_64.h | tail -n12
+#define __NR_read 0
+#define __NR_write 1
+#define __NR_open 2
+#define __NR_close 3
+#define __NR_stat 4
+#define __NR_fstat 5
+#define __NR_lstat 6
+#define __NR_poll 7
+#define __NR_lseek 8
+#define __NR_mmap 9
+#define __NR_mprotect 10
+#define __NR_munmap 11
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys$ cat /usr/include/asm/unistd_64.h | wc -l
+352
+
+===================================================================================================================

@@ -1,0 +1,240 @@
+22.08.2022
+==========
+
+olej@raspberrypi:~ $ sudo inxi -MSxxx
+System:
+  Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 compiler: gcc v: 10.2.1 
+  Console: tty 1 DM: LightDM 1.26.0 Distro: Raspbian GNU/Linux 11 (bullseye) 
+Machine:
+  Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 rev: a21041 
+  serial: 00000000f57e2ca8 
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ uname -a
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+
+-------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ cat /proc/meminfo | grep MemTotal
+MemTotal:         945300 kB
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ free
+               total        used        free      shared  buff/cache   available
+Mem:          945300      232232      168680        6716      544388      646556
+Swap:        1048572           0     1048572
+
+===========================================================================================
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/memory/mtest/memmax.o
+  CC [M]  /home/olej/kernel/examples/memory/mtest/memtim.o
+/home/olej/kernel/examples/memory/mtest/memtim.c:4:10: fatal error: asm/msr.h: Нет такого файла или каталога
+    4 | #include <asm/msr.h>
+      |          ^~~~~~~~~~~
+compilation terminated.
+make[2]: *** [scripts/Makefile.build:277: /home/olej/kernel/examples/memory/mtest/memtim.o] Ошибка 1
+make[1]: *** [Makefile:1868: /home/olej/kernel/examples/memory/mtest] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+make: *** [Makefile:13: default] Ошибка 2
+
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/memory/mtest/memtim.o
+/home/olej/kernel/examples/memory/mtest/memtim.c: In function ‘init’:
+/home/olej/kernel/examples/memory/mtest/memtim.c:23:12: error: implicit declaration of function ‘rdtsc’ [-Werror=implicit-function-declaration]
+   23 |       t1 = rdtsc();
+      |            ^~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:277: /home/olej/kernel/examples/memory/mtest/memtim.o] Ошибка 1
+make[1]: *** [Makefile:1868: /home/olej/kernel/examples/memory/mtest] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+make: *** [Makefile:13: default] Ошибка 2
+
+===========================================================================================
+
+23.08.2022
+==========
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ inxi -MCmxxx
+Machine:   Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 rev: a21041 
+           serial: 00000000f57e2ca8 
+Memory:    RAM: total: 999.1 MiB used: 235.6 MiB (23.6%) gpu: 76 MiB 
+           RAM Report: unknown-error: Unknown dmidecode error. Unable to generate data. 
+CPU:       Info: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP arch: v7l rev: 5 
+           features: Use -f option to see features bogomips: 0 
+           Speed: 700 MHz min/max: 600/1000 MHz Core speeds (MHz): 1: 700 2: 700 3: 700 4: 700 
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ uname -a
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ cat /proc/meminfo | grep MemTotal
+MemTotal:         945300 kB
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ sudo inxi -mxxx
+Memory:    RAM: total: 999.1 MiB used: 379 MiB (37.9%) gpu: 76 MiB 
+           RAM Report: unknown-error: Unknown dmidecode error. Unable to generate data. 
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ free
+               total        used        free      shared  buff/cache   available
+Mem:          945300      229480      151348        6716      564472      647584
+Swap:        1048572           0     1048572
+
+-------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  MODPOST /home/olej/kernel/examples/memory/mtest/Module.symvers
+  CC [M]  /home/olej/kernel/examples/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/kernel/examples/memory/mtest/memmax.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ modinfo memmax.ko
+filename:       /home/olej/kernel/examples/memory/mtest/memmax.ko
+license:        GPL v2
+description:    memory allocation size test
+author:         Oleg Tsiliuric
+srcversion:     C84784973BAAAFFF4B6659B
+depends:        
+name:           memmax
+vermagic:       5.15.32-v7+ SMP mod_unload modversions ARMv7 p2v8 
+parm:           mode:int
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ ls -l memmax.ko
+-rw-r--r-- 1 olej olej 5908 авг 23 13:51 memmax.ko
+
+-------------------------------------------------------------------------------------------
+
+include/asm-generic/page.h
+[14]
+
+/* PAGE_SHIFT determines the page size */
+
+#define PAGE_SHIFT      12
+#ifdef __ASSEMBLY__
+#define PAGE_SIZE       (1 << PAGE_SHIFT)
+#else
+#define PAGE_SIZE       (1UL << PAGE_SHIFT)
+#endif
+#define PAGE_MASK       (~(PAGE_SIZE-1))
+
+2^12=4096
+
+-------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ sudo insmod memmax.ko mode=0
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@raspberrypi:~ $ dmesg | tail -n10 
+[964306.669323] [<801cdb00>] (sys_finit_module) from [<80100040>] (ret_fast_syscall+0x0/0x1c)
+[964306.669351] Exception stack(0x9d6d5fa8 to 0x9d6d5ff0)
+[964306.669372] 5fa0:                   00000000 7edcc7e2 00000003 0203f190 00000000 00000002
+[964306.669392] 5fc0: 00000000 7edcc7e2 0160a200 0000017b 02040c98 00000003 00000000 7edcc7e2
+[964306.669408] 5fe0: 7edcc4d0 7edcc4c0 00023bc0 76bef9e0
+[964306.669425]  r7:0000017b r6:0160a200 r5:7edcc7e2 r4:00000000
+[964306.669436] ---[ end trace 768974e7daf6d487 ]---
+[964306.669454] order=11, pages=  2048, size=  8388608 - kmalloc failed
+[964306.826906] hwmon hwmon1: Undervoltage detected!
+[964313.066897] hwmon hwmon1: Voltage normalised
+
+olej@raspberrypi:~ $ dmesg | grep order | tail -n15
+[964306.667453] order= 0, pages=     1, size=     4096 - kmalloc OK
+[964306.667497] order= 1, pages=     2, size=     8192 - kmalloc OK
+[964306.667528] order= 2, pages=     4, size=    16384 - kmalloc OK
+[964306.667559] order= 3, pages=     8, size=    32768 - kmalloc OK
+[964306.667590] order= 4, pages=    16, size=    65536 - kmalloc OK
+[964306.667626] order= 5, pages=    32, size=   131072 - kmalloc OK
+[964306.667659] order= 6, pages=    64, size=   262144 - kmalloc OK
+[964306.667694] order= 7, pages=   128, size=   524288 - kmalloc OK
+[964306.667737] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[964306.667793] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[964306.667876] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[964306.668884] [<8031b1c0>] (__alloc_pages) from [<802eeb30>] (kmalloc_order+0x48/0xec)
+[964306.668941] [<802eeae8>] (kmalloc_order) from [<802eec00>] (kmalloc_order_trace+0x2c/0xc4)
+[964306.668984] [<802eebd4>] (kmalloc_order_trace) from [<80331dd0>] (__kmalloc+0x4a4/0x514)
+[964306.669454] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+-------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@raspberrypi:~ $ dmesg | grep order | tail -n12 
+[965306.210599] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[965306.210656] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[965306.210686] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[965306.210715] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[965306.210749] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[965306.210850] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[965306.210885] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[965306.210920] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[965306.210968] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[965306.211082] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[965306.211173] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[965306.211237] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+-------------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@raspberrypi:~ $ dmesg | grep order | tail -n19
+[965381.550356] order= 0, pages=     1, size=     4096 - vmalloc OK
+[965381.550433] order= 1, pages=     2, size=     8192 - vmalloc OK
+[965381.550488] order= 2, pages=     4, size=    16384 - vmalloc OK
+[965381.550555] order= 3, pages=     8, size=    32768 - vmalloc OK
+[965381.550653] order= 4, pages=    16, size=    65536 - vmalloc OK
+[965381.550842] order= 5, pages=    32, size=   131072 - vmalloc OK
+[965381.551133] order= 6, pages=    64, size=   262144 - vmalloc OK
+[965381.551688] order= 7, pages=   128, size=   524288 - vmalloc OK
+[965381.552791] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[965381.555206] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[965381.559872] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[965381.569045] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[965381.591305] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[965381.750376] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[965382.135365] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[965382.885498] order=15, pages= 32768, size=134217728 - vmalloc OK
+[965383.582883] order=16, pages= 65536, size=268435456 - vmalloc OK
+[965404.678219] order=17, pages=131072, size=536870912 - vmalloc OK
+[965405.098725] order=18, pages=262144, size=1073741824 - vmalloc failed
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ time sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+real	0m2,280s
+user	0m0,043s
+sys	0m1,835s
+
+===========================================================================================
+
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ sudo insmod memmax.ko mode=0
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@raspberrypi:~/kernel/examples/memory/mtest $ dmesg | grep order | tail -n12
+[976262.303285] order= 0, pages=     1, size=     4096 - kmalloc OK
+[976262.303320] order= 1, pages=     2, size=     8192 - kmalloc OK
+[976262.303342] order= 2, pages=     4, size=    16384 - kmalloc OK
+[976262.303367] order= 3, pages=     8, size=    32768 - kmalloc OK
+[976262.303391] order= 4, pages=    16, size=    65536 - kmalloc OK
+[976262.303417] order= 5, pages=    32, size=   131072 - kmalloc OK
+[976262.303440] order= 6, pages=    64, size=   262144 - kmalloc OK
+[976262.303578] order= 7, pages=   128, size=   524288 - kmalloc OK
+[976262.303629] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[976262.303682] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[976262.303763] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[976262.303808] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+===========================================================================================

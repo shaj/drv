@@ -1,0 +1,34 @@
+21.08.2022
+==========
+
+olej@mint:~$ inxi -S
+System:    Host: mint Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 
+           Distro: Linux Mint 20.3 Una 
+
+
+olej@mint:~/kernel/load_module/master$ uname -a
+Linux mint 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+=======================================================================================
+
+olej@mint:~/kernel/sys_call_table/load_module/master$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/kernel/sys_call_table/load_module/master modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/kernel/sys_call_table/load_module/master/slave.o
+  CC [M]  /home/olej/kernel/sys_call_table/load_module/master/master.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/kernel/sys_call_table/load_module/master/master.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/load_module/master/master.ko
+  CC [M]  /home/olej/kernel/sys_call_table/load_module/master/slave.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/load_module/master/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@mint:~/kernel/load_module/master$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 10784 авг 21 13:14 master.ko
+-rw-rw-r-- 1 olej olej  6480 авг 21 13:14 slave.ko
+
+
+
+=======================================================================================

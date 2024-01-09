@@ -1,0 +1,254 @@
+24.08.2022
+==========
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ make
+cc -Wall -O2 -Wall    info.c   -o info
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ./info 
+Unabled to open /dev/gpiochip0: Permission denied
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ ls -l /dev/gpio*
+crw------- 1 root root 254, 0 июл 22 17:17 /dev/gpiochip0
+crw------- 1 root root 254, 1 июл 22 17:17 /dev/gpiochip1
+
+==============================================================================================
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./info | grep -v "consumer: \."
+Chip name: gpiochip0
+Chip label: 1c20800.pinctrl
+Number of lines: 224
+offset: 15, name: , consumer: orangepi:red:status. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 166, name: , consumer: cd. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 204, name: , consumer: usb0_id_det. Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+
+==============================================================================================
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ make clean
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ make 
+cc -Wall -O2 -Wall    info.c   -o info
+cc -Wall -O2 -Wall    allops.c   -o allops
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ls -l /dev/gpio*
+crw------- 1 root root 254, 0 июл 22 17:17 /dev/gpiochip0
+crw------- 1 root root 254, 1 июл 22 17:17 /dev/gpiochip1
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ./allops --help
+./allops: invalid option -- '-'
+Usage: ./allops options dev_name.
+Options:
+     -i: print gpio chip info
+     -r <offset>: Read GPIO value at offset (INPUT mode)
+     -w <offset>: Write GPIO value at offset (OUTPUT mode). Option -v should be set
+     -v <0|1>: value that should be written to the GPIO, used only with option -w
+     -p <offset>: Polling raising event on the GPIO at offset
+
+----------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ make 
+cc -Wall -O2 -Wall    allops.c   -o allops
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ./allops -r 15 /dev/gpiochip0
+Unabled to open /dev/gpiochip0: Permission denied
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -r 15 /dev/gpiochip0
+[sudo] пароль для olej: 
+Unable to get line handle from ioctl : Device or resource busy
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -r 14 /dev/gpiochip0
+Value of GPIO at offset 14 (INPUT mode) on chip /dev/gpiochip0: 0
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -w 14 -v 1 /dev/gpiochip0
+Write value 1 to GPIO at offset 14 (OUTPUT mode) on chip /dev/gpiochip0
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -r 14 /dev/gpiochip0
+Value of GPIO at offset 14 (INPUT mode) on chip /dev/gpiochip0: 1
+
+
+==============================================================================================
+
+https://www.pvsm.ru/linux/69220
+Linux: кнопки, светодиоды и GPIO
+2014-09-09 
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ tree /sys/class/gpio/
+/sys/class/gpio/
+├── export
+├── gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+├── gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+└── unexport
+
+2 directories, 2 files
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ls -l /sys/class/gpio/
+итого 0
+--w------- 1 root root 4096 авг 25 01:10 export
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 01:10 unexport
+
+==============================================================================================
+
+root@orangepione:~# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 01:16 export
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 01:10 unexport
+
+
+
+root@orangepione:~# echo 16 > /sys/class/gpio/export
+root@orangepione:~# ls -l /sys/class/gpio
+итого 0
+--w------- 1 root root 4096 авг 25 01:23 export
+lrwxrwxrwx 1 root root    0 авг 25 01:23 gpio16 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio16
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 01:10 unexport
+
+
+
+root@orangepione:~# ls -lL /sys/class/gpio/gpio16
+итого 0
+-rw-r--r-- 1 root root 4096 авг 25 01:26 active_low
+drwxr-xr-x 4 root root    0 авг 25 01:23 device
+-rw-r--r-- 1 root root 4096 авг 25 01:26 direction
+-rw-r--r-- 1 root root 4096 авг 25 01:26 edge
+drwxr-xr-x 2 root root    0 авг 25 01:26 power
+drwxr-xr-x 2 root root    0 авг 25 01:10 subsystem
+-rw-r--r-- 1 root root 4096 авг 25 01:23 uevent
+-rw-r--r-- 1 root root 4096 авг 25 01:26 value
+
+
+root@orangepione:~# echo out > /sys/class/gpio/gpio16/direction
+
+root@orangepione:~# echo 1 > /sys/class/gpio/gpio16/value
+
+root@orangepione:~# cat /sys/class/gpio/gpio16/value
+1
+
+root@orangepione:~# echo 0 > /sys/class/gpio/gpio16/value
+
+root@orangepione:~# cat /sys/class/gpio/gpio16/value
+0
+
+
+root@orangepione:~# cat /sys/class/gpio/gpio16/direction
+out
+
+
+root@orangepione:~# tree /sys/class/gpio/gpio16
+/sys/class/gpio/gpio16
+├── active_low
+├── device -> ../../../gpiochip0
+├── direction
+├── edge
+├── power
+│   ├── autosuspend_delay_ms
+│   ├── control
+│   ├── runtime_active_time
+│   ├── runtime_status
+│   └── runtime_suspended_time
+├── subsystem -> ../../../../../../../class/gpio
+├── uevent
+└── value
+
+3 directories, 10 files
+
+
+----------------------------------------------------------------------------------------------
+
+root@orangepione:~# echo 17 > /sys/class/gpio/export
+
+root@orangepione:~# echo in > /sys/class/gpio/gpio17/direction
+
+root@orangepione:~# cat /sys/class/gpio/gpio17/direction
+in
+
+root@orangepione:~# echo 1 >  /sys/class/gpio/gpio17/value
+-bash: echo: ошибка записи: Операция не позволена
+
+root@orangepione:~# cat /sys/class/gpio/gpio17/value
+0
+
+
+root@orangepione:~# tree /sys/class/gpio/gpio17
+/sys/class/gpio/gpio17
+├── active_low
+├── device -> ../../../gpiochip0
+├── direction
+├── edge
+├── power
+│   ├── autosuspend_delay_ms
+│   ├── control
+│   ├── runtime_active_time
+│   ├── runtime_status
+│   └── runtime_suspended_time
+├── subsystem -> ../../../../../../../class/gpio
+├── uevent
+└── value
+
+3 directories, 10 files
+
+----------------------------------------------------------------------------------------------
+
+root@orangepione:~# echo 32 > /sys/class/gpio/export
+-bash: echo: ошибка записи: Неизвестная ошибка 517
+
+root@orangepione:~# echo 24 > /sys/class/gpio/export
+-bash: echo: ошибка записи: Устройство или ресурс занято
+
+root@orangepione:~# echo 20 > /sys/class/gpio/export
+
+root@orangepione:~# ls -l /sys/class/gpio/
+итого 0
+--w------- 1 root root 4096 авг 25 01:41 export
+lrwxrwxrwx 1 root root    0 авг 25 01:23 gpio16 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio16
+lrwxrwxrwx 1 root root    0 авг 25 01:31 gpio17 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio17
+lrwxrwxrwx 1 root root    0 авг 25 01:41 gpio20 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio20
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 01:10 unexport
+
+root@orangepione:~# echo 23 > /sys/class/gpio/export
+-bash: echo: ошибка записи: Неизвестная ошибка 517
+
+root@orangepione:~# echo 22 > /sys/class/gpio/export
+-bash: echo: ошибка записи: Неизвестная ошибка 517
+
+root@orangepione:~# echo 21 > /sys/class/gpio/export
+root@orangepione:~# echo 0 > /sys/class/gpio/export
+
+root@orangepione:~# ls -l /sys/class/gpio/
+итого 0
+--w------- 1 root root 4096 авг 25 01:42 export
+lrwxrwxrwx 1 root root    0 авг 25 01:43 gpio0 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio0
+lrwxrwxrwx 1 root root    0 авг 25 01:23 gpio16 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio16
+lrwxrwxrwx 1 root root    0 авг 25 01:31 gpio17 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio17
+lrwxrwxrwx 1 root root    0 авг 25 01:41 gpio20 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio20
+lrwxrwxrwx 1 root root    0 авг 25 01:43 gpio21 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio21
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 01:10 unexport
+
+----------------------------------------------------------------------------------------------
+
+root@orangepione:~# echo 21 > /sys/class/gpio/unexport
+
+root@orangepione:~# echo 20 > /sys/class/gpio/unexport
+
+root@orangepione:~# echo 0 > /sys/class/gpio/unexport
+
+root@orangepione:~# ls -l /sys/class/gpio/
+итого 0
+--w------- 1 root root 4096 авг 25 01:42 export
+lrwxrwxrwx 1 root root    0 авг 25 01:23 gpio16 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio16
+lrwxrwxrwx 1 root root    0 авг 25 01:31 gpio17 -> ../../devices/platform/soc/1c20800.pinctrl/gpiochip0/gpio/gpio17
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip0 -> ../../devices/platform/soc/1c20800.pinctrl/gpio/gpiochip0
+lrwxrwxrwx 1 root root    0 авг 25 01:10 gpiochip352 -> ../../devices/platform/soc/1f02c00.pinctrl/gpio/gpiochip352
+--w------- 1 root root 4096 авг 25 01:50 unexport
+
+==============================================================================================

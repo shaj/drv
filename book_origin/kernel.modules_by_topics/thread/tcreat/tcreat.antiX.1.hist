@@ -1,0 +1,213 @@
+13.08.2022
+==========
+
+$ sudo inxi -MS
+[sudo] пароль для olej: 
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+Machine:
+  Type: Virtualbox System: innotek GmbH product: VirtualBox v: 1.2
+    serial: N/A
+  Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek GmbH
+    v: VirtualBox date: 12/01/2006
+
+
+$ uname -r
+4.9.0-279-antix.1-486-smp
+
+$ pwd
+/home/olej/2022/kernel/thread/tcreat
+olej@antix21:~/2022/kernel/thread/tcreat
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.o
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+WARNING: "kernel_thread" [/home/olej/2022/kernel/thread/tcreat/mod_thr2.ko] undefined!
+WARNING: "kernel_thread" [/home/olej/2022/kernel/thread/tcreat/mod_thr1.ko] undefined!
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr1.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr1.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr2.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ sudo insmod mod_thr1.ko 
+insmod: ERROR: could not insert module mod_thr1.ko: Unknown symbol in module
+
+
+$ dmesg | tail -n1
+[ 7615.127406] mod_thr1: Unknown symbol kernel_thread (err 0)
+
+
+===========================================================================================
+
+$ sudo inxi -MCS
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64
+    Desktop: IceWM v: 2.9.8
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64
+    type: MCP cache: L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A cores: 1: 1198 2: 1198
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+$ time sudo insmod mod_thr3.ko N=3
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module mod_thr3.ko: Operation not permitted
+
+real	0m13,246s
+user	0m0,117s
+sys	0m0,030s
+
+
+$ ps -ef | grep '\[' | grep 'my_'
+root     10037     2  0 00:17 ?        00:00:00 [my_thread_3]
+root     10038     2  0 00:17 ?        00:00:00 [my_thread_2]
+root     10039     2  0 00:17 ?        00:00:00 [my_thread_1]
+
+
+
+$ dmesg | tail -n14 
+[ 3039.003701] mod_thr3: loading out-of-tree module taints kernel.
+[ 3039.003708] mod_thr3: module license 'GPL2' taints kernel.
+[ 3039.003710] Disabling lock debugging due to kernel taint
+[ 3039.003921] 4297706215 : main process [10036] is running
+[ 3039.004023] 4297706215 : kthread [10037:3] is parent [00002]
+[ 3039.004290] 4297706215 : kthread [10038:2] is parent [00002]
+[ 3039.004376] 4297706216 : kthread [10039:1] is parent [00002]
+[ 3049.092651] 4297716304 : kthread [10037:2] find signal!
+[ 3049.092659] 4297716304 : kthread [10038:1] find signal!
+[ 3049.196648] 4297716408 : kthread [10039:0] find signal!
+[ 3049.196651] 4297716408 : kthread [10039:0] is completed
+[ 3049.196676] 4297716408 : kthread [10038:1] is completed
+[ 3049.196734] 4297716408 : kthread [10037:2] is completed
+[ 3049.196752] 4297716408 : main process [10036] is completed
+
+===========================================================================================
+
+olej@lmde32:~$ sudo inxi -MCS
+[sudo] пароль для olej:       
+System:    Host: lmde32 Kernel: 5.10.0-16-686 i686 bits: 32 Console: tty 2 Distro: LMDE 5 Elsie 
+Machine:   Type: Virtualbox System: innotek product: VirtualBox v: 1.2 serial: N/A 
+           Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek v: VirtualBox date: 12/01/2006 
+CPU:       Info: Single Core model: Intel Xeon E5-2470 v2 bits: 32 type: MCP L2 cache: 25 MiB 
+           Speed: 2451 MHz min/max: N/A Core speed (MHz): 1: 2451 
+
+
+olej@lmde32:~/kernel/thread/tcreat$ make
+make -C /lib/modules/5.10.0-16-686/build M=/home/olej/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-16-686»
+make[3]: Предупреждение: время изменения файла «/home/olej/kernel/thread/tcreat/mod_thr3.c» находится в будущем (384)
+  CC [M]  /home/olej/kernel/thread/tcreat/mod_thr3.o
+make[3]: предупреждение: Неправильный ход часов.  Сборка может быть неполной.
+  MODPOST /home/olej/kernel/thread/tcreat/Module.symvers
+  CC [M]  /home/olej/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-16-686»
+
+
+
+olej@lmde32:~/kernel/thread/tcreat$ time sudo insmod mod_thr3.ko N=3
+insmod: ERROR: could not insert module mod_thr3.ko: Operation not permitted
+
+real	0m10,083s
+user	0m0,009s
+sys	0m0,010s
+
+
+olej@lmde32:~$ ps -ef | grep '\[' | grep 'my_'
+root      6335     2  0 00:18 ?        00:00:00 [my_thread_3]
+root      6336     2  0 00:18 ?        00:00:00 [my_thread_2]
+root      6337     2  0 00:18 ?        00:00:00 [my_thread_1]
+
+
+
+olej@lmde32:~$ dmesg | tail -n13
+[34469.022065] mod_thr3: module license 'GPL2' taints kernel.
+[34469.022070] Disabling lock debugging due to kernel taint
+[34469.022457] 08546484 : main process [6334] is running
+[34469.025816] 08546485 : kthread [06335:3] is parent [00002]
+[34469.025840] 08546485 : kthread [06336:2] is parent [00002]
+[34469.029719] 08546486 : kthread [06337:1] is parent [00002]
+[34479.064560] 08548996 : kthread [06335:2] find signal!
+[34479.064571] 08548996 : kthread [06336:1] find signal!
+[34479.064576] 08548996 : kthread [06337:0] find signal!
+[34479.064577] 08548996 : kthread [06337:0] is completed
+[34479.064635] 08548996 : kthread [06336:1] is completed
+[34479.064658] 08548996 : kthread [06335:2] is completed
+[34479.064692] 08548996 : main process [6334] is completed
+
+
+===========================================================================================
+
+olej@lmde32:~$ sudo inxi -MCS
+[sudo] пароль для olej:       
+System:    Host: lmde32 Kernel: 5.10.0-16-686 i686 bits: 32 Console: tty 2 Distro: LMDE 5 Elsie 
+Machine:   Type: Virtualbox System: innotek product: VirtualBox v: 1.2 serial: N/A 
+           Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek v: VirtualBox date: 12/01/2006 
+CPU:       Info: Single Core model: Intel Xeon E5-2470 v2 bits: 32 type: MCP L2 cache: 25 MiB 
+           Speed: 2451 MHz min/max: N/A Core speed (MHz): 1: 2451 
+
+
+
+olej@lmde32:~/kernel/thread/tcreat$ time sudo insmod mod_thr3.ko N=5
+insmod: ERROR: could not insert module mod_thr3.ko: Operation not permitted
+
+real	0m10,212s
+user	0m0,012s
+sys	0m0,009s
+
+
+olej@lmde32:~$ ps -ef | grep '\[' | grep 'my_'
+root      6750     2  0 00:22 ?        00:00:00 [my_thread_5]
+root      6751     2  0 00:22 ?        00:00:00 [my_thread_4]
+root      6752     2  0 00:22 ?        00:00:00 [my_thread_3]
+root      6753     2  0 00:22 ?        00:00:00 [my_thread_2]
+root      6754     2  0 00:22 ?        00:00:00 [my_thread_1]
+
+
+olej@lmde32:~$ dmesg | tail -n17
+[34685.460246] 08600620 : main process [6749] is running
+[34685.461990] 08600621 : kthread [06750:5] is parent [00002]
+[34685.462015] 08600621 : kthread [06751:4] is parent [00002]
+[34685.462033] 08600621 : kthread [06752:3] is parent [00002]
+[34685.462049] 08600621 : kthread [06753:2] is parent [00002]
+[34685.462065] 08600621 : kthread [06754:1] is parent [00002]
+[34695.608415] 08603159 : kthread [06750:4] find signal!
+[34695.608424] 08603159 : kthread [06751:3] find signal!
+[34695.608428] 08603159 : kthread [06752:2] find signal!
+[34695.608431] 08603159 : kthread [06753:1] find signal!
+[34695.608434] 08603159 : kthread [06754:0] find signal!
+[34695.608435] 08603159 : kthread [06754:0] is completed
+[34695.608494] 08603159 : kthread [06753:1] is completed
+[34695.608513] 08603159 : kthread [06752:2] is completed
+[34695.608524] 08603159 : kthread [06751:3] is completed
+[34695.608557] 08603159 : kthread [06750:4] is completed
+[34695.608674] 08603159 : main process [6749] is completed
+
+===========================================================================================

@@ -1,0 +1,114 @@
+12.08.2022
+==========
+
+olej@R420:~$ grep CONFIG_X86_64 /boot/config-`uname -r` 
+CONFIG_X86_64=y
+CONFIG_X86_64_SMP=y
+CONFIG_X86_64_ACPI_NUMA=y
+
+olej@R420:~$ grep CONFIG_64BIT /boot/config-`uname -r` 
+CONFIG_64BIT=y
+CONFIG_64BIT_TIME=y
+
+
+olej@R420:~$ grep CONFIG_COMPAT /boot/config-`uname -r` | grep -v ^# 
+CONFIG_COMPAT_32=y
+CONFIG_COMPAT=y
+CONFIG_COMPAT_FOR_U64_ALIGNMENT=y
+CONFIG_COMPAT_OLD_SIGACTION=y
+CONFIG_COMPAT_32BIT_TIME=y
+CONFIG_COMPAT_BINFMT_ELF=y
+CONFIG_COMPAT_NETLINK_MESSAGES=y
+
+
+=====================================================================================================================
+
+olej@raspberrypi:~ $ ls /boot
+bcm2708-rpi-b.dtb         bcm2710-rpi-zero-2.dtb    fixup4.dat    kernel.img
+bcm2708-rpi-b-plus.dtb    bcm2710-rpi-zero-2-w.dtb  fixup4db.dat  LICENCE.broadcom
+bcm2708-rpi-b-rev1.dtb    bcm2711-rpi-400.dtb       fixup4x.dat   overlays
+bcm2708-rpi-cm.dtb        bcm2711-rpi-4-b.dtb       fixup_cd.dat  start4cd.elf
+bcm2708-rpi-zero.dtb      bcm2711-rpi-cm4.dtb       fixup.dat     start4db.elf
+bcm2708-rpi-zero-w.dtb    bcm2711-rpi-cm4s.dtb      fixup_db.dat  start4.elf
+bcm2709-rpi-2-b.dtb       bootcode.bin              fixup_x.dat   start4x.elf
+bcm2710-rpi-2-b.dtb       cmdline.txt               issue.txt     start_cd.elf
+bcm2710-rpi-3-b.dtb       config.txt                kernel7.img   start_db.elf
+bcm2710-rpi-3-b-plus.dtb  COPYING.linux             kernel7l.img  start.elf
+bcm2710-rpi-cm3.dtb       fixup4cd.dat              kernel8.img   start_x.elf
+
+olej@raspberrypi:~ $ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Raspbian
+Description:	Raspbian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+
+olej@raspberrypi:~ $ grep 32 /lib/modules/`uname -r`/build/.config | grep -v ^#
+CONFIG_INIT_ENV_ARG_LIMIT=32
+CONFIG_CPU_32v6K=y
+CONFIG_CPU_32v7=y
+CONFIG_ARCH_32BIT_OFF_T=y
+CONFIG_COMPAT_32BIT_TIME=y
+CONFIG_NF_CONNTRACK_H323=m
+CONFIG_NETFILTER_XT_MATCH_U32=m
+CONFIG_NF_NAT_H323=m
+CONFIG_NET_CLS_U32=m
+CONFIG_CLS_U32_MARK=y
+CONFIG_NET_EMATCH_STACK=32
+CONFIG_NET_EMATCH_U32=m
+CONFIG_USB_ALI_M5632=y
+CONFIG_VIDEO_CS53L32A=m
+CONFIG_DVB_S5H1432=m
+CONFIG_DVB_RTL2832=m
+CONFIG_DVB_RTL2832_SDR=m
+CONFIG_DVB_OR51132=m
+CONFIG_SND_SOC_ICS43432=m
+CONFIG_SND_SOC_TLV320AIC32X4=m
+CONFIG_SND_SOC_TLV320AIC32X4_I2C=m
+CONFIG_USB_SERIAL_F81232=m
+CONFIG_USB_SERIAL_MCT_U232=m
+CONFIG_MMC_BLOCK_MINORS=32
+CONFIG_LEDS_PCA9532=m
+CONFIG_LEDS_IS31FL32XX=m
+CONFIG_RTC_DRV_BQ32K=m
+CONFIG_RTC_DRV_DS3232=m
+CONFIG_RTC_DRV_DS3232_HWMON=y
+CONFIG_FB_TFT_ILI9320=m
+CONFIG_FB_TFT_ILI9325=m
+CONFIG_MCP320X=m
+CONFIG_NLS_CODEPAGE_932=m
+CONFIG_CRYPTO_CRC32C=y
+CONFIG_CRYPTO_CRC32=y
+CONFIG_CRC32=y
+CONFIG_CRC32_SLICEBY8=y
+CONFIG_LIBCRC32C=y
+CONFIG_GENERIC_VDSO_32=y
+
+olej@raspberrypi:~ $ grep CONFIG_CPU_32 /lib/modules/`uname -r`/build/.config
+CONFIG_CPU_32v6K=y
+CONFIG_CPU_32v7=y
+
+$ grep CONFIG_ARM= /lib/modules/`uname -r`/build/.config
+CONFIG_ARM=y
+
+
+=====================================================================================================================
+
+[olej@xenix ~]$ inxi -Sxxx
+System:
+  Host: xenix.localdomain Kernel: 5.18.16-100.fc35.x86_64 arch: x86_64 bits: 64 compiler: gcc
+    v: 2.37-17.fc35 Console: pty pts/1 DM: LightDM v: 1.32.0
+    Distro: Fedora release 35 (Thirty Five)
+
+
+[olej@xenix ~]$ grep CONFIG_X86_64 /lib/modules/`uname -r`/build/.config | grep -v ^#
+CONFIG_X86_64=y
+CONFIG_X86_64_SMP=y
+CONFIG_X86_64_ACPI_NUMA=y
+
+[olej@xenix ~]$ ls /boot/config-5.18.*
+/boot/config-5.18.11-100.fc35.x86_64  /boot/config-5.18.16-100.fc35.x86_64  /boot/config-5.18.5-100.fc35.x86_64
+
+
+=====================================================================================================================

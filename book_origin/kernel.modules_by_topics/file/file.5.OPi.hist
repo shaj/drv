@@ -1,0 +1,96 @@
+28.06.2022
+==========
+
+olej@orangepione:~/kernel/examples/file$ inxi -Sxxx
+System:    Host: orangepione Kernel: 5.15.25-sunxi armv7l bits: 32 compiler: N/A Console: tty 2 dm: LightDM 1.26.0 
+           Distro: Armbian GNU/Linux 10 (buster) 
+
+olej@orangepione:~/kernel/examples/file$ uname -a
+Linux orangepione 5.15.25-sunxi #22.02.1 SMP Sun Feb 27 09:23:25 UTC 2022 armv7l GNU/Linux
+
+
+
+olej@orangepione:~/kernel/examples/file$ make
+make -C /lib/modules/5.15.25-sunxi/build M=/home/olej/kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.25-sunxi»
+  CC [M]  /home/olej/kernel/examples/file/mod_read.o
+  CC [M]  /home/olej/kernel/examples/file/mod_write.o
+  CC [M]  /home/olej/kernel/examples/file/mod_vfs.o
+/home/olej/kernel/examples/file/mod_vfs.c: In function ‘kread_init’:
+/home/olej/kernel/examples/file/mod_vfs.c:37:14: error: implicit declaration of function ‘get_fs’; did you mean ‘sget_fc’? [-Werror=implicit-function-declaration]
+     old_fs = get_fs();                 // буфер в kernel space
+              ^~~~~~
+              sget_fc
+/home/olej/kernel/examples/file/mod_vfs.c:37:12: error: incompatible types when assigning to type ‘mm_segment_t’ {aka ‘struct <anonymous>’} from type ‘int’
+     old_fs = get_fs();                 // буфер в kernel space
+            ^
+/home/olej/kernel/examples/file/mod_vfs.c:38:5: error: implicit declaration of function ‘set_fs’; did you mean ‘sget_fc’? [-Werror=implicit-function-declaration]
+     set_fs(KERNEL_DS);
+     ^~~~~~
+     sget_fc
+/home/olej/kernel/examples/file/mod_vfs.c:38:12: error: ‘KERNEL_DS’ undeclared (first use in this function); did you mean ‘KERNFS_NS’?
+     set_fs(KERNEL_DS);
+            ^~~~~~~~~
+            KERNFS_NS
+/home/olej/kernel/examples/file/mod_vfs.c:38:12: note: each undeclared identifier is reported only once for each function it appears in
+In file included from ./include/linux/kernel.h:19,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:12,
+                 from /home/olej/kernel/examples/file/mod_vfs.c:1:
+/home/olej/kernel/examples/file/mod_vfs.c:46:20: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘size_t’ {aka ‘unsigned int’} [-Wformat=]
+             printk("+++ failed to read: %ld\n", n);
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~  ~
+./include/linux/printk.h:422:11: note: in definition of macro ‘printk_index_wrap’
+   _p_func(_fmt, ##__VA_ARGS__);    \
+           ^~~~
+/home/olej/kernel/examples/file/mod_vfs.c:46:13: note: in expansion of macro ‘printk’
+             printk("+++ failed to read: %ld\n", n);
+             ^~~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:277: /home/olej/kernel/examples/file/mod_vfs.o] Error 1
+make[1]: *** [Makefile:1870: /home/olej/kernel/examples/file] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.25-sunxi»
+make: *** [Makefile:17: default] Ошибка 2
+
+====================================================================================================================
+
+olej@orangepione:/usr/src$ ls -l /usr/src
+итого 4
+drwxr-xr-x 23 root root 4096 мая 31 13:40 linux-headers-5.15.25-sunxi
+
+olej@orangepione:/usr/src$ aptitude search linux-doc-
+p   linux-doc-4.19                                         - Linux kernel specific documentation for version 4.19            
+p   linux-doc-5.10                                         - Linux kernel specific documentation for version 5.10            
+
+olej@orangepione:/usr/src$ aptitude search debian-kernel
+p   debian-kernel-handbook                                           - reference to Debian Linux kernel packages and development                  
+p   debian-kernel-handbook-ja                                        - reference to Debian Linux kernel packages and development (Japanese)       
+
+
+olej@orangepione:/usr/src$ sudo apt install linux-doc-5.10 debian-kernel-handbook
+[sudo] пароль для olej: 
+Чтение списков пакетов… Готово
+Построение дерева зависимостей       
+Чтение информации о состоянии… Готово
+Следующие НОВЫЕ пакеты будут установлены:
+  debian-kernel-handbook linux-doc-5.10
+Обновлено 0 пакетов, установлено 2 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.
+Необходимо скачать 30,3 MB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 166 MB.
+Пол:1 http://deb.debian.org/debian buster/main armhf debian-kernel-handbook all 1.0.19 [26,6 kB]
+Пол:2 http://deb.debian.org/debian buster-backports/main armhf linux-doc-5.10 all 5.10.103-1~bpo10+1 [30,2 MB]
+Получено 30,3 MB за 6с (5.294 kB/s)        
+Выбор ранее не выбранного пакета debian-kernel-handbook.
+(Чтение базы данных … на данный момент установлено 159242 файла и каталога.)
+Подготовка к распаковке …/debian-kernel-handbook_1.0.19_all.deb …
+Распаковывается debian-kernel-handbook (1.0.19) …
+Выбор ранее не выбранного пакета linux-doc-5.10.
+Подготовка к распаковке …/linux-doc-5.10_5.10.103-1~bpo10+1_all.deb …
+Распаковывается linux-doc-5.10 (5.10.103-1~bpo10+1) …
+Настраивается пакет linux-doc-5.10 (5.10.103-1~bpo10+1) …
+Настраивается пакет debian-kernel-handbook (1.0.19) …
+Обрабатываются триггеры для doc-base (0.10.8) …
+Processing 1 added doc-base file...
+
+====================================================================================================================
+

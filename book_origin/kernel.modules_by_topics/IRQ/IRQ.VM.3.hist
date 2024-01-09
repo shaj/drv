@@ -1,0 +1,258 @@
+16.08.2022
+==========
+
+olej@lmde32:~/kernel/IRQ$ inxi -S
+System:    Host: lmde32 Kernel: 5.10.0-16-686 i686 bits: 32 Desktop: Cinnamon 5.4.10 Distro: LMDE 5 Elsie 
+
+=====================================================================================
+
+olej@lmde32:~/kernel/IRQ$ make
+make -C /lib/modules/5.10.0-16-686/build M=/home/olej/kernel/IRQ modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-16-686»
+  CC [M]  /home/olej/kernel/IRQ/lab1_interrupt.o
+  CC [M]  /home/olej/kernel/IRQ/mod_tasklet.o
+/home/olej/kernel/IRQ/mod_tasklet.c:23:46: error: macro "DECLARE_TASKLET" passed 3 arguments, but takes just 2
+   23 |                  (unsigned long)&tasklet_data);
+      |                                              ^
+In file included from /home/olej/kernel/IRQ/mod_tasklet.c:2:
+/usr/src/linux-headers-5.10.0-16-common/include/linux/interrupt.h:622: note: macro "DECLARE_TASKLET" defined here
+  622 | #define DECLARE_TASKLET(name, _callback)  \
+      | 
+/home/olej/kernel/IRQ/mod_tasklet.c:22:1: warning: data definition has no type or storage class
+   22 | DECLARE_TASKLET(my_tasklet, tasklet_function,
+      | ^~~~~~~~~~~~~~~
+/home/olej/kernel/IRQ/mod_tasklet.c:22:1: error: type defaults to ‘int’ in declaration of ‘DECLARE_TASKLET’ [-Werror=implicit-int]
+/home/olej/kernel/IRQ/mod_tasklet.c: In function ‘init_module’:
+/home/olej/kernel/IRQ/mod_tasklet.c:29:22: error: ‘my_tasklet’ undeclared (first use in this function); did you mean ‘from_tasklet’?
+   29 |    tasklet_schedule(&my_tasklet);           /* Schedule the Bottom Half */
+      |                      ^~~~~~~~~~
+      |                      from_tasklet
+/home/olej/kernel/IRQ/mod_tasklet.c:29:22: note: each undeclared identifier is reported only once for each function it appears in
+/home/olej/kernel/IRQ/mod_tasklet.c: In function ‘cleanup_module’:
+/home/olej/kernel/IRQ/mod_tasklet.c:36:17: error: ‘my_tasklet’ undeclared (first use in this function); did you mean ‘from_tasklet’?
+   36 |   tasklet_kill(&my_tasklet);                /* Stop the tasklet before we exit */
+      |                 ^~~~~~~~~~
+      |                 from_tasklet
+cc1: some warnings being treated as errors
+make[3]: *** [/usr/src/linux-headers-5.10.0-16-common/scripts/Makefile.build:285: /home/olej/kernel/IRQ/mod_tasklet.o] Ошибка 1
+make[2]: *** [/usr/src/linux-headers-5.10.0-16-common/Makefile:1846: /home/olej/kernel/IRQ] Ошибка 2
+make[1]: *** [/usr/src/linux-headers-5.10.0-16-common/Makefile:185: __sub-make] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-16-686»
+make: *** [Makefile:16: default] Ошибка 2
+
+-------------------------------------------------------------------------------------
+
+olej@lmde32:~/kernel/IRQ$ make
+make -C /lib/modules/5.10.0-16-686/build M=/home/olej/kernel/IRQ modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-16-686»
+  CC [M]  /home/olej/kernel/IRQ/mod_tasklet.o
+  CC [M]  /home/olej/kernel/IRQ/mod_workqueue.o
+  CC [M]  /home/olej/kernel/IRQ/mod_ser.o
+  MODPOST /home/olej/kernel/IRQ/Module.symvers
+  CC [M]  /home/olej/kernel/IRQ/lab1_interrupt.mod.o
+  LD [M]  /home/olej/kernel/IRQ/lab1_interrupt.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_ser.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_ser.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_tasklet.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_tasklet.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_workqueue.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_workqueue.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-16-686»
+
+=====================================================================================
+
+olej@lmde32:~/kernel/IRQ$ cat /proc/interrupts
+           CPU0       
+  0:   12454652    XT-PIC      timer
+  1:      10270    XT-PIC      i8042
+  2:          0    XT-PIC      cascade
+  8:          0    XT-PIC      rtc0
+  9:      76832    XT-PIC      acpi, ehci_hcd:usb1, enp0s3
+ 10:      20526    XT-PIC      ohci_hcd:usb2, vmwgfx
+ 11:      92524    XT-PIC      vboxguest
+ 12:       3927    XT-PIC      i8042
+ 14:      70268    XT-PIC      ata_piix
+ 15:      54885    XT-PIC      ata_piix
+NMI:          0   Non-maskable interrupts
+LOC:          0   Local timer interrupts
+SPU:          0   Spurious interrupts
+PMI:          0   Performance monitoring interrupts
+IWI:          1   IRQ work interrupts
+RTR:          0   APIC ICR read retries
+RES:          0   Rescheduling interrupts
+CAL:          0   Function call interrupts
+TLB:          0   TLB shootdowns
+TRM:          0   Thermal event interrupts
+THR:          0   Threshold APIC interrupts
+DFR:          0   Deferred Error APIC interrupts
+MCE:          0   Machine check exceptions
+MCP:        177   Machine check polls
+ERR:          0
+MIS:          0
+PIN:          0   Posted-interrupt notification event
+NPI:          0   Nested posted-interrupt event
+PIW:          0   Posted-interrupt wakeup event
+
+olej@lmde32:~/kernel/IRQ$ cat /proc/interrupts | grep hci_
+  9:      76860    XT-PIC      acpi, ehci_hcd:usb1, enp0s3
+ 10:      20576    XT-PIC      ohci_hcd:usb2, vmwgfx
+
+=====================================================================================
+
+olej@lmde32:~/kernel/IRQ$ lsusb
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 003: ID 80ee:0021 VirtualBox USB Tablet
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+olej@lmde32:~/kernel/IRQ$ cat /sys/class/input/mouse1/device/name
+VirtualBox USB Tablet
+
+
+olej@lmde32:~$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ohci-pci/12p, 12M
+    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/12p, 480M
+
+olej@lmde32:~/kernel/IRQ$ cat /proc/interrupts | grep hci_
+  9:      76860    XT-PIC      acpi, ehci_hcd:usb1, enp0s3
+ 10:      20576    XT-PIC      ohci_hcd:usb2, vmwgfx
+
+=====================================================================================
+
+olej@lmde32:~/kernel/IRQ$ sudo insmod mod_ser.ko irq=9 num=3
+[sudo] пароль для olej:       
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=9' | tail -n6
+[55272.421281] 135496883889432 : irq=9 - handler #1
+[55272.421318] 135496884007594 : irq=9 - handler #2
+[55272.421320] 135496884014595 : irq=9 - handler #3
+[55274.418805] 135501779866242 : irq=9 - handler #1
+[55274.418854] 135501780001522 : irq=9 - handler #2
+[55274.418856] 135501780009338 : irq=9 - handler #3
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=9' | wc -l
+162
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=9' | wc -l
+177
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=9' | wc -l
+231
+
+olej@lmde32:~/kernel/IRQ$ sudo rmmod mod_ser
+
+=====================================================================================
+
+olej@lmde32:~/kernel/IRQ$ make
+make -C /lib/modules/5.10.0-16-686/build M=/home/olej/kernel/IRQ modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-16-686»
+  CC [M]  /home/olej/kernel/IRQ/lab1_interrupt.o
+  CC [M]  /home/olej/kernel/IRQ/mod_tasklet.o
+  CC [M]  /home/olej/kernel/IRQ/mod_workqueue.o
+  CC [M]  /home/olej/kernel/IRQ/mod_ser.o
+  MODPOST /home/olej/kernel/IRQ/Module.symvers
+  CC [M]  /home/olej/kernel/IRQ/lab1_interrupt.mod.o
+  LD [M]  /home/olej/kernel/IRQ/lab1_interrupt.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_ser.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_ser.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_tasklet.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_tasklet.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_workqueue.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_workqueue.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-16-686»
+
+
+olej@lmde32:~/kernel/IRQ$ sudo insmod mod_tasklet.ko
+[sudo] пароль для olej:       
+
+olej@lmde32:~/kernel/IRQ$ lsmod | head -n3
+Module                  Size  Used by
+mod_tasklet            16384  0
+ufs                    73728  0
+
+olej@lmde32:~/kernel/IRQ$ dmesg | tail -n2
+[57089.461366] 139950482197527 [14204420] : tasklet was scheduled in contxt 0
+[57089.461373] 139950482228937 [14204420] : tasklet function was called in contxt 1
+
+olej@lmde32:~/kernel/IRQ$ sudo rmmod mod_tasklet
+
+=====================================================================================
+
+olej@lmde32:~$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ohci-pci/12p, 12M
+    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/12p, 480M
+
+olej@lmde32:~$ lsusb 
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 80ee:0021 VirtualBox USB Tablet
+Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+
+olej@lmde32:~$ lspci -t
+-[0000:00]-+-00.0
+           +-01.0
+           +-01.1
+           +-02.0
+           +-03.0
+           +-04.0
+           +-06.0
+           +-07.0
+           \-0b.0
+
+
+=====================================================================================
+
+olej@lmde32:~$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ohci-pci/12p, 12M
+    |__ Port 1: Dev 2, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/12p, 480M
+
+
+olej@lmde32:~$ cat /proc/interrupts | grep hci_
+  9:      25098    XT-PIC      acpi, ehci_hcd:usb1, enp0s3
+ 10:      10260    XT-PIC      ohci_hcd:usb2, vmwgfx
+
+
+olej@lmde32:~/kernel/IRQ$ make
+make -C /lib/modules/5.10.0-17-686/build M=/home/olej/kernel/IRQ modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-17-686»
+  CC [M]  /home/olej/kernel/IRQ/lab1_interrupt.o
+  CC [M]  /home/olej/kernel/IRQ/mod_tasklet.o
+  CC [M]  /home/olej/kernel/IRQ/mod_workqueue.o
+  CC [M]  /home/olej/kernel/IRQ/mod_ser.o
+  MODPOST /home/olej/kernel/IRQ/Module.symvers
+  CC [M]  /home/olej/kernel/IRQ/lab1_interrupt.mod.o
+  LD [M]  /home/olej/kernel/IRQ/lab1_interrupt.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_ser.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_ser.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_tasklet.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_tasklet.ko
+  CC [M]  /home/olej/kernel/IRQ/mod_workqueue.mod.o
+  LD [M]  /home/olej/kernel/IRQ/mod_workqueue.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-17-686»
+
+
+olej@lmde32:~/kernel/IRQ$ sudo insmod mod_ser.ko irq=10 num=3
+
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=10' | tail -n6
+[ 8347.134222] 20046582976683 : irq=10 - handler #1
+[ 8347.134225] 20046582997098 : irq=10 - handler #2
+[ 8347.134226] 20046583000350 : irq=10 - handler #3
+[ 8347.221947] 20046793516431 : irq=10 - handler #1
+[ 8347.221951] 20046793537367 : irq=10 - handler #2
+[ 8347.221952] 20046793540983 : irq=10 - handler #3
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=10' | wc -l
+741
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=10' | wc -l
+825
+
+olej@lmde32:~/kernel/IRQ$ dmesg | grep 'irq=10' | wc -l
+885
+
+olej@lmde32:~/kernel/IRQ$ sudo rmmod mod_ser
+
+=====================================================================================

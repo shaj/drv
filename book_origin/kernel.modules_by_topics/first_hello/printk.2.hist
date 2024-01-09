@@ -1,0 +1,536 @@
+01.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ make
+=============== making all in first_hello =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello»
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.ko
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello»
+
+
+==============================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ ls 
+hello_printk.c  hello_printk.ko  hello_printk.mod  Makefile  printk.1.hist  printk.2.hist
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ file hello_printk.ko
+hello_printk.ko: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), BuildID[sha1]=28608f71e4c93f7083b4d560304d299aa74a1a0f, not stripped
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ objdump -t hello_printk.ko
+
+hello_printk.ko:     формат файла elf64-x86-64
+
+SYMBOL TABLE:
+0000000000000000 l    d  .note.gnu.build-id	0000000000000000 .note.gnu.build-id
+0000000000000000 l    d  .note.Linux	0000000000000000 .note.Linux
+0000000000000000 l    d  .text	0000000000000000 .text
+0000000000000000 l    d  .init.text	0000000000000000 .init.text
+0000000000000000 l    d  .exit.text	0000000000000000 .exit.text
+0000000000000000 l    d  .rodata.str1.1	0000000000000000 .rodata.str1.1
+0000000000000000 l    d  __mcount_loc	0000000000000000 __mcount_loc
+0000000000000000 l    d  .modinfo	0000000000000000 .modinfo
+0000000000000000 l    d  __versions	0000000000000000 __versions
+0000000000000000 l    d  .data	0000000000000000 .data
+0000000000000000 l    d  .gnu.linkonce.this_module	0000000000000000 .gnu.linkonce.this_module
+0000000000000000 l    d  .bss	0000000000000000 .bss
+0000000000000000 l    d  .comment	0000000000000000 .comment
+0000000000000000 l    d  .note.GNU-stack	0000000000000000 .note.GNU-stack
+0000000000000000 l    df *ABS*	0000000000000000 hello_printk.mod.c
+0000000000000032 l     O .modinfo	0000000000000023 __UNIQUE_ID_srcversion40
+0000000000000055 l     O .modinfo	0000000000000009 __UNIQUE_ID_depends39
+0000000000000000 l     O __versions	00000000000000c0 ____versions
+000000000000005e l     O .modinfo	000000000000000c __UNIQUE_ID_retpoline38
+000000000000006a l     O .modinfo	0000000000000012 __UNIQUE_ID_name37
+000000000000007c l     O .modinfo	0000000000000037 __UNIQUE_ID_vermagic36
+0000000000000000 l     O .note.Linux	0000000000000018 _note_6
+0000000000000000 l    df *ABS*	0000000000000000 hello_printk.c
+0000000000000000 l     F .init.text	0000000000000019 hello_init
+0000000000000000 l     F .exit.text	0000000000000012 hello_exit
+0000000000000000 l     O .modinfo	0000000000000026 __UNIQUE_ID_author37
+0000000000000026 l     O .modinfo	000000000000000c __UNIQUE_ID_license36
+0000000000000000 g     O .gnu.linkonce.this_module	0000000000000380 __this_module
+0000000000000000 g     F .exit.text	0000000000000012 cleanup_module
+0000000000000000         *UND*	0000000000000000 __fentry__
+0000000000000000 g     F .init.text	0000000000000019 init_module
+0000000000000000         *UND*	0000000000000000 printk
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ readelf -s hello_printk.ko
+
+Таблица символов «.symtab» содержит 33 элемента:
+   Чис:    Знач           Разм Тип     Связ   Vis      Индекс имени
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+     1: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 
+     2: 0000000000000000     0 SECTION LOCAL  DEFAULT    2 
+     3: 0000000000000000     0 SECTION LOCAL  DEFAULT    3 
+     4: 0000000000000000     0 SECTION LOCAL  DEFAULT    4 
+     5: 0000000000000000     0 SECTION LOCAL  DEFAULT    6 
+     6: 0000000000000000     0 SECTION LOCAL  DEFAULT    8 
+     7: 0000000000000000     0 SECTION LOCAL  DEFAULT    9 
+     8: 0000000000000000     0 SECTION LOCAL  DEFAULT   11 
+     9: 0000000000000000     0 SECTION LOCAL  DEFAULT   12 
+    10: 0000000000000000     0 SECTION LOCAL  DEFAULT   13 
+    11: 0000000000000000     0 SECTION LOCAL  DEFAULT   14 
+    12: 0000000000000000     0 SECTION LOCAL  DEFAULT   16 
+    13: 0000000000000000     0 SECTION LOCAL  DEFAULT   17 
+    14: 0000000000000000     0 SECTION LOCAL  DEFAULT   18 
+    15: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS hello_printk.mod.c
+    16: 0000000000000032    35 OBJECT  LOCAL  DEFAULT   11 __UNIQUE_ID_srcversion40
+    17: 0000000000000055     9 OBJECT  LOCAL  DEFAULT   11 __UNIQUE_ID_depends39
+    18: 0000000000000000   192 OBJECT  LOCAL  DEFAULT   12 ____versions
+    19: 000000000000005e    12 OBJECT  LOCAL  DEFAULT   11 __UNIQUE_ID_retpoline38
+    20: 000000000000006a    18 OBJECT  LOCAL  DEFAULT   11 __UNIQUE_ID_name37
+    21: 000000000000007c    55 OBJECT  LOCAL  DEFAULT   11 __UNIQUE_ID_vermagic36
+    22: 0000000000000000    24 OBJECT  LOCAL  DEFAULT    2 _note_6
+    23: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS hello_printk.c
+    24: 0000000000000000    25 FUNC    LOCAL  DEFAULT    4 hello_init
+    25: 0000000000000000    18 FUNC    LOCAL  DEFAULT    6 hello_exit
+    26: 0000000000000000    38 OBJECT  LOCAL  DEFAULT   11 __UNIQUE_ID_author37
+    27: 0000000000000026    12 OBJECT  LOCAL  DEFAULT   11 __UNIQUE_ID_license36
+    28: 0000000000000000   896 OBJECT  GLOBAL DEFAULT   14 __this_module
+    29: 0000000000000000    18 FUNC    GLOBAL DEFAULT    6 cleanup_module
+    30: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND __fentry__
+    31: 0000000000000000    25 FUNC    GLOBAL DEFAULT    4 init_module
+    32: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT  UND printk
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ modinfo hello_printk.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.ko
+author:         Oleg Tsiliuric <olej@front.ru>
+license:        GPL
+srcversion:     41B149114601F8815FBE409
+depends:        
+retpoline:      Y
+name:           hello_printk
+vermagic:       5.4.0-113-generic SMP mod_unload modversions 
+
+
+----------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo insmod hello_printk.ko
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ lsmod | head -n2
+Module                  Size  Used by
+hello_printk           16384  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ dmesg | tail -n1
+[15878.178622] Hello, world!
+
+----------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo rmmod hello_printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ dmesg | tail -n2
+[15878.178622] Hello, world!
+[16222.907015] Goodbye, world!
+
+==============================================================================================
+
+05.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ file hello_printk.ko 
+hello_printk.ko: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), BuildID[sha1]=dc1a94b0bc8019d82aee89ffff3b3e562249f016, not stripped
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo insmod hello_printk.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo rmmod hello_printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ tail -n2 /var/log/kern.log
+Jun  5 15:27:19 R420 kernel: [14377.822570] Hello, world!
+Jun  5 15:27:32 R420 kernel: [14390.766363] Goodbye, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ dmesg | tail -n2
+[14377.822570] Hello, world!
+[14390.766363] Goodbye, world!
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ modinfo hello_printk.ko 
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.ko
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>>
+license:        GPL
+srcversion:     9526D45F847C0B4EF5BBBDC
+depends:        
+retpoline:      Y
+name:           hello_printk
+vermagic:       5.4.0-113-generic SMP mod_unload modversions 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo insmod hello_printk.ko
+[sudo] пароль для olej:       
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ lsmod | head -n2
+Module                  Size  Used by
+hello_printk           16384  0
+
+==============================================================================================
+
+07.06.2022
+==========
+
+olej@R420:~$ uname -r
+5.4.0-122-generic
+
+
+olej@R420:~$ ls /lib/modules/
+5.4.0-121-generic  5.4.0-122-generic  5.4.0-97-generic  5.4.0-99-generic
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ make KDIR=/lib/modules/5.4.0-121-generic/build
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ modinfo hello_printk.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello/hello_printk.ko
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>>
+license:        GPL
+srcversion:     9526D45F847C0B4EF5BBBDC
+depends:        
+retpoline:      Y
+name:           hello_printk
+vermagic:       5.4.0-121-generic SMP mod_unload modversions 
+
+==============================================================================================
+
+olej@R420:~$ apt show dkms
+Package: dkms
+Version: 2.8.1-5ubuntu2
+Priority: optional
+Section: admin
+Origin: Ubuntu
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Original-Maintainer: Dynamic Kernel Modules Support Team <dkms@packages.debian.org>
+Bugs: https://bugs.launchpad.net/ubuntu/+filebug
+Installed-Size: 296 kB
+Pre-Depends: lsb-release
+Depends: kmod | kldutils, gcc | c-compiler, dpkg-dev, make | build-essential, coreutils (>= 7.4), patch, dctrl-tools
+Recommends: fakeroot, sudo, linux-headers-686-pae | linux-headers-amd64 | linux-headers-generic | linux-headers
+Suggests: menu, e2fsprogs
+Breaks: shim-signed (<< 1.34~)
+Homepage: https://github.com/dell-oss/dkms
+Download-Size: 66,8 kB
+APT-Manual-Installed: yes
+APT-Sources: http://ubuntu.volia.net/ubuntu-archive focal-updates/main amd64 Packages
+Description: инфраструктура для поддержки динамически загружаемых модулей ядра
+ DKMS — инфраструктура, позволяющая обновлять модули ядра без изменения
+ всего ядра. Также позволяет легко пересобирать модули при обновлении ядра.
+
+N: Есть 1 дополнительная запись. Используйте «-a» для просмотра.
+
+
+olej@R420:~$ dkms --help
+Error!  Unknown option: --help
+Usage: /usr/sbin/dkms [action] [options]
+  [action]  = { add | remove | build | install | uninstall | match | autoinstall | mkdriverdisk |
+                mktarball | ldtarball | mkrpm | mkkmp | mkdeb | mkdsc | mkbmdeb | status }
+  [options] = [-m module] [-v module-version] [-k kernel-version] [-a arch]
+              [-d distro] [-c dkms.conf-location] [-q] [--force] [--force-version-override] [--all]
+              [--templatekernel=kernel] [--directive='cli-directive=cli-value']
+              [--config=kernel-.config-location] [--archive=tarball-location]
+              [--kernelsourcedir=source-location] [--no-prepare-kernel] [--no-initrd]
+              [--binaries-only] [--source-only] [-r release (SuSE)] [--verbose]
+              [--size] [--spec=specfile] [--media=floppy|iso|tar] [--legacy-postinst=0|1]
+              [--no-depmod] [-j number] [--version]
+
+
+olej@R420:~$ ls -l /var/lib/dkms/
+итого 8
+-rw-r--r-- 1 root root    6 окт 31  2019 dkms_dbversion
+drwxr-xr-x 3 root root 4096 июл 11 23:03 virtualbox
+
+==============================================================================================
+
+08.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/first_hello
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ touch dkms.conf
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ cat dkms.conf
+PACKAGE_NAME="hello_printk"
+PACKAGE_VERSION="3.1"
+BUILT_MODULE_NAME[0]="hello_printk"
+DEST_MODULE_LOCATION[0]="/kernel/lib/hello_printk/"
+AUTOINSTALL="yes"
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ grep MODULE_ hello_printk.c
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Oleg Tsiliuric <olej.tsil@gmail.com>>");
+MODULE_DESCRIPTION("DKMS module hello_printk");
+MODULE_VERSION("3.1");
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo dkms add -m hello_printk -v 3.1
+[sudo] пароль для olej:       
+Error! Could not find module source directory.
+Directory: /usr/src/hello_printk-3.1 does not exist.
+
+----------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ ls /usr/src/
+linux-headers-5.4.0-121  linux-headers-5.4.0-121-generic  linux-headers-5.4.0-122  linux-headers-5.4.0-122-generic  virtualbox-6.1.34
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo mkdir /usr/src/hello_printk-3.1/
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ ls -l /usr/src/
+итого 24
+drwxr-xr-x  2 root root 4096 авг  8 09:17 hello_printk-3.1
+drwxr-xr-x 24 root root 4096 июн 23 00:52 linux-headers-5.4.0-121
+drwxr-xr-x  7 root root 4096 июн 23 00:52 linux-headers-5.4.0-121-generic
+drwxr-xr-x 24 root root 4096 июл 11 23:03 linux-headers-5.4.0-122
+drwxr-xr-x  7 root root 4096 июл 11 23:03 linux-headers-5.4.0-122-generic
+drwxr-xr-x 11 root root 4096 июл  4 18:26 virtualbox-6.1.34
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ ls -l /usr/src/hello_printk-3.1/
+итого 12
+-rw-rw-r-- 1 olej olej 156 авг  8 09:11 dkms.conf
+-rw-r--r-- 1 olej olej 384 авг  8 09:10 hello_printk.c
+-rw-r--r-- 1 olej olej 658 июл 11 16:58 Makefile
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo dkms add -m hello_printk -v 3.1
+
+Creating symlink /var/lib/dkms/hello_printk/3.1/source ->
+                 /usr/src/hello_printk-3.1
+
+DKMS: add completed.
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo dkms build -m hello_printk -v 2.1
+Error! Could not find module source directory.
+Directory: /usr/src/hello_printk-2.1 does not exist.
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ 
+
+----------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo dkms build -m hello_printk -v 3.1
+
+Kernel preparation unnecessary for this kernel.  Skipping...
+
+Building module:
+cleaning build area...
+make -j40 KERNELRELEASE=5.4.0-122-generic -C /lib/modules/5.4.0-122-generic/build M=/var/lib/dkms/hello_printk/3.1/build...
+cleaning build area...
+
+DKMS: build completed.
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ tree /var/lib/dkms/hello_printk/3.1
+/var/lib/dkms/hello_printk/3.1
+├── 5.4.0-122-generic
+│   └── x86_64
+│       ├── log
+│       │   └── make.log
+│       └── module
+│           └── hello_printk.ko
+└── source -> /usr/src/hello_printk-3.1
+
+5 directories, 2 files
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ dkms install -m hello_printk -v 2.1
+Error! You must be root to use this command.
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo dkms install -m hello_printk -v 3.1
+
+hello_printk.ko:
+Running module version sanity check.
+ - Original module
+   - No original module exists within this kernel
+ - Installation
+   - Installing to /lib/modules/5.4.0-122-generic/kernel/lib/hello_printk//
+
+depmod....
+
+DKMS: install completed.
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ tree /lib/modules/`uname -r`/updates
+/lib/modules/5.4.0-122-generic/updates
+├── vboxdrv.ko
+├── vboxnetadp.ko
+└── vboxnetflt.ko
+
+0 directories, 3 files
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ ls -l /lib/modules/`uname -r`/kernel/lib/hello_printk
+итого 8
+-rw-r--r-- 1 root root 4544 авг  8 09:25 hello_printk.ko
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ modinfo hello_printk
+filename:       /lib/modules/5.4.0-122-generic/kernel/lib/hello_printk/hello_printk.ko
+version:        3.1
+description:    DKMS module hello_printk
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>>
+license:        GPL
+srcversion:     6D5ACE57C7E17A1DF4E30B5
+depends:        
+retpoline:      Y
+name:           hello_printk
+vermagic:       5.4.0-122-generic SMP mod_unload modversions 
+
+
+----------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ lsmod | head -n3
+Module                  Size  Used by
+vboxnetadp             28672  0
+vboxnetflt             28672  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ sudo modprobe hello_printk
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ echo $?
+0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ lsmod | head -n3
+Module                  Size  Used by
+hello_printk           16384  0
+vboxnetadp             28672  0
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ dmesg | tail -n1
+[ 2439.063870] Hello, world!
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/first_hello$ dkms status
+hello_printk, 3.1, 5.4.0-122-generic, x86_64: installed
+virtualbox, 6.1.34, 5.4.0-121-generic, x86_64: installed
+virtualbox, 6.1.34, 5.4.0-122-generic, x86_64: installed
+
+
+
+==============================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ ln -s first_hello DKMS
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ ls -l
+итого 116
+drwxr-xr-x  7 olej olej  4096 июн 18 02:11 blkdev
+drwxr-xr-x  8 olej olej  4096 авг  5 20:54 chdev
+lrwxrwxrwx  1 olej olej    11 авг  8 11:03 DKMS -> first_hello
+drwxr-xr-x  2 olej olej  4096 июн 18 01:59 dma
+drwxr-xr-x  2 olej olej  4096 июл 11 22:28 exec
+drwxrwxr-x  3 olej olej  4096 авг  4 07:25 file
+drwxr-xr-x  2 olej olej  4096 авг  8 11:02 first_hello
+drwxrwxr-x  3 olej olej  4096 июн 15 11:05 fuse
+drwxr-xr-x  2 olej olej  4096 июн 18 01:59 IRQ
+drwxr-xr-x  5 olej olej  4096 июн 15 11:02 load_module
+-rw-r--r--  1 olej olej   504 июн 18 12:11 Makefile
+drwxr-xr-x  5 olej olej  4096 июн 15 10:59 memory
+drwxr-xr-x  8 olej olej  4096 авг  5 20:54 network
+drwxr-xr-x  2 olej olej  4096 июн 25 10:00 pci
+drwxr-xr-x  4 olej olej  4096 июн 30 11:23 procfs
+drwxr-xr-x  2 olej olej  4096 авг  4 07:25 signal
+drwxr-xr-x 10 olej olej  4096 июл  2 15:15 sys_call_table
+drwxr-xr-x  2 olej olej  4096 июн 16 14:44 sysfs
+drwxr-xr-x  5 olej olej  4096 апр 25  2014 thread
+drwxr-xr-x  2 olej olej  4096 июн 18 01:59 time
+drwxr-xr-x 12 olej olej  4096 июл 31 15:44 tools
+-rw-rw-r--  1 olej olej 23007 июн 18 12:11 tree.txt
+drwxrwxr-x  4 olej olej  4096 апр 25  2014 udev
+drwxr-xr-x  2 olej olej  4096 июн 18 01:59 usb
+drwxr-xr-x  2 olej olej  4096 июн 18 01:59 user_io
+
+==============================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ sudo dkms uninstall -m hello_printk -v 3.1
+
+-------- Uninstall Beginning --------
+Module:  hello_printk
+Version: 3.1
+Kernel:  5.4.0-122-generic (x86_64)
+-------------------------------------
+
+Status: Before uninstall, this module version was ACTIVE on this kernel.
+
+hello_printk.ko:
+ - Uninstallation
+   - Deleting from: /lib/modules/5.4.0-122-generic/kernel/lib/hello_printk//
+ - Original module
+   - No original module was found for this module on this kernel.
+   - Use the dkms install command to reinstall any previous module version.
+
+depmod...
+
+DKMS: uninstall completed.
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ ls -l /lib/modules/`uname -r`/kernel/lib/hello_printk
+ls: невозможно получить доступ к '/lib/modules/5.4.0-122-generic/kernel/lib/hello_printk': Нет такого файла или каталога
+
+
+
+----------------------------------------------------------------------------------------------
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ sudo dkms remove -m hello_printk -v 3.1
+Error! Invalid number of parameters passed.
+Usage: remove <module>/<module-version> --all
+   or: remove <module>/<module-version> -k <kernel-version>
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ 
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ sudo dkms remove hello_printk/3.1 --all
+
+-------- Uninstall Beginning --------
+Module:  hello_printk
+Version: 3.1
+Kernel:  5.4.0-122-generic (x86_64)
+-------------------------------------
+
+Status: This module version was INACTIVE for this kernel.
+depmod...
+
+DKMS: uninstall completed.
+
+------------------------------
+Deleting module version: 3.1
+completely from the DKMS tree.
+------------------------------
+Done.
+
+----------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples$ dkms status
+virtualbox, 6.1.34, 5.4.0-121-generic, x86_64: installed
+virtualbox, 6.1.34, 5.4.0-122-generic, x86_64: installed
+
+==============================================================================================

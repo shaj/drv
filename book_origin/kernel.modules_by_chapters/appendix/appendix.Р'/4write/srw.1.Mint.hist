@@ -1,0 +1,42 @@
+30.06.2022
+==========
+
+olej@mint:~/kernel/sys_call_table/4write$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/kernel/sys_call_table/4write modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+make[2]: Предупреждение: время изменения файла «/home/olej/kernel/sys_call_table/4write/srw.c» находится в будущем (61)
+  CC [M]  /home/olej/kernel/sys_call_table/4write/srw.o
+make[2]: предупреждение: Неправильный ход часов.  Сборка может быть неполной.
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/kernel/sys_call_table/4write/srw.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/4write/srw.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+=========================================================================================================
+
+olej@mint:~/kernel/sys_call_table/4write$ sudo insmod srw.ko mode=1
+Убито
+
+
+[12555.473222] ! detected 64-bit platform
+[12555.478162] ! sys_call_table address = ffffffff916013c0
+[12555.478163] ! original sys_call_table address = ffffffff916013c0
+[12555.478165] ------------[ cut here ]------------
+[12555.478165] CR0 WP bit went missing!?
+[12555.478177] WARNING: CPU: 0 PID: 7038 at arch/x86/kernel/cpu/common.c:389 native_write_cr0+0x38/0x50
+...
+[12555.478262] ---[ end trace 09cc88be88cc2e4c ]---
+[12555.478265] ! writing address 000000007354b651
+[12555.478271] BUG: unable to handle page fault for address: ffffffff91601a70
+[12555.478275] #PF: supervisor write access in kernel mode
+[12555.478276] #PF: error_code(0x0003) - permissions violation
+
+
+olej@mint:~/kernel/sys_call_table/4write$ sudo cat /proc/kallsyms | grep sys_call_table
+ffffffff916002a0 R x32_sys_call_table
+ffffffff916013c0 R sys_call_table
+ffffffff91602400 R ia32_sys_call_table
+
+
+=========================================================================================================

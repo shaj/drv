@@ -1,0 +1,153 @@
+28.06.2022
+==========
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.o
+  MODPOST /home/olej/kernel/sys_call_table/call_table/Module.symvers
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ uname -a
+Linux lmde32 5.10.0-15-686 #1 SMP Debian 5.10.120-1 (2022-06-09) i686 GNU/Linux
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo insmod mod_rct.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ dmesg | tail -n3
+[   22.166983] [drm:vmw_msg_ioctl [vmwgfx]] *ERROR* Failed to open channel.
+[ 1082.058448] + openning file: /proc/kallsyms
+[ 1082.058450] + close file: /proc/kallsyms
+
+==========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.o
+  MODPOST /home/olej/kernel/sys_call_table/call_table/Module.symvers
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Operation not permitted
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ dmesg | tail -n3
+[  530.517181] + openning file: /proc/kallsyms
+[  530.517184] + op. table => 00000000
+[  530.517185] + close file: /proc/kallsyms
+
+==========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call
+d0303540 t proc_sys_call_handler
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call_table
+olej@lmde32:~/kernel/sys_call_table/call_table$ 
+
+==========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ cat /boot/config-`uname -r` | grep CONFIG_X86_32
+CONFIG_X86_32=y
+CONFIG_X86_32_SMP=y
+CONFIG_X86_32_IRIS=m
+
+==========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo head -n13 /proc/kallsyms
+d0000000 T startup_32
+d0000000 T _stext
+d0000000 T _text
+d0000078 T start_cpu0
+d0000088 T startup_32_smp
+d00001f0 t verify_cpu
+d00002f0 T __traceiter_initcall_level
+d0000330 T __traceiter_initcall_start
+d0000370 T __traceiter_initcall_finish
+d00003b0 t trace_initcall_finish_cb
+d00003f0 t perf_trace_initcall_start
+d0000490 t perf_trace_initcall_finish
+d0000540 t trace_event_raw_event_initcall_level
+
+==========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call
+d0303540 t proc_sys_call_handler
+
+==========================================================================================================
+
+29.06.2022
+==========
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ uname -a
+Linux lmde32 5.10.0-15-686 #1 SMP Debian 5.10.120-1 (2022-06-09) i686 GNU/Linux
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ inxi -Sxxx
+System:    Host: lmde32 Kernel: 5.10.0-15-686 i686 bits: 32 compiler: gcc v: 10.2.1 
+           Desktop: Cinnamon 5.2.7 tk: GTK 3.24.24 wm: muffin 5.2.1 dm: LightDM 1.26.0 
+           Distro: LMDE 5 Elsie base: Debian 11.2 bullseye 
+
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ cat /boot/config-`uname -r` | grep KALLSYMS
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call_table
+[sudo] пароль для olej:       
+
+==========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_koes.o
+  MODPOST /home/olej/kernel/sys_call_table/call_table/Module.symvers
+ERROR: modpost: "kallsyms_on_each_symbol" [/home/olej/kernel/sys_call_table/call_table/mod_koes.ko] undefined!
+ERROR: modpost: "kallsyms_lookup_name" [/home/olej/kernel/sys_call_table/call_table/mod_kct.ko] undefined!
+make[3]: *** [/usr/src/linux-headers-5.10.0-15-common/scripts/Makefile.modpost:124: /home/olej/kernel/sys_call_table/call_table/Module.symvers] Ошибка 1
+make[3]: *** Удаляется файл «/home/olej/kernel/sys_call_table/call_table/Module.symvers»
+make[2]: *** [/usr/src/linux-headers-5.10.0-15-common/Makefile:1750: modules] Ошибка 2
+make[1]: *** [/usr/src/linux-headers-5.10.0-15-common/Makefile:185: __sub-make] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+make: *** [Makefile:13: all] Ошибка 2
+
+==========================================================================================================
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.o
+  MODPOST /home/olej/kernel/sys_call_table/call_table/Module.symvers
+  CC [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/kernel/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo insmod mod_rct.ko 
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_rct.ko: Unknown symbol in module
+
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ dmesg | tail -n1
+[26278.440907] + no config: CONFIG_KALLSYMS or CONFIG_KALLSYMS_ALL
+
+
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ ls -l /proc/kallsyms
+-r--r--r-- 1 root root 0 июн 29 17:24 /proc/kallsyms
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_close
+c525f580 T __ia32_sys_close
+c525f5d0 T __ia32_sys_close_range
+
+olej@lmde32:~/kernel/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep sys_call
+c5303540 t proc_sys_call_handler
+
+==========================================================================================================

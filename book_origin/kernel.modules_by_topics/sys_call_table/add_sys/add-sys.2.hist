@@ -1,0 +1,59 @@
+20.08.2022
+==========
+
+olej@R420:~$ sudo cat /proc/kallsyms | grep 'T sys_ni_syscall'
+ffffffff986c0e60 T sys_ni_syscall
+
+---------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:/usr/src$ ls  /usr/src/linux-headers-`uname -r`
+arch   certs   Documentation  fs       init  Kbuild   kernel  Makefile  Module.symvers  samples  security  tools   usr
+block  crypto  drivers        include  ipc   Kconfig  lib     mm        net             scripts  sound     ubuntu  virt
+
+
+===========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/ni-test.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c: In function ‘new_sys_call’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:17:33: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   17 |    printk( "! передано %d байт: %s\n", count, buf_msg );
+      |                                ~^                  ~~~~~
+      |                                 |                  |
+      |                                 int                size_t {aka long unsigned int}
+      |                                %ld
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/ni-test.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/ni-test.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+cc syscall.c -o syscall
+syscall.c: In function ‘do_own_call’:
+syscall.c:7:12: warning: implicit declaration of function ‘syscall’ [-Wimplicit-function-declaration]
+    7 |    int n = syscall( __NR_own, str, strlen( str ) );
+      |            ^~~~~~~
+
+===========================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/ni-test.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/ni-test.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/ni-test.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+cc syscall.c -o syscall
+
+===========================================================================================================================
+
+

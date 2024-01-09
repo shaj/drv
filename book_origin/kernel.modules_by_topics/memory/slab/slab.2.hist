@@ -1,0 +1,207 @@
+12.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/slab$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	Linux Mint 20.3
+Release:	20.3
+Codename:	una
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/slab$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/slab$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+----------------------------------------------------------------------------------------------------------------------
+
+======================================================================================================================
+
+[olej@xenix ~]$ lsb_release -a
+LSB Version:	:core-4.1-amd64:core-4.1-noarch
+Distributor ID:	Fedora
+Description:	Fedora release 35 (Thirty Five)
+Release:	35
+Codename:	ThirtyFive
+
+[olej@xenix ~]$ uname -a
+Linux xenix.localdomain 5.18.16-100.fc35.x86_64 #1 SMP PREEMPT_DYNAMIC Thu Aug 4 02:06:53 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+[olej@xenix slab]$ make
+make -C /lib/modules/5.18.16-100.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab modules
+make[1]: вход в каталог «/usr/src/kernels/5.18.16-100.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.o
+  MODPOST /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/Module.symvers
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/pool.ko due to unavailability of vmlinux
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/memory/slab/slab.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/kernels/5.18.16-100.fc35.x86_64»
+
+
+[olej@xenix slab]$ ls -l *.ko
+-rw-r--r-- 1 olej olej 159520 авг 12 16:59 pool.ko
+-rw-r--r-- 1 olej olej 106440 авг 12 16:59 slab.ko
+
+
+[olej@xenix slab]$ sudo insmod slab.ko
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module slab.ko: Invalid parameters
+
+----------------------------------------------------------------------------------------------------------------------
+
+[olej@xenix slab]$ sudo insmod pool.ko 
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module pool.ko: Operation not permitted
+
+[olej@xenix slab]$ dmesg | grep -v audit | grep -v nvidia | grep -v EXT4 | tail -n6
+[19883.667333] pool created
+[19883.667336] 11 objects in pool before allocation
+[19883.667345] 11 objects in pool after allocation
+[19883.667345] allocate 31 objects (size 7) in 61 cycles
+[19883.667347] tested OK objects: 31
+[19883.667400] pool destroyed
+
+----------------------------------------------------------------------------------------------------------------------
+
+[olej@xenix slab]$ sudo insmod pool.ko mode=1 
+insmod: ERROR: could not insert module pool.ko: Operation not permitted
+
+[olej@xenix slab]$ dmesg | grep -v audit | grep -v nvidia | grep -v EXT4 | tail -n6
+[20104.658380] pool created
+[20104.658382] 11 objects in pool before allocation
+[20104.658391] 11 objects in pool after allocation
+[20104.658392] allocate 31 objects (size 7) in 68 cycles
+[20104.658393] tested OK objects: 31
+[20104.658395] pool destroyed
+
+
+======================================================================================================================
+
+olej@raspberrypi:~/kernel/examples/memory $ inxi -S
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 Console: tty 3 
+           Distro: Raspbian GNU/Linux 11 (bullseye) 
+
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/memory/slab modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/memory/slab/slab.o
+  CC [M]  /home/olej/kernel/examples/memory/slab/pool.o
+  MODPOST /home/olej/kernel/examples/memory/slab/Module.symvers
+  CC [M]  /home/olej/kernel/examples/memory/slab/pool.mod.o
+  LD [M]  /home/olej/kernel/examples/memory/slab/pool.ko
+  CC [M]  /home/olej/kernel/examples/memory/slab/slab.mod.o
+  LD [M]  /home/olej/kernel/examples/memory/slab/slab.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ ls -l *.ko
+-rw-r--r-- 1 olej olej 8720 авг 12 17:09 pool.ko
+-rw-r--r-- 1 olej olej 6376 авг 12 17:09 slab.ko
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ sudo insmod slab.ko
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ lsmod | head -n3
+Module                  Size  Used by
+slab                   16384  0
+sha256_generic         16384  0
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ dmesg | grep -v hwmon | tail -n3
+[25650.044692] allocate 31 objects into slab: my_cache
+[25650.044730] object size 7 bytes, full size 217 bytes
+[25650.044747] constructor called 256 times
+
+olej@raspberrypi:~/kernel/examples/memory/slab $ sudo cat /proc/slabinfo | grep my_
+my_cache             256    256     16  256    1 : tunables    0    0    0 : slabdata      1      1      0
+
+
+======================================================================================================================
+
+$ hostname
+antix21
+
+$ inxi -S
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64 Console: pty pts/1
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+
+
+$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Debian
+Description:	Debian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-amd64-smp #1 SMP PREEMPT Sun Aug 8 15:04:18 EEST 2021 x86_64 GNU/Linux
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/memory/slab modules
+make[1]: Entering directory '/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp'
+  CC [M]  /home/olej/2022/kernel/memory/slab/slab.o
+  CC [M]  /home/olej/2022/kernel/memory/slab/pool.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/memory/slab/pool.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/slab/pool.ko
+  CC      /home/olej/2022/kernel/memory/slab/slab.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/slab/slab.ko
+make[1]: Leaving directory '/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp'
+
+$ sudo insmod slab.ko
+[sudo] password for olej: 
+
+$ dmesg | tail -n3
+[  607.487092] allocate 31 objects into slab: my_cache
+[  607.487094] object size 7 bytes, full size 217 bytes
+[  607.487095] constructor called 256 times
+
+$ lsmod | head -n3
+Module                  Size  Used by
+slab                    1427  0
+8021q                  20506  0
+
+$ sudo cat /proc/slabinfo | grep my_
+my_cache             256    256     16  256    1 : tunables    0    0    0 : slabdata      1      1      0
+olej@antix21:~/2022/kernel/memory/slab
+ 
+----------------------------------------------------------------------------------------------------------------------
+
+$ sudo insmod slab.ko size=3 number=1000
+olej@antix21:~/2022/kernel/memory/slab
+
+$ dmesg | tail -n3
+[  817.243489] allocate 1000 objects into slab: my_cache
+[  817.243493] object size 3 bytes, full size 3000 bytes
+[  817.243494] constructor called 1024 times
+
+$ sudo cat /proc/slabinfo | grep my_
+my_cache            1024   1024     16  256    1 : tunables    0    0    0 : slabdata      4      4      0
+
+olej@antix21:~/2022/kernel/memory/slab
+$ sudo rmmod slab
+
+======================================================================================================================
+
+

@@ -1,0 +1,35 @@
+14.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tfor$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.c: In function ‘thread_func’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.c:14:14: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+   14 |    int num = (int)data;
+      |              ^
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.c:3:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.c: In function ‘test_mlock’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.c:29:39: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+   29 |       t[i] = kthread_run(thread_func, (void*)i, IDENT, i);
+      |                                       ^
+./include/linux/kthread.h:26:35: note: in definition of macro ‘kthread_create’
+   26 |  kthread_create_on_node(threadfn, data, NUMA_NO_NODE, namefmt, ##arg)
+      |                                   ^~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.c:29:14: note: in expansion of macro ‘kthread_run’
+   29 |       t[i] = kthread_run(thread_func, (void*)i, IDENT, i);
+      |              ^~~~~~~~~~~
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tfor/mod_for.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tfor$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 6664 авг 14 01:55 mod_for.ko
+
+=============================================================================================================================================
+

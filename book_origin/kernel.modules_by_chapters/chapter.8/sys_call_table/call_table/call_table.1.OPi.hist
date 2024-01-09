@@ -1,0 +1,143 @@
+01.07.2022
+==========
+
+olej@orangepione:~$ inxi -Sxxx
+System:    Host: orangepione Kernel: 5.15.25-sunxi armv7l bits: 32 compiler: N/A Console: tty 1 dm: LightDM 1.26.0 
+           Distro: Armbian GNU/Linux 10 (buster) 
+
+
+olej@orangepione:~$ cat /boot/config-`uname -r` | grep CONFIG_KALLSYMS
+cat: /boot/config-5.15.25-sunxi: Нет такого файла или каталога
+
+olej@orangepione:~$ ls /boot
+armbianEnv.txt                  boot.scr              initrd.img-5.15.48-sunxi  uInitrd-5.15.48-sunxi
+armbian_first_run.txt.template  config-5.15.48-sunxi  overlay-user              vmlinuz-5.15.48-sunxi
+boot.bmp                        dtb                   System.map-5.15.48-sunxi  zImage
+boot.cmd                        dtb-5.15.48-sunxi     uInitrd
+
+olej@orangepione:~$ uname -r
+5.15.25-sunxi
+
+-------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~$ sudo cat /proc/kallsyms | grep kallsyms_lookup_name
+[sudo] пароль для olej: 
+c0195f9c T module_kallsyms_lookup_name
+c0196668 T kallsyms_lookup_name
+
+olej@orangepione:~$ sudo cat /proc/kallsyms | grep kallsyms_on_each_symbol
+olej@orangepione:~$
+
+olej@orangepione:~$ cat /boot/config-5.15.48-sunxi | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@orangepione:~$ sudo cat /proc/kallsyms | grep sys_call_table
+c0100264 T sys_call_table
+
+=======================================================================================================
+
+olej@orangepione:~/kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.15.25-sunxi/build M=/home/olej/kernel/examples/sys_call_table/call_table modules
+make[1]: *** /lib/modules/5.15.25-sunxi/build: Нет такого файла или каталога.  Останов.
+make: *** [Makefile:14: default] Ошибка 2
+
+olej@orangepione:~/kernel/examples/sys_call_table/call_table$ ls /lib/modules/
+5.15.48-sunxi
+
+-------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~/kernel/examples/sys_call_table/call_table$ su -
+Пароль: 
+[ Kernel was updated, please reboot ]
+
+=======================================================================================================
+
+olej@orangepione:~$ cat /boot/config-`uname -r` | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+olej@orangepione:~$ uname -r
+5.15.48-sunxi
+
+cat /lib/modules/`uname -r`/build/.config | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ALL is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ cat /lib/modules/`uname -r`/build/Module.symvers | grep kallsyms
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$
+
+-------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~/kernel/examples/sys_call_table/call_table$ make
+make -C /lib/modules/5.15.48-sunxi/build M=/home/olej/kernel/examples/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.48-sunxi»
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/kernel/examples/sys_call_table/call_table/mod_koes.o
+  MODPOST /home/olej/kernel/examples/sys_call_table/call_table/Module.symvers
+ERROR: modpost: "kallsyms_on_each_symbol" [/home/olej/kernel/examples/sys_call_table/call_table/mod_koes.ko] undefined!
+ERROR: modpost: "kallsyms_lookup_name" [/home/olej/kernel/examples/sys_call_table/call_table/mod_kct.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:134: /home/olej/kernel/examples/sys_call_table/call_table/Module.symvers] Error 1
+make[2]: *** Deleting file '/home/olej/kernel/examples/sys_call_table/call_table/Module.symvers'
+make[1]: *** [Makefile:1785: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.48-sunxi»
+make: *** [Makefile:14: default] Ошибка 2
+
+
+olej@orangepione:~/kernel/examples/sys_call_table/call_table$ sudo cat /proc/kallsyms | grep kallsyms_lookup_name
+[sudo] пароль для olej: 
+c0197a7c T module_kallsyms_lookup_name
+c0198148 T kallsyms_lookup_name
+
+-------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~$ cd /lib/modules/$(uname -r)/build
+
+-------------------------------------------------------------------------------------------------------
+
+</lib/modules/5.15.48-sunxi/build/include/linux/kallsyms.h>
+[77]
+int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+                                      unsigned long),
+                            void *data);
+
+#ifdef CONFIG_KALLSYMS
+/* Lookup the address for a symbol. Returns 0 if not found. */
+unsigned long kallsyms_lookup_name(const char *name);
+        
+extern int kallsyms_lookup_size_offset(unsigned long addr,
+                                  unsigned long *symbolsize,
+                                  unsigned long *offset);
+
+/* Lookup an address.  modname is set to NULL if it's in the kernel. */
+const char *kallsyms_lookup(unsigned long addr,
+                            unsigned long *symbolsize,
+                            unsigned long *offset,
+                            char **modname, char *namebuf);
+
+-------------------------------------------------------------------------------------------------------
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ cat /lib/modules/`uname -r`/build/Module.symvers | grep 'printk' | head -n3
+0x00000000	_printk	vmlinux	EXPORT_SYMBOL	
+0x00000000	__ftrace_vprintk	vmlinux	EXPORT_SYMBOL_GPL	
+0x00000000	trace_array_init_printk	vmlinux	EXPORT_SYMBOL_GPL	
+
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ cat /lib/modules/`uname -r`/build/Module.symvers | grep vmlinux | wc -l
+11663
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ cat /lib/modules/`uname -r`/build/Module.symvers | grep vmlinux | grep EXPORT_SYMBOL_GPL | wc -l
+5785
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ sudo cat /proc/kallsyms | wc -l
+51887
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ sudo cat /proc/kallsyms | grep ' T ' | wc -l
+23559
+
+=======================================================================================================

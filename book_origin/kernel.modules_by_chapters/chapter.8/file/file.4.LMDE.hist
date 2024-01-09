@@ -1,0 +1,89 @@
+27.06.2022
+==========
+
+olej@mint-20:~/kernel/file$ inxi -Sxxx
+System:    Host: mint-20 Kernel: 5.15.0-33-generic x86_64 bits: 64 compiler: N/A Desktop: Cinnamon 5.2.7 
+           wm: muffin 5.2.1 dm: LightDM 1.30.0 Distro: Linux Mint 20.3 Una base: Ubuntu 20.04 focal 
+
+
+olej@mint-20:~/kernel/file$ make
+make -C /lib/modules/5.15.0-33-generic/build M=/home/olej/kernel/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.0-33-generic»
+  CC [M]  /home/olej/kernel/file/mod_read.o
+  CC [M]  /home/olej/kernel/file/mod_write.o
+  CC [M]  /home/olej/kernel/file/mod_vfs.o
+/home/olej/kernel/file/mod_vfs.c: In function ‘kread_init’:
+/home/olej/kernel/file/mod_vfs.c:21:14: error: implicit declaration of function ‘get_fs’; did you mean ‘sget_fc’? [-Werror=implicit-function-declaration]
+   21 |     old_fs = get_fs();
+      |              ^~~~~~
+      |              sget_fc
+/home/olej/kernel/file/mod_vfs.c:21:14: error: incompatible types when assigning to type ‘mm_segment_t’ {aka ‘struct <anonymous>’} from type ‘int’
+/home/olej/kernel/file/mod_vfs.c:22:5: error: implicit declaration of function ‘set_fs’; did you mean ‘sget_fc’? [-Werror=implicit-function-declaration]
+   22 |     set_fs(KERNEL_DS);
+      |     ^~~~~~
+      |     sget_fc
+/home/olej/kernel/file/mod_vfs.c:22:12: error: ‘KERNEL_DS’ undeclared (first use in this function); did you mean ‘KERNFS_NS’?
+   22 |     set_fs(KERNEL_DS);
+      |            ^~~~~~~~~
+      |            KERNFS_NS
+/home/olej/kernel/file/mod_vfs.c:22:12: note: each undeclared identifier is reported only once for each function it appears in
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:285: /home/olej/kernel/file/mod_vfs.o] Ошибка 1
+make[1]: *** [Makefile:1875: /home/olej/kernel/file] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.0-33-generic»
+make: *** [Makefile:17: default] Ошибка 2
+
+============================================================================================================================================
+
+olej@mint-20:~/kernel/file$ aptitude show linux-hwe-5.15-headers-5.15.0-33
+Пакет: linux-hwe-5.15-headers-5.15.0-33          
+Версия: 5.15.0-33.34~20.04.1
+Новый: да
+Состояние: установлен
+Установлен автоматически: да
+Мультиархитектура: сторонняя
+Приоритет: необязательный
+Раздел: devel
+Сопровождающий: Ubuntu Kernel Team <kernel-team@lists.ubuntu.com>
+Архитектура: all
+Размер в распакованном виде: 77,2 M
+Зависит: coreutils
+Описание: Header files related to Linux kernel version 5.15.0
+ This package provides kernel header files for version 5.15.0, for sites that want the latest kernel headers. Please
+ read /usr/share/doc/linux-hwe-5.15-headers-5.15.0-33/debian.README.gz for details
+
+
+olej@mint-20:~/kernel/file$ aptitude show linux-headers-5.15.0-33-generic
+Пакет: linux-headers-5.15.0-33-generic           
+Версия: 5.15.0-33.34~20.04.1
+Новый: да
+Состояние: установлен
+Установлен автоматически: да
+Приоритет: необязательный
+Раздел: devel
+Сопровождающий: Ubuntu Kernel Team <kernel-team@lists.ubuntu.com>
+Архитектура: amd64
+Размер в распакованном виде: 26,1 M
+Зависит: linux-hwe-5.15-headers-5.15.0-33, libc6 (>= 2.22), libelf1 (>= 0.142), libssl1.1 (>= 1.1.0), zlib1g (>=
+         1:1.2.3.3)
+Предоставляет: linux-headers, linux-headers-3.0
+Описание: Linux kernel headers for version 5.15.0 on 64 bit x86 SMP
+ This package provides kernel header files for version 5.15.0 on 64 bit x86 SMP. 
+ 
+ This is for sites that want the latest kernel headers.  Please read
+ /usr/share/doc/linux-headers-5.15.0-33/debian.README.gz for details.
+
+
+
+olej@mint-20:/usr/src$ pwd
+/usr/src
+
+olej@mint-20:/usr/src$ du -hs linux-headers-5.15.0-33-generic 
+27M	linux-headers-5.15.0-33-generic
+
+olej@mint-20:/usr/src$ du -hs linux-hwe-5.15-headers-5.15.0-33 
+116M	linux-hwe-5.15-headers-5.15.0-33
+
+
+
+============================================================================================================================================

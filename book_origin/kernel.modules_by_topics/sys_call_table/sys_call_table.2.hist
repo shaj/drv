@@ -1,0 +1,166 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table$ make
+=============== making all in add_sys =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/ni-test.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c: In function ‘new_sys_call’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:17:33: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   17 |    printk( "! передано %d байт: %s\n", count, buf_msg );
+      |                                ~^                  ~~~~~
+      |                                 |                  |
+      |                                 int                size_t {aka long unsigned int}
+      |                                %ld
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c: Сообщения ассемблера:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:46: Ошибка: неверный суффикс инструкции для «push»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:47: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:49: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:50: Ошибка: неверный суффикс инструкции для «pop»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:48: Ошибка: неверный суффикс инструкции для «push»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:49: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:51: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:52: Ошибка: неверный суффикс инструкции для «pop»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:54: Ошибка: неверный суффикс инструкции для «push»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:55: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:57: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:58: Ошибка: неверный суффикс инструкции для «pop»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:56: Ошибка: неверный суффикс инструкции для «push»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:57: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:59: Ошибка: неподдерживаемая инструкция «mov»
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.c:60: Ошибка: неверный суффикс инструкции для «pop»
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys/add-sys.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:13: modules] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/add_sys»
+=============== making all in export =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0c.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0o.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0c.o
+see include/linux/module.h for more information
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0o.o
+see include/linux/module.h for more information
+ERROR: "sys_open" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0o.ko] undefined!
+ERROR: "sys_close" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0c.ko] undefined!
+make[3]: *** [scripts/Makefile.modpost:94: __modpost] Ошибка 1
+make[2]: *** [Makefile:1675: modules] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:11: all] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export»
+=============== making all in hidden =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden/hidden.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden/hidden.c: In function ‘new_sys_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden/hidden.c:34:103: warning: format ‘%d’ expects argument of type ‘int’, but argument 4 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   34 |       printk( "! статическая функция: начало= %p, конец=%lx, длина=%d \n",
+      |                                                                                                      ~^
+      |                                                                                                       |
+      |                                                                                                       int
+      |                                                                                                      %ld
+   35 |               new_sys_call, end, sys_size );
+      |                                  ~~~~~~~~                                                              
+      |                                  |
+      |                                  size_t {aka long unsigned int}
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden/hidden.c:41:40: warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘size_t’ {aka ‘long unsigned int’} [-Wformat=]
+   41 |    printk( "! выделен блок %d байт с адреса %p\n", sys_size, move_sys_call );
+      |                                       ~^                                 ~~~~~~~~
+      |                                        |                                 |
+      |                                        int                               size_t {aka long unsigned int}
+      |                                       %ld
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden/hidden.c:48:4: error: implicit declaration of function ‘set_memory_x’ [-Werror=implicit-function-declaration]
+   48 |    set_memory_x( (long unsigned)move_sys_call, sys_size / PAGE_SIZE + 1 );
+      |    ^~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden/hidden.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:19: modules] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/hidden»
+=============== making all in new_sys =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c: In function ‘do_write’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:26:12: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+   26 |    set_fs( get_ds() );
+      |            ^~~~~~
+      |            get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:26:12: error: incompatible type for argument 1 of ‘set_fs’
+   26 |    set_fs( get_ds() );
+      |            ^~~~~~~~
+      |            |
+      |            int
+In file included from ./include/linux/uaccess.h:11,
+                 from ./arch/x86/include/asm/fpu/xstate.h:5,
+                 from ./arch/x86/include/asm/pgtable.h:26,
+                 from ./include/linux/mm.h:99,
+                 from ./include/linux/kallsyms.h:12,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.c:2:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+cc1: some warnings being treated as errors
+make[3]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys/mod_wrc.o] Ошибка 1
+make[2]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:13: default] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/new_sys»
+=============== making all in call_table =================
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table»
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table modules
+make[2]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c: In function ‘stread_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:66:38: warning: passing argument 2 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   66 |            if( ( k = kernel_read( f, n, p++, 1 ) ) < 0 ) {
+      |                                      ^
+      |                                      |
+      |                                      size_t {aka long unsigned int}
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:3022:43: note: expected ‘void *’ but argument is of type ‘size_t’ {aka ‘long unsigned int’}
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                           ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:66:42: warning: passing argument 3 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   66 |            if( ( k = kernel_read( f, n, p++, 1 ) ) < 0 ) {
+      |                                         ~^~
+      |                                          |
+      |                                          char *
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:3022:51: note: expected ‘size_t’ {aka ‘long unsigned int’} but argument is of type ‘char *’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                   ^~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:66:46: warning: passing argument 4 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   66 |            if( ( k = kernel_read( f, n, p++, 1 ) ) < 0 ) {
+      |                                              ^
+      |                                              |
+      |                                              int
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:3022:59: note: expected ‘loff_t *’ {aka ‘long long int *’} but argument is of type ‘int’
+ 3022 | extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+      |                                                           ^~~~~~~~
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+ERROR: "sys_close" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table/mod_rct.ko] undefined!
+make[3]: *** [scripts/Makefile.modpost:94: __modpost] Ошибка 1
+make[2]: *** [Makefile:1675: modules] Ошибка 2
+make[2]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make[1]: *** [Makefile:12: all] Ошибка 2
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/call_table»
+make: *** [Makefile:4: all] Ошибка 2
+
+==========================================================================================================================================================
+

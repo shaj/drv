@@ -1,0 +1,60 @@
+14.08.2022
+==========
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.o
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.o
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_for.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_for.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_for.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr2.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ make 
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.o
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.o
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_for.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_for.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_for.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr2.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+olej@antix21:~/2022/kernel/thread/tcreat
+$ ls -l *.ko
+-rw-r--r-- 1 olej olej 4532 авг 14 13:40 mod_for.ko
+-rw-r--r-- 1 olej olej 4300 авг 14 13:40 mod_thr2.ko
+-rw-r--r-- 1 olej olej 5256 авг 14 13:40 mod_thr3.ko
+
+
+$ time sudo insmod mod_for.ko
+insmod: ERROR: could not insert module mod_for.ko: Operation not permitted
+
+real	0m1,077s
+user	0m0,009s
+sys	0m0,021s
+
+
+$ dmesg | tail -n6
+[33242.368422] ! 32942846 : kthread [17213:2] is running
+[33242.368427] ! 32942846 : kthread [17214:0] is running
+[33243.010874] ! 32943488 : kthread [17213:2] is finished
+[33243.202412] ! 32943680 : kthread [17212:1] is finished
+[33243.393998] ! 32943872 : kthread [17214:0] is finished
+[33243.394007] ! 32943872 : kthread [17211:3] is finished
+
+=======================================================================================================

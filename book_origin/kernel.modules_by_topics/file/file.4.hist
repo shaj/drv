@@ -1,0 +1,458 @@
+24.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PRACTIS.Tasks.245.ex/file$ sudo grep 'T' /proc/kallsyms | head -n5
+[sudo] пароль для olej:       
+ffffffff9f800000 T startup_64
+ffffffff9f800000 T _stext
+ffffffff9f800000 T _text
+ffffffff9f800030 T secondary_startup_64
+ffffffff9f8000e0 T verify_cpu
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/PRACTIS.Tasks.245.ex/file$ sudo grep 'T' /proc/kallsyms | grep vfs_
+ffffffff9fa1bfb0 T vfs_fadvise
+ffffffff9fac7670 T vfs_fallocate
+ffffffff9fac8310 T vfs_truncate
+ffffffff9fac9770 T vfs_open
+ffffffff9fac9d80 T vfs_setpos
+ffffffff9fac9df0 T vfs_llseek
+ffffffff9fac9e30 T vfs_readf
+ffffffff9fac9e70 T vfs_writef
+ffffffff9faca410 T vfs_dedupe_file_range_one
+ffffffff9faca560 T vfs_dedupe_file_range
+ffffffff9facb010 T vfs_clone_file_range
+ffffffff9facb960 T vfs_write
+ffffffff9facbcf0 T vfs_iter_read
+ffffffff9facc2f0 T vfs_iter_write
+ffffffff9facd500 T vfs_copy_file_range
+ffffffff9facdc30 T __vfs_read
+ffffffff9facdc70 T vfs_read
+ffffffff9face460 T vfs_readv
+ffffffff9facf380 T vfs_get_tree
+ffffffff9fad15c0 T vfs_get_super
+ffffffff9fad2790 T vfs_getattr_nosec
+ffffffff9fad2840 T vfs_getattr
+ffffffff9fad2890 T vfs_statx_fd
+ffffffff9fad2920 T vfs_statx
+ffffffff9fad8ad0 T vfs_get_link
+ffffffff9fadbe20 T vfs_rmdir
+ffffffff9fadbfd0 T vfs_unlink
+ffffffff9fadc210 T vfs_tmpfile
+ffffffff9fadc320 T vfs_rename
+ffffffff9fadcdb0 T vfs_whiteout
+ffffffff9fadceb0 T vfs_mknod
+ffffffff9fadd0e0 T vfs_create
+ffffffff9fadd270 T vfs_symlink
+ffffffff9fadd400 T vfs_mkobj
+ffffffff9fadd5a0 T vfs_mkdir
+ffffffff9fadd760 T vfs_link
+ffffffff9fadfe80 T vfs_path_lookup
+ffffffff9fae13b0 T vfs_readlink
+ffffffff9fae2b40 T vfs_ioctl
+ffffffff9fae31c0 T do_vfs_ioctl
+ffffffff9faec1f0 T vfs_ioc_fssetxattr_check
+ffffffff9faec790 T vfs_ioc_setflags_prepare
+ffffffff9faf2420 T vfs_create_mount
+ffffffff9faf2600 T vfs_kern_mount
+ffffffff9faf2620 T vfs_submount
+ffffffff9faf94e0 T __vfs_setxattr
+ffffffff9faf9570 T __vfs_getxattr
+ffffffff9faf95f0 T __vfs_removexattr
+ffffffff9faf9780 T vfs_getxattr_alloc
+ffffffff9faf98a0 T vfs_getxattr
+ffffffff9faf99e0 T vfs_listxattr
+ffffffff9fafa4e0 T __vfs_removexattr_noperm
+ffffffff9fafa580 T __vfs_removexattr_locked
+ffffffff9fafa640 T vfs_removexattr
+ffffffff9fafaa20 T __vfs_setxattr_noperm
+ffffffff9fafabf0 T __vfs_setxattr_locked
+ffffffff9faface0 T vfs_setxattr
+ffffffff9fb08c20 T vfs_fsync_range
+ffffffff9fb08ca0 T vfs_fsync
+ffffffff9fb0b630 T vfs_get_fsid
+ffffffff9fb0b8f0 T vfs_statfs
+ffffffff9fb0d090 T vfs_dup_fs_context
+ffffffff9fb0d220 T vfs_parse_fs_param
+ffffffff9fb0d3e0 T vfs_parse_fs_string
+ffffffff9fb0d7f0 T vfs_clean_context
+ffffffff9fb41020 T vfs_cancel_lock
+ffffffff9fb43470 T vfs_test_lock
+ffffffff9fb43b70 T vfs_setlease
+ffffffff9fb44d70 T vfs_lock_file
+ffffffff9fc40610 T get_vfs_caps_from_disk
+ffffffff9fd8e8e0 T pci_vfs_assigned
+ffffffffa14eb69f T vfs_caches_init_early
+ffffffffa14eb71d T vfs_caches_init
+
+==============================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ make 
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_write.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_vfs.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/file/mod_vfs.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ sudo insmod mod_vfs.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_vfs.ko: Input/output error
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ dmesg | tail -n3
+[35933.419698] *** openning file: /etc/apt/sources.list
+[35933.419705] *** file size = 361 bytes
+[35933.419705] *** failed to read
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/file$ ls -l /etc/apt/sources.list
+-rw-r--r-- 1 root root 361 мар 30  2021 /etc/apt/sources.list
+
+
+==============================================================================================================================================================
+
+<linux/fs.h#L1909>
+[1908]
+
+extern ssize_t __vfs_read(struct file *, char __user *, size_t, loff_t *);
+extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
+extern ssize_t vfs_write(struct file *, const char __user *, size_t, loff_t *);
+extern ssize_t vfs_readv(struct file *, const struct iovec __user *,
+	unsigned long, loff_t *, rwf_t);
+
+==============================================================================================================================================================
+
+26.06.2022
+==========
+
+</arch/x86/include/asm/uaccess.h>
+[15]
+
+/*
+ * The fs value determines whether argument validity checking should be
+ * performed or not.  If get_fs() == USER_DS, checking is performed, with
+ * get_fs() == KERNEL_DS, checking is bypassed.
+ *
+ * For historical reasons, these macros are grossly misnamed.
+ */
+
+#define MAKE_MM_SEG(s)	((mm_segment_t) { (s) })
+
+#define KERNEL_DS	MAKE_MM_SEG(-1UL)
+#define USER_DS 	MAKE_MM_SEG(TASK_SIZE_MAX)
+
+#define get_fs()	(current->thread.addr_limit)
+static inline void set_fs(mm_segment_t fs)
+{
+    current->thread.addr_limit = fs;
+    /* On user-mode return, check fs is correct */
+    set_thread_flag(TIF_FSCHECK);
+}
+
+#define segment_eq(a, b)	((a).seg == (b).seg)
+#define user_addr_max() (current->thread.addr_limit.seg)
+
+
+
+olej@R420:/usr/src/linux-headers-5.4.0-121-generic/arch/x86/include$ ls -l asm 
+lrwxrwxrwx 1 root root 56 июн 15 16:13 asm -> ../../../../linux-headers-5.4.0-121/arch/x86/include/asm
+
+olej@R420:/usr/src/linux-headers-5.4.0-121-generic/arch/x86/include$ ls -l /usr/src/linux-headers-5.4.0-121-generic/arch/x86/include/asm
+lrwxrwxrwx 1 root root 56 июн 15 16:13 /usr/src/linux-headers-5.4.0-121-generic/arch/x86/include/asm -> ../../../../linux-headers-5.4.0-121/arch/x86/include/asm
+
+[23]
+#define MAKE_MM_SEG(s)  ((mm_segment_t) { (s) })
+
+#define KERNEL_DS       MAKE_MM_SEG(-1UL)
+#define USER_DS         MAKE_MM_SEG(TASK_SIZE_MAX)
+
+#define get_fs()        (current->thread.addr_limit)
+static inline void set_fs(mm_segment_t fs)
+{
+        current->thread.addr_limit = fs;
+        /* On user-mode return, check fs is correct */
+        set_thread_flag(TIF_FSCHECK);
+}
+
+==============================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.c: In function ‘kread_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.c:43:5: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
+   43 |     mm_segment_t old_fs = get_fs();
+      |     ^~~~~~~~~~~~
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+==============================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+
+olej@R420:~/2022/Monero$ aptitude search header* | grep ^i
+i A linux-headers-5.4.0-120 - Header files related to Linux kernel version 5.4.0
+i A linux-headers-5.4.0-120-generic - Linux kernel headers for version 5.4.0 on 64 bit x86 SMP
+i A linux-headers-5.4.0-121 - Header files related to Linux kernel version 5.4.0
+i A linux-headers-5.4.0-121-generic - Linux kernel headers for version 5.4.0 on 64 bit x86 SMP
+i  linux-headers-generic - Generic Linux kernel headers
+
+
+olej@R420:~/2022/Monero$ aptitude search linux-modules | grep ^i
+i A linux-modules-5.4.0-120-generic - Linux kernel extra modules for version 5.4.0 on 64 bit x86 SMP
+i A linux-modules-5.4.0-121-generic - Linux kernel extra modules for version 5.4.0 on 64 bit x86 SMP
+i A linux-modules-extra-5.4.0-120-generic - Linux kernel extra modules for version 5.4.0 on 64 bit x86 SMP
+i A linux-modules-extra-5.4.0-121-generic - Linux kernel extra modules for version 5.4.0 on 64 bit x86 SMP
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_vfs.ko: Input/output error
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n3
+[55278.693906] *** openning file: /etc/apt/sources.list
+[55278.693913] *** file size = 361 bytes
+[55278.693914] *** failed to read
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ ls -l /etc/apt/sources.list
+-rw-r--r-- 1 root root 361 мар 30  2021 /etc/apt/sources.list
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+</linux/fs.h>
+[1917]
+extern ssize_t vfs_read(struct file *, char __user *, size_t, loff_t *);
+extern ssize_t vfs_write(struct file *, const char __user *, size_t, loff_t *);
+
+
+<uapi/linux/fs.h>
+[43]
+#define SEEK_SET	0	/* seek relative to beginning of file */
+#define SEEK_CUR	1	/* seek relative to current file position */
+#define SEEK_END	2	/* seek relative to end of file */
+#define SEEK_DATA	3	/* seek to the next data */
+#define SEEK_HOLE	4	/* seek to the next hole */
+
+==============================================================================================================================================================
+
+27.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_vfs.ko: Operation not permitted
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n10
+[ 4572.384370] device eno1 entered promiscuous mode
+[ 7692.847914] VMMR0InitVM: eflags=246 fKernelFeatures=0x0 (SUPKERNELFEATURES_SMAP=0)
+[ 8358.769629] perf: interrupt took too long (2530 > 2500), lowering kernel.perf_event_max_sample_rate to 79000
+[10306.587553] *** openning file: /etc/apt/sources.list
+[10306.587560] *** file size = 361 bytes
+[10306.587561] n=0
+[10306.587563] read bytes = 120
+[10306.587564] #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+               # This system was installed using sma
+[10306.587564] **** close file
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_read.ko 
+insmod: ERROR: could not insert module mod_read.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | grep +++ | tail -n10
+[11829.363733] +++ openning file: /etc/apt/sources.list
+[11829.363748] +++ read 80 bytes:
+[11829.363749] +++ read 80 bytes:
+[11829.363750] +++ read 80 bytes:
+[11829.363751] +++ read 80 bytes:
+[11829.363752] +++ read 41 bytes:
+[11829.363753] +++ read EOF
+[11829.363753] +++ close file
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko 
+insmod: ERROR: could not insert module mod_vfs.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | grep +++ | tail -n4
+[11920.500454] +++ openning file: /etc/apt/sources.list
+[11920.500461] +++ file size = 361 bytes
+[11920.500464] +++ read 120 bytes:
+[11920.500464] +++ close file
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko 
+insmod: ERROR: could not insert module mod_vfs.ko: Input/output error
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | grep +++ | tail -n11
+[12726.794500] +++ openning file: /etc/apt/sources.list
+[12726.794509] +++ file size = 361 bytes
+[12726.794512] +++ n = 120
+[12726.794513] +++ read 120 bytes:
+[12726.794515] +++ n = 120
+[12726.794516] +++ read 120 bytes:
+[12726.794517] +++ n = 120
+[12726.794518] +++ read 120 bytes:
+[12726.794519] +++ n = 1
+[12726.794519] +++ failed to read
+[12726.794519] +++ close file
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko 
+insmod: ERROR: could not insert module mod_vfs.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n23
+[13425.076051] +++ openning file: /etc/apt/sources.list
+[13425.076058] +++ file size = 361 bytes
+[13425.076060] +++ n = 120
+[13425.076061] +++ read 120 bytes:
+               #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+               # This system was installed using sma
+[13425.076062] +++ n = 120
+[13425.076063] +++ read 120 bytes:
+               ll removable media
+               # (e.g. netinst, live or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[13425.076064] +++ n = 120
+[13425.076064] +++ read 120 bytes:
+               he installation process.
+               # For information about how to configure apt package sources,
+               # see the sources.list(5) manual.
+[13425.076065] +++ n = 1
+[13425.076066] +++ read 1 bytes:
+               
+
+[13425.076067] +++ n = 0
+[13425.076067] +++ read EOF
+[13425.076067] +++ close file
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_read.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_vfs.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/file/mod_write.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ sudo insmod mod_vfs.ko 
+insmod: ERROR: could not insert module mod_vfs.ko: Operation not permitted
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ dmesg | tail -n18
+[13610.963746] +++ openning file: /etc/apt/sources.list
+[13610.963753] +++ file size = 361 bytes
+[13610.963755] +++ read 120 bytes:
+               #deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+               # This system was installed using sma
+[13610.963757] +++ read 120 bytes:
+               ll removable media
+               # (e.g. netinst, live or single CD). The matching "deb cdrom"
+               # entries were disabled at the end of t
+[13610.963758] +++ read 120 bytes:
+               he installation process.
+               # For information about how to configure apt package sources,
+               # see the sources.list(5) manual.
+[13610.963759] +++ read 1 bytes:
+               
+
+[13610.963760] +++ read EOF
+[13610.963760] +++ close file
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/file$ cat /etc/apt/sources.list
+#deb cdrom:[Linux Mint 20.1 _Ulyssa_ - Release amd64 20210103]/ focal contrib main
+# This system was installed using small removable media
+# (e.g. netinst, live or single CD). The matching "deb cdrom"
+# entries were disabled at the end of the installation process.
+# For information about how to configure apt package sources,
+# see the sources.list(5) manual.
+
+==============================================================================================================================================================
+
+

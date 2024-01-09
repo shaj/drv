@@ -1,0 +1,120 @@
+28.08.2022
+==========
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ inxi -Sxxx
+System:    Host: esprimop420 Kernel: 5.10.0-16-amd64 x86_64 bits: 64 compiler: gcc v: 10.2.1 Console: tty 2 DM: LightDM 1.26.0 
+           Distro: Debian GNU/Linux 11 (bullseye) 
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo insmod mod_proct.ko
+[sudo] пароль для olej: 
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo dmesg | tail -n1
+[968456.245697] ! /proc/mod_dir/mod_node installed
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ ls -l /proc/mod_dir
+итого 0
+-rw-rw-rw- 1 root root 0 авг 28 18:19 mod_node
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ tree /proc/mod_dir
+/proc/mod_dir
+└── mod_node
+
+0 directories, 1 file
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ ls -l /proc/mod_dir/*
+-rw-rw-rw- 1 root root 0 авг 28 18:19 /proc/mod_dir/mod_node
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ lsmod | head -n3
+Module                  Size  Used by
+mod_proct              16384  0
+binfmt_misc            24576  1
+
+
+olej@esprimop420:/sys/module$ ls -l /sys/module/mod_proct 
+итого 0
+-r--r--r-- 1 root root 4096 авг 28 18:24 coresize
+drwxr-xr-x 2 root root    0 авг 28 18:24 holders
+-r--r--r-- 1 root root 4096 авг 28 18:27 initsize
+-r--r--r-- 1 root root 4096 авг 28 18:27 initstate
+drwxr-xr-x 2 root root    0 авг 28 18:27 notes
+-r--r--r-- 1 root root 4096 авг 28 18:24 refcnt
+drwxr-xr-x 2 root root    0 авг 28 18:27 sections
+-r--r--r-- 1 root root 4096 авг 28 18:27 taint
+--w------- 1 root root 4096 авг 28 18:14 uevent
+
+olej@esprimop420:/sys/module$ tree /sys/module/mod_proct 
+/sys/module/mod_proct
+├── coresize
+├── holders
+├── initsize
+├── initstate
+├── notes
+├── refcnt
+├── sections
+│   ├── __bug_table
+│   └── __mcount_loc
+├── taint
+└── uevent
+
+3 directories, 8 files
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ cat /proc/mod_dir/mod_node 
+.........1.........2.........3.........4.........5
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ echo 'new string' > /proc/mod_dir/mod_node
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ cat /proc/mod_dir/mod_node 
+new string
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ echo 'новая строка' > /proc/mod_dir/mod_node
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ cat /proc/mod_dir/mod_node 
+новая строка
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo dmesg | tail -n19
+[960494.092631] ! /proc/mod_node installed
+[960581.515037] ! write: 6 bytes
+[960581.515046] ! put 6 bytes
+[968456.245697] ! /proc/mod_dir/mod_node installed
+[968893.882680] ! read: 131072 bytes (ppos=0)
+[968893.882689] ! return 51 bytes
+[968893.882713] ! read: 131072 bytes (ppos=51)
+[968893.882715] ! EOF
+[968927.209691] ! write: 11 bytes
+[968927.209700] ! put 11 bytes
+[968930.379425] ! read: 131072 bytes (ppos=0)
+[968930.379434] ! return 11 bytes
+[968930.379458] ! read: 131072 bytes (ppos=11)
+[968930.379460] ! EOF
+[968947.938606] ! write: 24 bytes
+[968947.938612] ! put 24 bytes
+[968950.012618] ! read: 131072 bytes (ppos=0)
+[968950.012622] ! return 24 bytes
+[968950.012629] ! read: 131072 bytes (ppos=24)
+
+-----------------------------------------------------------------------------------------------------------------------------------
+
+olej@esprimop420:/sys/module$ sudo rmmod mod_proct
+
+
+olej@esprimop420:/sys/module$ lsmod | head -n3
+Module                  Size  Used by
+binfmt_misc            24576  1
+ufs                    94208  0
+
+
+olej@esprimop420:/sys/module$ sudo dmesg | tail -n3
+[968950.012630] ! EOF
+[969131.895184] ! /proc/mod_node removed
+[969704.374776] ! /proc/mod_dir/mod_node removed
+
+===================================================================================================================================
+

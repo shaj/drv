@@ -1,0 +1,74 @@
+07.07.2022
+==========
+
+https://elixir.bootlin.com/linux/v5.10/source/Documentation/kbuild/kbuild.rst
+
+KCFLAGS
+-------
+Additional options to the C compiler (for built-in and modules).
+
+CFLAGS_KERNEL
+-------------
+Additional options for $(CC) when used to compile
+code that is compiled as built-in.
+
+CFLAGS_MODULE
+-------------
+Additional module specific options to use for $(CC).
+
+LDFLAGS_MODULE
+--------------
+Additional options used for $(LD) when linking modules.
+
+========================================================================================================================
+
+olej@R420:/lib/modules/5.4.0-121-generic/build/include$ uname -a
+Linux R420 5.4.0-121-generic #137-Ubuntu SMP Wed Jun 15 13:33:07 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:/lib/modules/5.4.0-121-generic/build/include$ pwd
+/lib/modules/5.4.0-121-generic/build/include
+
+olej@R420:/lib/modules/5.4.0-121-generic/build/include$ ls -l
+итого 72
+lrwxrwxrwx   1 root root    42 июн 15 16:13 acpi -> ../../linux-headers-5.4.0-121/include/acpi
+lrwxrwxrwx   1 root root    49 июн 15 16:13 asm-generic -> ../../linux-headers-5.4.0-121/include/asm-generic
+lrwxrwxrwx   1 root root    49 июн 15 16:13 clocksource -> ../../linux-headers-5.4.0-121/include/clocksource
+drwxr-xr-x 953 root root 65536 июн 23 00:52 config
+lrwxrwxrwx   1 root root    44 июн 15 16:13 crypto -> ../../linux-headers-5.4.0-121/include/crypto
+lrwxrwxrwx   1 root root    41 июн 15 16:13 drm -> ../../linux-headers-5.4.0-121/include/drm
+lrwxrwxrwx   1 root root    49 июн 15 16:13 dt-bindings -> ../../linux-headers-5.4.0-121/include/dt-bindings
+drwxr-xr-x   3 root root  4096 июн 23 00:52 generated
+lrwxrwxrwx   1 root root    42 июн 15 16:13 keys -> ../../linux-headers-5.4.0-121/include/keys
+lrwxrwxrwx   1 root root    41 июн 15 16:13 kvm -> ../../linux-headers-5.4.0-121/include/kvm
+lrwxrwxrwx   1 root root    43 июн 15 16:13 linux -> ../../linux-headers-5.4.0-121/include/linux
+lrwxrwxrwx   1 root root    46 июн 15 16:13 math-emu -> ../../linux-headers-5.4.0-121/include/math-emu
+lrwxrwxrwx   1 root root    43 июн 15 16:13 media -> ../../linux-headers-5.4.0-121/include/media
+lrwxrwxrwx   1 root root    42 июн 15 16:13 misc -> ../../linux-headers-5.4.0-121/include/misc
+lrwxrwxrwx   1 root root    41 июн 15 16:13 net -> ../../linux-headers-5.4.0-121/include/net
+lrwxrwxrwx   1 root root    44 июн 15 16:13 pcmcia -> ../../linux-headers-5.4.0-121/include/pcmcia
+lrwxrwxrwx   1 root root    41 июн 15 16:13 ras -> ../../linux-headers-5.4.0-121/include/ras
+lrwxrwxrwx   1 root root    42 июн 15 16:13 rdma -> ../../linux-headers-5.4.0-121/include/rdma
+lrwxrwxrwx   1 root root    42 июн 15 16:13 scsi -> ../../linux-headers-5.4.0-121/include/scsi
+lrwxrwxrwx   1 root root    41 июн 15 16:13 soc -> ../../linux-headers-5.4.0-121/include/soc
+lrwxrwxrwx   1 root root    43 июн 15 16:13 sound -> ../../linux-headers-5.4.0-121/include/sound
+lrwxrwxrwx   1 root root    44 июн 15 16:13 target -> ../../linux-headers-5.4.0-121/include/target
+lrwxrwxrwx   1 root root    43 июн 15 16:13 trace -> ../../linux-headers-5.4.0-121/include/trace
+lrwxrwxrwx   1 root root    42 июн 15 16:13 uapi -> ../../linux-headers-5.4.0-121/include/uapi
+lrwxrwxrwx   1 root root    42 июн 15 16:13 vdso -> ../../linux-headers-5.4.0-121/include/vdso
+lrwxrwxrwx   1 root root    43 июн 15 16:13 video -> ../../linux-headers-5.4.0-121/include/video
+lrwxrwxrwx   1 root root    41 июн 15 16:13 xen -> ../../linux-headers-5.4.0-121/include/xen
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/include$ uname -a
+Linux esprimop420 5.10.0-13-amd64 #1 SMP Debian 5.10.106-1 (2022-03-17) x86_64 GNU/Linux
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/include$ pwd
+/lib/modules/5.10.0-13-amd64/build/include
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/include$ ls -l
+итого 40
+drwxr-xr-x 802 root root 36864 мар 26 17:46 config
+drwxr-xr-x   3 root root  4096 мар 26 17:46 generated
+
+========================================================================================================================

@@ -1,0 +1,310 @@
+20.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ sudo inxi -MSxxx
+[sudo] пароль для olej:       
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 compiler: gcc v: 9.4.0 Desktop: Cinnamon 5.2.7 
+           wm: muffin 5.2.1 dm: LightDM 1.30.0 Distro: Linux Mint 20.3 Una base: Ubuntu 20.04 focal 
+Machine:   Type: Server System: Dell product: PowerEdge R420 v: N/A serial: 9DDFKY1 Chassis: type: 23 serial: 9DDFKY1 
+           Mobo: Dell model: 0CN7CM v: A06 serial: ..CN1374035400RO. BIOS: Dell v: 2.9.0 date: 01/09/2020 
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ make
+gcc     inst1.c   -o inst1
+inst1.c: In function ‘main’:
+inst1.c:32:10: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   32 |          close( fd );
+      |          ^~~~~
+      |          pclose
+inst1.c:49:17: warning: implicit declaration of function ‘read’; did you mean ‘fread’? [-Wimplicit-function-declaration]
+   49 |    if( fsize != read( fd, buff, fsize ) ) {
+      |                 ^~~~
+      |                 fread
+inst1.c:56:10: warning: implicit declaration of function ‘syscall’ [-Wimplicit-function-declaration]
+   56 |    res = syscall( __NR_init_module, buff, fsize, parms );
+      |          ^~~~~~~
+gcc     inst2.c   -o inst2
+inst2.c: In function ‘main’:
+inst2.c:29:10: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   29 |          close( fd );
+      |          ^~~~~
+      |          pclose
+inst2.c:46:17: warning: implicit declaration of function ‘read’; did you mean ‘fread’? [-Wimplicit-function-declaration]
+   46 |    if( fsize != read( fd, buff, fsize ) ) {
+      |                 ^~~~
+      |                 fread
+inst2.c:53:10: warning: implicit declaration of function ‘init_module’; did you mean ‘SYS_init_module’? [-Wimplicit-function-declaration]
+   53 |    res = init_module( buff, fsize, parms ); // вызов sys_init_module()
+      |          ^~~~~~~~~~~
+      |          SYS_init_module
+gcc     rem1.c   -o rem1
+rem1.c: In function ‘main’:
+rem1.c:18:10: warning: implicit declaration of function ‘syscall’ [-Wimplicit-function-declaration]
+   18 |    res = syscall( __NR_delete_module, slave_mod, O_TRUNC );
+      |          ^~~~~~~
+gcc     rem2.c   -o rem2
+rem2.c: In function ‘main’:
+rem2.c:14:10: warning: implicit declaration of function ‘delete_module’; did you mean ‘SYS_delete_module’? [-Wimplicit-function-declaration]
+   14 |    res = delete_module( slave_mod, O_TRUNC );  // flags: O_TRUNC, O_NONBLOCK
+      |          ^~~~~~~~~~~~~
+      |          SYS_delete_module
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ make
+gcc     inst1.c   -o inst1
+gcc     inst2.c   -o inst2
+inst2.c: In function ‘main’:
+inst2.c:53:10: warning: implicit declaration of function ‘init_module’; did you mean ‘SYS_init_module’? [-Wimplicit-function-declaration]
+   53 |    res = init_module(buff, fsize, parms); // вызов sys_init_module()
+      |          ^~~~~~~~~~~
+      |          SYS_init_module
+gcc     rem1.c   -o rem1
+gcc     rem2.c   -o rem2
+rem2.c: In function ‘main’:
+rem2.c:14:10: warning: implicit declaration of function ‘delete_module’; did you mean ‘SYS_delete_module’? [-Wimplicit-function-declaration]
+   14 |    res = delete_module(slave_mod, O_TRUNC);  // flags: O_TRUNC, O_NONBLOCK
+      |          ^~~~~~~~~~~~~
+      |          SYS_delete_module
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ make
+gcc     inst1.c   -o inst1
+gcc     inst2.c   -o inst2
+inst2.c: In function ‘main’:
+inst2.c:53:10: warning: implicit declaration of function ‘init_module’; did you mean ‘SYS_init_module’? [-Wimplicit-function-declaration]
+   53 |    res = init_module(buff, fsize, parms); // вызов sys_init_module()
+      |          ^~~~~~~~~~~
+      |          SYS_init_module
+gcc     rem1.c   -o rem1
+gcc     rem2.c   -o rem2
+rem2.c: In function ‘main’:
+rem2.c:14:10: warning: implicit declaration of function ‘delete_module’; did you mean ‘SYS_delete_module’? [-Wimplicit-function-declaration]
+   14 |    res = delete_module(slave_mod, O_TRUNC);  // flags: O_TRUNC, O_NONBLOCK
+      |          ^~~~~~~~~~~~~
+      |          SYS_delete_module
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ ls -l | grep ^-rwx
+-rwxrwxr-x 1 olej olej 17256 авг 20 22:38 inst1
+-rwxrwxr-x 1 olej olej 17256 авг 20 22:38 inst2
+-rwxrwxr-x 1 olej olej 16880 авг 20 22:38 rem1
+-rwxrwxr-x 1 olej olej 16888 авг 20 22:38 rem2
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ make
+gcc     inst1.c   -o inst1
+gcc     inst2.c   -o inst2
+gcc     rem1.c   -o rem1
+gcc     rem2.c   -o rem2
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ modinfo slave.ko 
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster/slave.ko
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>
+license:        GPL
+srcversion:     AA25554663A345F368F47E6
+depends:        
+retpoline:      Y
+name:           slave
+vermagic:       5.4.0-124-generic SMP mod_unload modversions 
+parm:           parm1:charp
+parm:           parm2:charp
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ sudo insmod slave.ko
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ dmesg | tail -n1
+[43464.851759] + модуль slave.ko загружен: parm1=, parm2=
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ sudo rmmod slave
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ dmesg | tail -n2
+[43464.851759] + модуль slave.ko загружен: parm1=, parm2=
+[43516.110535] + модуль slave.ko выгружен
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ ls -l slave.ko 
+-rw-rw-r-- 1 olej olej 6544 авг 20 23:19 slave.ko
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~$ man 2 init_module
+...
+       Note: glibc provides no header file declaration of init_module() and no wrapper function for finit_module();
+...
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ ldd rem1 
+    linux-vdso.so.1 (0x00007ffe611c6000)
+    libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f441a39d000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007f441a5bc000)
+
+
+olej@R420:/lib/x86_64-linux-gnu$ pwd
+/lib/x86_64-linux-gnu
+
+olej@R420:/lib/x86_64-linux-gnu$ ls -l libc.so.6
+lrwxrwxrwx 1 root root 12 апр  7 04:24 libc.so.6 -> libc-2.31.so
+
+olej@R420:/lib/x86_64-linux-gnu$ ls -l libc-2.31.so
+-rwxr-xr-x 1 root root 2029592 апр  7 04:24 libc-2.31.so
+
+
+olej@R420:/lib/x86_64-linux-gnu$ cat /etc/ld.so.conf.d/*
+/usr/lib/x86_64-linux-gnu/libfakeroot
+# libc default configuration
+/usr/local/lib
+# Multiarch support
+/usr/local/lib/x86_64-linux-gnu
+/lib/x86_64-linux-gnu
+/usr/lib/x86_64-linux-gnu
+# Legacy biarch compatibility support
+/lib32
+/usr/lib32
+# Legacy biarch compatibility support
+/libx32
+/usr/libx32
+
+olej@R420:/lib/x86_64-linux-gnu$ dpkg -S libc-2.31.so
+libc6-i386: /lib32/libc-2.31.so
+libc6:amd64: /lib/x86_64-linux-gnu/libc-2.31.so
+libc6-x32: /libx32/libc-2.31.so
+
+olej@R420:/lib/x86_64-linux-gnu$ pwd
+/lib/x86_64-linux-gnu
+
+olej@R420:/lib/x86_64-linux-gnu$ dpkg -S /lib/x86_64-linux-gnu/libc-2.31.so
+libc6:amd64: /lib/x86_64-linux-gnu/libc-2.31.so
+
+
+olej@R420:/lib/x86_64-linux-gnu$ nm -D libc-2.31.so | grep ' T ' | wc -l
+1486
+
+olej@R420:/lib/x86_64-linux-gnu$ sudo nm -D libc-2.31.so | grep ' T ' | grep _module 
+[sudo] пароль для olej:       
+000000000011fa30 T create_module
+000000000011fa60 T delete_module
+0000000000025aa0 T __gconv_get_modules_db
+000000000011fb50 T init_module
+000000000011fd60 T query_module
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ grep _module /usr/include/x86_64-linux-gnu/asm/unistd_32.h
+#define __NR_create_module 127
+#define __NR_init_module 128
+#define __NR_delete_module 129
+#define __NR_query_module 167
+#define __NR_finit_module 350
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ grep _module /usr/include/x86_64-linux-gnu/asm/unistd_64.h
+#define __NR_create_module 174
+#define __NR_init_module 175
+#define __NR_delete_module 176
+#define __NR_query_module 178
+#define __NR_finit_module 313
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ sudo ./inst1 slave.ko parm1='строка1' parm2='строка2' 
+[sudo] пароль для olej:       
+загрузка модуля: slave.ko parm1=строка1 parm2=строка2 
+размер файла модуля slave.ko = 6544 байт
+модуль slave.ko успешно загружен!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ dmesg | tail -n1
+[50509.921854] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ lsmod | head -n2
+Module                  Size  Used by
+slave                  16384  0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ sudo ./rem1 
+выгружается модуль slave
+модуль slave успешно загружен!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ dmesg | tail -n2
+[50509.921854] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+[50681.215028] + модуль slave.ko выгружен
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ sudo ./inst2 slave.ko parm1='строка1' parm2='строка2' 
+загрузка модуля: slave.ko parm1=строка1 parm2=строка2 
+размер файла модуля slave.ko = 6544 байт
+модуль slave.ko успешно загружен!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ dmesg | tail -n1
+[50755.109764] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ dmesg | tail -n1
+[50755.109764] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ lsmod | head -n2
+Module                  Size  Used by
+slave                  16384  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ sudo ./rem1 
+выгружается модуль slave
+модуль slave успешно загружен!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/load_module/umaster$ dmesg | tail -n2
+[50755.109764] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+[50799.318937] + модуль slave.ko выгружен
+
+==================================================================================================================================

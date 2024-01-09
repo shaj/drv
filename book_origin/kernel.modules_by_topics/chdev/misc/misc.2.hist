@@ -1,0 +1,137 @@
+14.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+================================================================================================================
+
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/cdev$ ls -l /dev/{null,zero,random}
+crw-rw-rw- 1 root root 1, 3 июн 15 09:59 /dev/null
+crw-rw-rw- 1 root root 1, 8 июн 15 09:59 /dev/random
+crw-rw-rw- 1 root root 1, 5 июн 15 09:59 /dev/zero
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo insmod misc_dev.ko
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ lsmod | head -n2
+Module                  Size  Used by
+misc_dev               16384  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ cat /proc/devices  | grep misc
+ 10 misc
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls -l /dev/ow*  
+crw------- 1 root root 10, 55 июн 15 16:41 /dev/own_misc_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo cat /dev/own_misc_dev
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls -l /dev/*misc*
+crw------- 1 root root 10, 55 июн 15 16:41 /dev/own_misc_dev
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo rmmod misc_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls -l /dev/*misc*
+ls: невозможно получить доступ к '/dev/*misc*': Нет такого файла или каталога
+
+================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/misc/misc_dev.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo insmod misc_dev.ko
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls -l /dev/*misc*
+crw------- 1 root root 10, 55 июн 15 17:03 /dev/own_misc_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo cat /dev/own_misc_dev
+Hello, world!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo rmmod misc_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls -l /dev/*misc*
+ls: невозможно получить доступ к '/dev/*misc*': Нет такого файла или каталога
+
+----------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo insmod misc_dev.ko minor=60
+insmod: ERROR: could not insert module misc_dev.ko: Device or resource busy
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ dmesg | tail -n1
+[25656.480808] === Unable to register misc device
+
+----------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo insmod misc_dev.ko minor=0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls -l /dev/*misc*
+crw------- 1 root root 10, 0 июн 15 17:07 /dev/own_misc_dev
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ sudo cat /dev/own_misc_dev
+Hello, world!
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls /sys/class/misc -w80
+autofs           fuse       loop-control  rfkill    vboxdrv
+btrfs-control    hpet       mcelog        snapshot  vboxdrvu
+cpu_dma_latency  hw_random  microcode     tun       vboxnetctl
+device-mapper    kvm        own_misc_dev  udmabuf   vfio
+ecryptfs         lightnvm   psaux         uinput    vga_arbiter
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ ls /sys/class/misc/own_misc_dev 
+dev  power  subsystem  uevent
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/misc$ tree /sys/devices/virtual/misc/own_misc_dev/ 
+/sys/devices/virtual/misc/own_misc_dev/
+├── dev
+├── power
+│   ├── async
+│   ├── autosuspend_delay_ms
+│   ├── control
+│   ├── runtime_active_kids
+│   ├── runtime_active_time
+│   ├── runtime_enabled
+│   ├── runtime_status
+│   ├── runtime_suspended_time
+│   └── runtime_usage
+├── subsystem -> ../../../../class/misc
+└── uevent
+
+2 directories, 11 files
+
+================================================================================================================

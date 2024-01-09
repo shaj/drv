@@ -1,0 +1,229 @@
+13.08.2022
+==========
+
+======================================================================================================================
+
+[olej@xenix time]$ inxi -M
+Machine:
+  Type: Desktop System: FUJITSU product: ESPRIMO P420 v: N/A serial: <superuser required>
+  Mobo: FUJITSU model: D3230-A1 v: S26361-D3230-A1 serial: <superuser required>
+    BIOS: FUJITSU // American Megatrends v: 4.6.5.4 R1.17.0 for D3230-A1x date: 03/06/2014
+
+[olej@xenix time]$ inxi -S
+System:
+  Host: xenix.localdomain Kernel: 5.18.16-100.fc35.x86_64 arch: x86_64 bits: 64
+    Console: pty pts/4 Distro: Fedora release 35 (Thirty Five)
+
+[olej@xenix time]$ ps -ef | head -n10
+UID          PID    PPID  C STIME TTY          TIME CMD
+root           1       0  0 10:59 ?        00:00:01 /usr/lib/systemd/systemd rhgb --switched-root --system --deserialize 30
+root           2       0  0 10:59 ?        00:00:00 [kthreadd]
+root           3       2  0 10:59 ?        00:00:00 [rcu_gp]
+root           4       2  0 10:59 ?        00:00:00 [rcu_par_gp]
+root           5       2  0 10:59 ?        00:00:00 [netns]
+root           7       2  0 10:59 ?        00:00:00 [kworker/0:0H-events_highpri]
+root           9       2  0 10:59 ?        00:00:00 [kworker/0:1H-events_highpri]
+root          10       2  0 10:59 ?        00:00:00 [mm_percpu_wq]
+root          12       2  0 10:59 ?        00:00:00 [rcu_tasks_kthread]
+
+[olej@xenix time]$ ps -ef | grep -F '[' | wc -l 
+161
+
+======================================================================================================================
+
+olej@raspberrypi:~ $ inxi -M
+Machine:   Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 
+           rev: a21041 serial: 00000000f57e2ca8 
+
+olej@raspberrypi:~ $ ps -ef | grep -F '[' | wc -l
+92
+
+olej@raspberrypi:~ $ sudo grep kernel_thread$ /proc/kallsyms
+8011e880 T kernel_thread
+
+======================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/time$ inxi -M
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family rev: N/A 
+           serial: 02c000815fd5e717 
+
+olej@orangepione:~/2022/kernel/examples/time$ ps -ef | grep -F '[' | wc -l
+85
+
+olej@orangepione:~/2022/kernel/examples/time$ sudo grep kernel_thread$ /proc/kallsyms
+[sudo] пароль для olej: 
+c011b8f0 T kernel_thread
+
+======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ uname -r
+5.4.0-124-generic
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ ps -ef | grep -F '[' | wc -l 
+411
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ cat /proc/kallsyms | grep kernel_thread
+0000000000000000 T kernel_thread
+0000000000000000 T thaw_kernel_threads
+0000000000000000 T freeze_kernel_threads
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ sudo grep kernel_thread$ /proc/kallsyms
+ffffffff85898df0 T kernel_thread
+
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.c: In function ‘test_thread’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.c:18:10: error: implicit declaration of function ‘kernel_thread’; did you mean ‘test_thread’? [-Werror=implicit-function-declaration]
+   18 |    pid = kernel_thread( thread, NULL, CLONE_FS );     /* Запускаем новый поток */
+      |          ^~~~~~~~~~~~~
+      |          test_thread
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:14: default] Ошибка 2
+
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/sched/task.h#L96
+extern pid_t kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+
+/lib/modules/5.4.0-124-generic/build/include/linux/sched/task.h 
+extern pid_t kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
+
+----------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 7760 авг 13 19:10 mod_thr3.ko
+
+----------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ ls *.ko
+mod_thr1.ko  mod_thr3.ko
+
+
+olej@esprimop420:~/2022/kernel/thread/tcreat$ time sudo insmod mod_thr3.ko N=3 
+[sudo] пароль для olej: 
+Убито
+
+real	0m12,984s
+user	0m0,005s
+sys	0m0,007s
+
+...
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ sudo insmod mod_thr1.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module mod_thr1.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ dmesg | tail -n2
+[38675.097842] thread: main process [34606] is running
+[38680.263044] thread: main process [34606] is completed
+...
+
+olej@esprimop420:~/2022/kernel/thread/tcreat$ lsmod | head -n5
+Module                  Size  Used by
+mod_thr3               16384  1
+sr9700                 24576  0
+dm9601                 24576  0
+usbnet                 53248  2 sr9700,dm9601
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+[1064833.591423] mod_thr3: loading out-of-tree module taints kernel.
+[1064833.591425] mod_thr3: module license 'GPL2' taints kernel.
+[1064833.591426] Disabling lock debugging due to kernel taint
+[1064833.591466] mod_thr3: module verification failed: signature and/or required key missing - tainting kernel
+[1064833.591952] 4561100694 : main process [42025] is running
+[1064833.592073] BUG: kernel NULL pointer dereference, address: 0000000000000003
+[1064833.592085] #PF: supervisor read access in kernel mode
+
+======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ sudo cat /proc/kallsyms | grep ' T ' | grep ' kthread' 
+ffffffff858bf540 T kthread_blkcg
+ffffffff858bf570 T kthread_should_stop
+ffffffff858bf5d0 T kthread_should_park
+ffffffff858bf600 T kthread_freezable_should_stop
+ffffffff858bf700 T kthread_parkme
+ffffffff858bf900 T kthread_create_on_node
+ffffffff858bf960 T kthread_park
+ffffffff858bfc70 T kthread_queue_work
+ffffffff858bfce0 T kthread_flush_worker
+ffffffff858bfd70 T kthread_delayed_work_timer_fn
+ffffffff858bfe10 T kthread_flush_work
+ffffffff858c0010 T kthread_cancel_work_sync
+ffffffff858c0030 T kthread_cancel_delayed_work_sync
+ffffffff858c00e0 T kthread_queue_delayed_work
+ffffffff858c0160 T kthread_mod_delayed_work
+ffffffff858c02c0 T kthread_bind
+ffffffff858c0420 T kthread_create_worker
+ffffffff858c04a0 T kthread_create_worker_on_cpu
+ffffffff858c0510 T kthread_unpark
+ffffffff858c0580 T kthread_stop
+ffffffff858c0690 T kthread_destroy_worker
+ffffffff858c06e0 T kthread_associate_blkcg
+ffffffff858c0780 T kthread_worker_fn
+ffffffff858c0980 T kthread_data
+ffffffff858c09b0 T kthread_probe_data
+ffffffff858c0a50 T kthread_bind_mask
+ffffffff858c0a70 T kthread_create_on_cpu
+ffffffff858c0b00 T kthread_set_per_cpu
+ffffffff858c0b50 T kthread_is_per_cpu
+ffffffff858c0b80 T kthreadd
+
+======================================================================================================================
+
+$ time sudo insmod mod_thr3.ko N=3
+$ ps -ef | grep '\[' | grep 'my_'
+$ dmesg | tail -n40 | grep -v audit
+
+======================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr2.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr2.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr2.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ ls *.ko
+mod_thr2.ko  mod_thr3.ko
+
+======================================================================================================================

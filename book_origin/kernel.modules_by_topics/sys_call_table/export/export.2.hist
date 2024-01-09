@@ -1,0 +1,77 @@
+28.07.2012
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0c.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0o.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0c.o
+see include/linux/module.h for more information
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0o.o
+see include/linux/module.h for more information
+ERROR: "sys_open" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0o.ko] undefined!
+ERROR: "sys_close" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/sys_call_table/export/md_0c.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:94: __modpost] Ошибка 1
+make[1]: *** [Makefile:1675: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+make: *** [Makefile:11: all] Ошибка 2
+
+==============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  sys_open
+[sudo] пароль для olej:       
+ffffffff8b6c9940 T do_sys_open
+ffffffff8b6c9bd0 T __x64_sys_open
+ffffffff8b6c9c00 T __ia32_sys_open
+ffffffff8b6c9c30 T __x64_sys_openat
+ffffffff8b6c9c60 T __ia32_sys_openat
+ffffffff8b6c9c90 T __ia32_compat_sys_open
+ffffffff8b6c9cb0 T __x32_compat_sys_open
+ffffffff8b6c9ce0 T __ia32_compat_sys_openat
+ffffffff8b6c9d00 T __x32_compat_sys_openat
+ffffffff8b6f48f0 T __ia32_sys_open_tree
+ffffffff8b6f4a90 T __x64_sys_open_tree
+ffffffff8b751e40 T __x64_sys_open_by_handle_at
+ffffffff8b751e60 T __ia32_sys_open_by_handle_at
+ffffffff8b751e80 T __ia32_compat_sys_open_by_handle_at
+ffffffff8b751ea0 T __x32_compat_sys_open_by_handle_at
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo cat /proc/kallsyms | grep ' T ' | grep  sys_close
+ffffffff8b6c74e0 T __ia32_sys_close
+ffffffff8b6c7c80 T __x64_sys_close
+
+==============================================================================================================================
+
+<include/linux/syscalls.h>
+[953]
+/*
+ * Deprecated system calls which are still defined in
+ * include/uapi/asm-generic/unistd.h and wanted by >= 1 arch
+ */
+
+/* __ARCH_WANT_SYSCALL_NO_AT */
+asmlinkage long sys_open(const char __user *filename,
+		int flags, umode_t mode);
+...
+
+[430]
+asmlinkage long sys_close(unsigned int fd);
+
+==============================================================================================================================
+
+30.07.2012
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/proc$ cat /proc/kallsyms | wc -l 
+144297
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/proc$ grep ' T ' /proc/kallsyms | wc -l 
+24466
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/proc$ cat /lib/modules/`uname -r`/build/Module.symvers | wc -l 
+23857
+
+==============================================================================================================================

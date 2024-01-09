@@ -1,0 +1,78 @@
+18.08.2022
+==========
+
+olej@R420:/etc$ aptitude search modeswitch
+i   usb-modeswitch                                                     - инструмент переключения режима для управления USB-устройствами "flip flop"  
+i   usb-modeswitch-data                                                - mode switching data for usb-modeswitch                                      
+v   usb-modeswitch-data-packed                                         -                                                                             
+
+olej@R420:/etc$ aptitude show usb-modeswitch
+Пакет: usb-modeswitch                            
+Версия: 2.5.2+repack0-2ubuntu3
+Состояние: установлен
+Установлен автоматически: нет
+Приоритет: дополнительный
+Раздел: comm
+Сопровождающий: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Архитектура: amd64
+Размер в распакованном виде: 170 k
+Зависит: libc6 (>= 2.27), libpipeline1 (>= 1.0.0), libusb-1.0-0 (>= 2:1.0.9), usb-modeswitch-data (>= 20140529)
+Предлагает: comgt, wvdial
+Ломает: usb-modeswitch-data (< 20100127)
+Описание: инструмент переключения режима для управления USB-устройствами "flip flop"
+ Некоторые современные устройства USB имеют на борту свои собственные патентованные драйвера для Windows, особенно WAN-донглы. При первом подключении
+ они работают как флеш-память и начинают установку драйвера оттуда. Если драйвер уже установлен, запоминающее устройство исчезает, и появляется новое
+ устройство, например, USB-модем. Эта функция называется ZeroCD. 
+ 
+ В системе Debian это не требуется, потому что драйвер включен в модуль usbserial ядра Linux. Тем не менее устройство продолжает отображаться по
+ умолчанию как usb-накопитель. usb-modeswitch решает эту проблему посылкой команды, которая переключает устройство из "usb-storage" в "usbserial". 
+ 
+ Пакет содержит исполняемые скрипты.
+Домашняя страница: http://www.draisberghof.de/usb_modeswitch/
+
+========================================================================================================================
+
+olej@R420:~$ ls -l /usr/share/usb_modeswitch/configPack.tar.gz 
+-rw-r--r-- 1 root root 18024 фев 24  2020 /usr/share/usb_modeswitch/configPack.tar.gz
+
+olej@R420:~$ tar -tvf /usr/share/usb_modeswitch/configPack.tar.gz | head
+-rw-r--r-- 0/0             130 2017-01-19 21:47 03f0:002a
+-rw-r--r-- 0/0             131 2017-01-19 21:47 03f0:032a
+-rw-r--r-- 0/0              38 2019-11-25 20:48 03f0:0857
+-rw-r--r-- 0/0              28 2017-08-04 21:41 03f0:371d
+-rw-r--r-- 0/0              28 2017-08-04 21:41 03f0:4b1d
+-rw-r--r-- 0/0              28 2017-08-04 21:42 03f0:4e1d
+-rw-r--r-- 0/0              28 2016-07-25 21:36 03f0:521d
+-rw-r--r-- 0/0              28 2016-07-25 21:39 03f0:531d
+-rw-r--r-- 0/0              28 2016-07-25 21:39 03f0:541d
+-rw-r--r-- 0/0              28 2016-07-25 21:39 03f0:581d
+
+olej@R420:~$ tar -tvf /usr/share/usb_modeswitch/configPack.tar.gz | wc -l
+513
+
+========================================================================================================================
+
+olej@R420:~$ head -n 15 /usr/lib/udev/rules.d/40-usb_modeswitch.rules
+# Part of usb-modeswitch-data, version 20191128
+#
+# Works with usb_modeswitch versions >= 2.4.0. Slash before %k parameter
+# is for compatibility only. Versions >= 2.5.0 don't need it.
+#
+ACTION!="add|change", GOTO="modeswitch_rules_end"
+
+# Adds a symlink "gsmmodem[n]" to the lowest ttyUSB port with interrupt
+# transfer; checked against a list of known modems, or else no action
+KERNEL=="ttyUSB*", ATTRS{bNumConfigurations}=="*", PROGRAM="usb_modeswitch --symlink-name %p %s{idVendor} %s{idProduct} %E{PRODUCT}", SYMLINK+="%c"
+
+SUBSYSTEM!="usb", ACTION!="add",, GOTO="modeswitch_rules_end"
+
+# Generic entry for most Huawei devices, excluding Android phones
+ATTRS{idVendor}=="12d1", ATTRS{manufacturer}!="Android", ATTR{bInterfaceNumber}=="00", ATTR{bInterfaceClass}=="08", RUN+="usb_modeswitch '%b/%k'"
+
+
+
+olej@R420:~$ ls -l /usr/lib/udev/rules.d | grep usb_
+-rw-r--r-- 1 root root  42861 фев 24  2020 40-usb_modeswitch.rules
+
+========================================================================================================================
+

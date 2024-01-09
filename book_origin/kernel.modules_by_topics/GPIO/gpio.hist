@@ -1,0 +1,186 @@
+24.08.2022
+==========
+
+olej@R420:~$ sudo inxi -Mxxx
+[sudo] пароль для olej:       
+Machine:   Type: Server System: Dell product: PowerEdge R420 v: N/A serial: 9DDFKY1 Chassis: type: 23 serial: 9DDFKY1 
+           Mobo: Dell model: 0CN7CM v: A06 serial: ..CN1374035400RO. BIOS: Dell v: 2.9.0 date: 01/09/2020 
+
+olej@R420:~$ grep CONFIG_GPIO_ /boot/config-`uname -r`
+CONFIG_GPIO_ACPI=y
+CONFIG_GPIO_SYSFS=y
+CONFIG_GPIO_GENERIC=m
+CONFIG_GPIO_MAX730X=m
+CONFIG_GPIO_AMDPT=m
+CONFIG_GPIO_DWAPB=m
+CONFIG_GPIO_EXAR=m
+CONFIG_GPIO_GENERIC_PLATFORM=m
+CONFIG_GPIO_ICH=m
+CONFIG_GPIO_LYNXPOINT=y
+CONFIG_GPIO_MB86S7X=m
+CONFIG_GPIO_MENZ127=m
+CONFIG_GPIO_SIOX=m
+CONFIG_GPIO_VX855=m
+CONFIG_GPIO_XILINX=y
+CONFIG_GPIO_AMD_FCH=m
+CONFIG_GPIO_104_DIO_48E=m
+CONFIG_GPIO_104_IDIO_16=m
+CONFIG_GPIO_104_IDI_48=m
+CONFIG_GPIO_F7188X=m
+CONFIG_GPIO_GPIO_MM=m
+CONFIG_GPIO_IT87=m
+CONFIG_GPIO_SCH=m
+CONFIG_GPIO_SCH311X=m
+CONFIG_GPIO_WINBOND=m
+CONFIG_GPIO_WS16C48=m
+CONFIG_GPIO_ADP5588=m
+CONFIG_GPIO_MAX7300=m
+CONFIG_GPIO_MAX732X=m
+CONFIG_GPIO_PCA953X=m
+CONFIG_GPIO_PCF857X=m
+CONFIG_GPIO_TPIC2810=m
+CONFIG_GPIO_ADP5520=m
+CONFIG_GPIO_ARIZONA=m
+CONFIG_GPIO_BD9571MWV=m
+CONFIG_GPIO_CRYSTAL_COVE=m
+CONFIG_GPIO_DA9052=m
+CONFIG_GPIO_DA9055=m
+CONFIG_GPIO_DLN2=m
+CONFIG_GPIO_JANZ_TTL=m
+CONFIG_GPIO_KEMPLD=m
+CONFIG_GPIO_LP3943=m
+CONFIG_GPIO_LP873X=m
+CONFIG_GPIO_MADERA=m
+CONFIG_GPIO_PALMAS=y
+CONFIG_GPIO_RC5T583=y
+CONFIG_GPIO_TPS65086=m
+CONFIG_GPIO_TPS6586X=y
+CONFIG_GPIO_TPS65910=y
+CONFIG_GPIO_TPS65912=m
+CONFIG_GPIO_TPS68470=y
+CONFIG_GPIO_TQMX86=m
+CONFIG_GPIO_TWL4030=m
+CONFIG_GPIO_TWL6040=m
+CONFIG_GPIO_UCB1400=m
+CONFIG_GPIO_WHISKEY_COVE=m
+CONFIG_GPIO_WM831X=m
+CONFIG_GPIO_WM8350=m
+CONFIG_GPIO_WM8994=m
+CONFIG_GPIO_AMD8111=m
+CONFIG_GPIO_ML_IOH=m
+CONFIG_GPIO_PCI_IDIO_16=m
+CONFIG_GPIO_PCIE_IDIO_24=m
+CONFIG_GPIO_RDC321X=m
+CONFIG_GPIO_MAX3191X=m
+CONFIG_GPIO_MAX7301=m
+CONFIG_GPIO_MC33880=m
+CONFIG_GPIO_PISOSR=m
+CONFIG_GPIO_XRA1403=m
+CONFIG_GPIO_VIPERBOARD=m
+# CONFIG_GPIO_MOCKUP is not set
+
+
+olej@R420:~$ grep CONFIG_GPIO_ /boot/config-`uname -r`| wc -l
+71
+
+============================================================================================================================
+
+olej@R420:~$ aptitude show gpiod
+Пакет: gpiod                                     
+Версия: 1.4.1-4
+Новый: да
+Состояние: не установлен
+Мультиархитектура: сторонняя
+Приоритет: необязательный
+Раздел: universe/misc
+Сопровождающий: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Архитектура: amd64
+Размер в распакованном виде: 121 k
+Зависит: libc6 (>= 2.16), libgpiod2 (>= 1.2)
+Описание: Tools for interacting with Linux GPIO character device - binary
+ libgpiod encapsulates the ioctl calls and data structures behind a straightforward API. This new character device interface guarantees all allocated
+ resources are freed after closing the device file descriptor and adds several new features that are not present in the obsolete sysfs interface (like
+ event polling, setting/reading multiple values at once or open-source and open-drain GPIOs). 
+ 
+ This package contains the gpiod binary tools.
+Домашняя страница: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ make
+cc -Wall   info.o   -o info
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ ./info
+Unabled to open /dev/gpiochip0: No such file or directory
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ make
+cc -Wall -O2 -Wall    allops.c   -o allops
+allops.c: In function ‘main’:
+allops.c:495:9: warning: ‘opt.offset’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  495 |         gpio_read(opt.dev, opt.offset);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ make
+cc -Wall -O2 -Wall    allops.c   -o allops
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ ./allops --help
+./allops: invalid option -- '-'
+Usage: ./allops options dev_name.
+Options:
+     -i: print gpio chip info
+     -r <offset>: Read GPIO value at offset (INPUT mode)
+     -w <offset>: Write GPIO value at offset (OUTPUT mode). Option -v should be set
+     -v <0|1>: value that should be written to the GPIO, used only with option -w
+     -p <offset>: Polling raising event on the GPIO at offset
+
+============================================================================================================================
+
+25.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ make
+gcc -Wall -O2 -Wall info.c -o info
+gcc -Wall -O2 -Wall allops.c -o allops
+make -C /lib/modules/`uname -r`/build M=`pwd` modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-125-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/GPIO/gcore.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/GPIO/gcore.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/GPIO/gcore.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-125-generic»
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ sudo insmod gcore.ko
+insmod: ERROR: could not insert module gcore.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ dmesg | tail -n2
+[12187.692312] 1
+[12187.692314] offset: 0 - enable
+
+----------------------------------------------------------------------------------------------------------------------------
+
+root@R420:/sys/class/gpio# pwd
+/sys/class/gpio
+
+root@R420:/sys/class/gpio# ls -l
+итого 0
+--w------- 1 root root 4096 авг 25 11:49 export
+--w------- 1 root root 4096 авг 25 11:49 unexport
+
+root@R420:/sys/class/gpio# echo 1 > export
+bash: echo: ошибка записи: Недопустимый аргумент
+
+root@R420:/sys/class/gpio# echo 10 > export
+bash: echo: ошибка записи: Недопустимый аргумент
+
+root@R420:/sys/class/gpio# echo $?
+1
+
+root@R420:/sys/class/gpio# ls /dev/g*
+ls: невозможно получить доступ к '/dev/g*': Нет такого файла или каталога
+
+============================================================================================================================

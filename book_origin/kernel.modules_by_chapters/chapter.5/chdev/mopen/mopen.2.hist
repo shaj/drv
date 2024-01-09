@@ -1,0 +1,490 @@
+14.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ pwd
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.o
+In file included from ./include/linux/printk.h:7,
+                 from ./include/linux/kernel.h:15,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:9,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:1:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c: In function ‘mopen_release’:
+./include/linux/kern_levels.h:5:18: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 4 has type ‘int’ [-Wformat=]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+./include/linux/kern_levels.h:14:19: note: in expansion of macro ‘KERN_SOH’
+   14 | #define KERN_INFO KERN_SOH "6" /* informational */
+      |                   ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:17:42: note: in expansion of macro ‘KERN_INFO’
+   17 | #define LOG(...) if( debug !=0 ) printk( KERN_INFO "! "__VA_ARGS__ )
+      |                                          ^~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:48:4: note: in expansion of macro ‘LOG’
+   48 |    LOG( "close - node: %p, file: %p, refcount: %ld", n, f, module_refcount( THIS_MODULE ) );
+      |    ^~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:48:50: note: format string is defined here
+   48 |    LOG( "close - node: %p, file: %p, refcount: %ld", n, f, module_refcount( THIS_MODULE ) );
+      |                                                ~~^
+      |                                                  |
+      |                                                  long int
+      |                                                %d
+In file included from ./include/linux/printk.h:7,
+                 from ./include/linux/kernel.h:15,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:9,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:1:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c: In function ‘mopen_read’:
+./include/linux/kern_levels.h:5:18: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 5 has type ‘int’ [-Wformat=]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+./include/linux/kern_levels.h:14:19: note: in expansion of macro ‘KERN_SOH’
+   14 | #define KERN_INFO KERN_SOH "6" /* informational */
+      |                   ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:17:42: note: in expansion of macro ‘KERN_INFO’
+   17 | #define LOG(...) if( debug !=0 ) printk( KERN_INFO "! "__VA_ARGS__ )
+      |                                          ^~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:62:4: note: in expansion of macro ‘LOG’
+   62 |    LOG( "read - file: %p, read from %p bytes %ld; refcount: %ld",
+      |    ^~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:62:63: note: format string is defined here
+   62 |    LOG( "read - file: %p, read from %p bytes %ld; refcount: %ld",
+      |                                                             ~~^
+      |                                                               |
+      |                                                               long int
+      |                                                             %d
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:65:17: error: implicit declaration of function ‘copy_to_user’; did you mean ‘raw_copy_to_user’? [-Werror=implicit-function-declaration]
+   65 |       int res = copy_to_user( (void*)buf, data->buf, strlen( data->buf ) );
+      |                 ^~~~~~~~~~~~
+      |                 raw_copy_to_user
+In file included from ./include/linux/printk.h:7,
+                 from ./include/linux/kernel.h:15,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:9,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:1:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c: In function ‘mopen_write’:
+./include/linux/kern_levels.h:5:18: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 5 has type ‘int’ [-Wformat=]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+./include/linux/kern_levels.h:14:19: note: in expansion of macro ‘KERN_SOH’
+   14 | #define KERN_INFO KERN_SOH "6" /* informational */
+      |                   ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:17:42: note: in expansion of macro ‘KERN_INFO’
+   17 | #define LOG(...) if( debug !=0 ) printk( KERN_INFO "! "__VA_ARGS__ )
+      |                                          ^~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:81:4: note: in expansion of macro ‘LOG’
+   81 |    LOG( "write - file: %p, write to %p bytes %ld; refcount: %ld",
+      |    ^~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:81:63: note: format string is defined here
+   81 |    LOG( "write - file: %p, write to %p bytes %ld; refcount: %ld",
+      |                                                             ~~^
+      |                                                               |
+      |                                                               long int
+      |                                                             %d
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:83:10: error: implicit declaration of function ‘copy_from_user’; did you mean ‘raw_copy_from_user’? [-Werror=implicit-function-declaration]
+   83 |    res = copy_from_user( data->buf, (void*)buf, len );
+      |          ^~~~~~~~~~~~~~
+      |          raw_copy_from_user
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:13: module] Ошибка 2
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.o
+In file included from ./include/linux/printk.h:7,
+                 from ./include/linux/kernel.h:15,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:9,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:1:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c: In function ‘mopen_release’:
+./include/linux/kern_levels.h:5:18: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 4 has type ‘int’ [-Wformat=]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+./include/linux/kern_levels.h:14:19: note: in expansion of macro ‘KERN_SOH’
+   14 | #define KERN_INFO KERN_SOH "6" /* informational */
+      |                   ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:18:42: note: in expansion of macro ‘KERN_INFO’
+   18 | #define LOG(...) if( debug !=0 ) printk( KERN_INFO "! "__VA_ARGS__ )
+      |                                          ^~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:49:4: note: in expansion of macro ‘LOG’
+   49 |    LOG( "close - node: %p, file: %p, refcount: %ld", n, f, module_refcount( THIS_MODULE ) );
+      |    ^~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:49:50: note: format string is defined here
+   49 |    LOG( "close - node: %p, file: %p, refcount: %ld", n, f, module_refcount( THIS_MODULE ) );
+      |                                                ~~^
+      |                                                  |
+      |                                                  long int
+      |                                                %d
+In file included from ./include/linux/printk.h:7,
+                 from ./include/linux/kernel.h:15,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:9,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:1:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c: In function ‘mopen_read’:
+./include/linux/kern_levels.h:5:18: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 5 has type ‘int’ [-Wformat=]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+./include/linux/kern_levels.h:14:19: note: in expansion of macro ‘KERN_SOH’
+   14 | #define KERN_INFO KERN_SOH "6" /* informational */
+      |                   ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:18:42: note: in expansion of macro ‘KERN_INFO’
+   18 | #define LOG(...) if( debug !=0 ) printk( KERN_INFO "! "__VA_ARGS__ )
+      |                                          ^~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:63:4: note: in expansion of macro ‘LOG’
+   63 |    LOG( "read - file: %p, read from %p bytes %ld; refcount: %ld",
+      |    ^~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:63:63: note: format string is defined here
+   63 |    LOG( "read - file: %p, read from %p bytes %ld; refcount: %ld",
+      |                                                             ~~^
+      |                                                               |
+      |                                                               long int
+      |                                                             %d
+In file included from ./include/linux/printk.h:7,
+                 from ./include/linux/kernel.h:15,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:9,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:1:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c: In function ‘mopen_write’:
+./include/linux/kern_levels.h:5:18: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 5 has type ‘int’ [-Wformat=]
+    5 | #define KERN_SOH "\001"  /* ASCII Start Of Header */
+      |                  ^~~~~~
+./include/linux/kern_levels.h:14:19: note: in expansion of macro ‘KERN_SOH’
+   14 | #define KERN_INFO KERN_SOH "6" /* informational */
+      |                   ^~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:18:42: note: in expansion of macro ‘KERN_INFO’
+   18 | #define LOG(...) if( debug !=0 ) printk( KERN_INFO "! "__VA_ARGS__ )
+      |                                          ^~~~~~~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:82:4: note: in expansion of macro ‘LOG’
+   82 |    LOG( "write - file: %p, write to %p bytes %ld; refcount: %ld",
+      |    ^~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.c:82:63: note: format string is defined here
+   82 |    LOG( "write - file: %p, write to %p bytes %ld; refcount: %ld",
+      |                                                             ~~^
+      |                                                               |
+      |                                                               long int
+      |                                                             %d
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc pmopen.c -o pmopen
+pmopen.c: In function ‘prepare’:
+pmopen.c:14:16: warning: implicit declaration of function ‘write’; did you mean ‘fwrite’? [-Wimplicit-function-declaration]
+   14 |    if( ( res = write( df, test, len ) ) != len )
+      |                ^~~~~
+      |                fwrite
+pmopen.c: In function ‘test’:
+pmopen.c:26:19: warning: implicit declaration of function ‘read’; did you mean ‘fread’? [-Wimplicit-function-declaration]
+   26 |       if( ( res = read( df, buf, LEN_MSG ) ) > 0 ) {
+      |                   ^~~~
+      |                   fread
+pmopen.c: In function ‘main’:
+pmopen.c:45:4: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   45 |    close( df1 );
+      |    ^~~~~
+      |    pclose
+gcc simple.c -o simple
+simple.c: In function ‘main’:
+simple.c:16:4: warning: implicit declaration of function ‘gets’; did you mean ‘fgets’? [-Wimplicit-function-declaration]
+   16 |    gets( msg ); // gets() - опасная функция!
+      |    ^~~~
+      |    fgets
+simple.c:18:16: warning: implicit declaration of function ‘write’; did you mean ‘fwrite’? [-Wimplicit-function-declaration]
+   18 |    if( ( res = write( df, msg, len ) ) != len )
+      |                ^~~~~
+      |                fwrite
+simple.c:22:19: warning: implicit declaration of function ‘read’; did you mean ‘fread’? [-Wimplicit-function-declaration]
+   22 |       if( ( res = read( df, p, sizeof( msg ) ) ) > 0 ) {
+      |                   ^~~~
+      |                   fread
+simple.c:31:4: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   31 |    close( df );
+      |    ^~~~~
+      |    pclose
+/usr/bin/ld: /tmp/ccVPkZgt.o: в функции «main»:
+simple.c:(.text+0x15d): предупреждение: the `gets' function is dangerous and should not be used.
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 12368 июн 14 20:03 mmopen.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ modinfo mmopen.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.ko
+version:        6.4
+author:         Oleg Tsiliuric <olej@front.ru>
+license:        GPL
+srcversion:     26A751190ADD9D9603DC4A4
+depends:        
+retpoline:      Y
+name:           mmopen
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+parm:           mode:int
+parm:           debug:int
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc pmopen.c -o pmopen
+pmopen.c: In function ‘prepare’:
+pmopen.c:14:16: warning: implicit declaration of function ‘write’; did you mean ‘fwrite’? [-Wimplicit-function-declaration]
+   14 |    if( ( res = write( df, test, len ) ) != len )
+      |                ^~~~~
+      |                fwrite
+pmopen.c: In function ‘test’:
+pmopen.c:26:19: warning: implicit declaration of function ‘read’; did you mean ‘fread’? [-Wimplicit-function-declaration]
+   26 |       if( ( res = read( df, buf, LEN_MSG ) ) > 0 ) {
+      |                   ^~~~
+      |                   fread
+pmopen.c: In function ‘main’:
+pmopen.c:45:4: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   45 |    close( df1 );
+      |    ^~~~~
+      |    pclose
+gcc simple.c -o simple
+simple.c: In function ‘main’:
+simple.c:16:4: warning: implicit declaration of function ‘gets’; did you mean ‘fgets’? [-Wimplicit-function-declaration]
+   16 |    gets( msg ); // gets() - опасная функция!
+      |    ^~~~
+      |    fgets
+simple.c:18:16: warning: implicit declaration of function ‘write’; did you mean ‘fwrite’? [-Wimplicit-function-declaration]
+   18 |    if( ( res = write( df, msg, len ) ) != len )
+      |                ^~~~~
+      |                fwrite
+simple.c:22:19: warning: implicit declaration of function ‘read’; did you mean ‘fread’? [-Wimplicit-function-declaration]
+   22 |       if( ( res = read( df, p, sizeof( msg ) ) ) > 0 ) {
+      |                   ^~~~
+      |                   fread
+simple.c:31:4: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   31 |    close( df );
+      |    ^~~~~
+      |    pclose
+/usr/bin/ld: /tmp/cckXamUJ.o: в функции «main»:
+simple.c:(.text+0x15d): предупреждение: the `gets' function is dangerous and should not be used.
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc pmopen.c -o pmopen
+gcc simple.c -o simple
+simple.c: In function ‘main’:
+simple.c:17:4: warning: implicit declaration of function ‘gets’; did you mean ‘fgets’? [-Wimplicit-function-declaration]
+   17 |    gets( msg ); // gets() - опасная функция!
+      |    ^~~~
+      |    fgets
+/usr/bin/ld: /tmp/ccawqCBZ.o: в функции «main»:
+simple.c:(.text+0x15d): предупреждение: the `gets' function is dangerous and should not be used.
+
+==================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dev/mopen/mmopen.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+gcc simple.c -o simple
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo insmod ./mmopen.ko debug=1 mode=0 
+[sudo] пароль для olej:       
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ cat /dev/mopen
+cat: /dev/mopen: Отказано в доступе
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo cat /dev/mopen
+static: not initialized!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo echo 777777777 > /dev/mopen
+bash: /dev/mopen: Отказано в доступе
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ ls -l /dev/mopen
+crw------- 1 root root 10, 55 июн 15 20:30 /dev/mopen
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ echo 777777777 | sudo tee /dev/mopen
+777777777
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo cat /dev/mopen
+777777777
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo ./pmopen 
+prepared 7 bytes: 1111111
+prepared 5 bytes: 22222
+------------------------------------
+read 6 bytes: 22222
+
+read end of stream
+------------------------------------
+------------------------------------
+read 6 bytes: 22222
+
+read end of stream
+------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo insmod ./mmopen.ko debug=1 mode=1 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo cat /dev/mopen
+static: not initialized!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ echo 777777777 | sudo tee /dev/mopen
+777777777
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo cat /dev/mopen
+777777777
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo ./pmopen 
+prepared 7 bytes: 1111111
+open device error: Device or resource busy
+write device error: Bad file descriptor
+------------------------------------
+read 8 bytes: 1111111
+
+read end of stream
+------------------------------------
+------------------------------------
+read device error: Bad file descriptor
+------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo rmmod mmopen
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo insmod ./mmopen.ko mode=2 debug=1
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo cat /dev/mopen
+dynamic: not initialized!
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ echo 987654321 | sudo tee /dev/mopen
+987654321
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ dmesg | tail -n10
+[52608.573231] ! installed device /dev/mopen in mode 2
+[52644.371784] ! open - node: 00000000a0d09f6b, file: 0000000052cd11a5, refcount: 1
+[52644.371796] ! read - file: 0000000052cd11a5, read from 000000007a95e1ed bytes 131072; refcount: 1
+[52644.371798] ! return bytes :  26
+[52644.371809] ! read - file: 0000000052cd11a5, read from 000000007a95e1ed bytes 131072; refcount: 1
+[52644.371810] ! return : EOF
+[52644.371821] ! close - node: 00000000a0d09f6b, file: 0000000052cd11a5, refcount: 1
+[52669.029744] ! open - node: 00000000a0d09f6b, file: 00000000442313cf, refcount: 1
+[52669.029790] ! write - file: 00000000442313cf, write to 000000002ab3bcd3 bytes 10; refcount: 1
+[52669.029792] ! put bytes : 10
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo ./pmopen 
+prepared 7 bytes: 1111111
+prepared 5 bytes: 22222
+------------------------------------
+read 8 bytes: 1111111
+
+read end of stream
+------------------------------------
+------------------------------------
+read 6 bytes: 22222
+
+read end of stream
+------------------------------------
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ dmesg | tail -n15
+[52953.484737] ! open - node: 00000000a0d09f6b, file: 00000000e3632089, refcount: 1
+[52953.484748] ! write - file: 00000000e3632089, write to 00000000cf2a1986 bytes 7; refcount: 1
+[52953.484750] ! put bytes : 7
+[52953.484930] ! open - node: 00000000a0d09f6b, file: 00000000af8dd9cb, refcount: 2
+[52953.484936] ! write - file: 00000000af8dd9cb, write to 000000009e6cd3eb bytes 5; refcount: 2
+[52953.484937] ! put bytes : 5
+[52953.484950] ! read - file: 00000000e3632089, read from 00000000cf2a1986 bytes 256; refcount: 2
+[52953.484952] ! return bytes :  8
+[52953.484961] ! read - file: 00000000e3632089, read from 00000000cf2a1986 bytes 256; refcount: 2
+[52953.484962] ! return : EOF
+[52953.484992] ! read - file: 00000000af8dd9cb, read from 000000009e6cd3eb bytes 256; refcount: 2
+[52953.484993] ! return bytes :  6
+[52953.485005] ! read - file: 00000000af8dd9cb, read from 000000009e6cd3eb bytes 256; refcount: 2
+[52953.485005] ! return : EOF
+[52953.485018] ! close - node: 00000000a0d09f6b, file: 00000000e3632089, refcount: 2
+
+----------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ lsmod | head -n2
+Module                  Size  Used by
+mmopen                 16384  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ ls /sys/module/mmopen/parameters
+debug  mode
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ cat /sys/module/mmopen/parameters/*
+1
+2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo ./simple 
+> 1234
+read 5 bytes: 1234
+1234
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo ./simple
+[sudo] пароль для olej:       
+> 5678
+read 5 bytes: 5678
+5678
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ sudo ./simple
+[sudo] пароль для olej:       
+> ^C
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ dmesg | tail -n14
+[54789.287543] ! write - file: 00000000424e3044, write to 000000008e1b4d52 bytes 5; refcount: 3
+[54789.287546] ! put bytes : 5
+[54789.287550] ! read - file: 00000000424e3044, read from 000000008e1b4d52 bytes 160; refcount: 3
+[54789.287552] ! return bytes :  5
+[54789.287600] ! read - file: 00000000424e3044, read from 000000008e1b4d52 bytes 160; refcount: 3
+[54789.287601] ! return : EOF
+[54789.287610] ! close - node: 00000000a0d09f6b, file: 00000000424e3044, refcount: 3
+[54795.351883] ! write - file: 0000000049c2c7d7, write to 00000000f2c7d547 bytes 5; refcount: 2
+[54795.351889] ! put bytes : 5
+[54795.351908] ! read - file: 0000000049c2c7d7, read from 00000000f2c7d547 bytes 160; refcount: 2
+[54795.351909] ! return bytes :  5
+[54795.351943] ! read - file: 0000000049c2c7d7, read from 00000000f2c7d547 bytes 160; refcount: 2
+[54795.351943] ! return : EOF
+[54795.351953] ! close - node: 00000000a0d09f6b, file: 0000000049c2c7d7, refcount: 2
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dev/mopen$ lsmod | head -n2
+Module                  Size  Used by
+mmopen                 16384  0
+
+
+==================================================================================================================================

@@ -1,0 +1,260 @@
+13.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/memory/slab$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	Linux Mint 20.3
+Release:	20.3
+Codename:	una
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/time modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.o
+see include/linux/module.h for more information
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.o
+see include/linux/module.h for more information
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make calibr.o rdtsc.o proc_hz.o set_rt.o
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+gcc -c calibr.c -o calibr.o 
+ar -r libdiag.a calibr.o        
+ar: создаётся libdiag.a
+gcc -c rdtsc.c -o rdtsc.o 
+ar -r libdiag.a rdtsc.o        
+gcc -c proc_hz.c -o proc_hz.o 
+ar -r libdiag.a proc_hz.o        
+gcc -c set_rt.c -o set_rt.o 
+ar -r libdiag.a set_rt.o        
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+ar -t libdiag.a
+calibr.o
+rdtsc.o
+proc_hz.o
+set_rt.o
+make clean
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+gcc clock.c -Bstatic -L./ -ldiag -o clock
+clock.c: In function ‘main’:
+clock.c:4:19: warning: format ‘%llX’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    4 |    printf( "%016llX\n", rdtsc() );
+      |             ~~~~~~^     ~~~~~~~
+      |                   |     |
+      |                   |     uint64_t {aka long unsigned int}
+      |                   long long unsigned int
+      |             %016lX
+clock.c:5:19: warning: format ‘%llX’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    5 |    printf( "%016llX\n", rdtsc() );
+      |             ~~~~~~^     ~~~~~~~
+      |                   |     |
+      |                   |     uint64_t {aka long unsigned int}
+      |                   long long unsigned int
+      |             %016lX
+clock.c:6:19: warning: format ‘%llX’ expects argument of type ‘long long unsigned int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    6 |    printf( "%016llX\n", rdtsc() );
+      |             ~~~~~~^     ~~~~~~~
+      |                   |     |
+      |                   |     uint64_t {aka long unsigned int}
+      |                   long long unsigned int
+      |             %016lX
+clock.c:7:16: warning: format ‘%lld’ expects argument of type ‘long long int’, but argument 2 has type ‘uint64_t’ {aka ‘long unsigned int’} [-Wformat=]
+    7 |    printf( "%lld\n", proc_hz() );
+      |             ~~~^     ~~~~~~~~~
+      |                |     |
+      |                |     uint64_t {aka long unsigned int}
+      |                long long int
+      |             %ld
+gcc pdelay.c -Bstatic -L./ -ldiag -o pdelay
+gcc     rtcr.c   -o rtcr
+rtcr.c: In function ‘main’:
+rtcr.c:16:4: warning: implicit declaration of function ‘close’; did you mean ‘pclose’? [-Wimplicit-function-declaration]
+   16 |    close( fd );
+      |    ^~~~~
+      |    pclose
+gcc rtprd.c -Bstatic -L./ -ldiag -o rtprd
+rtprd.c: In function ‘main’:
+rtprd.c:39:4: warning: implicit declaration of function ‘mlockall’ [-Wimplicit-function-declaration]
+   39 |    mlockall( MCL_CURRENT );                 // Avoid paging and related indeterminism
+      |    ^~~~~~~~
+
+
+============================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/time$ make 
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/time modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.o
+see include/linux/module.h for more information
+WARNING: modpost: missing MODULE_LICENSE() in /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.o
+see include/linux/module.h for more information
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/htick.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/interv.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/time/tick.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make calibr.o rdtsc.o proc_hz.o set_rt.o
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+gcc -c calibr.c -o calibr.o 
+ar -r libdiag.a calibr.o        
+gcc -c rdtsc.c -o rdtsc.o 
+ar -r libdiag.a rdtsc.o        
+gcc -c proc_hz.c -o proc_hz.o 
+ar -r libdiag.a proc_hz.o        
+gcc -c set_rt.c -o set_rt.o 
+ar -r libdiag.a set_rt.o        
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+ar -t libdiag.a
+calibr.o
+rdtsc.o
+proc_hz.o
+set_rt.o
+make clean
+make[1]: вход в каталог «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+make[1]: выход из каталога «/home/olej/2022/own.BOOKs/BHV.kernel/examples/time»
+gcc clock.c -Bstatic -L./ -ldiag -o clock
+gcc pdelay.c -Bstatic -L./ -ldiag -o pdelay
+gcc rtprd.c -Bstatic -L./ -ldiag -o rtprd
+
+============================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/time$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Debian
+Description:	Debian GNU/Linux 10 (buster)
+Release:	10
+Codename:	buster
+
+olej@orangepione:~/2022/kernel/examples/time$ make 
+make -C /lib/modules/5.15.48-sunxi/build M=/home/olej/2022/kernel/examples/time modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.48-sunxi»
+  CC [M]  /home/olej/2022/kernel/examples/time/tick.o
+  CC [M]  /home/olej/2022/kernel/examples/time/htick.o
+  CC [M]  /home/olej/2022/kernel/examples/time/interv.o
+  MODPOST /home/olej/2022/kernel/examples/time/Module.symvers
+ERROR: modpost: missing MODULE_LICENSE() in /home/olej/2022/kernel/examples/time/tick.o
+ERROR: modpost: missing MODULE_LICENSE() in /home/olej/2022/kernel/examples/time/interv.o
+make[2]: *** [scripts/Makefile.modpost:134: /home/olej/2022/kernel/examples/time/Module.symvers] Error 1
+make[2]: *** Deleting file '/home/olej/2022/kernel/examples/time/Module.symvers'
+make[1]: *** [Makefile:1785: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.48-sunxi»
+make: *** [Makefile:16: mod] Ошибка 2
+
+----------------------------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/time$ make 
+make -C /lib/modules/5.15.48-sunxi/build M=/home/olej/2022/kernel/examples/time modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.48-sunxi»
+  CC [M]  /home/olej/2022/kernel/examples/time/tick.o
+  CC [M]  /home/olej/2022/kernel/examples/time/htick.o
+  CC [M]  /home/olej/2022/kernel/examples/time/interv.o
+  MODPOST /home/olej/2022/kernel/examples/time/Module.symvers
+  CC [M]  /home/olej/2022/kernel/examples/time/htick.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/time/htick.ko
+  CC [M]  /home/olej/2022/kernel/examples/time/interv.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/time/interv.ko
+  CC [M]  /home/olej/2022/kernel/examples/time/tick.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/time/tick.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.48-sunxi»
+make calibr.o rdtsc.o proc_hz.o set_rt.o
+make[1]: вход в каталог «/home/olej/2022/kernel/examples/time»
+gcc -c calibr.c -o calibr.o 
+ar -r libdiag.a calibr.o        
+gcc -c rdtsc.c -o rdtsc.o 
+rdtsc.c: In function ‘rdtsc’:
+rdtsc.c:8:4: error: impossible constraint in ‘asm’
+    __asm__ __volatile__ ("rdtsc" : "=a"(sc.r.lo), "=d"(sc.r.hi));
+    ^~~~~~~
+make[1]: *** [Makefile:37: rdtsc.o] Ошибка 1
+make[1]: выход из каталога «/home/olej/2022/kernel/examples/time»
+make: *** [Makefile:28: lib] Ошибка 2
+
+регистры - другие !!! - архитекстура ARM
+
+============================================================================================================================
+
+olej@lmde32:~/kernel/time$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Linuxmint
+Description:	LMDE 5 (elsie)
+Release:	5
+Codename:	elsie
+
+olej@lmde32:~/kernel/time$ inxi -S
+System:    Host: lmde32 Kernel: 5.10.0-15-686 i686 bits: 32 Console: tty 13 Distro: LMDE 5 Elsie 
+
+olej@lmde32:~/kernel/time$ uname -a
+Linux lmde32 5.10.0-15-686 #1 SMP Debian 5.10.120-1 (2022-06-09) i686 GNU/Linux
+
+
+olej@lmde32:~/kernel/time$ make
+make -C /lib/modules/5.10.0-15-686/build M=/home/olej/kernel/time modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-15-686»
+  CC [M]  /home/olej/kernel/time/tick.o
+  CC [M]  /home/olej/kernel/time/htick.o
+  CC [M]  /home/olej/kernel/time/interv.o
+  MODPOST /home/olej/kernel/time/Module.symvers
+  CC [M]  /home/olej/kernel/time/htick.mod.o
+  LD [M]  /home/olej/kernel/time/htick.ko
+  CC [M]  /home/olej/kernel/time/interv.mod.o
+  LD [M]  /home/olej/kernel/time/interv.ko
+  CC [M]  /home/olej/kernel/time/tick.mod.o
+  LD [M]  /home/olej/kernel/time/tick.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-15-686»
+make calibr.o rdtsc.o proc_hz.o set_rt.o
+make[1]: вход в каталог «/home/olej/kernel/time»
+gcc -c calibr.c -o calibr.o 
+ar -r libdiag.a calibr.o        
+gcc -c rdtsc.c -o rdtsc.o 
+ar -r libdiag.a rdtsc.o        
+gcc -c proc_hz.c -o proc_hz.o 
+ar -r libdiag.a proc_hz.o        
+gcc -c set_rt.c -o set_rt.o 
+ar -r libdiag.a set_rt.o        
+make[1]: выход из каталога «/home/olej/kernel/time»
+ar -t libdiag.a
+calibr.o
+rdtsc.o
+proc_hz.o
+set_rt.o
+make clean
+make[1]: вход в каталог «/home/olej/kernel/time»
+make[1]: выход из каталога «/home/olej/kernel/time»
+gcc clock.c -Bstatic -L./ -ldiag -o clock
+gcc pdelay.c -Bstatic -L./ -ldiag -o pdelay
+gcc rtprd.c -Bstatic -L./ -ldiag -o rtprd
+
+
+root@lmde32:/home/olej/kernel/time# date; insmod interv.ko
+Сб 13 авг 2022 02:58:03 EEST
+
+root@lmde32:/home/olej/kernel/time# date; rmmod interv
+Сб 13 авг 2022 02:58:26 EEST
+
+root@lmde32:/home/olej/kernel/time# dmesg | tail -n3
+[101865.933176] module: jiffies on start = 1833FA0
+[101889.068876] module: jiffies on finish = 1835635
+[101889.068881] module: interval of life = 23
+
+
+============================================================================================================================

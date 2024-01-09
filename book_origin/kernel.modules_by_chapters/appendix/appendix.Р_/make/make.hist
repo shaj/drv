@@ -1,0 +1,12 @@
+24.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ make -f/dev/null --print-data-base > make.data-base
+make: *** Нет целей.  Останов.
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ echo $?
+2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/GPIO$ ls -l make.data-base
+-rw-rw-r-- 1 olej olej 48290 авг 24 21:13 make.data-base
+

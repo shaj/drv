@@ -1,0 +1,55 @@
+19.08.2022
+==========
+
+$ sudo inxi -MSxxx
+[sudo] пароль для olej: 
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.7 dm: slimski v: 1.5.0
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+Machine:
+  Type: Virtualbox System: innotek GmbH product: VirtualBox v: 1.2
+    serial: N/A Chassis: Oracle Corporation type: 1 serial: N/A
+  Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek GmbH
+    v: VirtualBox date: 12/01/2006
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+scripts/Makefile.build:49: *** CFLAGS was changed in "/home/olej/2022/kernel/file/Makefile". Fix it to use ccflags-y.  Останов.
+make[1]: *** [Makefile:1557: _module_/home/olej/2022/kernel/file] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+make: *** [Makefile:17: default] Ошибка 2
+
+=============================================================================================
+
+$ head -n 12 Makefile 
+CURRENT = $(shell uname -r)
+KDIR = /lib/modules/$(CURRENT)/build
+PWD = $(shell pwd)
+# https://ask-dev.ru/info/403420/kernel-module-compilation-and-kbuildnopedantic
+EXTRA_CFLAGS += -std=gnu11
+ccflags-y  += $(EXTRA_CFLAGS)
+
+obj-m += mod_read.o
+#obj-m += mod_write.o
+#obj-m += mod_vfs.o
+#obj-m += mdw.o
+
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/file/mod_read.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/file/mod_read.mod.o
+  LD [M]  /home/olej/2022/kernel/file/mod_read.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+=============================================================================================
+
+

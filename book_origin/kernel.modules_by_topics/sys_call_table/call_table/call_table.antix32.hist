@@ -1,0 +1,135 @@
+19.08.2022
+==========
+
+$ make disclean
+olej@antix21:~/2022/kernel/sys_call_table/call_table
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.o
+/home/olej/2022/kernel/sys_call_table/call_table/mod_rct.c: In function ‘stread_init’:
+/home/olej/2022/kernel/sys_call_table/call_table/mod_rct.c:72:33: warning: passing argument 2 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   72 |             k = kernel_read(f, p++, 1, &pos);
+      |                                ~^~
+      |                                 |
+      |                                 char *
+In file included from /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:2716:39: note: expected ‘loff_t’ {aka ‘long long int’} but argument is of type ‘char *’
+ 2716 | extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+      |                                       ^~~~~~
+/home/olej/2022/kernel/sys_call_table/call_table/mod_rct.c:72:37: warning: passing argument 3 of ‘kernel_read’ makes pointer from integer without a cast [-Wint-conversion]
+   72 |             k = kernel_read(f, p++, 1, &pos);
+      |                                     ^
+      |                                     |
+      |                                     int
+In file included from /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:2716:47: note: expected ‘char *’ but argument is of type ‘int’
+ 2716 | extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+      |                                               ^~~~~~
+/home/olej/2022/kernel/sys_call_table/call_table/mod_rct.c:72:40: warning: passing argument 4 of ‘kernel_read’ makes integer from pointer without a cast [-Wint-conversion]
+   72 |             k = kernel_read(f, p++, 1, &pos);
+      |                                        ^~~~
+      |                                        |
+      |                                        loff_t * {aka long long int *}
+In file included from /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.c:2:
+./include/linux/fs.h:2716:55: note: expected ‘long unsigned int’ but argument is of type ‘loff_t *’ {aka ‘long long int *’}
+ 2716 | extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+      |                                                       ^~~~~~~~~~~~~
+  CC [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC      /home/olej/2022/kernel/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_kct.ko
+  CC      /home/olej/2022/kernel/sys_call_table/call_table/mod_koes.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_koes.ko
+  CC      /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+================================================================================================
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/fs.h#L2996
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+
+https://elixir.bootlin.com/linux/v4.19/source/include/linux/fs.h
+[2875]
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+
+https://elixir.bootlin.com/linux/v4.15.18/source/include/linux/fs.h
+[2843]
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+
+https://elixir.bootlin.com/linux/v4.14/source/include/linux/fs.h
+[2823]
+extern ssize_t kernel_read(struct file *, void *, size_t, loff_t *);
+
+------------------------------------------------------------------------------------------------
+
+https://elixir.bootlin.com/linux/v4.13.16/source/include/linux/fs.h
+[2775]
+extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+
+
+/lib/modules/4.9.0-279-~uild/include/linux/fs.h
+[2716]
+extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+
+https://elixir.bootlin.com/linux/v4.9/source/include/linux/fs.h
+[2699]
+extern int kernel_read(struct file *, loff_t, char *, unsigned long);
+
+================================================================================================
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-486-smp #1 SMP Sun Aug 8 20:59:37 EEST 2021 i686 GNU/Linux
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/call_table modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.o
+  CC [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_kct.o
+  CC [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_koes.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC      /home/olej/2022/kernel/sys_call_table/call_table/mod_kct.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_kct.ko
+  CC      /home/olej/2022/kernel/sys_call_table/call_table/mod_koes.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_koes.ko
+  CC      /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/call_table/mod_rct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ time sudo insmod mod_rct.ko
+insmod: ERROR: could not insert module mod_rct.ko: Unknown symbol in module
+
+real    0m0,046s
+user    0m0,019s
+sys     0m0,012s
+
+
+$ dmesg | tail -n1
+[134583.413611] + no config: CONFIG_KALLSYMS or CONFIG_KALLSYMS_ALL
+
+------------------------------------------------------------------------------------------------
+
+$ cat /lib/modules/`uname -r`/build/.config | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ABSOLUTE_PERCPU is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+================================================================================================
+
+$ sudo grep ' kallsyms_lookup_name' /proc/kallsyms
+[sudo] password for olej: 
+c90d3950 T kallsyms_lookup_name
+
+$ sudo grep ' kallsyms_on_each_symbol' /proc/kallsyms
+[sudo] password for olej: 
+c90d3890 T kallsyms_on_each_symbol
+
+================================================================================================

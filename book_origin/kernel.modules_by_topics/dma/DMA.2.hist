@@ -1,0 +1,133 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dma$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dma modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma_PCI_API.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma_PCI_API.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma_PCI_API.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dma$ ls *.ko
+lab1_dma.ko  lab1_dma_PCI_API.ko
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dma$ modinfo *.ko
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma.ko
+license:        GPL v2
+description:    LDD:1.0 s_23/lab1_dma.c
+author:         Oleg Tsiliuric
+author:         Jerry Cooperstein
+srcversion:     FDB003B1C5F9D3DC50A8E6C
+depends:        
+retpoline:      Y
+name:           lab1_dma
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+filename:       /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma_PCI_API.ko
+license:        GPL v2
+description:    LDD:1.0 s_23/lab1_dma.c
+author:         Oleg Tsiliuric
+author:         Jerry Cooperstein
+srcversion:     A396137CEB5CAD68497959E
+depends:        
+retpoline:      Y
+name:           lab1_dma_PCI_API
+vermagic:       5.4.0-117-generic SMP mod_unload modversions 
+
+=====================================================================================================================================
+
+17.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/dma$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/dma modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma_PCI_API.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma_PCI_API.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/dma/lab1_dma_PCI_API.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+=====================================================================================================================================
+
+$ sudo inxi -MCxxx
+[sudo] пароль для olej: 
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF Chassis: type: 4 serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64
+    type: MCP smt: <unsupported> arch: Puma rev: 1 cache: L1: 128 KiB
+    L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A volts: 0.9 V ext-clock: 100 MHz
+    cores: 1: 1198 2: 1198 bogomips: 4790
+  Flags: avx ht lm nx pae sse sse2 sse3 sse4_1 sse4_2 sse4a ssse3 svm
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/dma modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/dma/lab1_dma.o
+  CC [M]  /home/olej/2022/kernel/dma/lab1_dma_PCI_API.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/dma/lab1_dma.mod.o
+  LD [M]  /home/olej/2022/kernel/dma/lab1_dma.ko
+  CC      /home/olej/2022/kernel/dma/lab1_dma_PCI_API.mod.o
+  LD [M]  /home/olej/2022/kernel/dma/lab1_dma_PCI_API.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+
+$ sudo insmod lab1_dma.ko
+Убито
+
+olej@antix21:~/2022/kernel/dma
+$ lsmod | head -n3
+Module                  Size  Used by
+lab1_dma                1412  1
+8021q                  20506  0
+
+
+$ dmesg | tail -n50
+...
+[ 1485.891268] lab1_dma: loading out-of-tree module taints kernel.
+[ 1485.891505] => kbuf=ffff880035c50000, handle=    35c50000, size = 40960
+[ 1485.891509] => (kbuf-handle)= ffff880000000000, 18446612132314218496, PAGE_OFFSET=18446612132314218496, compare=0
+[ 1485.891510] => string written was, This is the dma_alloc_coherent() string
+[ 1485.891533] BUG: unable to handle kernel NULL pointer dereference at 00000000000001f8
+[ 1485.891897] IP: [<ffffffff813d8e22>] swiotlb_map_page+0x32/0xd0
+[ 1485.892163] PGD 0 
+[ 1485.892319] Oops: 0000 [#1] PREEMPT SMP
+...
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+$ sudo insmod lab1_dma_PCI_API.ko
+
+
+$ dmesg | tail -n70
+...
+[ 2101.681981] => kbuf=ffff880035c50000, handle=    35c50000, size = 40960
+[ 2101.681991] => (kbuf-handle)= ffff880000000000, 18446612132314218496, PAGE_OFFSET=18446612132314218496, compare=0
+[ 2101.681995] => string written was, This is the pci_alloc_consistent() string
+[ 2101.682020] BUG: unable to handle kernel NULL pointer dereference at 00000000000001f8
+[ 2101.689773] IP: [<ffffffff813d8e22>] swiotlb_map_page+0x32/0xd0
+[ 2101.697280] PGD 0 
+[ 2101.704490] Oops: 0000 [#2] PREEMPT SMP
+...
+
+=====================================================================================================================================

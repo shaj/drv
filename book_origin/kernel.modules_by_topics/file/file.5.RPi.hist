@@ -1,0 +1,113 @@
+28.06.2022
+==========
+
+olej@raspberrypi:~/kernel/examples/file $ pwd
+/home/olej/kernel/examples/file
+
+
+olej@raspberrypi:~/kernel/examples/file $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/file modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/file/mod_read.o
+  CC [M]  /home/olej/kernel/examples/file/mod_write.o
+  CC [M]  /home/olej/kernel/examples/file/mod_vfs.o
+/home/olej/kernel/examples/file/mod_vfs.c: In function ‘kread_init’:
+/home/olej/kernel/examples/file/mod_vfs.c:37:14: error: implicit declaration of function ‘get_fs’; did you mean ‘sget_fc’? [-Werror=implicit-function-declaration]
+   37 |     old_fs = get_fs();                 // буфер в kernel space
+      |              ^~~~~~
+      |              sget_fc
+/home/olej/kernel/examples/file/mod_vfs.c:37:14: error: incompatible types when assigning to type ‘mm_segment_t’ from type ‘int’
+/home/olej/kernel/examples/file/mod_vfs.c:38:5: error: implicit declaration of function ‘set_fs’; did you mean ‘sget_fc’? [-Werror=implicit-function-declaration]
+   38 |     set_fs(KERNEL_DS);
+      |     ^~~~~~
+      |     sget_fc
+/home/olej/kernel/examples/file/mod_vfs.c:38:12: error: ‘KERNEL_DS’ undeclared (first use in this function); did you mean ‘KERNFS_NS’?
+   38 |     set_fs(KERNEL_DS);
+      |            ^~~~~~~~~
+      |            KERNFS_NS
+/home/olej/kernel/examples/file/mod_vfs.c:38:12: note: each undeclared identifier is reported only once for each function it appears in
+In file included from ./include/linux/kernel.h:19,
+                 from ./include/linux/list.h:9,
+                 from ./include/linux/module.h:12,
+                 from /home/olej/kernel/examples/file/mod_vfs.c:1:
+/home/olej/kernel/examples/file/mod_vfs.c:46:20: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘size_t’ {aka ‘unsigned int’} [-Wformat=]
+   46 |             printk("+++ failed to read: %ld\n", n);
+      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~  ~
+      |                                                 |
+      |                                                 size_t {aka unsigned int}
+./include/linux/printk.h:422:11: note: in definition of macro ‘printk_index_wrap’
+  422 |   _p_func(_fmt, ##__VA_ARGS__);    \
+      |           ^~~~
+/home/olej/kernel/examples/file/mod_vfs.c:46:13: note: in expansion of macro ‘printk’
+   46 |             printk("+++ failed to read: %ld\n", n);
+      |             ^~~~~~
+/home/olej/kernel/examples/file/mod_vfs.c:46:43: note: format string is defined here
+   46 |             printk("+++ failed to read: %ld\n", n);
+      |                                         ~~^
+      |                                           |
+      |                                           long int
+      |                                         %d
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:277: /home/olej/kernel/examples/file/mod_vfs.o] Ошибка 1
+make[1]: *** [Makefile:1868: /home/olej/kernel/examples/file] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+make: *** [Makefile:17: default] Ошибка 2
+
+-----------------------------------------------------------------------------------------
+
+olej@raspberrypi:~/kernel/examples/file $ inxi -Sxxx
+System:    Host: raspberrypi Kernel: 5.15.32-v7+ armv7l bits: 32 compiler: gcc v: 10.2.1 Console: tty 3 
+           DM: LightDM 1.26.0 Distro: Raspbian GNU/Linux 11 (bullseye) 
+
+olej@raspberrypi:~/kernel/examples/file $ uname -a
+Linux raspberrypi 5.15.32-v7+ #1538 SMP Thu Mar 31 19:38:48 BST 2022 armv7l GNU/Linux
+
+olej@raspberrypi:~/kernel/examples/file $ ls -l /usr/src
+итого 16
+drwxr-xr-x 23 root root 4096 мая 31 12:42 linux-headers-5.15.32+
+drwxr-xr-x 23 root root 4096 мая 31 12:42 linux-headers-5.15.32-v7+
+drwxr-xr-x 23 root root 4096 мая 31 12:42 linux-headers-5.15.32-v7l+
+drwxr-xr-x  3 root root 4096 апр  4 14:55 sense-hat
+
+
+olej@raspberrypi:~/kernel/examples/file $ du -hs /usr/src/*
+91M	/usr/src/linux-headers-5.15.32+
+91M	/usr/src/linux-headers-5.15.32-v7+
+91M	/usr/src/linux-headers-5.15.32-v7l+
+120K	/usr/src/sense-hat
+
+olej@raspberrypi:~/kernel/examples/file $ uname -r
+5.15.32-v7+
+
+=========================================================================================
+
+olej@raspberrypi:~/kernel/examples/file $ aptitude search linux-doc-
+p   linux-doc-5.10                                  - Linux kernel specific documentation for version 5.10      
+
+olej@raspberrypi:~/kernel/examples/file $ aptitude search debian-kernel
+p   debian-kernel-handbook                          - reference to Debian Linux kernel packages and development 
+p   debian-kernel-handbook-ja                       - reference to Debian Linux kernel packages and development 
+
+olej@raspberrypi:~/kernel/examples/file $ sudo apt install linux-doc-5.10 debian-kernel-handbook
+Чтение списков пакетов… Готово
+Построение дерева зависимостей… Готово
+Чтение информации о состоянии… Готово         
+Следующие НОВЫЕ пакеты будут установлены:
+  debian-kernel-handbook linux-doc-5.10
+Обновлено 0 пакетов, установлено 2 новых пакетов, для удаления отмечено 0 пакетов, и 43 пакетов не обновлено.
+Необходимо скачать 30,2 MB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 167 MB.
+Пол:1 http://mirror.wheel.sk/raspbian/raspbian bullseye/main armhf debian-kernel-handbook all 1.0.19 [26,6 kB]
+Пол:2 http://raspbian.raspberrypi.org/raspbian bullseye/main armhf linux-doc-5.10 all 5.10.120-1+rpi1 [30,2 MB]
+Получено 30,2 MB за 7с (4.529 kB/s)                                                                            
+Выбор ранее не выбранного пакета debian-kernel-handbook.
+(Чтение базы данных … на данный момент установлено 250427 файлов и каталогов.)
+Подготовка к распаковке …/debian-kernel-handbook_1.0.19_all.deb …
+Распаковывается debian-kernel-handbook (1.0.19) …
+Выбор ранее не выбранного пакета linux-doc-5.10.
+Подготовка к распаковке …/linux-doc-5.10_5.10.120-1+rpi1_all.deb …
+Распаковывается linux-doc-5.10 (5.10.120-1+rpi1) …
+Настраивается пакет linux-doc-5.10 (5.10.120-1+rpi1) …
+Настраивается пакет debian-kernel-handbook (1.0.19) …
+
+=========================================================================================

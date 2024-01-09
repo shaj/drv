@@ -1,0 +1,122 @@
+22.08.2022
+==========
+
+olej@raspberrypi:~ $ sudo inxi -MCxxx
+Machine:
+  Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 
+  rev: a21041 serial: 00000000f57e2ca8 
+CPU:
+  Info: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP 
+  arch: v7l rev: 5 
+  features: Use -f option to see features bogomips: 0 
+  Speed: 700 MHz min/max: 600/1000 MHz Core speeds (MHz): 1: 700 2: 700 
+  3: 700 4: 700 
+
+olej@raspberrypi:~ $ sudo grep ' T ' /proc/kallsyms | grep printk$
+801865e4 T vprintk
+8021f994 T trace_array_init_printk
+80223534 T trace_vbprintk
+80223a50 T trace_array_printk
+80223adc T trace_vprintk
+80224a68 T trace_array_vprintk
+8022d664 T __ftrace_vbprintk
+8022d69c T __trace_bprintk
+8022d718 T __trace_printk
+8022d780 T __ftrace_vprintk
+80244220 T __traceiter_bpf_trace_printk
+80245cec T bpf_trace_printk
+805ef210 T aa_label_xprintk
+805ef904 T aa_label_printk
+8077c068 T sdev_prefix_printk
+8077ca68 T scmd_printk
+80a3df28 T _printk
+80a40f3c T f2fs_printk
+80a41788 T _dev_printk
+80a441f0 T netdev_printk
+
+
+olej@raspberrypi:~ $ sudo inxi -MCxxx
+Machine:
+  Type: ARM Device System: Raspberry Pi 2 Model B Rev 1.1 details: BCM2835 
+  rev: a21041 serial: 00000000f57e2ca8 
+CPU:
+  Info: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP 
+  arch: v7l rev: 5 
+  features: Use -f option to see features bogomips: 0 
+  Speed: 700 MHz min/max: 600/1000 MHz Core speeds (MHz): 1: 700 2: 700 
+  3: 700 4: 700 
+
+olej@raspberrypi:~ $ sudo grep ' T ' /proc/kallsyms | grep ' vprintk'$
+801865e4 T vprintk
+
+
+olej@raspberrypi:~/kernel/examples/simple-debug $ make
+make -C /lib/modules/5.15.32-v7+/build M=/home/olej/kernel/examples/simple-debug modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.32-v7+»
+  CC [M]  /home/olej/kernel/examples/simple-debug/md.o
+  MODPOST /home/olej/kernel/examples/simple-debug/Module.symvers
+  CC [M]  /home/olej/kernel/examples/simple-debug/md.mod.o
+  LD [M]  /home/olej/kernel/examples/simple-debug/md.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.32-v7+»
+
+olej@raspberrypi:~/kernel/examples/simple-debug $ ls -l md.ko
+-rw-r--r-- 1 olej olej 3472 авг 22 14:42 md.ko
+
+olej@raspberrypi:~/kernel/examples/simple-debug $ sudo insmod md.ko
+insmod: ERROR: could not insert module md.ko: Operation not permitted
+
+olej@raspberrypi:~/kernel/examples/simple-debug $ dmesg | grep ? -A0
+[880827.647054] ? интересующий нас адрес: 801865e4
+
+olej@raspberrypi:~/kernel/examples/simple-debug $ dmesg | grep ? -A2 -B2
+[880807.435886] hwmon hwmon1: Undervoltage detected!
+[880813.675740] hwmon hwmon1: Voltage normalised
+[880827.647054] ? интересующий нас адрес: 801865e4
+[880828.235703] hwmon hwmon1: Undervoltage detected!
+[880834.475684] hwmon hwmon1: Voltage normalised
+
+
+=========================================================================================================
+
+olej@orangepione:~$ sudo inxi -MCxxx
+[sudo] пароль для olej: 
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family 
+           rev: N/A serial: 02c000815fd5e717 
+CPU:       Topology: Quad Core model: ARMv7 v7l variant: cortex-a7 bits: 32 type: MCP 
+           arch: v7l rev: 5 
+           features: Use -f option to see features bogomips: 0 
+           Speed: 1008 MHz min/max: 480/1008 MHz Core speeds (MHz): 1: 1008 2: 1008 
+           3: 1008 4: 1008 
+
+
+olej@orangepione:~$ sudo inxi -MSxxx
+[sudo] пароль для olej: 
+System:    Host: orangepione Kernel: 5.15.48-sunxi armv7l bits: 32 compiler: N/A 
+           Console: tty 1 dm: LightDM 1.26.0 Distro: Armbian GNU/Linux 10 (buster) 
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family 
+           rev: N/A serial: 02c000815fd5e717 
+
+
+olej@orangepione:~$ sudo grep ' T ' /proc/kallsyms | grep ' vprintk'$
+c0166a80 T vprintk
+
+olej@orangepione:~/2022/kernel/examples/simple-debug$ make
+make -C /lib/modules/5.15.48-sunxi/build M=/home/olej/2022/kernel/examples/simple-debug modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.48-sunxi»
+  CC [M]  /home/olej/2022/kernel/examples/simple-debug/md.o
+  MODPOST /home/olej/2022/kernel/examples/simple-debug/Module.symvers
+  CC [M]  /home/olej/2022/kernel/examples/simple-debug/md.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/simple-debug/md.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.48-sunxi»
+
+olej@raspberrypi:~/kernel/examples/simple-debug $ ls -l md.ko
+-rw-r--r-- 1 olej olej 3472 авг 22 14:42 md.ko
+
+olej@orangepione:~/2022/kernel/examples/simple-debug$ sudo insmod md.ko
+insmod: ERROR: could not insert module md.ko: Operation not permitted
+
+olej@orangepione:~/2022/kernel/examples/simple-debug$ dmesg | grep ? -A0
+[881089.811458] ? интересующий нас адрес: c0166a81
+
+
+=========================================================================================================

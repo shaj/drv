@@ -1,0 +1,104 @@
+19.08.2022
+==========
+
+$ grep sys_write /lib/modules/4.9.0-279-antix.1-486-smp/build/Module.symvers
+0x10094583	fb_sys_write	drivers/video/fbdev/core/fb_sys_fops	EXPORT_SYMBOL_GPL
+0x27249b6c	drm_fb_helper_sys_write	drivers/gpu/drm/drm_kms_helper	EXPORT_SYMBOL
+
+
+$ cat /proc/kallsyms | grep T | grep ' sys_write'
+c91ae1e0 T sys_write
+c91ae4f0 T sys_writev
+
+
+/lib/modules/4.9.0-279-antix.1-486-smp/build/include/linux/syscalls.h
+asmlinkage long sys_write(unsigned int fd, const char __user *buf,
+                          size_t count);
+
+---------------------------------------------------------------------------------------------------------------------
+
+$ inxi -Sxxx
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.7 vt: 7 dm: slimski v: 1.5.0
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrc.o
+  CC [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrc.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrc.ko
+  CC      /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ sudo insmod mod_wrc.ko
+[sudo] пароль для olej: 
+адрес системного обработчика sys_write = c91ae1e0
+insmod: ERROR: could not insert module mod_wrc.ko: Operation not permitted
+
+
+$ dmesg | tail -n2
+[147438.442785] + [77]: адрес системного обработчика sys_write = c91ae1e0
+[147438.442947] + write return : 77
+
+---------------------------------------------------------------------------------------------------------------------
+
+$ cat /proc/kallsyms | grep 'T sys_write' 
+c91ae1e0 T sys_write
+c91ae4f0 T sys_writev
+
+=====================================================================================================================
+
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrc.o
+  CC [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrc.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrc.ko
+  CC      /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ sudo insmod mod_wrchg.ko
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module mod_wrchg.ko: Invalid parameters
+
+
+$ dmesg | tail -n1
+[154135.128691] ! sys_call_table не найден
+
+=====================================================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/new_sys modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/new_sys/mod_wrchg.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ inxi -Sxxx
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.7 vt: 7 dm: slimski v: 1.5.0
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+
+---------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------
+
+

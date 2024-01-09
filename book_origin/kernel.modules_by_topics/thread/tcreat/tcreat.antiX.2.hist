@@ -1,0 +1,198 @@
+13.08.2022
+==========
+
+$ sudo inxi -MS
+[sudo] пароль для olej: 
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+Machine:
+  Type: Virtualbox System: innotek GmbH product: VirtualBox v: 1.2
+    serial: N/A
+  Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek GmbH
+    v: VirtualBox date: 12/01/2006
+
+
+$ uname -r
+4.9.0-279-antix.1-486-smp
+
+$ pwd
+/home/olej/2022/kernel/thread/tcreat
+olej@antix21:~/2022/kernel/thread/tcreat
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.o
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+WARNING: "kernel_thread" [/home/olej/2022/kernel/thread/tcreat/mod_thr2.ko] undefined!
+WARNING: "kernel_thread" [/home/olej/2022/kernel/thread/tcreat/mod_thr1.ko] undefined!
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr1.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr1.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr2.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ sudo insmod mod_thr1.ko 
+insmod: ERROR: could not insert module mod_thr1.ko: Unknown symbol in module
+
+
+$ dmesg | tail -n1
+[ 7615.127406] mod_thr1: Unknown symbol kernel_thread (err 0)
+
+
+===========================================================================================
+
+$ sudo inxi -MCS
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64
+    Desktop: IceWM v: 2.9.8
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+CPU:
+  Info: dual core model: AMD GX-212JC SOC with Radeon R2E Graphics bits: 64
+    type: MCP cache: L2: 1024 KiB
+  Speed (MHz): avg: 1198 min/max: N/A cores: 1: 1198 2: 1198
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+$ time sudo insmod mod_thr3.ko N=3
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module mod_thr3.ko: Operation not permitted
+
+real	0m13,246s
+user	0m0,117s
+sys	0m0,030s
+
+
+$ ps -ef | grep '\[' | grep 'my_'
+root     10037     2  0 00:17 ?        00:00:00 [my_thread_3]
+root     10038     2  0 00:17 ?        00:00:00 [my_thread_2]
+root     10039     2  0 00:17 ?        00:00:00 [my_thread_1]
+
+
+
+$ dmesg | tail -n14 
+[ 3039.003701] mod_thr3: loading out-of-tree module taints kernel.
+[ 3039.003708] mod_thr3: module license 'GPL2' taints kernel.
+[ 3039.003710] Disabling lock debugging due to kernel taint
+[ 3039.003921] 4297706215 : main process [10036] is running
+[ 3039.004023] 4297706215 : kthread [10037:3] is parent [00002]
+[ 3039.004290] 4297706215 : kthread [10038:2] is parent [00002]
+[ 3039.004376] 4297706216 : kthread [10039:1] is parent [00002]
+[ 3049.092651] 4297716304 : kthread [10037:2] find signal!
+[ 3049.092659] 4297716304 : kthread [10038:1] find signal!
+[ 3049.196648] 4297716408 : kthread [10039:0] find signal!
+[ 3049.196651] 4297716408 : kthread [10039:0] is completed
+[ 3049.196676] 4297716408 : kthread [10038:1] is completed
+[ 3049.196734] 4297716408 : kthread [10037:2] is completed
+[ 3049.196752] 4297716408 : main process [10036] is completed
+
+===========================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.o
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr2.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr2.ko
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr3.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+$ time sudo insmod mod_thr2.ko param=6
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module mod_thr2.ko: Operation not permitted
+
+real	0m11,793s
+user	0m0,121s
+sys	0m0,028s
+
+
+
+$ ps -ef | grep '\[' | grep 'my_'
+root     17988     2  0 01:04 ?        00:00:00 [my_thread]
+
+
+$ dmesg | tail -n5
+[ 5874.550797] main process [17987] is running
+[ 5874.550890] create new kernel thread [17988]
+[ 5874.550900] child process [17988] is running
+[ 5880.962115] child process [17988] is completed
+[ 5880.962136] main process [17987] is completed
+
+===========================================================================================
+
+14.08.2022
+==========
+
+$ uname -r
+4.9.0-279-antix.1-486-smp
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr1.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+WARNING: "kernel_thread" [/home/olej/2022/kernel/thread/tcreat/mod_thr1.ko] undefined!
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr1.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr1.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ ls -l *.ko
+-rw-r--r-- 1 olej olej 3760 авг 14 13:27 mod_thr1.ko
+
+$ modinfo mod_thr1.ko
+filename:       /home/olej/2022/kernel/thread/tcreat/mod_thr1.ko
+license:        GPL
+depends:        
+retpoline:      Y
+vermagic:       4.9.0-279-antix.1-486-smp SMP mod_unload modversions 486 
+parm:           param:int
+
+$ sudo insmod mod_thr1.ko
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module mod_thr1.ko: Unknown symbol in module
+
+$ dmesg | tail -n1
+[12225.904334] mod_thr1: Unknown symbol kernel_thread (err 0)
+olej@antix21:~/2022/kernel/thread/tcreat
+
+
+
+$ sudo grep kernel_thread /proc/kallsyms 
+c9058790 T kernel_thread
+c97ffe21 T thaw_kernel_threads
+c97ffec3 T freeze_kernel_threads
+
+$ sudo grep ' kernel_thread' /proc/kallsyms
+c9058790 T kernel_thread
+
+===========================================================================================

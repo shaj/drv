@@ -1,0 +1,255 @@
+17.08.2022
+==========
+
+olej@R420:~$ sudo inxi -Mxxx
+[sudo] пароль для olej:       
+Machine:   Type: Server System: Dell product: PowerEdge R420 v: N/A serial: 9DDFKY1 Chassis: type: 23 serial: 9DDFKY1 
+           Mobo: Dell model: 0CN7CM v: A06 serial: ..CN1374035400RO. BIOS: Dell v: 2.9.0 date: 01/09/2020 
+
+
+olej@R420:~$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+olej@R420:~$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+
+olej@R420:~$ cat /boot/config-`uname -r` | grep _USB_ | wc -l
+497
+
+olej@R420:~$ cat /boot/config-`uname -r` | grep _USB | wc -l
+559
+
+
+olej@R420:~$ cat /boot/config-`uname -r` | grep _USB | grep HCI
+CONFIG_USB_OHCI_LITTLE_ENDIAN=y
+CONFIG_USB_XHCI_HCD=y
+CONFIG_USB_XHCI_DBGCAP=y
+CONFIG_USB_XHCI_PCI=y
+CONFIG_USB_XHCI_PLATFORM=m
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_EHCI_ROOT_HUB_TT=y
+CONFIG_USB_EHCI_TT_NEWSCHED=y
+CONFIG_USB_EHCI_PCI=y
+CONFIG_USB_EHCI_FSL=m
+CONFIG_USB_EHCI_HCD_PLATFORM=y
+CONFIG_USB_OHCI_HCD=y
+CONFIG_USB_OHCI_HCD_PCI=y
+CONFIG_USB_OHCI_HCD_PLATFORM=y
+CONFIG_USB_UHCI_HCD=y
+CONFIG_USBIP_VHCI_HCD=m
+CONFIG_USBIP_VHCI_HC_PORTS=8
+CONFIG_USBIP_VHCI_NR_HCS=1
+CONFIG_USB_ROLES_INTEL_XHCI=m
+CONFIG_USB_WHCI_HCD=m
+
+olej@R420:~$ cat /boot/config-`uname -r` | grep _USB_ | grep HCI_HCD=
+CONFIG_USB_XHCI_HCD=y
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_OHCI_HCD=y
+CONFIG_USB_UHCI_HCD=y
+CONFIG_USB_WHCI_HCD=m
+
+
+
+olej@R420:~$ lspci | grep USB 
+00:1a.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller #2 (rev 05)
+00:1d.0 USB controller: Intel Corporation C600/X79 series chipset USB2 Enhanced Host Controller #1 (rev 05)
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modinfo usb_storage | head
+filename:       /lib/modules/5.4.0-124-generic/kernel/drivers/usb/storage/usb-storage.ko
+license:        GPL
+description:    USB Mass Storage driver for Linux
+author:         Matthew Dharm <mdharm-usb@one-eyed-alien.net>
+srcversion:     C62DE01B04F29D62503A44A
+alias:          usb:v*p*d*dc*dsc*dp*ic08isc06ip50in*
+alias:          usb:v*p*d*dc*dsc*dp*ic08isc05ip50in*
+alias:          usb:v*p*d*dc*dsc*dp*ic08isc04ip50in*
+alias:          usb:v*p*d*dc*dsc*dp*ic08isc03ip50in*
+alias:          usb:v*p*d*dc*dsc*dp*ic08isc02ip50in*
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modinfo usb_storage | grep alias | wc -l
+404
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modprobe -c | grep -w usb_storage | wc -l 
+429
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modinfo option | head
+filename:       /lib/modules/5.4.0-124-generic/kernel/drivers/usb/serial/option.ko
+license:        GPL v2
+description:    USB Driver for GSM modems
+author:         Matthias Urlichs <smurf@smurf.noris.de>
+srcversion:     2B9C94EE65CA5A7235E5DBF
+alias:          usb:v305Ap1406d*dc*dsc*dp*icFFisc*ip*in*
+alias:          usb:v305Ap1405d*dc*dsc*dp*icFFisc*ip*in*
+alias:          usb:v305Ap1404d*dc*dsc*dp*icFFisc*ip*in*
+alias:          usb:v2DF3p9D03d*dc*dsc*dp*icFFisc*ip*in*
+alias:          usb:v2CB7p01A4d*dc*dsc*dp*icFFisc*ip*in*
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modinfo option | grep alias | wc -l
+1329
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modprobe -c | grep -w option | wc -l 
+1329
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modprobe -c | grep -w option | head -n10
+alias usb:v03F0p421Dd*dc*dsc*dp*icFFiscFFipFFin* option
+alias usb:v03F0pA31Dd*dc*dsc*dp*icFFisc06ip10in* option
+alias usb:v03F0pA31Dd*dc*dsc*dp*icFFisc06ip12in* option
+alias usb:v03F0pA31Dd*dc*dsc*dp*icFFisc06ip13in* option
+alias usb:v03F0pA31Dd*dc*dsc*dp*icFFisc06ip14in* option
+alias usb:v03F0pA31Dd*dc*dsc*dp*icFFisc06ip1Bin* option
+alias usb:v0408pEA02d*dc*dsc*dp*ic*isc*ip*in* option
+alias usb:v0408pEA03d*dc*dsc*dp*ic*isc*ip*in* option
+alias usb:v0408pEA04d*dc*dsc*dp*ic*isc*ip*in* option
+alias usb:v0408pEA05d*dc*dsc*dp*ic*isc*ip*in* option
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modinfo qcaux | head
+filename:       /lib/modules/5.4.0-124-generic/kernel/drivers/usb/serial/qcaux.ko
+license:        GPL v2
+srcversion:     988EF28AB8DCCDD11BA956C
+alias:          usb:v1FACp0151d*dc*dsc*dp*icFFiscFFipFFin*
+alias:          usb:v106Cp*d*dc*dsc*dp*icFFiscFFipFFin*
+alias:          usb:v106Cp*d*dc*dsc*dp*icFFiscFEipFFin*
+alias:          usb:v106Cp*d*dc*dsc*dp*icFFiscFDipFFin*
+alias:          usb:v04E8p6640d*dc*dsc*dp*icFFisc00ip00in*
+alias:          usb:v0474p0754d*dc*dsc*dp*icFFiscFFip00in*
+alias:          usb:v1004p6000d*dc*dsc*dp*icFFiscFFip00in*
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modinfo qcaux | grep alias | wc -l
+15
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modprobe -c | grep -w qcaux | head -n10
+alias usb:v0474p0754d*dc*dsc*dp*icFFiscFFip00in* qcaux
+alias usb:v04E8p6640d*dc*dsc*dp*icFFisc00ip00in* qcaux
+alias usb:v1004p6000d*dc*dsc*dp*icFFiscFFip00in* qcaux
+alias usb:v106Cp*d*dc*dsc*dp*icFFiscFDipFFin* qcaux
+alias usb:v106Cp*d*dc*dsc*dp*icFFiscFEipFFin* qcaux
+alias usb:v106Cp*d*dc*dsc*dp*icFFiscFFipFFin* qcaux
+alias usb:v106Cp3701d*dc*dsc*dp*icFFisc00ip00in* qcaux
+alias usb:v106Cp3702d*dc*dsc*dp*icFFisc00ip00in* qcaux
+alias usb:v106Cp3711d*dc*dsc*dp*icFFisc00ip00in* qcaux
+alias usb:v106Cp3712d*dc*dsc*dp*icFFisc00ip00in* qcaux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/usb$ modprobe -c | grep -w qcaux | wc -l
+15
+
+
+========================================================================================================================
+
+[olej@xenix usb]$ sudo inxi -Mxxx
+Machine:
+  Type: Desktop System: FUJITSU product: ESPRIMO P420 v: N/A
+    serial: YLTH128357 Chassis: type: 6 v: C$WH01 serial: YLTH128357
+  Mobo: FUJITSU model: D3230-A1 v: S26361-D3230-A1 serial: B246BE82
+    BIOS: FUJITSU // American Megatrends v: 4.6.5.4 R1.17.0 for D3230-A1x
+    date: 03/06/2014
+
+[olej@xenix usb]$ inxi -Sxxx
+System:
+  Host: xenix.localdomain Kernel: 5.18.16-100.fc35.x86_64 arch: x86_64
+    bits: 64 compiler: gcc v: 2.37-17.fc35 Desktop: Cinnamon v: 5.2.7 tk: GTK
+    v: 3.24.34 wm: muffin v: 5.2.1 vt: 1 dm: LightDM v: 1.32.0
+    Distro: Fedora release 35 (Thirty Five)
+
+
+[olej@xenix usb]$ lspci | grep USB
+00:14.0 USB controller: Intel Corporation 8 Series/C220 Series Chipset Family USB xHCI (rev 04)
+00:1a.0 USB controller: Intel Corporation 8 Series/C220 Series Chipset Family USB EHCI #2 (rev 04)
+00:1d.0 USB controller: Intel Corporation 8 Series/C220 Series Chipset Family USB EHCI #1 (rev 04)
+
+[olej@xenix usb]$ cat /proc/interrupts | grep hci
+ 16:          0          0          0          0          0          0         27          0  IR-IO-APIC  16-fasteoi   ehci_hcd:usb1
+ 23:          0          0          0          0          0          0          0         29  IR-IO-APIC  23-fasteoi   ehci_hcd:usb2
+ 28:          0          0          0          0          0      22307      40851          0  IR-PCI-MSI 512000-edge      ahci[0000:00:1f.2]
+ 29:      20246      12029          0          0          0          0          0          0  IR-PCI-MSI 327680-edge      xhci_hcd
+
+
+[olej@xenix usb]$ make
+make -C /lib/modules/5.18.16-100.fc35.x86_64/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/usb modules
+make[1]: вход в каталог «/usr/src/kernels/5.18.16-100.fc35.x86_64»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/usb/lab1_usb.o
+  MODPOST /home/olej/2022/own.BOOKs/BHV.kernel/examples/usb/Module.symvers
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/usb/lab1_usb.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/usb/lab1_usb.ko
+  BTF [M] /home/olej/2022/own.BOOKs/BHV.kernel/examples/usb/lab1_usb.ko
+Skipping BTF generation for /home/olej/2022/own.BOOKs/BHV.kernel/examples/usb/lab1_usb.ko due to unavailability of vmlinux
+make[1]: выход из каталога «/usr/src/kernels/5.18.16-100.fc35.x86_64»
+
+
+========================================================================================================================
+
+$ sudo inxi -Mxxx
+[sudo] пароль для olej: 
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF Chassis: type: 4 serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+
+$ inxi -Sxxx
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.8 vt: 7 dm: slimski v: 1.5.0
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+
+
+$ lspci | grep USB
+00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 11)
+00:12.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB EHCI Controller (rev 39)
+00:13.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB EHCI Controller (rev 39)
+
+$ cat /proc/interrupts | grep ehci
+  18:      17685      17725   IO-APIC   18-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+
+$ cat /proc/interrupts | grep ahci
+  19:       9562       9543   IO-APIC   19-fasteoi   ahci[0000:00:11.0]
+
+
+$ cat /proc/interrupts | grep hci
+  18:      20011      20040   IO-APIC   18-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+  19:       9705       9682   IO-APIC   19-fasteoi   ahci[0000:00:11.0]
+  26:          0          0   PCI-MSI 262144-edge      xhci_hcd
+  27:          0          0   PCI-MSI 262145-edge      xhci_hcd
+  28:          0          0   PCI-MSI 262146-edge      xhci_hcd
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/usb modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/usb/lab1_usb.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/usb/lab1_usb.mod.o
+  LD [M]  /home/olej/2022/kernel/usb/lab1_usb.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+========================================================================================================================
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples$ sudo inxi -Mxxx
+[sudo] пароль для olej:
+Machine:   Type: Desktop Mobo: ASUSTeK model: PRIME Z270-P v: Rev X.0x serial: 170604425306174 UEFI: American Megatrends
+           v: 0807 date: 06/07/2017
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples$ sudo inxi -Sxxx
+System:    Host: nvme Kernel: 5.10.0-16-amd64 x86_64 bits: 64 compiler: gcc v: 10.2.1 Desktop: Cinnamon 5.4.9 tk: GTK 3.24.24
+           wm: Muffin dm: LightDM 1.26.0 Distro: LMDE 5 Elsie base: Debian 11.2 bullseye
+
+
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples$ lspci | grep USB
+00:14.0 USB controller: Intel Corporation 200 Series/Z370 Chipset Family USB 3.0 xHCI Controller
+
+olej@nvme:~/2022/OwnBooks/BHV.kernel/examples$ cat /proc/interrupts | grep hci
+129:    9749904          0   PCI-MSI 327680-edge      xhci_hcd
+130:     240331        353   PCI-MSI 376832-edge      ahci[0000:00:17.0]
+
+========================================================================================================================

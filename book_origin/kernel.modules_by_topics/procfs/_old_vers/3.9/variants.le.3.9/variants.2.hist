@@ -1,0 +1,63 @@
+16.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9$ make disclean
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9 modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.o
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c:9:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/proc_node_write.c: In function ‘proc_node_write’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/proc_node_write.c:9:7: error: implicit declaration of function ‘copy_from_user’; did you mean ‘raw_copy_from_user’? [-Werror=implicit-function-declaration]
+    9 |    if(copy_from_user( buf_msg, buffer, len))
+      |       ^~~~~~~~~~~~~~
+      |       raw_copy_from_user
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c: In function ‘proc_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c:20:11: error: implicit declaration of function ‘create_proc_entry’; did you mean ‘remove_proc_entry’? [-Werror=implicit-function-declaration]
+   20 |           create_proc_entry(node_var(), S_IFREG | S_IRUGO | S_IWUGO, NULL);
+      |           ^~~~~~~~~~~~~~~~~
+      |           remove_proc_entry
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c:20:11: warning: initialization of ‘struct proc_dir_entry *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c:26:17: error: dereferencing pointer to incomplete type ‘struct proc_dir_entry’
+   26 |    own_proc_node->uid = own_proc_node->gid = 0;
+      |                 ^~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:20: module] Ошибка 2
+
+============================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9$ make 
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9 modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c: In function ‘proc_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c:20:11: error: implicit declaration of function ‘create_proc_entry’; did you mean ‘remove_proc_entry’? [-Werror=implicit-function-declaration]
+   20 |           create_proc_entry(node_var(), S_IFREG | S_IRUGO | S_IWUGO, NULL);
+      |           ^~~~~~~~~~~~~~~~~
+      |           remove_proc_entry
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c:20:11: warning: initialization of ‘struct proc_dir_entry *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.c:26:17: error: dereferencing pointer to incomplete type ‘struct proc_dir_entry’
+   26 |    own_proc_node->uid = own_proc_node->gid = 0;
+      |                 ^~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9/mod_proc.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/procfs/variants.le.3.9] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:20: module] Ошибка 2
+
+============================================================================================================================================
+
+https://elixir.bootlin.com/linux/v5.4/source/fs/proc/generic.c#L655
+
+</fs/proc/generic.c>
+[553]
+struct proc_dir_entry *proc_create(const char *name, umode_t mode,
+		   struct proc_dir_entry *parent,
+		   const struct file_operations *proc_fops)
+
+
+============================================================================================================================================

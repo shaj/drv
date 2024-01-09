@@ -1,0 +1,198 @@
+20.08.2022
+==========
+
+olej@lmde32:~/kernel/load_module/umaster$ sudo inxi -MSxxx
+[sudo] пароль для olej:       
+System:    Host: lmde32 Kernel: 5.10.0-17-686 i686 bits: 32 compiler: gcc v: 10.2.1 Console: tty 2 wm: Mutter 
+           DM: LightDM 1.26.0 Distro: LMDE 5 Elsie base: Debian 11.2 bullseye 
+Machine:   Type: Virtualbox System: innotek product: VirtualBox v: 1.2 serial: N/A Chassis: Oracle Corporation type: 1 
+           serial: N/A 
+           Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek v: VirtualBox date: 12/01/2006 
+
+========================================================================================================================
+
+olej@lmde32:~/kernel/load_module/umaster$ make
+gcc     inst1.c   -o inst1
+gcc     inst2.c   -o inst2
+inst2.c: In function ‘main’:
+inst2.c:53:10: warning: implicit declaration of function ‘init_module’; did you mean ‘SYS_init_module’? [-Wimplicit-function-declaration]
+   53 |    res = init_module(buff, fsize, parms); // вызов sys_init_module()
+      |          ^~~~~~~~~~~
+      |          SYS_init_module
+gcc     rem1.c   -o rem1
+gcc     rem2.c   -o rem2
+rem2.c: In function ‘main’:
+rem2.c:14:10: warning: implicit declaration of function ‘delete_module’; did you mean ‘SYS_delete_module’? [-Wimplicit-function-declaration]
+   14 |    res = delete_module(slave_mod, O_TRUNC);  // flags: O_TRUNC, O_NONBLOCK
+      |          ^~~~~~~~~~~~~
+      |          SYS_delete_module
+make -C /lib/modules/5.10.0-17-686/build M=/home/olej/kernel/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-17-686»
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.o
+  MODPOST /home/olej/kernel/load_module/umaster/Module.symvers
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/kernel/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-17-686»
+
+------------------------------------------------------------------------------------------------------------------------
+
+/usr/include/i386-linux-gnu/bits/syscall.h
+
+#ifdef __NR_init_module
+# define SYS_init_module __NR_init_module
+#endif
+
+#ifdef __NR_finit_module
+# define SYS_finit_module __NR_finit_module
+#endif
+
+#ifdef __NR_delete_module
+# define SYS_delete_module __NR_delete_module
+#endif
+
+#ifdef __NR_create_module
+# define SYS_create_module __NR_create_module
+#endif
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@lmde32:/usr/include/i386-linux-gnu/asm$ grep __NR_init_module unistd_32.h
+#define __NR_init_module 128
+
+olej@lmde32:/usr/include/i386-linux-gnu/asm$ grep _module unistd_32.h
+#define __NR_create_module 127
+#define __NR_init_module 128
+#define __NR_delete_module 129
+#define __NR_query_module 167
+#define __NR_finit_module 350
+
+olej@lmde32:/usr/include/i386-linux-gnu/asm$ grep __NR_init_module unistd_64.h
+#define __NR_init_module 175
+
+olej@lmde32:/usr/include/i386-linux-gnu/asm$ grep _module unistd_64.h
+#define __NR_create_module 174
+#define __NR_init_module 175
+#define __NR_delete_module 176
+#define __NR_query_module 178
+#define __NR_finit_module 313
+
+========================================================================================================================
+
+olej@lmde32:~/kernel/load_module/umaster$ make disclean
+
+olej@lmde32:~/kernel/load_module/umaster$ make 
+gcc     inst1.c   -o inst1
+gcc     rem1.c   -o rem1
+make -C /lib/modules/5.10.0-17-686/build M=/home/olej/kernel/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-17-686»
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.o
+  MODPOST /home/olej/kernel/load_module/umaster/Module.symvers
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/kernel/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-17-686»
+
+
+olej@lmde32:~/kernel/load_module/umaster$ modinfo slave.ko
+filename:       /home/olej/kernel/load_module/umaster/slave.ko
+author:         Oleg Tsiliuric <olej@front.ru>
+license:        GPL
+depends:        
+retpoline:      Y
+name:           slave
+vermagic:       5.10.0-17-686 SMP mod_unload modversions GEODE 
+parm:           parm1:charp
+parm:           parm2:charp
+
+------------------------------------------------------------------------------------------------------------------------
+
+olej@lmde32:~/kernel/load_module/umaster$ make disclean
+
+olej@lmde32:~/kernel/load_module/umaster$ make 
+gcc     inst2.c   -o inst2
+inst2.c: In function ‘main’:
+inst2.c:53:10: warning: implicit declaration of function ‘init_module’; did you mean ‘SYS_init_module’? [-Wimplicit-function-declaration]
+   53 |    res = init_module(buff, fsize, parms); // вызов sys_init_module()
+      |          ^~~~~~~~~~~
+      |          SYS_init_module
+gcc     rem2.c   -o rem2
+rem2.c: In function ‘main’:
+rem2.c:14:10: warning: implicit declaration of function ‘delete_module’; did you mean ‘SYS_delete_module’? [-Wimplicit-function-declaration]
+   14 |    res = delete_module(slave_mod, O_TRUNC);  // flags: O_TRUNC, O_NONBLOCK
+      |          ^~~~~~~~~~~~~
+      |          SYS_delete_module
+make -C /lib/modules/5.10.0-17-686/build M=/home/olej/kernel/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-17-686»
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.o
+  MODPOST /home/olej/kernel/load_module/umaster/Module.symvers
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/kernel/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-17-686»
+
+
+olej@lmde32:~/kernel/load_module/umaster$ ls -l | grep ^-rwx
+-rwxr-xr-x 1 olej olej  15940 авг 20 20:59 inst1
+-rwxr-xr-x 1 olej olej  15944 авг 20 21:03 inst2
+-rwxr-xr-x 1 olej olej  15600 авг 20 20:59 rem1
+-rwxr-xr-x 1 olej olej  15604 авг 20 21:03 rem2
+
+========================================================================================================================
+
+olej@lmde32:~/kernel/load_module/umaster$ make disclean
+
+olej@lmde32:~/kernel/load_module/umaster$ make
+gcc     inst2.c   -o inst2
+gcc     rem2.c   -o rem2
+make -C /lib/modules/5.10.0-17-686/build M=/home/olej/kernel/load_module/umaster modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-17-686»
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.o
+  MODPOST /home/olej/kernel/load_module/umaster/Module.symvers
+  CC [M]  /home/olej/kernel/load_module/umaster/slave.mod.o
+  LD [M]  /home/olej/kernel/load_module/umaster/slave.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-17-686»
+
+
+olej@lmde32:~/kernel/load_module/umaster$ ls -l *.[c,h]
+-rw-r--r-- 1 olej olej  157 авг 20 20:01 common.h
+-rw-r--r-- 1 olej olej 1757 авг 20 22:36 inst1.c
+-rw-r--r-- 1 olej olej 1707 авг 20 22:43 inst2.c
+-rw-r--r-- 1 olej olej  810 авг 20 22:49 rem1.c
+-rw-r--r-- 1 olej olej  689 авг 20 22:46 rem2.c
+-rw-r--r-- 1 olej olej  467 авг 20 22:37 slave.c
+
+olej@lmde32:~/kernel/load_module/umaster$ ls -l | grep ^-rwx
+-rwxr-xr-x 1 olej olej  15940 авг 20 20:59 inst1
+-rwxr-xr-x 1 olej olej  15944 авг 20 22:51 inst2
+-rwxr-xr-x 1 olej olej  15600 авг 20 20:59 rem1
+-rwxr-xr-x 1 olej olej  15604 авг 20 22:51 rem2
+
+olej@lmde32:~/kernel/load_module/umaster$ modinfo slave.ko 
+filename:       /home/olej/kernel/load_module/umaster/slave.ko
+author:         Oleg Tsiliuric <olej.tsil@gmail.com>
+license:        GPL
+depends:        
+retpoline:      Y
+name:           slave
+vermagic:       5.10.0-17-686 SMP mod_unload modversions GEODE 
+parm:           parm1:charp
+parm:           parm2:charp
+
+========================================================================================================================
+
+olej@lmde32:~/kernel/load_module/umaster$ sudo ./inst2 slave.ko parm1='строка1' parm2='строка2'
+[sudo] пароль для olej:       
+загрузка модуля: slave.ko parm1=строка1 parm2=строка2 
+размер файла модуля slave.ko = 116096 байт
+модуль slave.ko успешно загружен!
+
+olej@lmde32:~/kernel/load_module/umaster$ dmesg | tail -n1
+[74051.068542] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+
+olej@lmde32:~/kernel/load_module/umaster$ sudo ./rem2
+выгружается модуль slave
+модуль slave успешно загружен!
+
+olej@lmde32:~/kernel/load_module/umaster$ dmesg | tail -n2
+[74051.068542] + модуль slave.ko загружен: parm1=строка1, parm2=строка2
+[74089.458651] + модуль slave.ko выгружен
+
+========================================================================================================================

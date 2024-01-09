@@ -1,0 +1,101 @@
+11.07.2022
+==========
+
+https://askubuntu.com/questions/483283/module-verification-failed-signature-and-or-required-key-missing
+
+olej@esprimop420:~$ cat /boot/config-`uname -r` | grep CONFIG_MODULE_SIG
+CONFIG_MODULE_SIG_FORMAT=y
+CONFIG_MODULE_SIG=y
+# CONFIG_MODULE_SIG_FORCE is not set
+# CONFIG_MODULE_SIG_ALL is not set
+# CONFIG_MODULE_SIG_SHA1 is not set
+# CONFIG_MODULE_SIG_SHA224 is not set
+CONFIG_MODULE_SIG_SHA256=y
+# CONFIG_MODULE_SIG_SHA384 is not set
+# CONFIG_MODULE_SIG_SHA512 is not set
+CONFIG_MODULE_SIG_HASH="sha256"
+CONFIG_MODULE_SIG_KEY=""
+
+--------------------------------------------------------------------------------------------------------------
+
+olej@esprimop420:/lib/modules$ cd `uname -r`
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/scripts$ pwd
+/lib/modules/5.10.0-13-amd64/build/scripts
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/scripts$ ls -l sign-file
+-rwxr-xr-x 1 root root 14776 июн 30 22:31 sign-file
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/scripts$ ./sign-file --help
+./sign-file: invalid option -- '-'
+Usage: scripts/sign-file [-dp] <hash algo> <key> <x509> <module> [<dest>]
+       scripts/sign-file -s <raw sig> <hash algo> <x509> <module> [<dest>]
+
+
+
+https://askubuntu.com/questions/483283/module-verification-failed-signature-and-or-required-key-missing
+
+To manually sign a module, use the scripts/sign-file tool available in the Linux kernel source tree. The script requires 4 arguments:
+
+1.  The hash algorithm (e.g., sha256)
+2.  The private key filename or PKCS#11 URI
+3.  The public key filename
+4.  The kernel module to be signed
+
+The following is an example to sign a kernel module:
+
+scripts/sign-file sha512 kernel-signkey.priv \
+    kernel-signkey.x509 module.ko
+
+
+
+
+
+
+Edit ./include/generated/autoconf.h and change the line
+
+define CONFIG_MODULE_SIG 1
+
+to
+
+define CONFIG_MODULE_SIG 0
+
+
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/include/generated$ pwd
+/lib/modules/5.10.0-13-amd64/build/include/generated
+
+olej@esprimop420:/lib/modules/5.10.0-13-amd64/build/include/generated$ grep CONFIG_MODULE_SIG autoconf.h 
+#define CONFIG_MODULE_SIG_FORMAT 1
+#define CONFIG_MODULE_SIG_HASH "sha256"
+#define CONFIG_MODULE_SIG_KEY ""
+#define CONFIG_MODULE_SIG_SHA256 1
+#define CONFIG_MODULE_SIG 1
+
+==============================================================================================================
+
+olej@esprimop420:~/2022/kernel/first_hello$ sudo insmod hello_printk.ko
+
+olej@esprimop420:~/2022/kernel/first_hello$ sudo dmesg | tail -n3
+[531266.495524] perf: interrupt took too long (5010 > 4965), lowering kernel.perf_event_max_sample_rate to 39750
+[606144.925113] Goodbye, world!
+[606149.781791] Hello, world!
+
+olej@esprimop420:~/2022/kernel/first_hello$ sudo rmmod hello_printk
+
+olej@esprimop420:~/2022/kernel/first_hello$ sudo dmesg | tail -n2
+[606149.781791] Hello, world!
+[606171.520483] Goodbye, world!
+
+
+olej@esprimop420:~/2022/kernel/first_hello$ lsb_release -a
+No LSB modules are available.
+Distributor ID:	Debian
+Description:	Debian GNU/Linux 11 (bullseye)
+Release:	11
+Codename:	bullseye
+
+olej@esprimop420:~/2022/kernel/first_hello$ cat /etc/debian_version 
+11.4
+
+==============================================================================================================

@@ -1,0 +1,222 @@
+06.07.2022
+==========
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ make
+make -C /lib/modules/5.10.0-13-amd64/build M=/home/olej/2022/kernel/procfs/proc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-13-amd64»
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_procr.o
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_procr2.o
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_proc.o
+/home/olej/2022/kernel/procfs/proc/mod_proc.c: In function ‘proc_init’:
+/home/olej/2022/kernel/procfs/proc/mod_proc.c:16:78: error: passing argument 4 of ‘proc_create’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+   16 |    own_proc_node = proc_create(NAME_NODE, S_IFREG | S_IRUGO | S_IWUGO, NULL, &node_fops);
+      |                                                                              ^~~~~~~~~~
+      |                                                                              |
+      |                                                                              const struct file_operations *
+In file included from /home/olej/2022/kernel/procfs/proc/mod_proc.h:4,
+                 from /home/olej/2022/kernel/procfs/proc/mod_proc.c:1:
+/usr/src/linux-headers-5.10.0-13-common/include/linux/proc_fs.h:109:122: note: expected ‘const struct proc_ops *’ but argument is of type ‘const struct file_operations *’
+  109 | struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
+      |                                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+cc1: some warnings being treated as errors
+make[3]: *** [/usr/src/linux-headers-5.10.0-13-common/scripts/Makefile.build:285: /home/olej/2022/kernel/procfs/proc/mod_proc.o] Ошибка 1
+make[2]: *** [/usr/src/linux-headers-5.10.0-13-common/Makefile:1846: /home/olej/2022/kernel/procfs/proc] Ошибка 2
+make[1]: *** [/usr/src/linux-headers-5.10.0-13-common/Makefile:185: __sub-make] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-13-amd64»
+make: *** [Makefile:19: default] Ошибка 2
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ ls *.ko
+ls: невозможно получить доступ к '*.ko': Нет такого файла или каталога
+
+===============================================================================================================================
+
+https://elixir.bootlin.com/linux/v5.10/source/include/linux/proc_fs.h
+
+<include/linux/proc_fs.h>
+[29]
+struct proc_ops {
+    unsigned int proc_flags;
+    int	(*proc_open)(struct inode *, struct file *);
+    ssize_t	(*proc_read)(struct file *, char __user *, size_t, loff_t *);
+    ssize_t (*proc_read_iter)(struct kiocb *, struct iov_iter *);
+    ssize_t	(*proc_write)(struct file *, const char __user *, size_t, loff_t *);
+    /* mandatory unless nonseekable_open() or equivalent is used */
+    loff_t	(*proc_lseek)(struct file *, loff_t, int);
+    int	(*proc_release)(struct inode *, struct file *);
+    __poll_t (*proc_poll)(struct file *, struct poll_table_struct *);
+    long	(*proc_ioctl)(struct file *, unsigned int, unsigned long);
+#ifdef CONFIG_COMPAT
+    long	(*proc_compat_ioctl)(struct file *, unsigned int, unsigned long);
+#endif
+    int	(*proc_mmap)(struct file *, struct vm_area_struct *);
+    unsigned long (*proc_get_unmapped_area)(struct file *, unsigned long, unsigned long, unsigned long, unsigned long);
+} __randomize_layout;
+
+[103]
+extern struct proc_dir_entry *proc_create_data(const char *, umode_t,
+		           struct proc_dir_entry *,
+		           const struct proc_ops *,
+		           void *);
+
+struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
+extern void proc_set_size(struct proc_dir_entry *, loff_t);
+extern void proc_set_user(struct proc_dir_entry *, kuid_t, kgid_t);
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/proc_fs.h
+[44]
+extern struct proc_dir_entry *proc_create_data(const char *, umode_t,
+		           struct proc_dir_entry *,
+		           const struct file_operations *,
+		           void *);
+
+struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct file_operations *proc_fops);
+extern void proc_set_size(struct proc_dir_entry *, loff_t);
+extern void proc_set_user(struct proc_dir_entry *, kuid_t, kgid_t);
+
+
+https://elixir.bootlin.com/linux/v5.9/source/include/linux/proc_fs.h
+[102]
+extern struct proc_dir_entry *proc_create_data(const char *, umode_t,
+		           struct proc_dir_entry *,
+		           const struct proc_ops *,
+		           void *);
+
+struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
+extern void proc_set_size(struct proc_dir_entry *, loff_t);
+extern void proc_set_user(struct proc_dir_entry *, kuid_t, kgid_t);
+
+
+
+===============================================================================================================================
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ uname -r
+5.10.0-13-amd64
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ make
+make -C /lib/modules/5.10.0-13-amd64/build M=/home/olej/2022/kernel/procfs/proc modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.10.0-13-amd64»
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_proct.o
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_2.o
+  MODPOST /home/olej/2022/kernel/procfs/proc/Module.symvers
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_2.mod.o
+  LD [M]  /home/olej/2022/kernel/procfs/proc/mod_2.ko
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_proc.mod.o
+  LD [M]  /home/olej/2022/kernel/procfs/proc/mod_proc.ko
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_procr.mod.o
+  LD [M]  /home/olej/2022/kernel/procfs/proc/mod_procr.ko
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_procr2.mod.o
+  LD [M]  /home/olej/2022/kernel/procfs/proc/mod_procr2.ko
+  CC [M]  /home/olej/2022/kernel/procfs/proc/mod_proct.mod.o
+  LD [M]  /home/olej/2022/kernel/procfs/proc/mod_proct.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.10.0-13-amd64»
+gcc -Wall     mcat.c   -o mcat
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ ls -l *.ko
+-rw-r--r-- 1 olej olej 220136 июл  6 20:41 mod_2.ko
+-rw-r--r-- 1 olej olej 241456 июл  6 20:41 mod_proc.ko
+-rw-r--r-- 1 olej olej 100248 июл  6 20:41 mod_procr2.ko
+-rw-r--r-- 1 olej olej 100240 июл  6 20:41 mod_procr.ko
+-rw-r--r-- 1 olej olej 242784 июл  6 20:41 mod_proct.ko
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo insmod ./mod_proc.ko
+Попробуйте ещё раз.
+[sudo] пароль для olej: 
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ lsmod | head -n3
+Module                  Size  Used by
+mod_proc               16384  0
+tcp_diag               16384  0
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ ls -l /proc/mod_node
+-rw-rw-rw- 1 root root 0 июл  6 21:07 /proc/mod_node
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo dmesg | grep -v audit | tail -n4
+[65623.492064] hello_printk: loading out-of-tree module taints kernel.
+[65623.492100] hello_printk: module verification failed: signature and/or required key missing - tainting kernel
+[65623.492556] Hello, world!
+[188746.237879] ! /proc/mod_node installed
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ echo новая строка >  /proc/mod_node
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ cat  /proc/mod_node
+новая строка
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo dmesg | grep -v audit | tail -n 10
+[16887.008885] perf: interrupt took too long (3152 > 3132), lowering kernel.perf_event_max_sample_rate to 63250
+[65623.492064] hello_printk: loading out-of-tree module taints kernel.
+[65623.492100] hello_printk: module verification failed: signature and/or required key missing - tainting kernel
+[65623.492556] Hello, world!
+[188746.237879] ! /proc/mod_node installed
+[189131.278891] ! write: 24 bytes
+[189131.278892] ! put 24 bytes
+[189147.279599] ! read: 131072 bytes (ppos=0)
+[189147.279603] ! return 24 bytes
+[189147.279610] ! read: 131072 bytes (ppos=24)
+
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo rmmod mod_proc
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo dmesg | grep -v audit | tail -n 1
+[189284.831379] ! /proc/mod_node removed
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ cat  /proc/mod_node
+cat: /proc/mod_node: Нет такого файла или каталога
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ lsmod | head -n3
+Module                  Size  Used by
+tcp_diag               16384  0
+inet_diag              24576  1 tcp_diag
+
+===============================================================================================================================
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo insmod ./mod_proct.ko
+[sudo] пароль для olej: 
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ lsmod | head -n3
+Module                  Size  Used by
+mod_proct              16384  0
+tcp_diag               16384  0
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ ls /proc/mo*
+/proc/modules  /proc/mounts
+
+/proc/mod_dir:
+mod_node
+
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ tree /proc/mod_dir
+/proc/mod_dir
+└── mod_node
+
+0 directories, 1 file
+
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo cat /proc/modules | grep mod_
+mod_proct 16384 0 - Live 0xffffffffc14e3000 (OE)
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ cat //proc/mod_dir/mod_node 
+.........1.........2.........3.........4.........5
+
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ dmesg | grep -v audit | tail -n4
+dmesg: чтение буфера ядра завершилось неудачно: Операция не позволена
+
+olej@esprimop420:~/2022/kernel/procfs/proc$ sudo dmesg | grep -v audit | tail -n4
+[190199.667297] ! /proc/mod_dir/mod_node installed
+[190371.360904] ! read: 131072 bytes (ppos=0)
+[190371.360906] ! return 51 bytes
+[190371.360912] ! read: 131072 bytes (ppos=51)
+
+===============================================================================================================================

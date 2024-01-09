@@ -1,0 +1,74 @@
+25.08.2022
+==========
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ make
+gcc -Wall -O2 -Wall allops.c -o allops
+
+====================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ./allops 
+Usage: ./allops options dev_name.
+Options:
+     -l: print gpio chip info
+     -r <offset>: Read GPIO value at offset (INPUT mode)
+     -w <offset>: Write GPIO value at offset (OUTPUT mode). Option -v should be set
+     -v <0|1>: value that should be written to the GPIO, used only with option -w
+     -p <offset>: Polling raising event on the GPIO at offset
+
+====================================================================================================================
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ls -l /dev/gpio*
+crw------- 1 root root 254, 0 авг 25 17:17 /dev/gpiochip0
+crw------- 1 root root 254, 1 авг 25 17:17 /dev/gpiochip1
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -l /dev/gpiochip1
+Chip name: gpiochip1
+Chip label: 1f02c00.pinctrl
+Number of lines: 32
+offset: 0, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 1, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 2, name: , consumer: usb0-vbus. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 3, name: , consumer: sw4. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 4, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 5, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 6, name: , consumer: vdd-cpux. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 7, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 8, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 9, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 10, name: , consumer: orangepi:green:pwr. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 11, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 12, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 13, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 14, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 15, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 16, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 17, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 18, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 19, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 20, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 21, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 22, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 23, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 24, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 25, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 26, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 27, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 28, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 29, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 30, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 31, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -r11 /dev/gpiochip1
+Value of GPIO at offset 11 (INPUT mode) on chip /dev/gpiochip1: 0
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -w11 -v1 /dev/gpiochip1
+Write value 1 to GPIO at offset 11 (OUTPUT mode) on chip /dev/gpiochip1
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./allops -r11 /dev/gpiochip1
+Value of GPIO at offset 11 (INPUT mode) on chip /dev/gpiochip1: 1
+
+====================================================================================================================
+
+

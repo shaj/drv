@@ -1,0 +1,1373 @@
+22.06.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall$ tar -zxvf keynote.tar.gz 
+keynote-2.3
+keynote-2.3/doc
+keynote-2.3/doc/rfc2704.txt
+keynote-2.3/doc/rfc2792.txt
+keynote-2.3/Misc
+keynote-2.3/Misc/keynote.btm
+keynote-2.3/Misc/keynote.gif
+keynote-2.3/testsuite
+keynote-2.3/testsuite/test-assertion1-signed.in
+keynote-2.3/testsuite/test-assertion6
+keynote-2.3/testsuite/test-assertion7
+keynote-2.3/testsuite/test-assertion2
+keynote-2.3/testsuite/test-assertion3
+keynote-2.3/testsuite/test-assertion4
+keynote-2.3/testsuite/auth4
+keynote-2.3/testsuite/openssl.cnf
+keynote-2.3/testsuite/test-assertion5
+keynote-2.3/testsuite/auth2
+keynote-2.3/testsuite/auth3
+keynote-2.3/testsuite/test-env
+keynote-2.3/testsuite/test-assertion1
+keynote-2.3/testsuite/auth1
+keynote-2.3/man
+keynote-2.3/man/keynote.5
+keynote-2.3/man/keynote.3
+keynote-2.3/man/.#keynote.1.1.10
+keynote-2.3/man/keynote.1
+keynote-2.3/man/keynote.4
+keynote-2.3/man/keynote.cat5
+keynote-2.3/man/keynote.cat3
+keynote-2.3/man/keynote.cat4
+keynote-2.3/man/keynote.cat1
+keynote-2.3/getopt.c
+keynote-2.3/getopt.h
+keynote-2.3/Makefile.in
+keynote-2.3/LICENSE
+keynote-2.3/config.hin
+keynote-2.3/HOWTO.add.crypto
+keynote-2.3/TODO
+keynote-2.3/assertion.h
+keynote-2.3/base64.c
+keynote-2.3/environment.c
+keynote-2.3/header.h
+keynote-2.3/keynote-sign.c
+keynote-2.3/auxil.c
+keynote-2.3/keynote-main.c
+keynote-2.3/keynote-sigver.c
+keynote-2.3/keynote-ver.l
+keynote-2.3/keynote-ver.y
+keynote-2.3/keynote-verify.c
+keynote-2.3/keynote.h
+keynote-2.3/keynote.l
+keynote-2.3/keynote.y
+keynote-2.3/parse_assertion.c
+keynote-2.3/signature.c
+keynote-2.3/README
+keynote-2.3/signature.h
+keynote-2.3/configure
+keynote-2.3/configure.in
+keynote-2.3/keynote-keygen.c
+keynote-2.3/sample-app.c
+
+olej@ubuntu:~/WORK_2015/FWall/keynote-2.3$ pwd
+/home/olej/WORK_2015/FWall/keynote-2.3
+
+olej@ubuntu:~/WORK_2015/FWall/keynote-2.3$ du -hs
+732K	.
+
+============================================================================================
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ make
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/drivers/sys_call_table/fw modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/drivers/sys_call_table/fw/mod_wrc.o
+  CC [M]  /home/olej/WORK_2015/FWall/drivers/sys_call_table/fw/mod_wrchg.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/WORK_2015/FWall/drivers/sys_call_table/fw/mod_wrc.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/drivers/sys_call_table/fw/mod_wrc.ko
+  CC      /home/olej/WORK_2015/FWall/drivers/sys_call_table/fw/mod_wrchg.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/drivers/sys_call_table/fw/mod_wrchg.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+--------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ sudo cat /proc/kallsyms | grep sys_write
+c1144d20 T sys_write
+c11453d0 T sys_writev
+c119bbc0 t proc_sys_write
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ sudo insmod mod_wrc.ko
+address sys_write system call = c1144d20
+insmod: error inserting 'mod_wrc.ko': -1 Operation not permitted
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ dmesg | tail -n2
+[23128.073912] + [42]: address sys_write system call = c1144d20
+[23128.078039] + write return : 42
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ sudo insmod mod_wrchg.ko
+[sudo] password for olej: 
+
+:-) olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ :-) sudo rmmod mod_wrchg:-) 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ dmesg | tail -n9
+[26885.900170] glcells[3362]: segfault at b70af0b0 ip b70af0b0 sp bfe4374c error 15
+[26972.063994] ! address sys_call_table = c15b4000
+[26972.076902] ! aqddress in position 4[__NR_write] = c1144d20
+[26972.077661] ! address sys_write = c1144d20
+[26972.077665] ! new address sys_write = e1a30030
+[26972.077668] ! CR0 = 8005003b
+[26972.077693] ! CR0 = 8004003b
+[26972.077700] ! CR0 = 8005003b
+[27005.338835] ! address sys_write before unload = e1a30030
+
+--------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ lsmod | grep ^f
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ lsmod | grep f
+vesafb                 13516  1 
+rfcomm                 38139  4 
+bluetooth             158438  10 bnep,rfcomm
+
+============================================================================================
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ uname -a
+Linux ubuntu 3.2.0-25-generic-pae #40-Ubuntu SMP Wed May 23 22:11:24 UTC 2012 i686 i686 i386 GNU/Linux
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/sys_call_table/fw$ lsb_release -ircd
+Distributor ID:Ubuntu
+Description:Ubuntu 12.04 LTS
+Release:12.04
+Codename:precise
+
+============================================================================================
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/difw$ pwd
+/home/olej/WORK_2015/FWall/drivers/difw
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/difw$ make
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/drivers/difw modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/drivers/difw/difw.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK_2015/FWall/drivers/difw/difw.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/drivers/difw/difw.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+--------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/Рабочий стол$ cd /lib/modules/`uname -r`
+
+olej@ubuntu:/lib/modules/3.2.0-25-generic-pae$ pwd
+/lib/modules/3.2.0-25-generic-pae
+
+olej@ubuntu:/lib/modules/3.2.0-25-generic-pae/build/include/linux$ pwd
+/lib/modules/3.2.0-25-generic-pae/build/include/linux
+
+--------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/difw$ sudo cat /proc/kallsyms | grep sys_accept
+c1499e10 T sys_accept4
+c149a070 T sys_accept
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/difw$ sudo cat /proc/kallsyms | grep sys_connect
+c149a0a0 T sys_connect
+
+http://lxr.oss.org.cn/source/arch/x86/include/asm/unistd_32.h?v=3.2.20#L12
+linux-3.2.20/arch/x86/include/asm/unistd_32.h
+#define __NR_exit                 1
+#define __NR_write                4
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/difw$ sudo cat /proc/kallsyms | grep sys_write$ | grep T
+c1144d20 T sys_write
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/difw$ sudo cat /proc/kallsyms | grep sys_exit$ | grep T
+c105eb50 T sys_exit
+
+============================================================================================
+
+23.06.2015
+==========
+
+olej@ubuntu:~/Рабочий стол$ cd /lib/modules/`uname -r`/build/include
+
+olej@ubuntu:/lib/modules/3.2.0-25-generic-pae/build/include$ pwd
+/lib/modules/3.2.0-25-generic-pae/build/include
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo insmod fwtest.ko
+[sudo] password for olej: 
+address of sys_call_table  = c15b4000
+address of syscall accept  = c149a070
+address of syscall connect  = c149a0a0
+insmod: error inserting 'fwtest.ko': -1 Operation not permitted
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo cat /proc/kallsyms | grep sys_connect
+c149a0a0 T sys_connect
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo cat /proc/kallsyms | grep sys_accept$
+c149a070 T sys_accept
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ make
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/drivers/fwtest modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/drivers/fwtest/fwtest.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK_2015/FWall/drivers/fwtest/fwtest.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/drivers/fwtest/fwtest.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo insmod fwtest.ko
+address of sys_call_table  = c15b4000
+size of sys_call_table  = 349
+__NR_write = 4, sys_call_table[ __NR_write ] = c1144d20
+__NR_write = 4, sys_call_table[ __NR_write ] = c1144d20
+address of syscall accept  = c149a070
+address not found
+address of syscall connect = c149a0a0
+address not found
+sys_call_table[ 202 ] = c106a150
+sys_call_table[ 203 ] = c1070210
+insmod: error inserting 'fwtest.ko': -1 Operation not permitted
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ dmesg | tail -n2
+[37143.123754] ! aqddress in position 4[__NR_write] = c1144d20
+[40354.645524] --------------------------------------------------------------------
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo cat /proc/kallsyms | grep  c106a150
+c106a150 T sys_getegid
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo cat /proc/kallsyms | grep  c1070210
+c1070210 T sys_setreuid
+
+getgid, getegid - get group identity
+setreuid, setregid - set real and/or effective user or group ID
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ make 
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/drivers/fwtest modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/drivers/fwtest/fwtest.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK_2015/FWall/drivers/fwtest/fwtest.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/drivers/fwtest/fwtest.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo insmod fwtest.ko
+address of sys_call_table  = c15b4000
+size of sys_call_table  = 349
+symbol: sys_write address=c1144d20 found in position 4
+symbol: sys_accept address=c149a070 not found
+symbol: sys_connect address=c149a0a0 not found
+sys_call_table[ 202 ] = c106a150
+sys_call_table[ 203 ] = c1070210
+insmod: error inserting 'fwtest.ko': -1 Operation not permitted
+
+===========================================================================
+
+olej@ubuntu:~/Рабочий стол$ man socketcall
+
+SOCKETCALL(2)                                                 Linux Programmer's Manual                                                 SOCKETCALL(2)
+
+NAME
+       socketcall - socket system calls
+
+SYNOPSIS
+       int socketcall(int call, unsigned long *args);
+
+DESCRIPTION
+       socketcall()  is  a common kernel entry point for the socket system calls.  call determines which socket function to invoke.  args points to a
+       block containing the actual arguments, which are passed through to the appropriate call.
+
+       User programs should call the appropriate functions by their usual names.  Only standard library implementors and kernel hackers need to  know
+       about socketcall().
+
+CONFORMING TO
+       This call is specific to Linux, and should not be used in programs intended to be portable.
+
+NOTES
+       On  a  few  architectures, for example ia64, there is no socketcall() system call; instead socket(2), accept(2), bind(2), and so on really are
+       implemented as separate system calls.
+
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo cat /proc/kallsyms | grep socketcall | grep T
+c10b0c90 T audit_socketcall
+c149acd0 T sys_socketcall
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ sudo insmod fwtest.ko
+address of sys_call_table  = c15b4000
+size of sys_call_table  = 349
+__NR_socketcall = 102
+symbol: sys_write address=c1144d20 found in position 4
+symbol: sys_accept address=c149a070 not found
+symbol: sys_connect address=c149a0a0 not found
+symbol: sys_socketcall address=c149acd0 found in position 102
+insmod: error inserting 'fwtest.ko': -1 Operation not permitted
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwtest$ dmesg | tail -n5
+[47178.373308] glmatrix[21155]: segfault at b6d080b0 ip b6d080b0 sp bfd058bc error 15
+[48988.604810] gltext[21182]: segfault at b70580b0 ip b70580b0 sp bff6019c error 15
+[51467.457087] --------------------------------------------------------------------
+[51678.578802] --------------------------------------------------------------------
+[52124.950810] --------------------------------------------------------------------
+
+===========================================================================
+
+25.06.2015
+==========
+
+olej@ubuntu:~/Рабочий стол$ cd /lib/modules/`uname -r`/build/include
+
+olej@ubuntu:/lib/modules/3.2.0-25-generic-pae/build/include$ pwd
+/lib/modules/3.2.0-25-generic-pae/build/include
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko
+insmod: error inserting 'fwnet.ko': -1 Invalid parameters
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n3
+[12579.010298] glschool[4598]: segfault at b70b20b0 ip b70b20b0 sp bfd0153c error 15
+[14571.168189] ! debug=0
+[14571.168194] ! deny=(null)
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko debug=1 deny=127.0.0.1
+insmod: error inserting 'fwnet.ko': -1 Invalid parameters
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n3
+[14616.929080] ! debug=1
+[14616.929095] ! deny=127.0.0.1
+[14616.929107] ! deny=127.0.0.1
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko debug=0 deny=127.0.0.1
+insmod: error inserting 'fwnet.ko': -1 Invalid parameters
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n2
+[15445.576592] ! debug=0
+[15445.578023] ! deny=127.0.0.1
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers$ cat /proc/kallsyms | grep 'T inet'
+00000000 T inet_proto_csum_replace4
+00000000 T inet_putpeer
+00000000 T inet_peer_xrlim_allow
+00000000 T inet_getpeer
+00000000 T inet_add_protocol
+00000000 T inet_del_protocol
+00000000 T inet_hashinfo_init
+00000000 T inet_unhash
+00000000 T inet_hash
+00000000 T inet_bind_bucket_create
+00000000 T inet_bind_bucket_destroy
+00000000 T inet_put_port
+00000000 T inet_bind_hash
+00000000 T inet_hash_connect
+00000000 T inet_twsk_schedule
+00000000 T inet_twsk_alloc
+00000000 T inet_twsk_put
+00000000 T inet_twsk_unhash
+00000000 T inet_twsk_bind_unhash
+00000000 T inet_twdr_twcal_tick
+00000000 T inet_twsk_deschedule
+00000000 T inet_twsk_purge
+00000000 T inet_twdr_twkill_work
+00000000 T inet_twdr_hangman
+00000000 T inet_csk_addr2sockaddr
+00000000 T inet_get_local_port_range
+00000000 T inet_csk_bind_conflict
+00000000 T inet_csk_search_req
+00000000 T inet_csk_destroy_sock
+00000000 T inet_csk_clone
+00000000 T inet_csk_route_child_sock
+00000000 T inet_csk_route_req
+00000000 T inet_csk_reset_keepalive_timer
+00000000 T inet_csk_reqsk_queue_prune
+00000000 T inet_csk_reqsk_queue_hash_add
+00000000 T inet_csk_delete_keepalive_timer
+00000000 T inet_csk_clear_xmit_timers
+00000000 T inet_csk_init_xmit_timers
+00000000 T inet_csk_accept
+00000000 T inet_csk_get_port
+00000000 T inet_csk_listen_start
+00000000 T inet_csk_listen_stop
+00000000 T inet_select_addr
+00000000 T inetdev_by_index
+00000000 T inet_addr_onlink
+00000000 T inet_ifa_byprefix
+00000000 T inet_confirm_addr
+00000000 T inet_ctl_sock_create
+00000000 T inet_register_protosw
+00000000 T inet_ioctl
+00000000 T inet_getname
+00000000 T inet_bind
+00000000 T inet_release
+00000000 T inet_sk_rebuild_header
+00000000 T inet_unregister_protosw
+00000000 T inet_shutdown
+00000000 T inet_dgram_connect
+00000000 T inet_accept
+00000000 T inet_stream_connect
+00000000 T inet_listen
+00000000 T inet_recvmsg
+00000000 T inet_sendmsg
+00000000 T inet_sendpage
+00000000 T inet_sock_destruct
+00000000 T inet_addr_type
+00000000 T inet_dev_addr_type
+00000000 T inet_frags_init_net
+00000000 T inet_frags_fini
+00000000 T inet_frag_destroy
+00000000 T inet_frag_find
+00000000 T inet_frags_init
+00000000 T inet_frag_kill
+00000000 T inet_frag_evictor
+00000000 T inet_frags_exit_net
+00000000 T inet_get_ping_group_range_table
+00000000 T inet6_register_protosw
+00000000 T inet6_ioctl
+00000000 T inet6_destroy_sock
+00000000 T inet6_release
+00000000 T inet6_unregister_protosw
+00000000 T inet6_getname
+00000000 T inet6_sk_rebuild_header
+00000000 T inet6_bind
+00000000 T inet6_ifa_finish_destroy
+00000000 T inet6_ifinfo_notify
+00000000 T inet6_rt_notify
+00000000 T inet6_add_protocol
+00000000 T inet6_del_protocol
+00000000 T inet6_mc_check
+00000000 T inet6_hash_frag
+00000000 T inet6_csk_reqsk_queue_hash_add
+00000000 T inet6_csk_search_req
+00000000 T inet6_csk_bind_conflict
+00000000 T inet6_csk_xmit
+00000000 T inet6_csk_addr2sockaddr
+00000000 T inet6_csk_route_req
+00000000 T inet6_hash_connect
+00000000 T inet6_lookup_listener
+00000000 T inet6_lookup
+00000000 T inet_initpeers
+
+http://lxr.free-electrons.com/source/include/linux/inet.h?v=3.5
+
+olej@ubuntu:~/WORK_2015/FWall/drivers$ sudo cat /proc/kallsyms | grep 'T in_a'
+c14ba640 T in_aton
+
+olej@ubuntu:~/WORK_2015/FWall/drivers$ sudo cat /proc/kallsyms | grep 'T in4_'
+c14ba7b0 T in4_pton
+
+
+http://lxr.free-electrons.com/source/include/linux/byteorder/generic.h?v=3.5#L131
+
+133 #define ___htonl(x) __cpu_to_be32(x)
+134 #define ___htons(x) __cpu_to_be16(x)
+135 #define ___ntohl(x) __be32_to_cpu(x)
+136 #define ___ntohs(x) __be16_to_cpu(x)
+137 
+138 #define htonl(x) ___htonl(x)
+139 #define ntohl(x) ___ntohl(x)
+140 #define htons(x) ___htons(x)
+141 #define ntohs(x) ___ntohs(x)
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers$ sudo cat /proc/kallsyms | grep sys_socket
+c107acb0 W compat_sys_socketcall
+c1499ab0 T sys_socket
+c1499b30 T sys_socketpair
+c149acd0 T sys_socketcall
+
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=127.0.0.1
+[sudo] password for olej: 
+insmod: error inserting 'fwnet.ko': -1 Unknown symbol in module
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n2
+[28638.373479] glmatrix[6185]: segfault at b6d440b0 ip b6d440b0 sp bfec96dc error 15
+[33235.291338] fwnet: Unknown symbol sys_socketcall (err 0)
+
+---------------------------------------------------------------------------
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=127.0.0.1
+[sudo] password for olej: 
+insmod: error inserting 'fwnet.ko': -1 Invalid parameters
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n5
+[37196.890678] ! aton = 16777343
+[37196.903168] ! sys_call_table address = c15b4000
+[37196.919910] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[37196.931599] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[37196.937592] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.1.1
+insmod: error inserting 'fwnet.ko': -1 Invalid parameters
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n5
+[37240.782972] ! aton = 16885952
+[37240.788008] ! sys_call_table address = c15b4000
+[37240.795996] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[37240.807969] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[37240.816034] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+
+---------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.1.1 debug=1
+[sudo] password for olej: 
+insmod: error inserting 'fwnet.ko': -1 Invalid parameters
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n7
+[42792.552994] glmatrix[8088]: segfault at b6ce60b0 ip b6ce60b0 sp bfd87ebc error 15
+[46379.293020] ! deny=192.168.1.1
+[46379.293171] ! aton = 16885952
+[46379.297203] ! sys_call_table address = c15b4000
+[46379.304599] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[46379.326405] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[46379.333481] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+
+===========================================================================================
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.1.100 debug=1
+[sudo] password for olej: 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ lsmod | head -n6
+Module                  Size  Used by
+fwnet                  12877  0 
+vboxvideo              12511  1 
+drm                   197692  2 vboxvideo
+vesafb                 13516  1 
+snd_intel8x0           33455  3 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n11
+[51672.341215] gltext[9772]: segfault at b702e0b0 ip b702e0b0 sp bffda7fc error 15
+[52155.614244] ! deny=192.168.1.100
+[52155.614249] ! aton = 1677830336
+[52155.617672] ! sys_call_table address = c15b4000
+[52155.622369] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[52155.629399] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[52155.634857] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[52155.635996] ! CR0 = 8005003b
+[52155.637651] ! CR0 = 8004003b
+[52155.637680] ! CR0 = 8005003b
+[52155.637704] ! install new sys_socketcall handler: e1a32000
+
+olej@ubuntu:~/WORK_2015/FWall/drivers$ ifconfig eth3
+eth3      Link encap:Ethernet  HWaddr 08:00:27:9a:16:31  
+          inet addr:192.168.1.100  Bcast:192.168.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:fe9a:1631/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:27176 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:17229 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:13503035 (13.5 MB)  TX bytes:4527433 (4.5 MB)
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.1.100 debug=1
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ lsmod | head -n3
+Module                  Size  Used by
+fwnet                  12877  0 
+vboxvideo              12511  1 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n11
+[52844.775288] ! new_sys_socketcall after. cod=10
+[52844.788210] ! new_sys_socketcall before. cod=10
+[52844.788237] ! new_sys_socketcall after. cod=10
+...
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo rmmod fwnet.ko 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n11
+[52865.614715] ! new_sys_socketcall after. cod=9
+[52865.621748] ! new_sys_socketcall before. cod=10
+[52865.621860] ! new_sys_socketcall after. cod=10
+[52865.621947] ! new_sys_socketcall before. cod=10
+[52865.622012] ! new_sys_socketcall after. cod=10
+[52865.622721] ! new_sys_socketcall before. cod=17
+[52865.622779] ! new_sys_socketcall after. cod=17
+[52865.624558] ! new_sys_socketcall before. cod=10
+[52865.624570] ! new_sys_socketcall after. cod=10
+[52865.667889] ! sys_socketcall handler before unload: e1a37000
+[52865.667942] ! restore old sys_socketcall handler: c149acd0
+
+===========================================================================================
+
+2326 #ifdef __ARCH_WANT_SYS_SOCKETCALL
+2327 /* Argument list sizes for sys_socketcall */
+2328 #define AL(x) ((x) * sizeof(unsigned long))
+2329 static const unsigned char nargs[21] = {
+2330         AL(0), AL(3), AL(3), AL(3), AL(2), AL(3),
+2331         AL(3), AL(3), AL(4), AL(4), AL(4), AL(6),
+2332         AL(6), AL(2), AL(5), AL(5), AL(3), AL(3),
+2333         AL(4), AL(5), AL(4)
+2334 };
+2335 
+2336 #undef AL
+2337 
+2338 /*
+2339  *      System call vectors.
+2340  *
+2341  *      Argument checking cleaned up. Saved 20% in size.
+2342  *  This function doesn't need to set the kernel lock because
+2343  *  it is set by the callees.
+2344  */
+
+
+2346 SYSCALL_DEFINE2(socketcall, int, call, unsigned long __user *, args)
+2347 {
+2348         unsigned long a[6];
+2349         unsigned long a0, a1;
+2350         int err;
+2351         unsigned int len;
+2352 
+2353         if (call < 1 || call > SYS_SENDMMSG)
+2354                 return -EINVAL;
+2355 
+2356         len = nargs[call];
+2357         if (len > sizeof(a))
+2358                 return -EINVAL;
+2359 
+2360         /* copy_from_user should be SMP safe. */
+2361         if (copy_from_user(a, args, len))
+2362                 return -EFAULT;
+2363 
+2364         audit_socketcall(nargs[call] / sizeof(unsigned long), a);
+2365 
+2366         a0 = a[0];
+2367         a1 = a[1];
+2368 
+2369         switch (call) {
+2370         case SYS_SOCKET:
+2371                 err = sys_socket(a0, a1, a[2]);
+2372                 break;
+2373         case SYS_BIND:
+2374                 err = sys_bind(a0, (struct sockaddr __user *)a1, a[2]);
+2375                 break;
+2376         case SYS_CONNECT:
+2377                 err = sys_connect(a0, (struct sockaddr __user *)a1, a[2]);
+2378                 break;
+2379         case SYS_LISTEN:
+2380                 err = sys_listen(a0, a1);
+2381                 break;
+2382         case SYS_ACCEPT:
+2383                 err = sys_accept4(a0, (struct sockaddr __user *)a1,
+2384                                   (int __user *)a[2], 0);
+
+-------------------------------------------------------------------------------------------
+
+http://lxr.free-electrons.com/source/include/linux/net.h?v=3.5#L28
+
+ 26 #define SYS_SOCKET      1               /* sys_socket(2)                */
+ 27 #define SYS_BIND        2               /* sys_bind(2)                  */
+ 28 #define SYS_CONNECT     3               /* sys_connect(2)               */
+ 29 #define SYS_LISTEN      4               /* sys_listen(2)                */
+ 30 #define SYS_ACCEPT      5               /* sys_accept(2)                */
+ 31 #define SYS_GETSOCKNAME 6               /* sys_getsockname(2)           */
+ 32 #define SYS_GETPEERNAME 7               /* sys_getpeername(2)           */
+ 33 #define SYS_SOCKETPAIR  8               /* sys_socketpair(2)            */
+ 34 #define SYS_SEND        9               /* sys_send(2)                  */
+ 35 #define SYS_RECV        10              /* sys_recv(2)                  */
+ 36 #define SYS_SENDTO      11              /* sys_sendto(2)                */
+ 37 #define SYS_RECVFROM    12              /* sys_recvfrom(2)              */
+ 38 #define SYS_SHUTDOWN    13              /* sys_shutdown(2)              */
+ 39 #define SYS_SETSOCKOPT  14              /* sys_setsockopt(2)            */
+ 40 #define SYS_GETSOCKOPT  15              /* sys_getsockopt(2)            */
+...
+
+===========================================================================================
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.1.100 debug=1
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ lsmod | head -n3
+Module                  Size  Used by
+fwnet                  12877  0 
+vboxvideo              12511  1 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n11
+[54053.766374] ! restore old sys_socketcall handler: c149acd0
+[54162.553918] ! deny=192.168.1.100
+[54162.553939] ! aton = 1677830336
+[54162.565720] ! sys_call_table address = c15b4000
+[54162.579146] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[54162.579996] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[54162.587990] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[54162.591959] ! CR0 = 8005003b
+[54162.592594] ! CR0 = 8004003b
+[54162.592639] ! CR0 = 8005003b
+[54162.592669] ! install new sys_socketcall handler: e1a37030
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v 
+listening on the TCP port 60000
+connect from: 192.168.1.100:60000 <= 192.168.1.100:43274
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n11
+[54162.553918] ! deny=192.168.1.100
+[54162.553939] ! aton = 1677830336
+[54162.565720] ! sys_call_table address = c15b4000
+[54162.579146] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[54162.579996] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[54162.587990] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[54162.591959] ! CR0 = 8005003b
+[54162.592594] ! CR0 = 8004003b
+[54162.592639] ! CR0 = 8005003b
+[54162.592669] ! install new sys_socketcall handler: e1a37030
+[54200.630387] ! new_sys_socketcall before cod=5
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -h 192.168.1.100 -v
+connect to: 192.168.1.100:43274 => 192.168.1.100:60000
+11111
+11111
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n35
+[54053.722871] ! new_sys_socketcall before cod=3
+[54053.722880] ! new_sys_socketcall after cod=3
+[54053.735878] ! new_sys_socketcall before cod=3
+[54053.736736] ! new_sys_socketcall after cod=3
+[54053.740370] ! new_sys_socketcall before cod=3
+[54053.740382] ! new_sys_socketcall after cod=3
+[54053.766352] ! sys_socketcall handler before unload: e1a32030
+[54053.766374] ! restore old sys_socketcall handler: c149acd0
+[54162.553918] ! deny=192.168.1.100
+[54162.553939] ! aton = 1677830336
+[54162.565720] ! sys_call_table address = c15b4000
+[54162.579146] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[54162.579996] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[54162.587990] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[54162.591959] ! CR0 = 8005003b
+[54162.592594] ! CR0 = 8004003b
+[54162.592639] ! CR0 = 8005003b
+[54162.592669] ! install new sys_socketcall handler: e1a37030
+[54200.630387] ! new_sys_socketcall before cod=5
+[54226.044023] ! new_sys_socketcall before cod=3
+[54226.045553] ! new_sys_socketcall after cod=3
+[54237.335567] ! new_sys_socketcall before cod=3
+[54237.335751] ! new_sys_socketcall after cod=3
+[54237.335903] ! new_sys_socketcall after cod=5
+[54237.336956] ! new_sys_socketcall before cod=5
+[54239.062681] ! new_sys_socketcall before cod=3
+[54239.062740] ! new_sys_socketcall after cod=3
+[54239.102679] ! new_sys_socketcall before cod=3
+[54239.102700] ! new_sys_socketcall after cod=3
+[54239.102708] ! new_sys_socketcall before cod=3
+[54239.102718] ! new_sys_socketcall after cod=3
+[54239.102723] ! new_sys_socketcall before cod=3
+[54239.102730] ! new_sys_socketcall after cod=3
+[54239.103119] ! new_sys_socketcall before cod=3
+[54239.103316] ! new_sys_socketcall after cod=3
+
+
+-------------------------------------------------------------------------------------------
+
+http://isomerica.net/~dpn/socketcall1.pdf
+
+sys socketcall: Network systems calls on Linux
+
+===========================================================================================
+
+26.06.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+connect from: 192.168.1.100:60000 <= 192.168.1.100:48474
+connection closed
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -h192.168.1.100 -v
+connect to: 192.168.1.100:48474 => 192.168.1.100:60000
+asdfsadf
+asdfsadf
+^C
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ make
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/drivers/fwnet modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/drivers/fwnet/fwnet.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK_2015/FWall/drivers/fwnet/fwnet.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/drivers/fwnet/fwnet.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko debug=1
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ lsmod | head -n4
+Module                  Size  Used by
+fwnet                  13009  0 
+vboxvideo              12511  1 
+drm                   197692  2 vboxvideo
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[12464.254204] ! restore old sys_socketcall handler: c149acd0
+[13087.992533] ! denied IP: no
+[13087.995686] ! sys_call_table address = c15b4000
+[13088.000797] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[13088.005839] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[13088.011015] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[13088.013601] ! CR0 = 80050033
+[13088.013625] ! CR0 = 80040033
+[13088.013631] ! CR0 = 80050033
+[13088.013635] ! install new sys_socketcall handler: e09f10d0
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[13088.000797] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[13088.005839] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[13088.011015] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[13088.013601] ! CR0 = 80050033
+[13088.013625] ! CR0 = 80040033
+[13088.013631] ! CR0 = 80050033
+[13088.013635] ! install new sys_socketcall handler: e09f10d0
+[13130.843320] ! connect to 127.0.0.1:53
+[13130.890517] ! connect to 213.108.249.3:0
+[13130.890542] ! connect to 213.108.248.249:0
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ nslookup 213.108.248.249
+Server:127.0.0.1
+Address:127.0.0.1#53
+
+Non-authoritative answer:
+249.248.108.213.in-addr.arpaname = ubuntu.ru.
+
+Authoritative answers can be found from:
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[13130.890517] ! connect to 213.108.249.3:0
+[13130.890542] ! connect to 213.108.248.249:0
+[13283.887977] ! connect to 127.0.0.1:53
+[13283.944314] ! connect to 64.233.164.125:5222
+[13284.394271] ! connect to 64.233.164.125:443
+[13284.873305] ! connect to 127.0.0.1:53
+[13284.922349] ! connect to 74.125.203.125:5222
+[13285.126159] ! connect to 74.125.203.125:5222
+[13286.744654] ! connect to 74.125.203.125:443
+[13286.995507] ! connect to 74.125.203.125:443
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+connect from: 127.0.0.1:60000 <= 127.0.0.1:51382
+connection closed
+connect from: 192.168.1.100:60000 <= 192.168.1.100:37964
+connection closed
+^C
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1
+connect to: 127.0.0.1:51382 => 127.0.0.1:60000
+1234
+1234
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 192.168.1.100
+connect to: 192.168.1.100:37964 => 192.168.1.100:60000
+1234
+1234
+^C
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n40
+[13130.890517] ! connect to 213.108.249.3:0
+[13130.890542] ! connect to 213.108.248.249:0
+[13283.887977] ! connect to 127.0.0.1:53
+[13283.944314] ! connect to 64.233.164.125:5222
+[13284.394271] ! connect to 64.233.164.125:443
+[13284.873305] ! connect to 127.0.0.1:53
+[13284.922349] ! connect to 74.125.203.125:5222
+[13285.126159] ! connect to 74.125.203.125:5222
+[13286.744654] ! connect to 74.125.203.125:443
+[13286.995507] ! connect to 74.125.203.125:443
+[13347.311420] BUG: unable to handle kernel paging request at e09c30fc
+[13347.311430] IP: [<e09c30fc>] 0xe09c30fb
+[13347.311443] *pdpt = 000000000193a001 *pde = 000000001f26a067 *pte = 0000000000000000 
+[13347.311452] Oops: 0010 [#4] SMP 
+[13347.311459] Modules linked in: fwnet(O) vboxvideo(O) drm vesafb snd_intel8x0 snd_ac97_codec ac97_bus snd_pcm snd_seq_midi snd_rawmidi snd_seq_midi_event snd_seq snd_timer bnep rfcomm snd_seq_device bluetooth ppdev joydev psmouse snd serio_raw i2c_piix4 video vboxguest(O) parport_pc mac_hid soundcore snd_page_alloc lp parport usbhid hid e1000 [last unloaded: fwnet]
+[13347.311491] 
+[13347.311498] Pid: 7799, comm: tcpserv Tainted: G      D    O 3.2.0-25-generic-pae #40-Ubuntu innotek GmbH VirtualBox/VirtualBox
+[13347.311522] EIP: 0060:[<e09c30fc>] EFLAGS: 00210286 CPU: 1
+[13347.311529] EIP is at 0xe09c30fc
+[13347.311534] EAX: fffffe00 EBX: 00000005 ECX: 00000016 EDX: 00000000
+[13347.311540] ESI: 00000005 EDI: 00000004 EBP: dc515fac ESP: dc515f94
+[13347.311546]  DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068
+[13347.311551] Process tcpserv (pid: 7799, ti=dc514000 task=ce4e4bc0 task.ti=dc514000)
+[13347.311557] Stack:
+[13347.311561]  00000005 bfeeef40 c0f8b340 bfeeef40 00000005 bfeeef68 dc514000 c15afedf
+[13347.311572]  00000005 bfeeef40 00000003 bfeeef68 00000004 bfeeef98 00000066 0000007b
+[13347.311582]  0000007b 00000000 00000033 00000066 b76ff424 00000073 00200246 bfeeef2c
+[13347.311593] Call Trace:
+[13347.311603]  [<c15afedf>] sysenter_do_call+0x12/0x28
+[13347.311609] Code:  Bad EIP value.
+[13347.311632] EIP: [<e09c30fc>] 0xe09c30fc SS:ESP 0068:dc515f94
+[13347.311640] CR2: 00000000e09c30fc
+[13347.311649] ---[ end trace f0d11a880b2a5f95 ]---
+[13358.108422] ! connect to 127.0.0.1:60000
+[13358.108650] ! accept from 127.0.0.1:51382
+[13366.431414] ! connect to 192.168.1.100:60000
+[13366.431783] ! accept from 192.168.1.100:37964
+[13380.947463] ! connect to 127.0.0.1:53
+[13380.987806] ! connect to 213.108.248.249:0
+[13380.987824] ! connect to 213.108.249.3:0
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 192.168.1.100
+client: can't connect to server: Connection refused
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n4
+[13545.749174] ! connect to 173.194.113.206:80
+[13545.819269] ! connect to 127.0.0.1:53
+[13545.866269] ! connect to 216.58.209.206:80
+[13548.482553] ! connect to 192.168.1.100:60000
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo cat /proc/kallsyms | grep new_sys | grep T
+e09f10d0 T new_sys_socketcall[fwnet]
+
+===========================================================================================
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=127.0.0.1 debug=1
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[16984.669438] ! restore old sys_socketcall handler: c149acd0
+[17236.928001] ! denied IP: 127.0.0.1
+[17236.931230] ! sys_call_table address = c15b4000
+[17236.936778] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[17236.941832] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[17236.947271] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[17236.950021] ! CR0 = 80050033
+[17236.950046] ! CR0 = 80040033
+[17236.950053] ! CR0 = 80050033
+[17236.950056] ! install new sys_socketcall handler: e09c30d0
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1
+client: can't connect to server: Operation not permitted
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[17264.245553] ! connect to 127.0.0.1:53
+[17264.245559] ! connect to 127.0.0.1:53 denied
+[17264.245571] ! connect to 127.0.0.1:53
+[17264.245578] ! connect to 127.0.0.1:53 denied
+[17264.245620] ! connect to 127.0.0.1:53
+[17264.245624] ! connect to 127.0.0.1:53 denied
+[17264.245633] ! connect to 127.0.0.1:53
+[17264.245637] ! connect to 127.0.0.1:53 denied
+[17279.947287] ! connect to 127.0.0.1:60000
+[17279.947293] ! connect to 127.0.0.1:60000 denied
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+connect from: 192.168.1.100:60000 <= 192.168.1.100:38115
+connection closed
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 192.168.1.100
+connect to: 192.168.1.100:38115 => 192.168.1.100:60000
+1234
+1234
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1
+client: can't connect to server: Operation not permitted
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[17264.245620] ! connect to 127.0.0.1:53
+[17264.245624] ! connect to 127.0.0.1:53 denied
+[17264.245633] ! connect to 127.0.0.1:53
+[17264.245637] ! connect to 127.0.0.1:53 denied
+[17279.947287] ! connect to 127.0.0.1:60000
+[17279.947293] ! connect to 127.0.0.1:60000 denied
+[17375.154222] ! connect to 192.168.1.100:60000
+[17375.154523] ! accept from 192.168.1.100:38115
+[17382.097746] ! connect to 127.0.0.1:60000
+[17382.097756] ! connect to 127.0.0.1:60000 denied
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo rmmod fwnet.ko 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n5
+[17382.097746] ! connect to 127.0.0.1:60000
+[17382.097756] ! connect to 127.0.0.1:60000 denied
+[17407.553446] ! accept from 192.168.1.100:38115
+[17498.586851] ! sys_socketcall handler before unload: e09c30d0
+[17498.586878] ! restore old sys_socketcall handler: c149acd0
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo cat /proc/kallsyms | grep sys_shutdown | grep T
+c149a800 T sys_shutdown
+
+===========================================================================================
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/drivers/cliserv $ lsb_release -ircd
+Distributor ID:	LinuxMint
+Description:	Linux Mint 17.1 Rebecca
+Release:	17.1
+Codename:	rebecca
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/drivers/cliserv $ ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether f4:6d:04:60:78:6f brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.102/24 brd 192.168.1.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::f66d:4ff:fe60:786f/64 scope link 
+       valid_lft forever preferred_lft forever
+3: vboxnet0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UNKNOWN group default qlen 1000
+    link/ether 0a:00:27:00:00:00 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.56.1/24 brd 192.168.56.255 scope global vboxnet0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::800:27ff:fe00:0/64 scope link 
+       valid_lft forever preferred_lft forever
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/drivers/cliserv $ ping 192.168.56.101
+PING 192.168.56.101 (192.168.56.101) 56(84) bytes of data.
+64 bytes from 192.168.56.101: icmp_seq=1 ttl=64 time=0.595 ms
+64 bytes from 192.168.56.101: icmp_seq=2 ttl=64 time=0.546 ms
+64 bytes from 192.168.56.101: icmp_seq=3 ttl=64 time=0.427 ms
+64 bytes from 192.168.56.101: icmp_seq=4 ttl=64 time=0.450 ms
+64 bytes from 192.168.56.101: icmp_seq=5 ttl=64 time=0.528 ms
+^C
+--- 192.168.56.101 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4000ms
+rtt min/avg/max/mdev = 0.427/0.509/0.595/0.063 ms
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/drivers/cliserv $ ./tcpcli -v -h 192.168.56.101
+connect to: 192.168.56.1:41752 => 192.168.56.101:60000
+123
+123
+^C
+
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:9a:16:31 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.100/24 brd 192.168.1.255 scope global eth3
+    inet6 fe80::a00:27ff:fe9a:1631/64 scope link 
+       valid_lft forever preferred_lft forever
+3: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:da:a8:37 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.56.101/24 brd 192.168.56.255 scope global eth2
+    inet6 fe80::a00:27ff:feda:a837/64 scope link 
+       valid_lft forever preferred_lft forever
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+connect from: 192.168.56.101:60000 <= 192.168.56.1:41752
+^C
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.56.1 debug=1
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n3
+[17498.586851] ! sys_socketcall handler before unload: e09c30d0
+[17498.586878] ! restore old sys_socketcall handler: c149acd0
+[20406.670354] fwnet: Unknown symbol sys_shutdown (err 0)
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.56.1 debug=1
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n11
+[17498.586878] ! restore old sys_socketcall handler: c149acd0
+[20406.670354] fwnet: Unknown symbol sys_shutdown (err 0)
+[21150.424765] ! denied IP: 192.168.56.1
+[21150.427946] ! sys_call_table address = c15b4000
+[21150.434397] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[21150.439998] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[21150.446356] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[21150.452219] ! CR0 = 8005003b
+[21150.452241] ! CR0 = 8004003b
+[21150.452248] ! CR0 = 8005003b
+[21150.452251] ! install new sys_socketcall handler: e09f60d0
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/drivers/cliserv $ ./tcpcli -v -h 192.168.56.101
+connect to: 192.168.56.1:41805 => 192.168.56.101:60000
+111
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+server: accept error: Operation not permitted
+Аварийный останов (core dumped)
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[21150.434397] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[21150.439998] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[21150.446356] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[21150.452219] ! CR0 = 8005003b
+[21150.452241] ! CR0 = 8004003b
+[21150.452248] ! CR0 = 8005003b
+[21150.452251] ! install new sys_socketcall handler: e09f60d0
+[21199.570732] ! accept from 192.168.56.1:41805
+[21199.570744] ! accept from 192.168.56.1:41805 denied
+[21292.254277] ! connect to 127.0.0.1:53
+
+===========================================================================================
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ sudo insmod fwnet.ko deny=192.168.56.1 debug=1
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet$ dmesg | tail -n10
+[26571.412493] ! shutdown return -107
+[26571.412534] ! accept from 192.168.56.1:42138
+[26571.412538] ! accept from 192.168.56.1:42138 denied
+[26571.412542] ! shutdown return -107
+[26571.412630] ! accept from 192.168.56.1:42138
+[26571.412635] ! accept from 192.168.56.1:42138 denied
+[26571.412640] ! shutdown return -107
+[26571.412686] ! accept from 192.168.56.1:42138
+[26571.412691] ! accept from 192.168.56.1:42138 denied
+[26571.412695] ! shutdown return -107
+
+
+#define ENOTCONN        107     /* Transport endpoint is not connected */
+
+#define EBADF            9      /* Bad file number */
+
+===========================================================================================
+
+29.06.2015
+==========
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ make
+make -C /lib/modules/3.2.0-25-generic-pae/build M=/home/olej/WORK_2015/FWall/drivers/fwnet.ver1 modules
+make[1]: Вход в каталог `/usr/src/linux-headers-3.2.0-25-generic-pae'
+  CC [M]  /home/olej/WORK_2015/FWall/drivers/fwnet.ver1/fwnet.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/WORK_2015/FWall/drivers/fwnet.ver1/fwnet.mod.o
+  LD [M]  /home/olej/WORK_2015/FWall/drivers/fwnet.ver1/fwnet.ko
+make[1]: Выход из каталога `/usr/src/linux-headers-3.2.0-25-generic-pae'
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ ifconfig eth2
+eth2      Link encap:Ethernet  HWaddr 08:00:27:da:a8:37  
+          inet addr:192.168.56.101  Bcast:192.168.56.255  Mask:255.255.255.0
+          inet6 addr: fe80::a00:27ff:feda:a837/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:102 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:57 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:20906 (20.9 KB)  TX bytes:11918 (11.9 KB)
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo ifconfig eth2:1 192.168.56.105 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ ip address
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 16436 qdisc noqueue state UNKNOWN 
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:9a:16:31 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.100/24 brd 192.168.1.255 scope global eth3
+    inet6 fe80::a00:27ff:fe9a:1631/64 scope link 
+       valid_lft forever preferred_lft forever
+3: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 08:00:27:da:a8:37 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.56.101/24 brd 192.168.56.255 scope global eth2
+    inet 192.168.56.105/24 brd 192.168.56.255 scope global secondary eth2:1
+    inet6 fe80::a00:27ff:feda:a837/64 scope link 
+       valid_lft forever preferred_lft forever
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo insmod fwnet.ko debug=1 deny=192.168.56.105 port=10000
+[sudo] password for olej: 
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n11
+[ 8377.948347] gltext[3592]: segfault at b70570b0 ip b70570b0 sp bfe8b65c error 15
+[ 8473.068751] ! denied IP: 192.168.56.105
+[ 8473.068755] ! denied TCP port: 10000
+[ 8473.071769] ! sys_call_table address = c15b4000
+[ 8473.076913] ! symbol sys_accept address = c149a070, not found in sys_call_table
+[ 8473.081995] ! symbol sys_connect address = c149a0a0, not found in sys_call_table
+[ 8473.087038] ! symbol sys_socketcall address = c149acd0, position in sys_call_table = 102
+[ 8473.092549] ! CR0 = 80050033
+[ 8473.092570] ! CR0 = 80040033
+[ 8473.092577] ! CR0 = 80050033
+[ 8473.092580] ! install new sys_socketcall handler: e09b60d0
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ make
+gcc -O2 -Wall -c error.c -o error.o 
+gcc -O2 -Wall -c writen.c -o writen.o 
+gcc -O2 -Wall -c readline.c -o readline.o 
+gcc -O2 -Wall -c strsock.c -o strsock.o 
+gcc -O2 -Wall tcpserv.c -o tcpserv error.o writen.o readline.o strsock.o
+gcc -O2 -Wall tcpcli.c -o tcpcli error.o writen.o readline.o strsock.o
+rm *.o
+
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpserv -v
+listening on the TCP port 60000
+connect from: 192.168.56.101:60000 <= 192.168.56.101:55187
+connection closed
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 192.168.56.101
+connect to: 192.168.56.101:55187 => 192.168.56.101:60000
+12345
+12345
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 192.168.56.105
+client: can't connect to server: Permission denied
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n5
+[ 8473.092580] ! install new sys_socketcall handler: e09b60d0
+[ 8639.132245] ! connect to 192.168.56.101:60000
+[ 8639.133536] ! accept from 192.168.56.101:55187
+[ 8647.770627] ! connect to 192.168.56.105:60000
+[ 8647.770633] ! connect to 192.168.56.105:60000 denied
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1 
+connect to: 127.0.0.1:52145 => 127.0.0.1:60000
+123456
+123456
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n6
+[ 9463.779276] ! connect to 127.0.0.1:53
+[ 9463.827298] ! connect to 216.58.209.174:80
+[ 9490.596891] ! connect to 127.0.0.1:60000
+[ 9490.597299] ! accept from 127.0.0.1:52145
+[ 9502.396851] ! connect to 127.0.0.1:10000
+[ 9502.396855] ! connect to 127.0.0.1:10000 denied
+
+-------------------------------------------------------------------------------------------
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall $ ifconfig vboxnet0
+vboxnet0  Link encap:Ethernet  HWaddr 0a:00:27:00:00:00  
+          inet addr:192.168.56.1  Bcast:192.168.56.255  Mask:255.255.255.0
+          inet6 addr: fe80::800:27ff:fe00:0/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:213 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:45824 (45.8 KB)
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall $ ping 192.168.56.105
+PING 192.168.56.105 (192.168.56.105) 56(84) bytes of data.
+64 bytes from 192.168.56.105: icmp_seq=1 ttl=64 time=1.34 ms
+64 bytes from 192.168.56.105: icmp_seq=2 ttl=64 time=0.241 ms
+^C
+--- 192.168.56.105 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+rtt min/avg/max/mdev = 0.241/0.791/1.342/0.551 ms
+
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/drivers/fwnet.ver1 $ ping 192.168.56.101
+PING 192.168.56.101 (192.168.56.101) 56(84) bytes of data.
+64 bytes from 192.168.56.101: icmp_seq=1 ttl=64 time=0.807 ms
+64 bytes from 192.168.56.101: icmp_seq=2 ttl=64 time=0.321 ms
+^C
+--- 192.168.56.101 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1000ms
+rtt min/avg/max/mdev = 0.321/0.564/0.807/0.243 ms
+
+
+olej@nvidia ~/2015_WORK/in.WORK/FWall/drivers/fwnet.ver1 $ ping 192.168.1.100
+PING 192.168.1.100 (192.168.1.100) 56(84) bytes of data.
+64 bytes from 192.168.1.100: icmp_seq=1 ttl=64 time=0.514 ms
+64 bytes from 192.168.1.100: icmp_seq=2 ttl=64 time=0.316 ms
+^C
+--- 192.168.1.100 ping statistics ---
+2 packets transmitted, 2 received, 0% packet loss, time 1000ms
+rtt min/avg/max/mdev = 0.316/0.415/0.514/0.099 ms
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1 -p 10000
+client: can't connect to server: Permission denied
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1 -p 10000
+connect to: 127.0.0.1:55631 => 127.0.0.1:10000
+^C
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ time ./tcpcli -v -h 127.0.0.1 -p 10000
+client: can't connect to server: Connection refused
+real0m0.020s
+user0m0.000s
+sys0m0.020s
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/cliserv$ ./tcpcli -v -h 127.0.0.1 -p 10000
+client: can't connect to server: Connection refused
+
+-------------------------------------------------------------------------------------------
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ sudo rmmod fwnet
+
+olej@ubuntu:~/WORK_2015/FWall/drivers/fwnet.ver1$ dmesg | tail -n45
+[10664.393414] ! accept from 192.168.56.1:54846
+[10776.918123] ! accept from 192.168.56.1:54846
+[10934.081879] ! accept from 192.168.56.1:36343
+[10984.082051] ! connect to 127.0.0.1:10000
+[10984.082060] ! connect to 127.0.0.1:10000 denied
+[11166.236948] ! connect to 127.0.0.1:53
+...
+[11285.992820] ! sys_socketcall handler before unload: e09b60d0
+[11285.992874] ! restore old sys_socketcall handler: c149acd0
+[11296.875861] BUG: unable to handle kernel paging request at e09b60fc
+[11296.875870] IP: [<e09b60fc>] 0xe09b60fb
+[11296.875880] *pdpt = 000000000193a001 *pde = 000000001f3de067 *pte = 0000000000000000 
+[11296.875886] Oops: 0010 [#1] SMP 
+[11296.875893] Modules linked in: vboxvideo(O) drm vesafb snd_intel8x0 snd_ac97_codec bnep rfcomm ac97_bus snd_pcm bluetooth snd_seq_midi snd_rawmidi snd_seq_midi_event ppdev snd_seq vboxguest(O) joydev psmouse serio_raw snd_timer snd_seq_device i2c_piix4 snd soundcore video parport_pc snd_page_alloc mac_hid lp parport usbhid hid e1000 [last unloaded: fwnet]
+[11296.875918] 
+[11296.875923] Pid: 3716, comm: tcpserv Tainted: G           O 3.2.0-25-generic-pae #40-Ubuntu innotek GmbH VirtualBox/VirtualBox
+[11296.875929] EIP: 0060:[<e09b60fc>] EFLAGS: 00210286 CPU: 1
+[11296.875933] EIP is at 0xe09b60fc
+[11296.875937] EAX: 00000004 EBX: 00000005 ECX: db4e8400 EDX: 00000000
+[11296.875941] ESI: 00000005 EDI: 00000004 EBP: dd2fbfac ESP: dd2fbf94
+[11296.875947]  DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068
+[11296.875951] Process tcpserv (pid: 3716, ti=dd2fa000 task=c93ce500 task.ti=dd2fa000)
+[11296.875955] Stack:
+[11296.875958]  00000005 bff9f670 c5f57840 bff9f670 00000005 bff9f698 dd2fa000 c15afedf
+[11296.875966]  00000005 bff9f670 00000003 bff9f698 00000004 bff9f6c8 00000066 0000007b
+[11296.875973]  0000007b 00000000 00000033 00000066 b773e424 00000073 00200246 bff9f65c
+[11296.875980] Call Trace:
+[11296.875990]  [<c15afedf>] sysenter_do_call+0x12/0x28
+[11296.875994] Code:  Bad EIP value.
+[11296.876001] EIP: [<e09b60fc>] 0xe09b60fc SS:ESP 0068:dd2fbf94
+[11296.876031] CR2: 00000000e09b60fc
+[11296.876036] ---[ end trace 1b03a4db02ca814b ]---
+
+-------------------------------------------------------------------------------------------
+
+
+
+
+

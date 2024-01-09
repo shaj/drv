@@ -1,0 +1,155 @@
+19.08.2022
+==========
+
+$ sudo inxi -MS
+[sudo] пароль для olej: 
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+Machine:
+  Type: Virtualbox System: innotek GmbH product: VirtualBox v: 1.2
+    serial: N/A
+  Mobo: Oracle model: VirtualBox v: 1.2 serial: N/A BIOS: innotek GmbH
+    v: VirtualBox date: 12/01/2006
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/export/md_64p.o
+/home/olej/2022/kernel/sys_call_table/export/md_64p.c:4:12: error: conflicting types for ‘printk’
+    4 | extern int printk(const char *fmt, ...);
+      |            ^~~~~~
+In file included from ./include/linux/kernel.h:13,
+                 from ./include/linux/list.h:8,
+                 from ./include/linux/module.h:9,
+                 from /home/olej/2022/kernel/sys_call_table/export/md_64p.c:1:
+./include/linux/printk.h:163:5: note: previous declaration of ‘printk’ was here
+  163 | int printk(const char *fmt, ...);
+      |     ^~~~~~
+make[2]: *** [scripts/Makefile.build:314: /home/olej/2022/kernel/sys_call_table/export/md_64p.o] Ошибка 1
+make[1]: *** [Makefile:1557: _module_/home/olej/2022/kernel/sys_call_table/export] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+make: *** [Makefile:12: default] Ошибка 2
+
+------------------------------------------------------------------------------------------------------
+
+$ inxi -S
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    Desktop: IceWM v: 2.9.7
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/export/md_32c.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/sys_call_table/export/md_32c.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/export/md_32c.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+olej@antix21:~/2022/kernel/sys_call_table/export
+$ ls *.ko
+md_32c.ko
+
+$ sudo insmod md_32c.ko 
+insmod: ERROR: could not insert module md_32c.ko: Operation not permitted
+
+$ dmesg | tail -n1
+[124910.472207] sys_close address: c91a9c70
+
+$ sudo cat /proc/kallsyms | grep sys_close
+c91a9c70 T sys_close
+
+$ sudo cat /proc/kallsyms | grep ' sys_open'$
+c91ab810 T sys_open
+
+
+$ sudo cat /proc/kallsyms | grep ' T ' | grep ' sys_open'$
+c91ab810 T sys_open
+
+$ sudo cat /proc/kallsyms | grep ' T ' | grep sys_close
+c91a9c70 T sys_close
+
+
+------------------------------------------------------------------------------------------------------
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/sys_call_table/export modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/sys_call_table/export/md_32o.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+WARNING: "sys_open" [/home/olej/2022/kernel/sys_call_table/export/md_32o.ko] undefined!
+  CC      /home/olej/2022/kernel/sys_call_table/export/md_32o.mod.o
+  LD [M]  /home/olej/2022/kernel/sys_call_table/export/md_32o.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+olej@antix21:~/2022/kernel/sys_call_table/export
+$ ls *.ko
+md_32c.ko  md_32o.ko
+
+$ sudo insmod md_32o.ko 
+insmod: ERROR: could not insert module md_32o.ko: Unknown symbol in module
+
+$ dmesg | tail -n1
+[125175.046023] md_32o: Unknown symbol sys_open (err 0)
+
+======================================================================================================
+
+$ sudo cat /proc/kallsyms | grep ' T ' | grep  ' sys_close'$
+c91a9c70 T sys_close
+
+$ sudo cat /proc/kallsyms | grep ' T ' | grep  ' sys_open'$
+c91ab810 T sys_open
+
+$ sudo grep ' printk'$ /proc/kallsyms
+c98017ec T printk
+
+======================================================================================================
+
+$ cat /proc/kallsyms | wc -l
+48161
+
+$ cat /proc/kallsyms | grep ' T ' | wc -l
+18865
+
+
+$ grep 'vmlinux' /lib/modules/`uname -r`/build/Module.symvers | head
+0x6fbf0e92	ipv6_chk_custom_prefix	vmlinux	EXPORT_SYMBOL
+0xc560732c	cros_ec_check_result	vmlinux	EXPORT_SYMBOL
+0xef924f99	sata_pmp_error_handler	vmlinux	EXPORT_SYMBOL_GPL
+0x55417264	unregister_vt_notifier	vmlinux	EXPORT_SYMBOL_GPL
+0xcfc9cf89	debugfs_use_file_finish	vmlinux	EXPORT_SYMBOL_GPL
+0x309b6730	set_anon_super	vmlinux	EXPORT_SYMBOL
+0x464ee68d	__cleancache_invalidate_page	vmlinux	EXPORT_SYMBOL
+0xd3d34f27	kmem_cache_alloc	vmlinux	EXPORT_SYMBOL
+0xce0162d0	replace_page_cache_page	vmlinux	EXPORT_SYMBOL_GPL
+0x9432b036	net_cls_cgrp_subsys_enabled_key	vmlinux	EXPORT_SYMBOL_GPL
+
+$ grep 'vmlinux' /lib/modules/`uname -r`/build/Module.symvers | wc -l 
+8998
+
+$ grep 'vmlinux' /lib/modules/`uname -r`/build/Module.symvers | grep EXPORT_SYMBOL_GPL | wc -l 
+4222
+
+------------------------------------------------------------------------------------------------------
+
+$ cat /lib/modules/`uname -r`/build/Module.symvers | grep sys_close 
+0x268cc6a2	sys_close	vmlinux	EXPORT_SYMBOL
+
+$ cat /lib/modules/`uname -r`/build/Module.symvers | grep sys_open 
+$
+
+======================================================================================================
+
+$ cat /lib/modules/`uname -r`/build/.config | grep CONFIG_KALLSYMS
+CONFIG_KALLSYMS=y
+# CONFIG_KALLSYMS_ABSOLUTE_PERCPU is not set
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+
+======================================================================================================

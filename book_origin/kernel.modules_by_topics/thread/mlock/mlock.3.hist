@@ -1,0 +1,180 @@
+15.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+---------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=10 num=2 max_level=2 sync=-1
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m1,272s
+user	0m0,008s
+sys	0m0,004s
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep ! | tail -n7
+[17675.562501] ! repeat 10 times in 2 levels; synch. in level -1
+[17675.562584] ! 4299311045 : kthread [20837:1] is running
+[17675.562629] ! 4299311045 : kthread [20838:0] is running
+[17676.766882] ! 4299311347 : kthread [20838:0] do 100 units
+[17676.766885] ! 4299311347 : kthread [20837:1] do 100 units
+[17676.766926] ! 4299311347 : kthread [20836:2] is finished
+[17676.766928] ! working time was 1.2 seconds, locked 0 times
+
+---------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=10 num=2 max_level=4 sync=-1
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	2m0,379s
+user	0m0,008s
+sys	0m0,005s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep ! | tail -n7
+[17830.610924] ! repeat 10 times in 4 levels; synch. in level -1
+[17830.611044] ! 4299349808 : kthread [20915:1] is running
+[17830.611099] ! 4299349808 : kthread [20916:0] is running
+[17950.836423] ! 4299379865 : kthread [20916:0] do 10000 units
+[17950.912423] ! 4299379884 : kthread [20915:1] do 10000 units
+[17950.912433] ! 4299379884 : kthread [20914:2] is finished
+[17950.912435] ! working time was 120.3 seconds, locked 0 times
+
+===============================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/mlock.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/mlock/slock.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=10 num=2 max_level=2 sync=-1
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m1,273s
+user	0m0,007s
+sys	0m0,007s
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep ! | tail -n7
+[18389.739924] ! repeat 10 times in 2 levels; synch. in level -1
+[18389.740005] ! 4299489591 : kthread [21697:1] is running
+[18389.740056] ! 4299489591 : kthread [21698:0] is running
+[18390.936524] ! 4299489891 : kthread [21698:0] do 100 units
+[18390.936526] ! 4299489891 : kthread [21697:1] do 100 units
+[18390.936562] ! 4299489891 : kthread [21696:2] is finished
+[18390.936564] !! working time was 1.2 seconds, locked 0 times
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=10 num=2 max_level=4 sync=-1
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	2m0,379s
+user	0m0,008s
+sys	0m0,005s
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep ! | tail -n7
+[17830.610924] ! repeat 10 times in 4 levels; synch. in level -1
+[17830.611044] ! 4299349808 : kthread [20915:1] is running
+[17830.611099] ! 4299349808 : kthread [20916:0] is running
+[17950.836423] ! 4299379865 : kthread [20916:0] do 10000 units
+[17950.912423] ! 4299379884 : kthread [20915:1] do 10000 units
+[17950.912433] ! 4299379884 : kthread [20914:2] is finished
+[17950.912435] ! working time was 120.3 seconds, locked 0 times
+
+
+---------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ sudo insmod slock.ko rep=10 num=5 max_level=3 sync=-1 
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep '!!' | tail -n1
+[18508.835514] !! working time was 12.0 seconds, locked 0 times
+
+---------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=7 num=5 max_level=3 sync=-1 
+
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m4,233s
+user	0m0,006s
+sys	0m0,007s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep '!!' | tail -n1
+[18805.948779] !! working time was 4.1 seconds, locked 0 times
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=7 num=5 max_level=3 sync=0
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m20,668s
+user	0m0,006s
+sys	0m0,007s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep '!!' | tail -n1
+[18907.343872] !! working time was 20.6 seconds, locked 1715 times
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=7 num=5 max_level=3 sync=1
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m20,676s
+user	0m0,008s
+sys	0m0,004s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep '!!' | tail -n1
+[18939.039549] !! working time was 20.6 seconds, locked 245 times
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=7 num=5 max_level=3 sync=2
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m20,712s
+user	0m0,009s
+sys	0m0,003s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep '!!' | tail -n1
+[18982.239179] !! working time was 20.6 seconds, locked 35 times
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=7 num=5 max_level=3 sync=3
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m20,764s
+user	0m0,009s
+sys	0m0,003s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep '!!' | tail -n1
+[19015.890922] !! working time was 20.6 seconds, locked 5 times
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ time sudo insmod slock.ko rep=7 num=5 max_level=3 sync=4
+insmod: ERROR: could not insert module slock.ko: Operation not permitted
+
+real	0m4,195s
+user	0m0,008s
+sys	0m0,005s
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/mlock$ dmesg | grep '!!' | tail -n1
+[19030.418666] !! working time was 4.1 seconds, locked 0 times
+
+---------------------------------------------------------------------------------------------------------------

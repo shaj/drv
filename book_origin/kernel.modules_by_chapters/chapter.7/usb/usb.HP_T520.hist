@@ -1,0 +1,598 @@
+17.08.2022
+==========
+
+$ sudo inxi -MSxxx
+[sudo] пароль для olej: 
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-amd64-smp arch: x86_64 bits: 64
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.8 dm: slimski v: 1.5.0
+    Distro: antiX-21_x64-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+Machine:
+  Type: Desktop System: Hewlett-Packard product: HP t520 Flexible Series TC
+    v: N/A serial: MXL4470SVF Chassis: type: 4 serial: MXL4470SVF
+  Mobo: Hewlett-Packard model: 21EF v: 00~ serial: MXL4470SVF UEFI: AMI
+    v: L41 v01.09 date: 10/19/2016
+
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/usb modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/usb/lab1_usb.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/usb/lab1_usb.mod.o
+  LD [M]  /home/olej/2022/kernel/usb/lab1_usb.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+
+=================================================================================================
+
+$ lsusb
+Bus 002 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 2101:020f ActionStar 
+Bus 001 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+
+
+
+$ cat /proc/interrupts | grep hci
+  18:      25883      25905   IO-APIC   18-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+  19:       9871       9865   IO-APIC   19-fasteoi   ahci[0000:00:11.0]
+  26:          0          0   PCI-MSI 262144-edge      xhci_hcd
+  27:          0          0   PCI-MSI 262145-edge      xhci_hcd
+  28:          0          0   PCI-MSI 262146-edge      xhci_hcd
+
+$ cat /proc/interrupts | grep ahci
+  19:       9889       9883   IO-APIC   19-fasteoi   ahci[0000:00:11.0]
+
+$ cat /proc/interrupts | grep ehci
+  18:      27415      27439   IO-APIC   18-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+
+-------------------------------------------------------------------------------------------------
+
+$ lsusb
+Bus 002 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 2101:020f ActionStar 
+Bus 001 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 002: ID 1908:2310 GEMBIRD USB2.0 PC CAMERA
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+
+$ lsusb -d1908:2310
+Bus 003 Device 002: ID 1908:2310 GEMBIRD USB2.0 PC CAMERA
+
+
+
+=================================================================================================
+
+$ lsusb -d1908:2310
+Bus 003 Device 003: ID 1908:2310 GEMBIRD USB2.0 PC CAMERA
+
+$ lsmod | head -n12
+Module                  Size  Used by
+uvcvideo               77766  0
+videobuf2_vmalloc       4987  1 uvcvideo
+snd_usb_audio         135352  0
+videobuf2_memops        1609  1 videobuf2_vmalloc
+videobuf2_v4l2         11436  1 uvcvideo
+snd_usbmidi_lib        19654  1 snd_usb_audio
+videobuf2_core         26674  2 uvcvideo,videobuf2_v4l2
+snd_rawmidi            18472  1 snd_usbmidi_lib
+videodev              127185  3 uvcvideo,videobuf2_core,videobuf2_v4l2
+snd_seq_device          3368  1 snd_rawmidi
+media                  20419  2 uvcvideo,videodev
+
+$ dmsg
+...
+[ 6095.599640] usb 3-1: USB disconnect, device number 2
+[ 6113.447328] usb 3-1: new high-speed USB device number 3 using xhci_hcd
+[ 6113.791423] usb 3-1: New USB device found, idVendor=1908, idProduct=2310
+[ 6113.791435] usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 6113.791441] usb 3-1: Product: USB2.0 PC CAMERA
+[ 6113.791446] usb 3-1: Manufacturer: Generic
+[ 6113.793643] uvcvideo: Found UVC 1.00 device USB2.0 PC CAMERA (1908:2310)
+[ 6113.795224] uvcvideo 3-1:1.0: Entity type for entity Processing 2 was not initialized!
+[ 6113.795236] uvcvideo 3-1:1.0: Entity type for entity Camera 1 was not initialized!
+[ 6113.795534] input: USB2.0 PC CAMERA as /devices/pci0000:00/0000:00:10.0/usb3/3-1/3-1:1.0/input/input10
+[ 6291.484743] usb 3-1: USB disconnect, device number 3
+...
+
+=================================================================================================
+
+$ lsusb 
+Bus 002 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 2101:020f ActionStar 
+Bus 001 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 004: ID 0fe6:9700 ICS Advent DM9601 Fast Ethernet Adapter
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+$ lsusb -d 0fe6:9700
+Bus 003 Device 004: ID 0fe6:9700 ICS Advent DM9601 Fast Ethernet Adapter
+
+$ lsmod | head -n4
+Module                  Size  Used by
+sr9700                  6295  0
+dm9601                  7171  0
+usbnet                 20211  2 sr9700,dm9601
+
+$ dmsg
+...
+[ 6314.940370] usb 3-1: new full-speed USB device number 4 using xhci_hcd
+[ 6315.075133] usb 3-1: New USB device found, idVendor=0fe6, idProduct=9700
+[ 6315.075144] usb 3-1: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+[ 6315.075149] usb 3-1: Product: USB 2.0 10/100M Ethernet Adaptor
+[ 6315.790405] dm9601 3-1:1.0 eth1: register 'dm9601' at usb-0000:00:10.0-1, Davicom DM96xx USB 10/100 Ethernet, 00:e0:4c:53:44:58
+[ 6315.790508] usbcore: registered new interface driver dm9601
+[ 6315.792114] usbcore: registered new interface driver sr9700
+[ 6315.878145] dm9601 3-1:1.0 eth1: link up, 100Mbps, full-duplex, lpa 0xFFFF
+[ 6317.003077] IPv6: ADDRCONF(NETDEV_UP): eth1: link is not ready
+[ 6540.992442] usb 3-1: USB disconnect, device number 4
+[ 6540.995348] dm9601 3-1:1.0 eth1: unregister 'dm9601' usb-0000:00:10.0-1, Davicom DM96xx USB 10/100 Ethernet
+...
+
+
+=================================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/usb modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/usb/lab1_usb.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/usb/lab1_usb.mod.o
+  LD [M]  /home/olej/2022/kernel/usb/lab1_usb.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+olej@antix21:~/2022/kernel/usb
+$ modinfo lab1_usb.ko
+filename:       /home/olej/2022/kernel/usb/lab1_usb.ko
+license:        GPL v2
+description:    LDD:1.0 s_28/lab1_usb.c
+author:         Oleg Tsiliuric
+author:         Terry Griffin
+srcversion:     392361C6F496823B75238BA
+alias:          usb:v0FE6p9700d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v1908p2310d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v046Dp080Fd*dc*dsc*dp*ic*isc*ip*in*
+depends:        
+retpoline:      Y
+vermagic:       4.9.0-279-antix.1-amd64-smp SMP preempt mod_unload modversions 
+
+-------------------------------------------------------------------------------------------------
+
+olej@antix21:~/2022/kernel/usb
+$ sudo insmod lab1_usb.ko
+[sudo] пароль для olej: 
+
+$ lsmod | head -n2
+Module                  Size  Used by
+lab1_usb                2113  0
+
+
+$ dmesg | tail -n2
+[ 7313.460765] MY: Hello USB
+[ 7313.460883] usbcore: registered new interface driver usb-my
+
+-------------------------------------------------------------------------------------------------
+
+$ lsusb -d1908:2310
+Bus 003 Device 005: ID 1908:2310 GEMBIRD USB2.0 PC CAMERA
+
+olej@antix21:~/2022/kernel/usb
+
+$ dmesg | tail -n2
+[ 7686.678609] MY: Goodbye USB
+[ 7686.678620] usbcore: deregistering interface driver usb-my
+
+=================================================================================================
+
+$ cat /boot/config-`uname -r` | grep _USB_ | grep HCI_HCD=
+CONFIG_USB_XHCI_HCD=y
+CONFIG_USB_EHCI_HCD=y
+CONFIG_USB_OHCI_HCD=y
+CONFIG_USB_UHCI_HCD=y
+CONFIG_USB_WHCI_HCD=m
+
+=================================================================================================
+
+
+$ lsusb
+Bus 002 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 003: ID 2101:020f ActionStar 
+Bus 001 Device 002: ID 0438:7900 Advanced Micro Devices, Inc. Root Hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 007: ID 0fe6:9700 ICS Advent DM9601 Fast Ethernet Adapter
+Bus 003 Device 008: ID 1908:2310 GEMBIRD USB2.0 PC CAMERA
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+    |__ Port 1: Dev 8, If 2, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 1: Dev 8, If 0, Class=Video, Driver=uvcvideo, 480M
+    |__ Port 1: Dev 8, If 3, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 1: Dev 8, If 1, Class=Video, Driver=uvcvideo, 480M
+    |__ Port 2: Dev 7, If 0, Class=, Driver=dm9601, 12M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+
+
+$ cat /proc/interrupts | grep hci
+  18:      58677      58734   IO-APIC   18-fasteoi   ehci_hcd:usb1, ehci_hcd:usb2
+  19:      10897      10926   IO-APIC   19-fasteoi   ahci[0000:00:11.0]
+  26:     487288     487378   PCI-MSI 262144-edge      xhci_hcd
+  27:          0          0   PCI-MSI 262145-edge      xhci_hcd
+  28:          0          0   PCI-MSI 262146-edge      xhci_hcd
+
+=================================================================================================
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-amd64-smp/build M=/home/olej/2022/kernel/usb modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+  CC [M]  /home/olej/2022/kernel/usb/lab1_usb.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/olej/2022/kernel/usb/lab1_usb.mod.o
+  LD [M]  /home/olej/2022/kernel/usb/lab1_usb.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-amd64-smp»
+
+$ ls *.ko
+lab1_usb.ko
+
+$ modinfo lab1_usb.ko
+filename:       /home/olej/2022/kernel/usb/lab1_usb.ko
+license:        GPL v2
+description:    LDD:1.0 s_28/lab1_usb.c
+author:         Oleg Tsiliuric
+author:         Terry Griffin
+srcversion:     392361C6F496823B75238BA
+alias:          usb:v0FE6p9700d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v1908p2310d*dc*dsc*dp*ic*isc*ip*in*
+alias:          usb:v046Dp080Fd*dc*dsc*dp*ic*isc*ip*in*
+depends:        
+retpoline:      Y
+vermagic:       4.9.0-279-antix.1-amd64-smp SMP preempt mod_unload modversions 
+
+-------------------------------------------------------------------------------------------------
+
+$ lsmod | head -n4
+Module                  Size  Used by
+sr9700                  6295  0
+dm9601                  7171  0
+usbnet                 20211  2 sr9700,dm9601
+
+$ sudo rmmod sr9700
+
+$ sudo rmmod dm9601
+
+$ sudo rmmod usbnet
+
+$ lsmod | head -n2
+Module                  Size  Used by
+uvcvideo               77766  0
+
+-------------------------------------------------------------------------------------------------
+
+$ sudo insmod lab1_usb.ko
+olej@antix21:~/2022/kernel/usb
+
+$ lsmod | head -n2
+Module                  Size  Used by
+lab1_usb                2113  0
+
+
+$ dmesg | tail -n10
+[34585.917234] MY: ===== connect
+[34585.917266] MY: devnum=15, speed=2
+[34585.917270] MY: idVendor=0xFE6, idProduct=0x9700, bcdDevice=0x101
+[34585.917274] MY: class=0x0, subclass=0x0
+[34585.917277] MY: protocol=0x0, packetsize=64
+[34585.917280] MY: manufacturer=0x0, product=0x2, serial=0
+[34585.917282] MY: connect_count=0
+
+[34586.539443] usbcore: registered new interface driver dm9601
+[34586.540400] usbcore: registered new interface driver sr9700
+
+
+$ lsmod | head -n5
+Module                  Size  Used by
+sr9700                  6295  0
+dm9601                  7171  0
+usbnet                 20211  2 sr9700,dm9601
+lab1_usb                2113  0
+
+$ dmesg | tail -n2
+[34804.209355] usb 3-2: USB disconnect, device number 15
+[34804.209485] MY: ===== disconnect
+
+
+=================================================================================================
+
+$ sudo rmmod lab1_usb
+
+$ lsmod | head -n7
+Module                  Size  Used by
+sr9700                  6295  0
+dm9601                  7171  0
+usbnet                 20211  2 sr9700,dm9601
+uvcvideo               77766  0
+videobuf2_vmalloc       4987  1 uvcvideo
+snd_usb_audio         135352  0
+
+$ sudo rmmod uvcvideo
+
+$ lsmod | grep uvcvideo
+$ 
+
+
+$ dmesg | tail -n10
+[35315.546619] MY: ===== connect
+[35315.546623] MY: devnum=16, speed=3
+[35315.546626] MY: idVendor=0x1908, idProduct=0x2310, bcdDevice=0x100
+[35315.546629] MY: class=0xEF, subclass=0x2
+[35315.546631] MY: protocol=0x1, packetsize=64
+[35315.546634] MY: manufacturer=0x1, product=0x2, serial=0
+[35315.546637] MY: connect_count=1
+
+[35316.179442] usbcore: registered new interface driver uvcvideo
+[35316.179451] USB Video Class driver (1.1.1)
+
+
+$ lsmod | head -n8
+Module                  Size  Used by
+uvcvideo               77766  0
+lab1_usb                2113  0
+sr9700                  6295  0
+dm9601                  7171  0
+usbnet                 20211  2 sr9700,dm9601
+videobuf2_vmalloc       4987  1 uvcvideo
+snd_usb_audio         135352  0
+
+=================================================================================================
+
+$ sudo rmmod uvcvideo
+
+$ sudo rmmod lab1_usb
+
+$ sudo rmmod sr9700
+
+$ sudo rmmod dm9601
+
+$ sudo rmmod usbnet
+
+$ sudo rmmod snd_usb_audio
+
+$ lsmod | head -n10
+Module                  Size  Used by
+videobuf2_vmalloc       4987  0
+videobuf2_memops        1609  1 videobuf2_vmalloc
+videobuf2_v4l2         11436  0
+snd_usbmidi_lib        19654  0
+videobuf2_core         26674  1 videobuf2_v4l2
+snd_rawmidi            18472  1 snd_usbmidi_lib
+videodev              127185  2 videobuf2_core,videobuf2_v4l2
+snd_seq_device          3368  1 snd_rawmidi
+media                  20419  1 videodev
+
+$ sudo rmmod videobuf2_vmalloc
+
+$ sudo rmmod videobuf2_v4l2
+
+$ sudo rmmod snd_usbmidi_lib
+
+$ lsmod | head -n6
+Module                  Size  Used by
+videobuf2_memops        1609  0
+videobuf2_core         26674  0
+snd_rawmidi            18472  0
+videodev              127185  1 videobuf2_core
+snd_seq_device          3368  1 snd_rawmidi
+
+$ sudo rmmod videobuf2_memops
+
+$ sudo rmmod videobuf2_core
+
+$ sudo rmmod snd_rawmidi
+
+$ sudo rmmod videodev
+
+$ lsmod | head -n6
+Module                  Size  Used by
+snd_seq_device          3368  0
+media                  20419  0
+lab1_dma_PCI_API        1412  1
+lab1_dma                1412  1
+8021q                  20506  0
+
+-------------------------------------------------------------------------------------------------
+
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+    |__ Port 1: Dev 16, If 2, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 1: Dev 16, If 0, Class=Video, Driver=usb-my, 480M
+    |__ Port 1: Dev 16, If 3, Class=Audio, Driver=snd-usb-audio, 480M
+    |__ Port 1: Dev 16, If 1, Class=Video, Driver=usb-my, 480M
+    |__ Port 2: Dev 17, If 0, Class=, Driver=dm9601, 12M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+
+-------------------------------------------------------------------------------------------------
+
+$ dmesg | tail -n6
+[35717.637329] usbcore: deregistering interface driver uvcvideo
+[35726.771214] MY: Goodbye USB
+[35726.771224] usbcore: deregistering interface driver usb-my
+[35739.437041] usbcore: deregistering interface driver sr9700
+[35749.639709] usbcore: deregistering interface driver dm9601
+[35775.293509] usbcore: deregistering interface driver snd-usb-audio
+
+$ sudo insmod lab1_usb.ko
+
+$ dmesg | tail -n6
+[35726.771224] usbcore: deregistering interface driver usb-my
+[35739.437041] usbcore: deregistering interface driver sr9700
+[35749.639709] usbcore: deregistering interface driver dm9601
+[35775.293509] usbcore: deregistering interface driver snd-usb-audio
+[36201.963686] MY: Hello USB
+[36201.963767] usbcore: registered new interface driver usb-my
+
+подключение !!!
+
+$ dmesg | tail -n46
+[35739.437041] usbcore: deregistering interface driver sr9700
+[35749.639709] usbcore: deregistering interface driver dm9601
+[35775.293509] usbcore: deregistering interface driver snd-usb-audio
+[36201.963686] MY: Hello USB
+[36201.963767] usbcore: registered new interface driver usb-my
+[36278.722142] usb 3-1: new high-speed USB device number 18 using xhci_hcd
+[36279.066238] usb 3-1: New USB device found, idVendor=1908, idProduct=2310
+[36279.066248] usb 3-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[36279.066254] usb 3-1: Product: USB2.0 PC CAMERA
+[36279.066258] usb 3-1: Manufacturer: Generic
+[36279.068433] MY: ===== connect
+[36279.068441] MY: devnum=18, speed=3
+[36279.068446] MY: idVendor=0x1908, idProduct=0x2310, bcdDevice=0x100
+[36279.068449] MY: class=0xEF, subclass=0x2
+[36279.068452] MY: protocol=0x1, packetsize=64
+[36279.068455] MY: manufacturer=0x1, product=0x2, serial=0
+[36279.068458] MY: connect_count=0
+
+[36279.068555] MY: ===== connect
+[36279.068559] MY: devnum=18, speed=3
+[36279.068562] MY: idVendor=0x1908, idProduct=0x2310, bcdDevice=0x100
+[36279.068565] MY: class=0xEF, subclass=0x2
+[36279.068567] MY: protocol=0x1, packetsize=64
+[36279.068570] MY: manufacturer=0x1, product=0x2, serial=0
+[36279.068573] MY: connect_count=1
+
+[36279.069009] MY: ===== connect
+[36279.069013] MY: devnum=18, speed=3
+[36279.069016] MY: idVendor=0x1908, idProduct=0x2310, bcdDevice=0x100
+[36279.069018] MY: class=0xEF, subclass=0x2
+[36279.069021] MY: protocol=0x1, packetsize=64
+[36279.069024] MY: manufacturer=0x1, product=0x2, serial=0
+[36279.069026] MY: connect_count=2
+
+[36279.069086] MY: ===== connect
+[36279.069089] MY: devnum=18, speed=3
+[36279.069092] MY: idVendor=0x1908, idProduct=0x2310, bcdDevice=0x100
+[36279.069095] MY: class=0xEF, subclass=0x2
+[36279.069098] MY: protocol=0x1, packetsize=64
+[36279.069101] MY: manufacturer=0x1, product=0x2, serial=0
+[36279.069123] MY: connect_count=3
+
+[36279.691825] Linux video capture interface: v2.00
+[36279.703805] usbcore: registered new interface driver uvcvideo
+[36279.703814] USB Video Class driver (1.1.1)
+[36279.706707] usbcore: registered new interface driver snd-usb-audio
+
+=================================================================================================
+
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+olej@antix21:~/2022/kernel/usb
+$ 
+
+
+отключено...
+подключение WEB ... подключение Ethernet
+
+
+$ lsusb -t
+/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+/:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 480M
+    |__ Port 1: Dev 19, If 2, Class=Audio, Driver=usb-my, 480M
+    |__ Port 1: Dev 19, If 0, Class=Video, Driver=usb-my, 480M
+    |__ Port 1: Dev 19, If 3, Class=Audio, Driver=usb-my, 480M
+    |__ Port 1: Dev 19, If 1, Class=Video, Driver=usb-my, 480M
+    |__ Port 2: Dev 20, If 0, Class=, Driver=usb-my, 12M
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=ehci-pci/2p, 480M
+    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+        |__ Port 2: Dev 3, If 0, Class=Human Interface Device, Driver=usbhid, 1.5M
+        |__ Port 2: Dev 3, If 1, Class=Human Interface Device, Driver=usbhid, 1.5M
+
+
+$ dmesg | tail -n40
+...
+[41723.120971] MY: ===== connect
+[41723.120975] MY: devnum=19, speed=3
+[41723.120978] MY: idVendor=0x1908, idProduct=0x2310, bcdDevice=0x100
+[41723.120980] MY: class=0xEF, subclass=0x2
+[41723.120983] MY: protocol=0x1, packetsize=64
+[41723.120986] MY: manufacturer=0x1, product=0x2, serial=0
+[41723.120988] MY: connect_count=7
+
+[41762.447115] usb 3-2: new full-speed USB device number 20 using xhci_hcd
+[41762.581637] usb 3-2: New USB device found, idVendor=0fe6, idProduct=9700
+[41762.581647] usb 3-2: New USB device strings: Mfr=0, Product=2, SerialNumber=0
+[41762.581653] usb 3-2: Product: USB 2.0 10/100M Ethernet Adaptor
+[41762.583801] MY: ===== connect
+[41762.583810] MY: devnum=20, speed=2
+[41762.583814] MY: idVendor=0xFE6, idProduct=0x9700, bcdDevice=0x101
+[41762.583817] MY: class=0x0, subclass=0x0
+[41762.583820] MY: protocol=0x0, packetsize=64
+[41762.583823] MY: manufacturer=0x0, product=0x2, serial=0
+[41762.583826] MY: connect_count=8
+...
+
+
+$ dmesg | tail -n7
+[42137.280481] usb 3-2: USB disconnect, device number 20
+[42137.280606] MY: ===== disconnect
+[42153.281859] usb 3-1: USB disconnect, device number 19
+[42153.281953] MY: ===== disconnect
+[42153.282033] MY: ===== disconnect
+[42153.282083] MY: ===== disconnect
+[42153.282129] MY: ===== disconnect
+
+=================================================================================================

@@ -1,0 +1,100 @@
+14.08.2022
+==========
+
+$ uname -r
+4.9.0-279-antix.1-486-smp
+
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr1.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+WARNING: "kernel_thread" [/home/olej/2022/kernel/thread/tcreat/mod_thr1.ko] undefined!
+  CC      /home/olej/2022/kernel/thread/tcreat/mod_thr1.mod.o
+  LD [M]  /home/olej/2022/kernel/thread/tcreat/mod_thr1.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+
+$ ls -l *.ko
+-rw-r--r-- 1 olej olej 3760 авг 14 13:27 mod_thr1.ko
+
+$ modinfo mod_thr1.ko
+filename:       /home/olej/2022/kernel/thread/tcreat/mod_thr1.ko
+license:        GPL
+depends:
+retpoline:      Y
+vermagic:       4.9.0-279-antix.1-486-smp SMP mod_unload modversions 486
+parm:           param:int
+
+$ sudo insmod mod_thr1.ko
+[sudo] пароль для olej:
+insmod: ERROR: could not insert module mod_thr1.ko: Unknown symbol in module
+
+$ dmesg | tail -n1
+[12225.904334] mod_thr1: Unknown symbol kernel_thread (err 0)
+olej@antix21:~/2022/kernel/thread/tcreat
+
+
+
+$ sudo grep kernel_thread /proc/kallsyms
+c9058790 T kernel_thread
+c97ffe21 T thaw_kernel_threads
+c97ffec3 T freeze_kernel_threads
+
+$ sudo grep ' kernel_thread' /proc/kallsyms
+c9058790 T kernel_thread
+
+=========================================================================================================================
+
+15.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ uname -a
+Linux R420 5.4.0-124-generic #140-Ubuntu SMP Thu Aug 4 02:23:37 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ inxi -S
+System:    Host: R420 Kernel: 5.4.0-124-generic x86_64 bits: 64 Desktop: Cinnamon 5.2.7 Distro: Linux Mint 20.3 Una 
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ sudo grep ' kernel_thread' /proc/kallsyms
+[sudo] пароль для olej:       
+ffffffff9bc98df0 T kernel_thread
+
+-------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.c: In function ‘test_thread’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.c:18:10: error: implicit declaration of function ‘kernel_thread’; did you mean ‘test_thread’? [-Werror=implicit-function-declaration]
+   18 |    pid = kernel_thread(thread, NULL, CLONE_FS);     /* Запускаем новый поток */
+      |          ^~~~~~~~~~~~~
+      |          test_thread
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+-------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+ERROR: "kernel_thread" [/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr1.ko] undefined!
+make[2]: *** [scripts/Makefile.modpost:94: __modpost] Ошибка 1
+make[1]: *** [Makefile:1675: modules] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+make: *** [Makefile:13: default] Ошибка 2
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ ls *.ko
+ls: невозможно получить доступ к '*.ko': Нет такого файла или каталога
+
+=========================================================================================================================
+-------------------------------------------------------------------------------------------------------------------------

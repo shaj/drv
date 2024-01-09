@@ -1,0 +1,214 @@
+19.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full modules 
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full/virt.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full/virt.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full/virt.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ ls -l *.ko
+-rw-rw-r-- 1 olej olej 14552 июн 19 15:04 virt.ko
+
+==========================================================================================================================
+
+19.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ make
+make -C /lib/modules/5.4.0-120-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full modules 
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-120-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full/virt.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full/virt.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/network/virt-full/virt.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-120-generic»
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ ls -l
+итого 44
+-rw-r----- 1 olej olej   366 июн 19 15:06 Makefile
+-rw-r--r-- 1 olej olej  9440 янв 20  2015 virt.1.hist
+-rw-rw-r-- 1 olej olej   936 июн 19 15:06 virt.2.hist
+-rw-r--r-- 1 olej olej  6304 июн 20 11:50 virt.c
+-rw-rw-r-- 1 olej olej 14552 июн 20 11:48 virt.ko
+
+==========================================================================================================================
+
+olej@raspberrypi:~ $ sudo ifconfig eth0:1 192.168.5.142
+
+olej@raspberrypi:~ $ ip a s
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether b8:27:eb:7e:2c:a8 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.142/24 brd 192.168.1.255 scope global dynamic noprefixroute eth0
+       valid_lft 95653sec preferred_lft 67078sec
+    inet 192.168.5.142/24 brd 192.168.5.255 scope global eth0:1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5b06:3ef5:5b91:15d3/64 scope link 
+       valid_lft forever preferred_lft forever
+
+olej@raspberrypi:~ $ ping -I eth0:1 -c3 192.168.5.240
+ping: invalid source address: eth0:1
+
+olej@raspberrypi:~ $ route -n
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.1.3     0.0.0.0         UG    202    0        0 eth0
+192.168.1.0     0.0.0.0         255.255.255.0   U     202    0        0 eth0
+192.168.5.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+
+--------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ sudo insmod virt.ko
+[sudo] пароль для olej:       
+insmod: ERROR: could not insert module virt.ko: No such device
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ sudo insmod virt.ko link=eno2
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ lsmod | head -n4
+Module                  Size  Used by
+virt                   16384  0
+vboxnetadp             28672  0
+vboxnetflt             28672  0
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt-full$ ping -I eno2 -c3 192.168.1.142
+^C^C^C^C^C
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt$ dmesg | tail -n8
+[ 8700.400641] RAX: 0000000000000016 RBX: ffffa102020b8000 RCX: 0000000000000000
+[ 8700.400642] RDX: 0000000000000000 RSI: ffffa1020f75c8c8 RDI: ffffa1020f75c8c8
+[ 8700.400643] RBP: ffffbe80485fb528 R08: ffffa1020f75c8c8 R09: 0000000000000004
+[ 8700.400644] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+[ 8700.400644] R13: ffffffffc0e4f000 R14: 0000000000000001 R15: 0000000000000000
+[ 8700.400646] FS:  00007f932229c380(0000) GS:ffffa1020f740000(0000) knlGS:0000000000000000
+[ 8700.400647] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 8700.400648] CR2: 0000000000000034 CR3: 000000180276c001 CR4: 00000000001606e0
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt$ dmesg | tail -n90
+[ 4596.806313] ! rx: injecting frame from eno2 to virt0
+[ 4597.641332] ! rx: injecting frame from eno2 to virt0
+[ 4600.641475] ! rx: injecting frame from eno2 to virt0
+[ 4601.124573] ! unregister rx handler for eno2
+[ 4601.124709] ! virt0: device closed
+[ 4601.170003] ! module virt unloaded
+[ 8610.714758] ! virt: no such net: eth0
+[ 8700.366701] ! module virt loaded
+[ 8700.366705] ! virt: create link virt0
+[ 8700.366706] ! virt: registered rx handler for eno2
+[ 8700.387636] ! virt0: device opened
+[ 8700.387649] BUG: kernel NULL pointer dereference, address: 0000000000000034
+[ 8700.387655] #PF: supervisor read access in kernel mode
+[ 8700.387657] #PF: error_code(0x0000) - not-present page
+[ 8700.387660] PGD 0 P4D 0 
+[ 8700.387666] Oops: 0000 [#1] SMP PTI
+[ 8700.387672] CPU: 11 PID: 1188 Comm: NetworkManager Tainted: G           OE     5.4.0-120-generic #136-Ubuntu
+[ 8700.387675] Hardware name: Dell Inc. PowerEdge R420/0CN7CM, BIOS 2.9.0 01/09/2020
+[ 8700.387683] RIP: 0010:open+0x51/0xeb [virt]
+[ 8700.387688] Code: e8 31 c0 48 8b 87 00 03 00 00 48 8d 7d c8 4c 8b 60 10 31 c0 48 c7 45 c0 00 00 00 00 f3 ab 48 c7 c7 d3 e0 e4 c0 e8 43 e6 c3 f4 <41> 8b 7c 24 34 89 3d 3a 23 00 00 e8 15 fd ff ff 48 c7 c6 e9 e0 e4
+[ 8700.387692] RSP: 0018:ffffbe80485fb4e8 EFLAGS: 00010246
+[ 8700.387696] RAX: 0000000000000016 RBX: ffffa102020b8000 RCX: 0000000000000000
+[ 8700.387698] RDX: 0000000000000000 RSI: ffffa1020f75c8c8 RDI: ffffa1020f75c8c8
+[ 8700.387701] RBP: ffffbe80485fb528 R08: ffffa1020f75c8c8 R09: 0000000000000004
+[ 8700.387703] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+[ 8700.387706] R13: ffffffffc0e4f000 R14: 0000000000000001 R15: 0000000000000000
+[ 8700.387710] FS:  00007f932229c380(0000) GS:ffffa1020f740000(0000) knlGS:0000000000000000
+[ 8700.387712] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 8700.387715] CR2: 0000000000000034 CR3: 000000180276c001 CR4: 00000000001606e0
+[ 8700.387718] Call Trace:
+[ 8700.387730]  __dev_open+0xd4/0x170
+[ 8700.387736]  __dev_change_flags+0x191/0x1f0
+[ 8700.387741]  dev_change_flags+0x26/0x60
+[ 8700.387747]  do_setlink+0x84a/0x9a0
+[ 8700.387755]  ? cpumask_next+0x1b/0x20
+[ 8700.387762]  ? __snmp6_fill_stats64.isra.0+0xe7/0x110
+[ 8700.387769]  ? __nla_validate_parse+0x42/0x140
+[ 8700.387773]  __rtnl_newlink+0x592/0x990
+[ 8700.387780]  ? __nla_put+0x20/0x30
+[ 8700.387786]  ? __kmalloc_node_track_caller+0x20a/0x320
+[ 8700.387791]  ? pskb_expand_head+0x75/0x2d0
+[ 8700.387795]  ? __kmalloc_reserve.isra.0+0x31/0x90
+[ 8700.387802]  ? security_sock_rcv_skb+0x2f/0x50
+[ 8700.387807]  ? sk_filter_trim_cap+0x48/0x220
+[ 8700.387813]  ? skb_queue_tail+0x48/0x50
+[ 8700.387819]  ? __netlink_sendskb+0x42/0x50
+[ 8700.387829]  ? security_capable+0x3d/0x60
+[ 8700.387836]  ? _cond_resched+0x19/0x30
+[ 8700.387840]  ? kmem_cache_alloc_trace+0x177/0x240
+[ 8700.387844]  rtnl_newlink+0x49/0x70
+[ 8700.387850]  rtnetlink_rcv_msg+0x2c0/0x380
+[ 8700.387857]  ? vsnprintf+0x35d/0x4e0
+[ 8700.387862]  ? rtnl_calcit.isra.0+0x100/0x100
+[ 8700.387867]  netlink_rcv_skb+0x50/0x120
+[ 8700.387872]  rtnetlink_rcv+0x15/0x20
+[ 8700.387877]  netlink_unicast+0x187/0x220
+[ 8700.387882]  netlink_sendmsg+0x229/0x400
+[ 8700.387887]  sock_sendmsg+0x65/0x70
+[ 8700.387890]  ____sys_sendmsg+0x212/0x280
+[ 8700.387895]  ___sys_sendmsg+0x88/0xd0
+[ 8700.387900]  ? rtnl_unlock+0xe/0x10
+[ 8700.387906]  ? addrconf_sysctl_forward+0x111/0x280
+[ 8700.387913]  ? get_max_files+0x20/0x20
+[ 8700.387918]  __sys_sendmsg+0x5c/0xa0
+[ 8700.387924]  __x64_sys_sendmsg+0x1f/0x30
+[ 8700.387931]  do_syscall_64+0x57/0x190
+[ 8700.387936]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+[ 8700.387940] RIP: 0033:0x7f932370b18d
+[ 8700.387944] Code: 28 89 54 24 1c 48 89 74 24 10 89 7c 24 08 e8 ca ee ff ff 8b 54 24 1c 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 2f 44 89 c7 48 89 44 24 08 e8 fe ee ff ff 48
+[ 8700.387946] RSP: 002b:00007fff1b32cc00 EFLAGS: 00000293 ORIG_RAX: 000000000000002e
+[ 8700.387950] RAX: ffffffffffffffda RBX: 000055f6eb707880 RCX: 00007f932370b18d
+[ 8700.387952] RDX: 0000000000000000 RSI: 00007fff1b32cc50 RDI: 000000000000000c
+[ 8700.387955] RBP: 00007fff1b32cc50 R08: 0000000000000000 R09: 0000000000000000
+[ 8700.387957] R10: 000055f6eb6d9010 R11: 0000000000000293 R12: 000055f6eb707880
+[ 8700.387960] R13: 00007fff1b32ce08 R14: 00007fff1b32cdfc R15: 0000000000000000
+[ 8700.387963] Modules linked in: virt(OE) vboxnetadp(OE) vboxnetflt(OE) vboxdrv(OE) team_mode_loadbalance team aufs overlay binfmt_misc snd_usb_audio snd_usbmidi_lib snd_hwdep mc snd_pcm intel_rapl_msr snd_seq_midi snd_seq_midi_event snd_rawmidi intel_rapl_common nls_iso8859_1 sb_edac snd_seq ipmi_ssif x86_pkg_temp_thermal snd_seq_device input_leds joydev snd_timer intel_powerclamp snd kvm_intel soundcore kvm dcdbas rapl intel_cstate mei_me ipmi_si mei mac_hid acpi_power_meter sch_fq_codel coretemp ipmi_devintf ipmi_msghandler msr parport_pc ppdev nfsd lp parport auth_rpcgss nfs_acl lockd grace sunrpc ip_tables x_tables autofs4 btrfs xor zstd_compress raid6_pq libcrc32c dm_mirror dm_region_hash dm_log mgag200 drm_vram_helper i2c_algo_bit ttm drm_kms_helper syscopyarea sysfillrect sysimgblt fb_sys_fops hid_generic usbhid hid crct10dif_pclmul crc32_pclmul ghash_clmulni_intel aesni_intel crypto_simd cryptd glue_helper drm nvme ahci megaraid_sas libahci tg3 nvme_core lpc_ich wmi
+[ 8700.388031]  [last unloaded: virt]
+[ 8700.388038] CR2: 0000000000000034
+[ 8700.388041] ---[ end trace fb9c1e670ec56736 ]---
+[ 8700.400635] RIP: 0010:open+0x51/0xeb [virt]
+[ 8700.400638] Code: e8 31 c0 48 8b 87 00 03 00 00 48 8d 7d c8 4c 8b 60 10 31 c0 48 c7 45 c0 00 00 00 00 f3 ab 48 c7 c7 d3 e0 e4 c0 e8 43 e6 c3 f4 <41> 8b 7c 24 34 89 3d 3a 23 00 00 e8 15 fd ff ff 48 c7 c6 e9 e0 e4
+[ 8700.400639] RSP: 0018:ffffbe80485fb4e8 EFLAGS: 00010246
+[ 8700.400641] RAX: 0000000000000016 RBX: ffffa102020b8000 RCX: 0000000000000000
+[ 8700.400642] RDX: 0000000000000000 RSI: ffffa1020f75c8c8 RDI: ffffa1020f75c8c8
+[ 8700.400643] RBP: ffffbe80485fb528 R08: ffffa1020f75c8c8 R09: 0000000000000004
+[ 8700.400644] R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+[ 8700.400644] R13: ffffffffc0e4f000 R14: 0000000000000001 R15: 0000000000000000
+[ 8700.400646] FS:  00007f932229c380(0000) GS:ffffa1020f740000(0000) knlGS:0000000000000000
+[ 8700.400647] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 8700.400648] CR2: 0000000000000034 CR3: 000000180276c001 CR4: 00000000001606e0
+
+
+--------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt$ lsmod | head -n4
+Module                  Size  Used by
+virt                   16384  0
+vboxnetadp             28672  0
+vboxnetflt             28672  0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/virt$ ip a s
+^C^C^C
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/network/net$ sudo rmmod virt
+^C^C^C^C
+
+olej@R420:~$ ping -I eno1 -c3 192.168.1.142
+^C^C^C
+
+==========================================================================================================================
+

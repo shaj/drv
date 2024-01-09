@@ -1,0 +1,65 @@
+14.08.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ make
+make -C /lib/modules/5.4.0-124-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-124-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr2.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.c: In function ‘thread_func’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.c:14:14: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+   14 |    int num = (int)data;
+      |              ^
+In file included from /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.c:3:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.c: In function ‘test_mlock’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.c:29:39: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+   29 |       t[i] = kthread_run(thread_func, (void*)i, IDENT, i);
+      |                                       ^
+./include/linux/kthread.h:26:35: note: in definition of macro ‘kthread_create’
+   26 |  kthread_create_on_node(threadfn, data, NUMA_NO_NODE, namefmt, ##arg)
+      |                                   ^~~~
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.c:29:14: note: in expansion of macro ‘kthread_run’
+   29 |       t[i] = kthread_run(thread_func, (void*)i, IDENT, i);
+      |              ^~~~~~~~~~~
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr2.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr2.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_thr3.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat/mod_for.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-124-generic»
+
+================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ time sudo insmod mod_thr2.ko param=10
+insmod: ERROR: could not insert module mod_thr2.ko: Operation not permitted
+
+real	0m10,095s
+user	0m0,011s
+sys	0m0,008s
+
+
+olej@R420:~$ ps -A | grep my_thread
+  16446 ?        00:00:00 my_thread
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ dmesg | tail -n4
+[14166.035608] create new kernel thread [16446]
+[14166.035613] child process [16446] is running
+[14176.075824] child process [16446] is completed
+[14176.075881] main process [16445] is completed
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/thread/tcreat$ sudo cat /var/log/kern.log | tail -n4
+Aug 14 15:14:59 R420 kernel: [14166.035608] create new kernel thread [16446]
+Aug 14 15:14:59 R420 kernel: [14166.035613] child process [16446] is running
+Aug 14 15:15:09 R420 kernel: [14176.075824] child process [16446] is completed
+Aug 14 15:15:09 R420 kernel: [14176.075881] main process [16445] is completed
+
+================================================================================================================================
+
+

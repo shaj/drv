@@ -1,0 +1,159 @@
+15.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ make
+make -C /lib/modules/5.4.0-117-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-117-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.c: In function ‘exec_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.c:21:4: error: implicit declaration of function ‘msleep’ [-Werror=implicit-function-declaration]
+   21 |    msleep( 100 );
+      |    ^~~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-117-generic»
+make: *** [Makefile:14: default] Ошибка 2
+
+=========================================================================================================================================================
+
+28.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.c: In function ‘exec_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.c:21:4: error: implicit declaration of function ‘msleep’ [-Werror=implicit-function-declaration]
+   21 |    msleep(100);
+      |    ^~~~~~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+make: *** [Makefile:14: default] Ошибка 2
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+</include/linux/delay.h>
+[29]
+/*
+ * Using udelay() for intervals greater than a few milliseconds can
+ * risk overflow for high loops_per_jiffy (high bogomips) machines. The
+ * mdelay() provides a wrapper to prevent this.  For delays greater
+ * than MAX_UDELAY_MS milliseconds, the wrapper is used.  Architecture
+ * specific values can be defined in asm-???/delay.h as an override.
+ * The 2nd mdelay() definition ensures GCC will optimize away the 
+ * while loop for the common cases where n <= MAX_UDELAY_MS  --  Paul G.
+ */
+
+Использование udelay() для интервалов, превышающих несколько миллисекунд, может привести к переполнению на машинах с большим числом loops_per_jiffy
+(большим количеством bogomips). mdelay() предоставляет оболочку для предотвращения этого. Для задержек, превышающих MAX_UDELAY_MS миллисекунд, 
+используется оболочка. Значения, специфичные для архитектуры, могут быть определены в asm-???/delay.h в качестве переопределения. 
+Второе определение mdelay() гарантирует, что GCC оптимизирует цикл while для распространенных случаев, когда n <= MAX_UDELAY_MS -- Paul G.
+
+[38]
+#ifndef MAX_UDELAY_MS
+#define MAX_UDELAY_MS	5
+#endif
+
+#ifndef mdelay
+#define mdelay(n) (\
+    (__builtin_constant_p(n) && (n)<=MAX_UDELAY_MS) ? udelay((n)*1000) : \
+    ({unsigned long __ms=(n); while (__ms--) udelay(1000);}))
+#endif
+
+#ifndef ndelay
+static inline void ndelay(unsigned long x)
+{
+    udelay(DIV_ROUND_UP(x, 1000));
+}
+#define ndelay(x) ndelay(x)
+#endif
+
+extern unsigned long lpj_fine;
+void calibrate_delay(void);
+void __attribute__((weak)) calibration_delay_done(void);
+void msleep(unsigned int msecs);
+unsigned long msleep_interruptible(unsigned int msecs);
+void usleep_range(unsigned long min, unsigned long max);
+
+static inline void ssleep(unsigned int seconds)
+{
+    msleep(seconds * 1000);
+}
+
+=========================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ make
+make -C /lib/modules/5.4.0-121-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples/exec modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-121-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_execho.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_exec.ko
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_execho.mod.o
+  LD [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples/exec/mod_execho.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-121-generic»
+
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ which wall
+/usr/bin/wall
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ wall --help
+
+Использование:
+ wall [опции] [<файл> | <сообщение>]
+
+Отправка сообщения всем пользователям.
+
+Параметры:
+ -g, --group <group>     only send message to group
+ -n, --nobanner          не выводить баннер, действует только для root
+ -t, --timeout <сек.> тайм-аут записи в секундах
+
+ -h, --help              показать эту справку
+ -V, --version           показать версию
+
+Для более детальной информации смотрите wall(1).
+
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ ls
+exec.1.hist  exec.2.hist  Makefile  mod_exec.c  mod_execho.c  mod_execho.ko  mod_execho.mod  mod_exec.ko  mod_exec.mod
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo insmod mod_exec.ko
+insmod: ERROR: could not insert module mod_exec.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ dmesg | tail -n2
+[11805.174137] execute : wall 
+               this is wall message 
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo insmod mod_exec.ko str="новое рассылаемое сообщение"
+insmod: ERROR: could not insert module mod_exec.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ dmesg | tail -n4
+[11921.328768] mod_exec: unknown parameter 'рассылаемое' ignored
+[11921.328770] mod_exec: unknown parameter 'сообщение' ignored
+[11921.328845] execute : wall 
+               новое
+
+=========================================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ sudo insmod mod_execho.ko
+insmod: ERROR: could not insert module mod_execho.ko: Operation not permitted
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples/exec$ dmesg | tail -n1
+[13306.805197] execute : /bin/echo echo message
+
+=========================================================================================================================================================
+

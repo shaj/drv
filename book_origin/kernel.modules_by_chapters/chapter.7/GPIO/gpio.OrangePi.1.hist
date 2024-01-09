@@ -1,0 +1,432 @@
+22.08.2022
+==========
+
+olej@orangepione:~$ sudo inxi -M
+[sudo] пароль для olej: 
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family 
+           rev: N/A serial: 02c000815fd5e717 
+
+olej@orangepione:~$ aptitude search gpio
+p   gpiod                                     - Tools for interacting with Linux GPIO character devi
+p   libgpiod-dev                              - C library for interacting with Linux GPIO device - s
+p   libgpiod-doc                              - C library for interacting with Linux GPIO device - l
+p   libgpiod2                                 - C library for interacting with Linux GPIO device - s
+p   libpigpiod-if-dev                         - Development headers for client libraries for Raspber
+p   libpigpiod-if1                            - Client library for Raspberry Pi GPIO control (deprec
+p   libpigpiod-if2-1                          - Client library for Raspberry Pi GPIO control        
+p   pigpio-tools                              - Client tools for Raspberry Pi GPIO control          
+p   python-gpiozero                           - simple interface to everyday GPIO components used wi
+p   python-pigpio                             - Python module which talks to the pigpio daemon (Pyth
+p   python-rpi.gpio                           - Module to control Raspberry Pi GPIO channels (Python
+p   python3-gpiozero                          - simple interface to everyday GPIO components used wi
+p   python3-libgpiod                          - Python bindings for libgpiod (Python 3)             
+p   python3-pigpio                            - Python module which talks to the pigpio daemon (Pyth
+p   python3-rpi.gpio                          - Module to control Raspberry Pi GPIO channels (Python
+p   rpi.gpio-common                           - Module to control Raspberry Pi GPIO channels (common
+p   svxlink-gpio                              - GPIO control scripts SvxLink amateur radio server   
+
+
+olej@orangepione:~$ aptitude show gpiod
+Пакет: gpiod                                     
+Версия: 1.2-3
+Состояние: не установлен
+Приоритет: необязательный
+Раздел: misc
+Сопровождающий: SZ Lin (林上智) <szlin@debian.org>
+Архитектура: armhf
+Размер в распакованном виде: 68,6 k
+Зависит: libc6 (>= 2.16), libgpiod2 (>= 1.2)
+Описание: Tools for interacting with Linux GPIO character device - binary
+ 
+Домашняя страница: https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git
+
+
+olej@orangepione:~$ ls -l /dev/gpio*
+crw------- 1 root root 254, 0 июл 22 17:17 /dev/gpiochip0
+crw------- 1 root root 254, 1 июл 22 17:17 /dev/gpiochip1
+
+-------------------------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~$ sudo apt install gpiod
+Чтение списков пакетов… Готово
+Построение дерева зависимостей       
+Чтение информации о состоянии… Готово
+Будут установлены следующие дополнительные пакеты:
+  libgpiod2
+Следующие НОВЫЕ пакеты будут установлены:
+  gpiod libgpiod2
+Обновлено 0 пакетов, установлено 2 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.
+Необходимо скачать 43,0 kB архивов.
+После данной операции объём занятого дискового пространства возрастёт на 156 kB.
+Хотите продолжить? [Д/н] y
+Пол:1 http://deb.debian.org/debian buster/main armhf libgpiod2 armhf 1.2-3 [29,1 kB]
+Пол:2 http://deb.debian.org/debian buster/main armhf gpiod armhf 1.2-3 [13,9 kB]
+Получено 43,0 kB за 0с (181 kB/s)
+Выбор ранее не выбранного пакета libgpiod2:armhf.
+(Чтение базы данных … на данный момент установлен 173451 файл и каталог.)
+Подготовка к распаковке …/libgpiod2_1.2-3_armhf.deb …
+Распаковывается libgpiod2:armhf (1.2-3) …
+Выбор ранее не выбранного пакета gpiod.
+Подготовка к распаковке …/archives/gpiod_1.2-3_armhf.deb …
+Распаковывается gpiod (1.2-3) …
+Настраивается пакет libgpiod2:armhf (1.2-3) …
+Настраивается пакет gpiod (1.2-3) …
+Обрабатываются триггеры для libc-bin (2.28-10+deb10u1) …
+
+
+olej@orangepione:/$ ls -l /bin/*gpio*
+-rwxr-xr-x 1 root root 9688 дек  7  2018 /bin/gpiodetect
+-rwxr-xr-x 1 root root 5592 дек  7  2018 /bin/gpiofind
+-rwxr-xr-x 1 root root 9688 дек  7  2018 /bin/gpioget
+-rwxr-xr-x 1 root root 9688 дек  7  2018 /bin/gpioinfo
+-rwxr-xr-x 1 root root 9688 дек  7  2018 /bin/gpiomon
+-rwxr-xr-x 1 root root 9688 дек  7  2018 /bin/gpioset
+
+
+olej@orangepione:~$ ls -l /usr/include/linux/gpio.h
+-rw-r--r-- 1 root root 19768 июн 22 10:34 /usr/include/linux/gpio.h
+
+olej@orangepione:~$ sudo gpiodetect
+gpiochip0 [1c20800.pinctrl] (224 lines)
+gpiochip1 [1f02c00.pinctrl] (32 lines)
+
+-------------------------------------------------------------------------------------------------------------------------
+
+olej@orangepione:~$ lsmod | grep gpio
+gpio_keys              20480  0
+
+olej@orangepione:~$ modinfo gpio_keys
+-bash: modinfo: команда не найдена
+olej@orangepione:~$ /sbin/modinfo gpio_keys
+filename:       /lib/modules/5.15.48-sunxi/kernel/drivers/input/keyboard/gpio_keys.ko.xz
+alias:          platform:gpio-keys
+description:    Keyboard driver for GPIOs
+author:         Phil Blundell <pb@handhelds.org>
+license:        GPL
+alias:          of:N*T*Cgpio-keysC*
+alias:          of:N*T*Cgpio-keys
+depends:        
+intree:         Y
+name:           gpio_keys
+vermagic:       5.15.48-sunxi SMP mod_unload ARMv7 thumb2 p2v8 
+sig_id:         PKCS#7
+signer:         Build time autogenerated kernel key
+sig_key:        1B:B8:79:F8:DF:27:EE:20:25:69:05:AE:7A:F2:6F:C9:2F:DC:D2:39
+sig_hashalgo:   sha1
+signature:      8D:25:3A:05:F7:26:C1:1B:2B:61:2C:2B:84:AC:6D:DF:99:6A:A8:68:
+	F8:D5:0F:8D:97:0E:05:CC:52:10:69:16:CA:79:A7:A6:91:A1:1D:58:
+	E1:DE:E3:99:9E:ED:6A:37:52:19:9F:66:75:C9:A5:9D:AE:65:26:CD:
+	DF:82:17:EB:08:F8:D3:C7:59:BA:25:07:40:26:56:1B:F1:21:85:3D:
+	0E:C1:2F:F9:4F:07:9D:29:67:21:B0:77:35:F6:8A:1F:43:E2:62:0A:
+	CD:4A:B1:21:7C:34:76:01:17:D1:55:02:36:E9:4E:A6:79:8A:58:8A:
+	E9:C6:19:3A:A9:34:00:BF:5B:D0:57:1A:22:73:0A:FD:8E:D0:0A:AB:
+	D1:0F:EF:86:1A:FF:27:C7:70:B8:1E:94:B4:5B:00:77:15:42:29:6B:
+	3B:92:EB:7A:2F:D3:38:E8:06:79:6D:47:CA:F6:7D:C6:2B:49:8D:10:
+	59:2D:00:62:91:AC:4D:21:3C:9A:29:85:6A:20:0D:0A:FF:EC:05:BC:
+	6F:C7:6D:A2:9F:D7:C7:60:25:50:55:15:73:E6:FD:07:CE:F6:0F:84:
+	AD:F3:FC:EA:55:BD:E3:92:2C:06:A6:CB:6E:EC:73:63:B9:AF:AF:F5:
+	66:33:11:3D:32:93:6A:A1:12:54:57:42:E6:1E:FE:61:CC:D2:E6:A7:
+	4D:2E:95:29:C9:5D:A2:0F:E5:5D:43:BE:91:4C:E2:67:97:5A:82:BD:
+	BD:32:72:1E:DE:06:F2:D5:6D:B7:B6:19:E0:B5:E8:25:24:62:03:C0:
+	1A:00:2C:5C:46:E8:46:F0:5A:BF:48:BF:66:BE:7E:8D:52:8C:59:AB:
+	F2:7A:86:F9:EA:E7:6E:49:5C:06:DC:17:26:55:32:D3:66:3C:96:0D:
+	98:B6:B6:94:B8:E1:3C:BC:40:05:FF:49:FF:C9:78:0A:A0:B2:A2:F7:
+	45:2C:09:85:3F:1A:3E:2E:8B:B8:6E:65:08:40:8C:2B:75:43:CF:6C:
+	63:0C:1B:0E:3F:B3:52:31:0B:87:54:59:4B:94:60:11:80:94:CF:0F:
+	5D:2C:FA:D3:CC:07:93:51:90:21:DD:DA:45:7B:D5:10:AD:8F:02:D1:
+	39:83:C0:A1:8C:2F:CD:73:C3:0A:5B:43:81:51:8E:99:24:F1:9A:A1:
+	58:3B:FB:7A:3F:B0:48:4E:C0:4A:30:88:D3:79:49:7D:85:7E:42:B3:
+	C0:B5:15:D7:8F:C0:86:7C:01:BF:3D:23:FA:BC:40:31:E9:17:7D:5D:
+	4C:D5:EC:6E:6B:AF:5A:32:71:CB:0E:E8:7F:DE:1B:8C:5D:FF:2D:AE:
+	50:BE:19:A5:AA:B1:7C:8C:88:33:4E:AA
+
+=========================================================================================================================
+
+24.08.2022
+==========
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ inxi -M
+Machine:   Type: ARM Device System: Xunlong Orange Pi One details: Allwinner sun8i Family rev: N/A 
+           serial: 02c000815fd5e717 
+
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ grep CONFIG_GPIO_ /lib/modules/`uname -r`/build/.config  | grep -v ^#
+CONFIG_GPIO_SYSFS=y
+CONFIG_GPIO_CDEV=y
+CONFIG_GPIO_CDEV_V1=y
+CONFIG_GPIO_GENERIC=m
+CONFIG_GPIO_ALTERA=m
+CONFIG_GPIO_CADENCE=m
+CONFIG_GPIO_LOGICVC=m
+CONFIG_GPIO_SAMA5D2_PIOBU=m
+CONFIG_GPIO_SYSCON=m
+CONFIG_GPIO_AMD_FCH=m
+CONFIG_GPIO_GW_PLD=m
+CONFIG_GPIO_PCF857X=m
+CONFIG_GPIO_BD71815=m
+CONFIG_GPIO_BD71828=m
+CONFIG_GPIO_MAX77650=m
+CONFIG_GPIO_AGGREGATOR=m
+CONFIG_GPIO_VIRTIO=m
+CONFIG_GPIO_WATCHDOG=m
+
+======================================================================================
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build$ ls -l /dev/gpio*
+crw------- 1 root root 254, 0 июл 22 17:17 /dev/gpiochip0
+crw------- 1 root root 254, 1 июл 22 17:17 /dev/gpiochip1
+
+--------------------------------------------------------------------------------------
+
+https://blog.lxsang.me/post/id/33
+
+01/10/2020
+Control GPIO using the new Linux user space GPIO API
+
+======================================================================================
+
+
+https://blog.lxsang.me/post/id/33
+Control GPIO using the new Linux user space GPIO API
+01/10/2020
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ make
+cc -Wall -O2 -Wall    info.c   -o info
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ ./info 
+Unabled to open /dev/gpiochip0: Permission denied
+
+
+olej@orangepione:~/2022/kernel/examples/GPIO$ sudo ./info 
+[sudo] пароль для olej: 
+Chip name: gpiochip0
+Chip label: 1c20800.pinctrl
+Number of lines: 224
+offset: 0, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 1, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 2, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 3, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 4, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 5, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 6, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 7, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 8, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 9, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 10, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 11, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 12, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 13, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 14, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 15, name: , consumer: orangepi:red:status. Flags:	[OUTPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 16, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 17, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 18, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 19, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 20, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 21, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 22, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 23, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 24, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 25, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 26, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 27, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 28, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 29, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 30, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 31, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 32, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 33, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 34, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 35, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 36, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 37, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 38, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 39, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 40, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 41, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 42, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 43, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 44, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 45, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 46, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 47, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 48, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 49, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 50, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 51, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 52, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 53, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 54, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 55, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 56, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 57, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 58, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 59, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 60, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 61, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 62, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 63, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 64, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 65, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 66, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 67, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 68, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 69, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 70, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 71, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 72, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 73, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 74, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 75, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 76, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 77, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 78, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 79, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 80, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 81, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 82, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 83, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 84, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 85, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 86, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 87, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 88, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 89, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 90, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 91, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 92, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 93, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 94, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 95, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 96, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 97, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 98, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 99, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 100, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 101, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 102, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 103, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 104, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 105, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 106, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 107, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 108, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 109, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 110, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 111, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 112, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 113, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 114, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 115, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 116, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 117, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 118, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 119, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 120, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 121, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 122, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 123, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 124, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 125, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 126, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 127, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 128, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 129, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 130, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 131, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 132, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 133, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 134, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 135, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 136, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 137, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 138, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 139, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 140, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 141, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 142, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 143, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 144, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 145, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 146, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 147, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 148, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 149, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 150, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 151, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 152, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 153, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 154, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 155, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 156, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 157, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 158, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 159, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 160, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 161, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 162, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 163, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 164, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 165, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 166, name: , consumer: cd. Flags:	[INPUT]	[ACTIVE_LOW]	[...]	[...]	[KERNEL]
+offset: 167, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 168, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 169, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 170, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 171, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 172, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 173, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 174, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 175, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 176, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 177, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 178, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 179, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 180, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 181, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 182, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 183, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 184, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 185, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 186, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 187, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 188, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 189, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 190, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 191, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 192, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 193, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 194, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 195, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 196, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 197, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 198, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 199, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 200, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 201, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 202, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 203, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 204, name: , consumer: usb0_id_det. Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[KERNEL]
+offset: 205, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 206, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 207, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 208, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 209, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 210, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 211, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 212, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 213, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 214, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 215, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 216, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 217, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 218, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 219, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 220, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 221, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 222, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+offset: 223, name: , consumer: . Flags:	[INPUT]	[ACTIVE_HIGHT]	[...]	[...]	[]
+
+
+======================================================================================

@@ -1,0 +1,165 @@
+23.08.2022
+==========
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ uname -a
+Linux orangepione 5.15.48-sunxi #22.05.3 SMP Wed Jun 22 07:35:10 UTC 2022 armv7l GNU/Linux
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ cat /proc/meminfo | grep MemTotal
+MemTotal:         503484 kB
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ sudo inxi -mxxx
+[sudo] пароль для olej: 
+Memory:    RAM: total: 491.7 MiB used: 251.7 MiB (51.2%) 
+           RAM Report: missing: Required program dmidecode not available 
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ free
+              total        used        free      shared  buff/cache   available
+Mem:         503484      212508       65684       11108      225292      268388
+Swap:       2348888       97280     2251608
+
+-------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ make
+make -C /lib/modules/5.15.48-sunxi/build M=/home/olej/2022/kernel/examples/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.15.48-sunxi»
+  MODPOST /home/olej/2022/kernel/examples/memory/mtest/Module.symvers
+  CC [M]  /home/olej/2022/kernel/examples/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/kernel/examples/memory/mtest/memmax.ko
+make[1]: выход из каталога «/usr/src/linux-headers-5.15.48-sunxi»
+
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ /sbin/modinfo memmax.ko
+filename:       /home/olej/2022/kernel/examples/memory/mtest/memmax.ko
+license:        GPL v2
+description:    memory allocation size test
+author:         Oleg Tsiliuric
+depends:        
+name:           memmax
+vermagic:       5.15.48-sunxi SMP mod_unload ARMv7 thumb2 p2v8 
+parm:           mode:int
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ ls -l memmax.ko
+-rw-r--r-- 1 olej olej 5076 авг 23 14:23 memmax.ko
+
+-------------------------------------------------------------------------------------------
+
+olej@orangepione:~$ uname -r
+5.15.48-sunxi
+
+olej@orangepione:~$ cd /lib/modules/`uname -r`
+
+olej@orangepione:/lib/modules/5.15.48-sunxi$ pwd
+/lib/modules/5.15.48-sunxi
+
+olej@orangepione:/lib/modules/5.15.48-sunxi/build/include/asm-generic$ pwd
+/lib/modules/5.15.48-sunxi/build/include/asm-generic
+
+/page.h
+[16]
+/* PAGE_SHIFT determines the page size */
+
+#define PAGE_SHIFT      12
+#ifdef __ASSEMBLY__
+#define PAGE_SIZE       (1 << PAGE_SHIFT)
+#else
+#define PAGE_SIZE       (1UL << PAGE_SHIFT)
+#endif
+#define PAGE_MASK       (~(PAGE_SIZE-1))
+
+-------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=0
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@orangepione:~$ dmesg | grep order | tail -n15
+[968016.969732] order= 0, pages=     1, size=     4096 - kmalloc OK
+[968016.969765] order= 1, pages=     2, size=     8192 - kmalloc OK
+[968016.969786] order= 2, pages=     4, size=    16384 - kmalloc OK
+[968016.969815] order= 3, pages=     8, size=    32768 - kmalloc OK
+[968016.969853] order= 4, pages=    16, size=    65536 - kmalloc OK
+[968016.969918] order= 5, pages=    32, size=   131072 - kmalloc OK
+[968016.970034] order= 6, pages=    64, size=   262144 - kmalloc OK
+[968016.970240] order= 7, pages=   128, size=   524288 - kmalloc OK
+[968016.970638] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[968016.971420] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[968016.973064] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[968016.973533] [<c026afcd>] (__alloc_pages) from [<c024c0fb>] (kmalloc_order+0x2b/0x54)
+[968016.973557] [<c024c0fb>] (kmalloc_order) from [<c024c13d>] (kmalloc_order_trace+0x19/0x84)
+[968016.973577] [<c024c13d>] (kmalloc_order_trace) from [<bf89e08b>] (init+0x8b/0x1000 [memmax])
+[968016.973792] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+-------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@orangepione:~$ dmesg | grep order | tail -n12
+[968198.179911] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[968198.179946] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[968198.179964] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[968198.179992] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[968198.180029] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[968198.180093] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[968198.180204] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[968198.180409] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[968198.180805] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[968198.181584] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[968198.183224] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[968198.183281] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+-------------------------------------------------------------------------------------------
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@orangepione:~$ dmesg | grep order | tail -n18
+[968268.886565] order= 0, pages=     1, size=     4096 - vmalloc OK
+[968268.886605] order= 1, pages=     2, size=     8192 - vmalloc OK
+[968268.886634] order= 2, pages=     4, size=    16384 - vmalloc OK
+[968268.886672] order= 3, pages=     8, size=    32768 - vmalloc OK
+[968268.886730] order= 4, pages=    16, size=    65536 - vmalloc OK
+[968268.886837] order= 5, pages=    32, size=   131072 - vmalloc OK
+[968268.887049] order= 6, pages=    64, size=   262144 - vmalloc OK
+[968268.887411] order= 7, pages=   128, size=   524288 - vmalloc OK
+[968268.888095] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[968268.889684] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[968268.892555] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[968268.898242] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[968268.909663] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[968268.933189] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[968269.047460] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[968269.527135] order=15, pages= 32768, size=134217728 - vmalloc OK
+[968271.135626] order=16, pages= 65536, size=268435456 - vmalloc OK
+[968271.204675] order=17, pages=131072, size=536870912 - vmalloc failed
+
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ free
+              total        used        free      shared  buff/cache   available
+Mem:         503484      169208      288644         832       45632      321964
+Swap:       2348888      180224     2168664
+
+
+===========================================================================================
+
+olej@orangepione:~/2022/kernel/examples/memory/mtest$ sudo insmod memmax.ko mode=0
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+olej@orangepione:~$ dmesg | grep order | tail -n11
+[980839.955854] order= 0, pages=     1, size=     4096 - kmalloc OK
+[980839.955885] order= 1, pages=     2, size=     8192 - kmalloc OK
+[980839.955907] order= 2, pages=     4, size=    16384 - kmalloc OK
+[980839.955936] order= 3, pages=     8, size=    32768 - kmalloc OK
+[980839.955973] order= 4, pages=    16, size=    65536 - kmalloc OK
+[980839.956037] order= 5, pages=    32, size=   131072 - kmalloc OK
+[980839.956148] order= 6, pages=    64, size=   262144 - kmalloc OK
+[980839.956354] order= 7, pages=   128, size=   524288 - kmalloc OK
+[980839.956755] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[980839.957543] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[980839.970235] order=10, pages=  1024, size=  4194304 - kmalloc failed
+
+===========================================================================================

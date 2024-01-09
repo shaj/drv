@@ -1,0 +1,238 @@
+08.06.2022
+==========
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80 modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdu.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c: In function ‘x80_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c:6:12: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+    6 |    set_fs( get_ds() );
+      |            ^~~~~~
+      |            get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c:6:12: error: incompatible type for argument 1 of ‘set_fs’
+    6 |    set_fs( get_ds() );
+      |            ^~~~~~~~
+      |            |
+      |            int
+In file included from ./include/linux/uaccess.h:11,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c:1:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+make: *** [Makefile:18: modl] Ошибка 2
+
+===================================================================================================================================
+
+sudo ./mp 
+[sudo] пароль для olej:       
+getpid return : -14
+string for write length = 54
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ echo $?
+1
+
+===================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ./mplib  
+getpid return : 92762
+string for write length = 54
+эталонная строка для вывода!
+write return : 54
+mknod error : Operation not permitted
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ sudo ./mplib  
+[sudo] пароль для olej:       
+getpid return : 92783
+string for write length = 54
+эталонная строка для вывода!
+write return : 54
+mknod return : 0
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ls -l ZZZ
+crw------- 1 root root 247, 0 июн  8 01:11 ZZZ
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ sudo rm ZZZ
+
+===================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make mpsys
+gcc -Wall     mpsys.c   -o mpsys
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ sudo ./mpsys
+getpid return : 93322
+string for write length = 54
+эталонная строка для вывода!
+write return : 54
+mknod return : 0
+
+===================================================================================================================================
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ make
+gcc -Wall     mpint.c   -o mpint
+gcc -Wall     mplib.c   -o mplib
+make -C /lib/modules/5.4.0-113-generic/build M=/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80 modules
+make[1]: вход в каталог «/usr/src/linux-headers-5.4.0-113-generic»
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdu.o
+  CC [M]  /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.o
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c: In function ‘x80_init’:
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c:6:11: error: implicit declaration of function ‘get_ds’; did you mean ‘get_fs’? [-Werror=implicit-function-declaration]
+    6 |    set_fs(get_ds());
+      |           ^~~~~~
+      |           get_fs
+/home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c:6:11: error: incompatible type for argument 1 of ‘set_fs’
+    6 |    set_fs(get_ds());
+      |           ^~~~~~~~
+      |           |
+      |           int
+In file included from ./include/linux/uaccess.h:11,
+                 from /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.c:1:
+./arch/x86/include/asm/uaccess.h:29:40: note: expected ‘mm_segment_t’ {aka ‘struct <anonymous>’} but argument is of type ‘int’
+   29 | static inline void set_fs(mm_segment_t fs)
+      |                           ~~~~~~~~~~~~~^~
+cc1: some warnings being treated as errors
+make[2]: *** [scripts/Makefile.build:270: /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80/mdc.o] Ошибка 1
+make[1]: *** [Makefile:1762: /home/olej/2022/own.BOOKs/BHV.kernel/examples.tmp/int80] Ошибка 2
+make[1]: выход из каталога «/usr/src/linux-headers-5.4.0-113-generic»
+make: *** [Makefile:18: modl] Ошибка 2
+
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ ./mpint 
+__NR_getpid=39
+before int80
+adter int80
+getpid return : -14
+string for write length = 54
+
+
+/usr/include/asm/unistd_64.h
+#define __NR_write 1
+#define __NR_getpid 39
+#define __NR_mknod 133
+
+===================================================================================================================================
+
+olej@R420:~/2022/own.BOOKs/BHV.kernel/examples.tmp/int80$ uname -r
+5.4.0-113-generic
+
+
+https://elixir.bootlin.com/linux/v5.4/source/arch/sh/include/uapi/asm/unistd_64.h#L120
+
+<120> 
+#define __NR_socketcall		102	/* old implementation of socket systemcall */
+
+<239>
+/* Non-multiplexed socket family */
+#define __NR_socket		220
+#define __NR_bind		221
+#define __NR_connect		222
+#define __NR_listen		223
+#define __NR_accept		224
+#define __NR_getsockname	225
+#define __NR_getpeername	226
+#define __NR_socketpair		227
+#define __NR_send		228
+#define __NR_sendto		229
+#define __NR_recv		230
+#define __NR_recvfrom		231
+#define __NR_shutdown		232
+#define __NR_setsockopt		233
+#define __NR_getsockopt		234
+#define __NR_sendmsg		235
+#define __NR_recvmsg		236
+
+
+https://elixir.bootlin.com/linux/v5.4/source/include/uapi/asm-generic/unistd.h#L588
+
+/* net/socket.c */
+#define __NR_socket 198
+__SYSCALL(__NR_socket, sys_socket)
+#define __NR_socketpair 199
+__SYSCALL(__NR_socketpair, sys_socketpair)
+#define __NR_bind 200
+__SYSCALL(__NR_bind, sys_bind)
+#define __NR_listen 201
+__SYSCALL(__NR_listen, sys_listen)
+#define __NR_accept 202
+__SYSCALL(__NR_accept, sys_accept)
+#define __NR_connect 203
+__SYSCALL(__NR_connect, sys_connect)
+#define __NR_getsockname 204
+__SYSCALL(__NR_getsockname, sys_getsockname)
+#define __NR_getpeername 205
+__SYSCALL(__NR_getpeername, sys_getpeername)
+#define __NR_sendto 206
+__SYSCALL(__NR_sendto, sys_sendto)
+#define __NR_recvfrom 207
+__SC_COMP(__NR_recvfrom, sys_recvfrom, compat_sys_recvfrom)
+#define __NR_setsockopt 208
+__SC_COMP(__NR_setsockopt, sys_setsockopt, compat_sys_setsockopt)
+#define __NR_getsockopt 209
+__SC_COMP(__NR_getsockopt, sys_getsockopt, compat_sys_getsockopt)
+#define __NR_shutdown 210
+__SYSCALL(__NR_shutdown, sys_shutdown)
+#define __NR_sendmsg 211
+__SC_COMP(__NR_sendmsg, sys_sendmsg, compat_sys_sendmsg)
+#define __NR_recvmsg 212
+__SC_COMP(__NR_recvmsg, sys_recvmsg, compat_sys_recvmsg)
+
+
+
+
+
+https://elixir.bootlin.com/linux/v5.4/source/include/linux/syscalls.h#L798
+
+<797>
+/* net/socket.c */
+asmlinkage long sys_socket(int, int, int);
+asmlinkage long sys_socketpair(int, int, int, int __user *);
+asmlinkage long sys_bind(int, struct sockaddr __user *, int);
+asmlinkage long sys_listen(int, int);
+asmlinkage long sys_accept(int, struct sockaddr __user *, int __user *);
+asmlinkage long sys_connect(int, struct sockaddr __user *, int);
+asmlinkage long sys_getsockname(int, struct sockaddr __user *, int __user *);
+asmlinkage long sys_getpeername(int, struct sockaddr __user *, int __user *);
+asmlinkage long sys_sendto(int, void __user *, size_t, unsigned,
+		struct sockaddr __user *, int);
+asmlinkage long sys_recvfrom(int, void __user *, size_t, unsigned,
+		struct sockaddr __user *, int __user *);
+asmlinkage long sys_setsockopt(int fd, int level, int optname,
+		char __user *optval, int optlen);
+asmlinkage long sys_getsockopt(int fd, int level, int optname,
+		char __user *optval, int __user *optlen);
+asmlinkage long sys_shutdown(int, int);
+asmlinkage long sys_sendmsg(int fd, struct user_msghdr __user *msg, unsigned flags);
+asmlinkage long sys_recvmsg(int fd, struct user_msghdr __user *msg, unsigned flags);
+
+
+===================================================================================================================================
+
+olej@R420://usr/include/x86_64-linux-gnu/asm$ pwd
+/usr/include/x86_64-linux-gnu/asm
+
+olej@R420://usr/include/x86_64-linux-gnu/asm$ cat unistd_32.h | grep socketcall 
+#define __NR_socketcall 102
+
+olej@R420://usr/include/x86_64-linux-gnu/asm$ cat unistd_32.h | grep socket 
+#define __NR_socketcall 102
+#define __NR_socket 359
+#define __NR_socketpair 360
+
+
+
+olej@R420://usr/include/x86_64-linux-gnu/asm$ cat unistd_64.h | grep socketcall 
+
+olej@R420://usr/include/x86_64-linux-gnu/asm$ cat unistd_64.h | grep socket 
+#define __NR_socket 41
+#define __NR_socketpair 53
+
+
+===================================================================================================================================

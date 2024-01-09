@@ -1,0 +1,201 @@
+22.08.2022
+==========
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memtim.o
+  Building modules, stage 2.
+  MODPOST 2 modules
+  CC      /home/olej/2022/kernel/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memmax.ko
+  CC      /home/olej/2022/kernel/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memtim.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+-----------------------------------------------------------------------------------------
+
+$ uname -a
+Linux antix21 4.9.0-279-antix.1-486-smp #1 SMP Sun Aug 8 20:59:37 EEST 2021 i686 GNU/Linux
+olej@antix21:~/2022/kernel/memory/mtest
+
+$ cat /proc/meminfo | grep MemTotal
+MemTotal:        3620320 kB
+
+$ sudo insmod memmax.ko mode=0
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ lsmod | head -n3
+Module                  Size  Used by
+nls_utf8               16384  1
+8021q                  28672  0
+
+
+$ dmesg | tail -n60 
+...
+[317892.979025] order= 0, pages=     1, size=     4096 - kmalloc OK
+[317892.979028] order= 1, pages=     2, size=     8192 - kmalloc OK
+[317892.979031] order= 2, pages=     4, size=    16384 - kmalloc OK
+[317892.979033] order= 3, pages=     8, size=    32768 - kmalloc OK
+[317892.979035] order= 4, pages=    16, size=    65536 - kmalloc OK
+[317892.979037] order= 5, pages=    32, size=   131072 - kmalloc OK
+[317892.979039] order= 6, pages=    64, size=   262144 - kmalloc OK
+[317892.979042] order= 7, pages=   128, size=   524288 - kmalloc OK
+[317892.979045] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[317892.979052] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[317892.979098] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[317892.979107] ------------[ cut here ]------------
+[317892.979115] WARNING: CPU: 0 PID: 26214 at mm/page_alloc.c:3549 __alloc_pages_nodemask+0xb9a/0xc80
+...
+[317892.979256] ---[ end trace 3d71d66978e4a205 ]---
+[317892.979257] order=11, pages=  2048, size=  8388608 - kmalloc failed
+[318021.686662] Goodbye, world!
+
+-----------------------------------------------------------------------------------------
+
+$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[318255.920131] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[318255.920133] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[318255.920135] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[318255.920136] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[318255.920137] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[318255.920139] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[318255.920141] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[318255.920143] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[318255.920146] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[318255.920151] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[318255.920160] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[318255.920163] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+-----------------------------------------------------------------------------------------
+
+$ sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n60 
+...
+[318371.641359] order= 0, pages=     1, size=     4096 - vmalloc OK
+[318371.641443] order= 1, pages=     2, size=     8192 - vmalloc OK
+[318371.641524] order= 2, pages=     4, size=    16384 - vmalloc OK
+[318371.641630] order= 3, pages=     8, size=    32768 - vmalloc OK
+[318371.641723] order= 4, pages=    16, size=    65536 - vmalloc OK
+[318371.641810] order= 5, pages=    32, size=   131072 - vmalloc OK
+[318371.641919] order= 6, pages=    64, size=   262144 - vmalloc OK
+[318371.642018] order= 7, pages=   128, size=   524288 - vmalloc OK
+[318371.642141] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[318371.642299] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[318371.642511] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[318371.642946] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[318371.643631] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[318371.646619] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[318371.649262] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[318371.650767] vmap allocation for size 134221824 failed: use vmalloc=<size> to increase size
+[318371.650769] insmod: vmalloc: allocation failure: 134217728 bytes, mode:0x24000c2(GFP_KERNEL|__GFP_HIGHMEM)
+...
+
+=========================================================================================
+
+22.08.2022
+==========
+
+$ make
+make -C /lib/modules/4.9.0-279-antix.1-486-smp/build M=/home/olej/2022/kernel/memory/mtest modules
+make[1]: вход в каталог «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memmax.o
+  CC [M]  /home/olej/2022/kernel/memory/mtest/memtim.o
+  CC [M]  /home/olej/2022/kernel/memory/mtest/page.o
+  Building modules, stage 2.
+  MODPOST 3 modules
+  CC      /home/olej/2022/kernel/memory/mtest/memmax.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memmax.ko
+  CC      /home/olej/2022/kernel/memory/mtest/memtim.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/memtim.ko
+  CC      /home/olej/2022/kernel/memory/mtest/page.mod.o
+  LD [M]  /home/olej/2022/kernel/memory/mtest/page.ko
+make[1]: выход из каталога «/usr/src/linux-headers-4.9.0-279-antix.1-486-smp»
+
+-----------------------------------------------------------------------------------------
+
+$ cat /proc/meminfo | grep MemTotal
+MemTotal:        3620320 kB
+
+$ inxi -Smxxx
+System:
+  Host: antix21 Kernel: 4.9.0-279-antix.1-486-smp arch: i686 bits: 32
+    compiler: gcc v: 10.2.1 Desktop: IceWM v: 2.9.7 vt: 7 dm: slimski v: 1.5.0
+    Distro: antiX-21_386-base Grup Yorum 31 October 2021
+    base: Debian GNU/Linux 11 (bullseye)
+Memory:
+  RAM: total: 3.45 GiB used: 1018.7 MiB (28.8%)
+  RAM Report:
+    permissions: Unable to run dmidecode. Root privileges required.
+
+-----------------------------------------------------------------------------------------
+
+$ sudo insmod memmax.ko mode=0
+[sudo] пароль для olej: 
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[324844.105442] order= 0, pages=     1, size=     4096 - kmalloc OK
+[324844.105444] order= 1, pages=     2, size=     8192 - kmalloc OK
+[324844.105447] order= 2, pages=     4, size=    16384 - kmalloc OK
+[324844.105449] order= 3, pages=     8, size=    32768 - kmalloc OK
+[324844.105450] order= 4, pages=    16, size=    65536 - kmalloc OK
+[324844.105452] order= 5, pages=    32, size=   131072 - kmalloc OK
+[324844.105454] order= 6, pages=    64, size=   262144 - kmalloc OK
+[324844.105456] order= 7, pages=   128, size=   524288 - kmalloc OK
+[324844.105474] order= 8, pages=   256, size=  1048576 - kmalloc OK
+[324844.105485] order= 9, pages=   512, size=  2097152 - kmalloc OK
+[324844.105498] order=10, pages=  1024, size=  4194304 - kmalloc OK
+[324844.105503] order=11, pages=  2048, size=  8388608 - kmalloc failed
+
+-----------------------------------------------------------------------------------------
+
+$ sudo insmod memmax.ko mode=1
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | tail -n12
+[325215.857156] order= 0, pages=     1, size=     4096 - __get_free_pages OK
+[325215.857158] order= 1, pages=     2, size=     8192 - __get_free_pages OK
+[325215.857160] order= 2, pages=     4, size=    16384 - __get_free_pages OK
+[325215.857161] order= 3, pages=     8, size=    32768 - __get_free_pages OK
+[325215.857163] order= 4, pages=    16, size=    65536 - __get_free_pages OK
+[325215.857164] order= 5, pages=    32, size=   131072 - __get_free_pages OK
+[325215.857166] order= 6, pages=    64, size=   262144 - __get_free_pages OK
+[325215.857168] order= 7, pages=   128, size=   524288 - __get_free_pages OK
+[325215.857170] order= 8, pages=   256, size=  1048576 - __get_free_pages OK
+[325215.857175] order= 9, pages=   512, size=  2097152 - __get_free_pages OK
+[325215.857182] order=10, pages=  1024, size=  4194304 - __get_free_pages OK
+[325215.857185] order=11, pages=  2048, size=  8388608 - __get_free_pages failed
+
+-----------------------------------------------------------------------------------------
+
+$ sudo insmod memmax.ko mode=2
+insmod: ERROR: could not insert module memmax.ko: Operation not permitted
+
+$ dmesg | grep order | tail -n16
+[325229.084123] order= 0, pages=     1, size=     4096 - vmalloc OK
+[325229.084203] order= 1, pages=     2, size=     8192 - vmalloc OK
+[325229.084280] order= 2, pages=     4, size=    16384 - vmalloc OK
+[325229.084358] order= 3, pages=     8, size=    32768 - vmalloc OK
+[325229.084451] order= 4, pages=    16, size=    65536 - vmalloc OK
+[325229.084560] order= 5, pages=    32, size=   131072 - vmalloc OK
+[325229.084653] order= 6, pages=    64, size=   262144 - vmalloc OK
+[325229.084767] order= 7, pages=   128, size=   524288 - vmalloc OK
+[325229.084885] order= 8, pages=   256, size=  1048576 - vmalloc OK
+[325229.085017] order= 9, pages=   512, size=  2097152 - vmalloc OK
+[325229.085269] order=10, pages=  1024, size=  4194304 - vmalloc OK
+[325229.085710] order=11, pages=  2048, size=  8388608 - vmalloc OK
+[325229.086365] order=12, pages=  4096, size= 16777216 - vmalloc OK
+[325229.094717] order=13, pages=  8192, size= 33554432 - vmalloc OK
+[325229.097029] order=14, pages= 16384, size= 67108864 - vmalloc OK
+[325229.098690] order=15, pages= 32768, size=134217728 - vmalloc failed
+
+=========================================================================================
+
